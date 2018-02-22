@@ -1,12 +1,12 @@
 <template>
   <div>
-    BroadcastNotBegin
+    BroadCastAwait
   </div>
 </template>
 
 <script>
 export default {
-  name: 'BroadcastNotBegin',
+  name: 'BroadCastAwait',
   data () {
     return {
     }

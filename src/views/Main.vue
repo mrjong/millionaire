@@ -1,28 +1,26 @@
 <template>
   <div>
-    example
+    MainPage
+    <router-view/>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 export default {
-  name: 'Example',
+  name: 'Main',
   data () {
     return {
+      state: 'CountDown'
     }
   },
-  computed: {
-    ...mapGetters({
-      list: 'list'
-    })
+  updated () {
+    this.setRouter()
   },
   mounted () {
-    this.fetch()
+    this.setRouter()
   },
   methods: {
-    fetch () {
-      this.$store.dispatch('fetch')
+    setRouter () {
     }
   }
 }
