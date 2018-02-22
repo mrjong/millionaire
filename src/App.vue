@@ -21,10 +21,11 @@ export default {
       this.$http.get('')
         .then((data) => {
           // this.loginStatus = data.
-          this.loginStatus ? this.$router.push('/home') : this.$router.push('/login')
+          this.loginStatus ? this.$router.push('/main') : this.$router.push('/login')
         })
     }
-  }
+  },
+  components: {}
 }
 </script>
 

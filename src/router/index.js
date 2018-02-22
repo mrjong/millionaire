@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login.vue'
-import Home from '@/views/Home.vue'
-import BroadCastCountDown from '@/views/broadCastCountDown.vue'
-import BroadCasting from '@/views/broadCasting.vue'
-import BroadCastNotBegin from '@/views/broadCastNotBegin.vue'
+import Main from '@/views/Main.vue'
+import BroadCastAwait from '@/views/BroadCastAwait.vue'
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 
@@ -18,46 +16,27 @@ export default new Router({
       component: Login
     },
     {
-      path: '/home',
-      name: 'Home',
-      component: Home,
+      path: '/await',
+      name: 'Await',
+      component: BroadCastAwait
+    },
+    {
+      path: '/main',
+      name: 'Main',
+      component: Main,
       children: [
-        {
-          path: 'count-down',
-          name: 'CountDown',
-          component: BroadCastCountDown,
-          beforeEnter: (to, from, next) => {
-            if (from.fullPath !== '/home') {
-              next('/home')
-              return
-            }
-            next()
-          }
-        },
-        {
-          path: 'broadcasting',
-          name: 'BroadCasting',
-          component: BroadCasting,
-          beforeEnter: (to, from, next) => {
-            if (from.fullPath !== '/home') {
-              next('/home')
-              return
-            }
-            next()
-          }
-        },
-        {
-          path: 'not-begin',
-          name: 'BroadCastNotBegin',
-          component: BroadCastNotBegin,
-          beforeEnter: (to, from, next) => {
-            if (from.fullPath !== '/home') {
-              next('/home')
-              return
-            }
-            next()
-          }
-        }
+        // {
+        //   path: 'count-down',
+        //   name: 'CountDown',
+        //   component: BroadCastCountDown,
+        //   beforeEnter: (to, from, next) => {
+        //     if (from.fullPath !== '/home') {
+        //       next('/home')
+        //       return
+        //     }
+        //     next()
+        //   }
+        // }
       ]
     },
     {
