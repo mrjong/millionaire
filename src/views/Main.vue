@@ -1,11 +1,11 @@
 <template>
   <div>
-    MainPage
-    <router-view/>
+    <broad-cast-count-down></broad-cast-count-down>
   </div>
 </template>
 
 <script>
+import broadCastCountDown from '../components/BroadCastCountDown'
 export default {
   name: 'Main',
   data () {
@@ -13,15 +13,15 @@ export default {
       state: 'CountDown'
     }
   },
-  updated () {
-    this.setRouter()
-  },
   mounted () {
     this.setRouter()
   },
   methods: {
     setRouter () {
     }
+  },
+  components: {
+    broadCastCountDown
   }
 }
 </script>
