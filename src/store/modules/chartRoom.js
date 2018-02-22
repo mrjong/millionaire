@@ -4,10 +4,12 @@ import http from '../../assets/js/http'
 import Vue from 'vue'
 import * as type from '../type'
 const state = {
-  list: {}
+  list: {
+    chartList: []
+  }
 }
 const getters = {
-  exampleState: state => state
+  chartRoomState: state => state
 }
 const mutations = {
   [type.EXAMPLE] (state, {key, val}) {
