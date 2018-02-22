@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import broadCastCountDown from '../components/BroadCastCountDown'
+import BroadCastCountDown from '../components/BroadCastCountDown'
 export default {
   name: 'Main',
   data () {
@@ -21,7 +21,7 @@ export default {
     }
   },
   components: {
-    broadCastCountDown
+    BroadCastCountDown
   }
 }
 </script>

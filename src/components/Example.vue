@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      list: 'list'
+      exampleState: 'exampleState'
     })
   },
   mounted () {

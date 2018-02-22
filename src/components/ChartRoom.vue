@@ -14,16 +14,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      list: 'list'
+      chartRoomState: 'chartRoomState'
     })
   },
   mounted () {
-    this.fetch()
+    console.log(this.chartRoomState)
   },
   methods: {
-    fetch () {
-      this.$store.dispatch('fetch')
-    }
   }
 }
 </script>
