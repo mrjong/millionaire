@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BroadCastCountDown from '../components/BroadCastCountDown'
+import BroadCastCountDown from '../components/BroadCastCountDown.vue'
 export default {
   name: 'Main',
   data () {

@@ -1,12 +1,12 @@
 <template>
   <div>
     BroadcastCountDown
-    <chart-room></chart-room>
+    <chat-room></chat-room>
   </div>
 </template>
 
 <script>
-import ChartRoom from './ChartRoom'
+import ChatRoom from './ChatRoom'
 export default {
   name: 'BroadcastCountDown',
   data () {
@@ -14,7 +14,7 @@ export default {
     }
   },
   components: {
-    ChartRoom
+    ChatRoom
   }
 }
 </script>
