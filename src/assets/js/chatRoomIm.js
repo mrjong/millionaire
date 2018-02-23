@@ -31,7 +31,6 @@ const getUserInfo = (cb) => {
       if (data.code === 200) {
         postData = Object.assign(postData, {token: data.token})
         // localStorage.setItem('apus_im_client_user', JSON.stringify(postData))
-        // console.log(postData)
         // this.localeUser = postData
         postData && cb(postData)
       }
