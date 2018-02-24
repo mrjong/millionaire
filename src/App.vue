@@ -21,7 +21,7 @@ export default {
       this.$http.get('')
         .then((data) => {
           // this.loginStatus = data.
-          this.loginStatus ? this.$router.push('/main') : this.$router.push('/login')
+          // this.loginStatus ? this.$router.push('/main') : this.$router.push('/login')
         })
     }
   },
@@ -30,4 +30,8 @@ export default {
 </script>
 
 <style>
+  html,body,#app{
+    width:100%;
+    height:100%;
+  }
 </style>
