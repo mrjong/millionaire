@@ -1,20 +1,15 @@
 <template>
   <div>
-    BroadcastCountDown
-    <chat-room></chat-room>
+    Await
   </div>
 </template>
 
 <script>
-import ChatRoom from './ChatRoom'
 export default {
-  name: 'BroadcastCountDown',
+  name: 'Await',
   data () {
     return {
     }
-  },
-  components: {
-    ChatRoom
   }
 }
 </script>

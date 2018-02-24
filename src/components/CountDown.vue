@@ -1,15 +1,20 @@
 <template>
   <div>
-    BroadCastAwait
+    CountDown
+    <chat-room></chat-room>
   </div>
 </template>
 
 <script>
+import ChatRoom from './ChatRoom'
 export default {
-  name: 'BroadCastAwait',
+  name: 'CountDown',
   data () {
     return {
     }
+  },
+  components: {
+    ChatRoom
   }
 }
 </script>
