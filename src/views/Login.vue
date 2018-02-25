@@ -3,9 +3,11 @@
     <div class="login-container__btn">
       <a href="" class="login-container__btn__fb">
         <img src="../assets/images/login-fb.png" alt="facebook">
+        <i>Facebook</i>
       </a>
       <a href="" class="login-container__btn__google">
         <img src="../assets/images/login-google.png" alt="google+">
+        <i>Google+</i>
       </a>
     </div>
   </div>
@@ -36,9 +38,17 @@ export default {
         display: block;
         margin: 1.5rem auto 0;
         text-align: center;
+        position: relative;
         img{
           width: 90%;
           margin: 0 auto;
+        }
+        i{
+          font-style: normal;
+          display: block;
+          color: #ffffff;
+          font-size: 36px;
+          font-family: Roboto-Light,serif;
         }
       }
     }
