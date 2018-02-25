@@ -39,21 +39,79 @@ export default {
     }
     njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
   },
+  /**
+   * 计时器
+   */
+  Timer (interval, endTime, completeCallback, endCallback) {
+    return new Timer(interval, endTime, completeCallback, endCallback)
+  }
+}
+
+/**
+ * 计时器
+ * @class Timer
+ */
+class Timer {
+  /**
+   * 定时器
+   * @memberof Timer
+   */
+  timer = null
+  /**
+   * Creates an instance of Timer.
+   * @param {any} interval 间隔时间
+   * @param {any} endTime 结束时间
+   * @param {any} completeCallback 每次完成时的回调
+   * @param {any} endCallback 计时结束后的回调
+   * @memberof Timer
+   */
+  constructor (interval = 1000, endTime = 0, completeCallback, endCallback) {
+    this.interval = interval
+    this.endTime = endTime
+    this.completeCallback = completeCallback
+    this.endCallback = endCallback
+  }
 
   /**
-   * 数组乱序
-   * @param {any} myArr
-   * @returns
+   * 开始
+   * @memberof Timer
    */
-  mixArray (myArr) {
-    let aArr = myArr
-    const num = myArr.length
-    for (var i = 0; i < num; i++) {
-      var iRand = parseInt(num * Math.random())
-      var temp = aArr[i]
-      aArr[i] = aArr[iRand]
-      aArr[iRand] = temp
-    }
-    return aArr
+  start () {
+    const {interval, completeCallback, endCallback} = this
+    this.timer = setInterval(() => {
+      const endTime = this.endTime()
+      const offset = endTime - Date.now()
+      if (endTime <= 0 || offset > 0) {
+        const date = new Date(offset >= 0 ? offset : 0)
+        completeCallback && completeCallback({
+          year: date.getUTCFullYear() - 1970,
+          month: date.getUTCMonth() + 1,
+          date: date.getUTCDate(),
+          hours: date.getUTCHours(),
+          minuates: date.getUTCMinutes(),
+          seconds: date.getUTCSeconds()
+        })
+      } else {
+        endCallback && endCallback()
+        this.stop()
+      }
+    }, interval)
+  }
+
+  /**
+   * 停止
+   * @memberof Timer
+   */
+  stop () {
+    clearInterval(this.timer)
+  }
+
+  /**
+   * 同步结束时间
+   * @param {any} endTime
+   * @memberof Timer
+   */
+  sync (endTime) {
+    this.endTime = endTime
   }
 }
