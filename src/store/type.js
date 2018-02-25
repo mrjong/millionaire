@@ -1,1 +1,15 @@
 export const EXAMPLE = 'EXAMPLE'
+
+export const _UPDATE_LOGINSTATE = '_UPDATE_LOGINSTATE'
+export const _UPDATE_STARTTIME = '_UPDATE_STARTTIME'
+export const _UPDATE_STATUS = '_UPDATE_STATUS'
+export const _UPDATE_RESULT = '_UPDATE_RESULT'
+export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
+export const _INIT = '_INIT'
+
+export const HOME_UPDATE = 'HOME_UPDATE'
+
+export const QUESTION_UPDATE = 'QUESTION_UPDATE'
+export const QUESTION_GET = 'QUESTION_GET'
+export const QUESTION_SUBMIT = 'QUESTION_SUBMIT'
+export const QUESTION_START = 'QUESTION_START'
