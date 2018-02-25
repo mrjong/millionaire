@@ -77,9 +77,9 @@ class Timer {
    * @memberof Timer
    */
   start () {
-    const {interval, completeCallback, endCallback} = this
+    const interval = this.interval
     this.timer = setInterval(() => {
-      const endTime = this.endTime()
+      const {endTime, completeCallback, endCallback} = this
       const offset = endTime - Date.now()
       if (endTime <= 0 || offset > 0) {
         const date = new Date(offset >= 0 ? offset : 0)
@@ -113,5 +113,23 @@ class Timer {
    */
   sync (endTime) {
     this.endTime = endTime
+  }
+
+  /**
+   * 添加每次完成时的监听器
+   * @param {any} callback
+   * @memberof Timer
+   */
+  addCompleteListener (callback) {
+    this.completeCallback = callback
+  }
+
+  /**
+   * 添加计时结束后的监听器
+   * @param {any} callback
+   * @memberof Timer
+   */
+  addEndListener (callback) {
+    this.endCallback = callback
   }
 }
