@@ -54,15 +54,17 @@ const actions = {
     // 如果已经开始, 直接拉取题目
     if (rootGetters.status === status._PLAYING) {
       // TODO: 后端拉取题目
-    } else {
-      // TODO: 添加监听器至IM, 接受题目
     }
+    // TODO: 添加监听器至IM, 接受题目
   },
   [type.QUESTION_START] ({commit}) {
     // TODO: 开始答题
   },
   [type.QUESTION_SUBMIT] ({commit}) {
     // TODO: 提交答案
+  },
+  [type.QUESTION_RECEIVE_ANSWER] ({commit}, answer) {
+    // TODO: 接收答案
   }
 }
 
