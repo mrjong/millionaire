@@ -2,9 +2,8 @@
   <div class="await-container">
     <div class="await-container__top-btn"></div>
     <img src="../assets/images/await-title.png" class="await-container__title">
-    <div class="await-container__next-time">
-
-    </div>
+    <next-time :nextTime="nextTime" :money="money"></next-time>
+    <base-info :baseInfo="baseInfo"></base-info>
     <div class="await-container__btn">
         <base-btn :baseStyle="baseStyle1"></base-btn>
         <base-btn :baseStyle="baseStyle2"></base-btn>
@@ -14,6 +13,8 @@
 
 <script>
 import BaseBtn from '../components/BaseBtn.vue'
+import NextTime from '../components/NextTime.vue'
+import BaseInfo from '../components/BaseInfo.vue'
 export default {
   name: 'Await',
   data () {
@@ -25,11 +26,21 @@ export default {
       baseStyle2: {
         text: 'Leaderboards',
         bgColor: '#4c0aee'
+      },
+      nextTime: '2.18 16:30',
+      money: '10000',
+      baseInfo: {
+        head: 'http://images.apusapps.com/src/icon-apus-user-system.png',
+        name: 'zhangpanpan',
+        balance: '5267.8',
+        rank: '1258'
       }
     }
   },
   components: {
-    BaseBtn
+    BaseBtn,
+    NextTime,
+    BaseInfo
   }
 }
 </script>
@@ -46,7 +57,7 @@ export default {
     }
     &__btn{
       display: flex;
-      padding:0 40px;
+      padding:0 25px;
       justify-content: space-between;
     }
   }
