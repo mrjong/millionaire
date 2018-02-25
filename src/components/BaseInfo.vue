@@ -1,0 +1,80 @@
+<template>
+  <div class="base-info">
+    <div class="base-info__user">
+        <div class="base-info__user__head"
+             :style="{backgroundImage:'url('+ baseInfo.head +')'}"></div>
+        <p class="base-info__user__name">{{baseInfo.name}}</p>
+      </div>
+    <div class="base-info__other">
+      <div class="base-info__other__balance">
+        <p class="base-info__balance__text">Balance</p>
+        <p class="base-info__balance__num num">${{baseInfo.balance}}</p>
+      </div>
+      <p class="base-info__other__line"></p>
+      <div class="base-info__other__rank">
+        <p class="base-info__rank__text">Weekly Rank</p>
+        <p class="base-info__rank__num num">{{baseInfo.rank}}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'BaseInfo',
+  props: {
+    baseInfo: Object
+  },
+  data () {
+    return {}
+  }
+}
+</script>
+<style scoped lang="less" type="text/less">
+  .base-info{
+    width: 670px;
+    height: 463px;
+    background-color: #ffffff;
+    border-radius: 46px;
+    margin:113px auto 30px;
+    padding: 0.5px;
+    &__user{
+      margin: -70px auto;
+      text-align: center;
+      &__head{
+        width:160px;
+        height:160px;
+        border-radius: 50%;
+        background: no-repeat center;
+        background-size: cover;
+        margin: 0 auto;
+      }
+      &__name{
+        margin-top: 30px;
+        font-size: 36px;
+        color: #241262;
+      }
+    }
+    &__other{
+      display: flex;
+      margin-top: 156px;
+      justify-content: center;
+      &__line{
+        height: 76px;
+        border:1px solid #e0ddea;
+        margin: 0 93px;
+        align-self: center;
+      }
+      &__balance, &__rank {
+        font-size: 28px;
+        color: #241262;
+        text-align: center;
+        .num{
+          font-size: 56px;
+          margin-top: 26px;
+          color: #241262;
+        }
+      }
+    }
+  }
+</style>
