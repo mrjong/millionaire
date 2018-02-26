@@ -1,5 +1,14 @@
 <template>
-  <div>
+  <div class="main-container">
+    <div class="main-container__top">
+      <div class="main-container__top__online">
+        <span class="main-container__top__online__icon"></span>
+        <span class="main-container__top__online__num"></span>
+      </div>
+      <div class="main-container__top__logo">
+        <img src="../assets/images/logo.png" alt="millionaire">
+      </div>
+    </div>
     <count-down></count-down>
   </div>
 </template>
@@ -26,4 +35,13 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
+  .main-container{
+    width: 100%;
+    height:100%;
+    background: url("../assets/images/main-bg.jpg");
+    &__top{
+      width: 100%;
+
+    }
+  }
 </style>

@@ -40,7 +40,8 @@ export default {
       height: 43px;
       line-height: 43px;
       font-size: 28px;
-      background-color: #3e3d75;
+      background-color: #ffffff;
+      opacity: 0.2;
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;
