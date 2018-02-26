@@ -9,7 +9,10 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <count-down></count-down>
+    <!-- 展示倒计时 -->
+    <!-- <count-down></count-down> -->
+    <!-- 展示答题页 -->
+    <respondence class="respondence"></respondence>
     <chat-room></chat-room>
   </div>
 </template>
@@ -17,6 +20,7 @@
 <script>
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
+import Respondence from '../components/Respondence'
 export default {
   name: 'Main',
   data () {
@@ -33,7 +37,8 @@ export default {
   },
   components: {
     CountDown,
-    ChatRoom
+    ChatRoom,
+    Respondence
   }
 }
 </script>
@@ -75,5 +80,9 @@ export default {
         }
       }
     }
+  }
+  .respondence {
+    width: 100%;
+    height: 785px;
   }
 </style>

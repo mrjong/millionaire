@@ -60,5 +60,37 @@ export default {
       nickname: 'Cristina:',
       msg: '12You are really smartYou are really smartYou are really smartYou are really smart'
     }
+  ],
+  respondenceResult: [
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '234'
+    },
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '456'
+    },
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '789'
+    },
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '110'
+    },
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '112'
+    },
+    {
+      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      nickname: 'Cristina',
+      bonus: '113'
+    }
   ]
 }
