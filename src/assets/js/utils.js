@@ -89,7 +89,7 @@ class Timer {
           date: date.getUTCDate(),
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: date.getUTCSeconds()
+          seconds: Math.round(offset / 1000) % 60
         })
       } else {
         endCallback && endCallback()
