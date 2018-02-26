@@ -1,13 +1,12 @@
 <template>
-  <div>
-    chatRoom
-    <ul class="message-list">
+  <div class="chat-msg-wrap">
+    <!-- <ul class="message-list">
       <li v-for="(col) in chatRoomState. msgList" :key='col["sendTime"]'>
         {{col['content']['content']}}
       </li>
     </ul>
     <input type="text" v-model.trim="myMessage">
-    <p class="send-btn" @click="senMessage">send</p>
+     <p class="send-btn" @click="senMessage">send</p> -->
   </div>
 </template>
 
@@ -52,4 +51,7 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
+.chat-msg-wrap {
+  width: 100%;
+}
 </style>

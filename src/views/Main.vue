@@ -10,11 +10,14 @@
       </div>
     </div>
     <count-down></count-down>
-
+    <div class="main-container__chat__room__wrap">
+      <chat-room></chat-room>
+    </div>
   </div>
 </template>
 
 <script>
+import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 export default {
   name: 'Main',
@@ -31,7 +34,8 @@ export default {
     }
   },
   components: {
-    CountDown
+    CountDown,
+    ChatRoom
   }
 }
 </script>
@@ -40,6 +44,8 @@ export default {
     width: 100%;
     height:100%;
     background: url("../assets/images/main-bg.jpg");
+    display: flex;
+    flex-direction: column;
     &__top{
       width: 100%;
       display: flex;
@@ -70,6 +76,12 @@ export default {
          width: 100%;
         }
       }
+    }
+    &__chat__room__wrap{
+      width: 100%;
+      height: 100%;
+      flex:1;
+      overflow-y: scroll;
     }
   }
 </style>
