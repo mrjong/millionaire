@@ -2,7 +2,7 @@
   <div>
     CountDown
     {{timeStamp}}
-    <!-- <chat-room></chat-room> -->
+     <chat-room></chat-room>
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     setTimeout(() => {
       this.timeStamp = 128550
       publicFn.timeCountDown(this.timeStamp, this.intervalTime, (t) => {
-        console.log(t)
+        // console.log(t)
       })
     }, 500)
     // '1519535467489' 11m
