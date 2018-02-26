@@ -3,13 +3,14 @@
 import http from '../../assets/js/http'
 import Vue from 'vue'
 import * as type from '../type'
+import chatRoomIm from '../../assets/js/chatRoomIm'
 const state = {
   list: {
-    chartList: []
+    chatList: []
   }
 }
 const getters = {
-  chartRoomState: state => state
+  chatRoomState: state => state
 }
 const mutations = {
   [type.EXAMPLE] (state, {key, val}) {
@@ -19,12 +20,19 @@ const mutations = {
 }
 const actions = {
   fetch ({commit}) {
-    http.get('example')
+    http.get('')
       .then(({data}) => {
-        commit(type.EXAMPLE, data.key, data.val)
+        console.log(data)
       })
+  },
+  getUserInfo ({commit}, cb) {
+    chatRoomIm.getUserInfo((userInfo) => {
+      cb && cb(userInfo)
+    })
+  },
+  initChatRoom ({commit}, {appKey, token, protobuf, chatRoomId}) {
+    chatRoomIm.initChatRoom(appKey, token, protobuf, chatRoomId)
   }
-
 }
 export default {
   state,

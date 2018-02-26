@@ -1,11 +1,11 @@
 <template>
   <div>
-    <broad-cast-count-down></broad-cast-count-down>
+    <count-down></count-down>
   </div>
 </template>
 
 <script>
-import BroadCastCountDown from '../components/BroadCastCountDown'
+import CountDown from '../components/CountDown.vue'
 export default {
   name: 'Main',
   data () {
@@ -21,7 +21,7 @@ export default {
     }
   },
   components: {
-    BroadCastCountDown
+    CountDown
   }
 }
 </script>

@@ -1,20 +1,15 @@
 <template>
   <div>
-    BroadcastCountDown
-    <chart-room></chart-room>
+    Respondence…………
   </div>
 </template>
 
 <script>
-import ChartRoom from './ChartRoom'
 export default {
-  name: 'BroadcastCountDown',
+  name: 'Respondence',
   data () {
     return {
     }
-  },
-  components: {
-    ChartRoom
   }
 }
 </script>
