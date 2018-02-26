@@ -1,6 +1,6 @@
 <template>
   <div class="respondence-container">
-    <div class="respondence-container__countdown">
+     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50%" cy="50%" r="41%" stroke="#ececef" stroke-width="4"></circle>
         <circle id="circle" cx="50%" cy="50%" r="41%" stroke=" #ffcc03" stroke-width="4.5"></circle>

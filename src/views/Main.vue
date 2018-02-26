@@ -9,8 +9,9 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <count-down></count-down>
+     <count-down v-if="false"></count-down>
     <respondence v-if="false"></respondence>
+    <winners-result></winners-result>
     <chat-room></chat-room>
   </div>
 </template>
@@ -19,7 +20,8 @@
 import {mapGetters} from 'vuex'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
-import Respondence from '../components/Respondence.vue'
+import Respondence from '../components/Respondence'
+import winnersResult from '../components/WinnersResult'
 export default {
   name: 'Main',
   data () {
@@ -42,7 +44,8 @@ export default {
   components: {
     CountDown,
     ChatRoom,
-    Respondence
+    Respondence,
+    winnersResult
   }
 }
 </script>
@@ -84,5 +87,9 @@ export default {
         }
       }
     }
+  }
+  .respondence {
+    width: 100%;
+    height: 785px;
   }
 </style>
