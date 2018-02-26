@@ -1,6 +1,6 @@
 <template>
   <div class="hint">
-    <p class="hint__text">The next start time</p>
+    <p class="hint__text"><span>The next start time</span></p>
     <div class="hint__info">
       <p class="hint__info__time">
         {{nextTime}}
@@ -40,8 +40,7 @@ export default {
       height: 43px;
       line-height: 43px;
       font-size: 28px;
-      background-color: #ffffff;
-      opacity: 0.2;
+      background-color: rgba(255, 255, 255, 0.2);
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;

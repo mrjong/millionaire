@@ -40,9 +40,9 @@ export default {
 <style scoped lang="less" type="text/less">
   .count-down-container{
     width: 100%;
-    height:100%;
+    /*height:100%;*/
     &__module{
-      padding-top: 347px;
+      padding-top: 270px;
       color: #ffffff;
       text-align: center;
       font-family:RobotoCondensed-Regular;
