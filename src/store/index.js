@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import chatRoom from './modules/chatRoom'
 import question from './modules/question'
+import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
@@ -21,7 +22,9 @@ export default new Vuex.Store({
     isOnline: (state) => state.isOnline,
     startTime: (state) => state.startTime,
     status: (state) => state.status,
-    result: (state) => state.result
+    result: (state) => state.result,
+    onlineAmount: (status) => status.onlineAmount,
+    readyTime: (status) => status.readyTime
   },
   mutations: {
     /**
@@ -82,7 +85,8 @@ export default new Vuex.Store({
   },
   modules: {
     chatRoom,
-    question
+    question,
+    home
   },
   strict: debug // 开启严格模式，在mutations外修改state的数据会报错
 })
