@@ -36,7 +36,7 @@ export default {
     height: 463px;
     background-color: #ffffff;
     border-radius: 46px;
-    margin:113px auto 30px;
+    margin:113px auto 25px;
     padding: 0.5px;
     &__user{
       margin: -70px auto;

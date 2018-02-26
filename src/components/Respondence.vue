@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Respondence…………
+  <div class="respondence-container">
+    
   </div>
 </template>
 
