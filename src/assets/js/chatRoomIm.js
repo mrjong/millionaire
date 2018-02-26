@@ -37,9 +37,8 @@ const getUserInfo = (cb) => {
     })
   }
 }
-const initChatRoom = (appKey, token, protobuf, chatRoomId) => {
+const initChatRoom = (appKey, token, protobuf, chatRoomId, receivedMsgCb) => {
   console.log('initChatRoom')
-  const self = this
   const RongIMClient = RongIMLib.RongIMClient
   var config = {}
   if (protobuf) {
@@ -79,16 +78,17 @@ const initChatRoom = (appKey, token, protobuf, chatRoomId) => {
   RongIMClient.setOnReceiveMessageListener({
     // 接收到的消息
     onReceived: function (message) {
-      console.log('aaaaaaaaaaaaaaaaaaaaa')
+      // console.log('aaaaaaaaaaaaaaaaaaaaa')
       // 判断消息类型
       // showTips("新消息，类型为：" + message.messageType);
       // showResult("新消息",message,start);
-      self.messageList.push(message)
-      self.$nextTick(() => {
-        const messageWrapper = document.getElementById('messageWrapper')
-        messageWrapper.scroll(0, 100000)
-      })
+      // self.messageList.push(message)
+      // this.$nextTick(() => {
+      //   const messageWrapper = document.getElementById('messageWrapper')
+      //   messageWrapper.scroll(0, 100000)
+      // })
       // console.log(message)
+      receivedMsgCb(message)
       switch (message.messageType) {
         case RongIMClient.MessageType.TextMessage:
           /*
@@ -149,7 +149,7 @@ const initChatRoom = (appKey, token, protobuf, chatRoomId) => {
       RongIMClient.getInstance().joinChatRoom(chatRoomId, 10, {
         onSuccess: function () {
           // 加入聊天室成功。
-          console.log('go to ' + chatRoomId)
+          console.log(`welcom to chatRoom:${chatRoomId}`)
         },
         onError: (error) => {
           // 加入聊天室失败
@@ -161,7 +161,7 @@ const initChatRoom = (appKey, token, protobuf, chatRoomId) => {
           // chatRoom => 聊天室信息。
           // chatRoom.userInfos => 返回聊天室成员。
           // chatRoom.userTotalNums => 当前聊天室总人数。
-          console.log(chatRoom, chatRoom.userTotalNums)
+          // console.log(chatRoom, chatRoom.userTotalNums)
         },
         onError: function (error) {
           // 获取聊天室信息失败。
@@ -191,11 +191,11 @@ const initChatRoom = (appKey, token, protobuf, chatRoomId) => {
           info = '服务器不可用'
           break
       }
-      console.log(info)
+      return info
     }
   })
 }
-const sendMessage = (msg, roomId) => {
+const sendMessage = (msg, roomId, msgCb) => {
   const message = new RongIMLib.TextMessage({
     content: msg || '',
     extra: '附加消息'
@@ -204,9 +204,13 @@ const sendMessage = (msg, roomId) => {
   const ChatRoomId = roomId || ''
   RongIMClient.getInstance().sendMessage(conversationtype, ChatRoomId, message, {
     onSuccess (info) {
+      console.log('消息发送成功')
       console.log(info)
+      msgCb(info)
     },
     onError (errMsg) {
+      console.log('消息发送失败')
+      console.log(errMsg)
     }
   })
 }

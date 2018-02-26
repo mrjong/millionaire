@@ -1,4 +1,5 @@
 export const EXAMPLE = 'EXAMPLE'
+export const CHAT_LIST = 'CHATLIST'
 
 export const _UPDATE_LOGINSTATE = '_UPDATE_LOGINSTATE'
 export const _UPDATE_STARTTIME = '_UPDATE_STARTTIME'
