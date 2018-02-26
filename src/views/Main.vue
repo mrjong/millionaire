@@ -10,9 +10,7 @@
       </div>
     </div>
     <count-down></count-down>
-    <div class="main-container__chat__room__wrap">
-      <chat-room></chat-room>
-    </div>
+    <chat-room></chat-room>
   </div>
 </template>
 
@@ -76,12 +74,6 @@ export default {
          width: 100%;
         }
       }
-    }
-    &__chat__room__wrap{
-      width: 100%;
-      height: 100%;
-      flex:1;
-      overflow-y: scroll;
     }
   }
 </style>
