@@ -1,18 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import chatRoom from './modules/chatRoom'
+import question from './modules/question'
 import * as type from './type'
-import {isOnline} from '../assets/js/utils'
+import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
-    isOnline, // 是否登录
+    isOnline: utils.isOnline, // 是否登录
     startTime: Infinity, // 开始时间 时间差
     readyTime: 600000, // 准备时间 默认10分钟
     status: status._AWAIT, // 当前状态
+    onlineAmount: 0, // 在线人数
     result: null // 游戏结果
   },
   getters: {
@@ -53,6 +55,14 @@ export default new Vuex.Store({
      */
     [type._UPDATE_RESULT] (state, result) {
       state.result = result
+    },
+    /**
+     * 更新在线人数
+     * @param {any} state
+     * @param {any} amount
+     */
+    [type._UPDATE_AMOUNT] (state, amount) {
+      state.onlineAmount = amount
     }
   },
   actions: {
@@ -63,12 +73,16 @@ export default new Vuex.Store({
     [type._INIT] ({commit}) {
     // TODO: 初始化状态
     },
+    [type._UPDATE_AMOUNT] ({commit}) {
+      // TODO: 更新在线人数
+    },
     [type._RECEIVE_RESULT] ({commit}) {
       // TODO: 更新游戏结果
     }
   },
   modules: {
-    chatRoom
+    chatRoom,
+    question
   },
   strict: debug // 开启严格模式，在mutations外修改state的数据会报错
 })
