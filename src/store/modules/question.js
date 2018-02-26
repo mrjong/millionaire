@@ -21,7 +21,7 @@ const state = {
 }
 
 const getters = {
-  status: (state) => state.status,
+  question_status: (state) => state.status,
   contents: (state) => state.contents,
   options: (state) => state.options,
   index: (state) => state.index,
@@ -30,7 +30,7 @@ const getters = {
   isCorrect: (state) => state.isCorrect,
   correctAnswer: (state) => state.correctAnswer,
   userAnswer: (state) => state.userAnswer,
-  result: (state) => state.result,
+  question_result: (state) => state.result,
   restTime: (state) => state.restTime
 }
 
@@ -69,7 +69,6 @@ const actions = {
 }
 
 export default {
-  namespaced: true,
   state,
   getters,
   mutations,
