@@ -2,13 +2,13 @@
   <div class="base-info">
     <div class="base-info__user">
         <div class="base-info__user__head"
-             :style="{backgroundImage:'url('+ baseInfo.head +')'}"></div>
-        <p class="base-info__user__name">{{baseInfo.name}}</p>
+             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}"></div>
+        <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
       <div class="base-info__other__balance">
         <p class="base-info__balance__text">Balance</p>
-        <p class="base-info__balance__num num">${{baseInfo.balance}}</p>
+        <p class="base-info__balance__num num">{{baseInfo.currencyType + baseInfo.balance}}</p>
       </div>
       <p class="base-info__other__line"></p>
       <div class="base-info__other__rank">
