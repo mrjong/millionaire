@@ -2,8 +2,14 @@
   <div class="login-container">
     <img src="../assets/images/login-title.png" class="login-container__title">
     <div class="login-container__btn">
-      <a href="" class="login-container__btn__fb" @click="FbLogin">Facebook</a>
-      <a href="" class="login-container__btn__google" @click="GoogleLogin">Google+</a>
+      <a href="javascript:void (0)" class="login-container__btn__fb" @click="FbLogin">
+        <i class="login-container__btn__fb__icon fb-icon"></i>
+        Facebook
+      </a>
+      <a href="javascript:void (0)" class="login-container__btn__google" @click="GoogleLogin">
+        <i class="login-container__btn__google__icon google-icon"></i>
+        Google+
+      </a>
     </div>
   </div>
 </template>
@@ -52,6 +58,24 @@ export default {
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
+        position: relative;
+        .fb-icon, .google-icon{
+          display: inline-block;
+          position: absolute;
+          left: 64px;
+          top:50%;
+          transform: translate(0,-50%);
+        }
+        .fb-icon{
+          width: 24px;
+          height: 45px;
+          background-color: #ffffff;
+        }
+        .google-icon{
+          width: 40px;
+          height: 40px;
+          background-color: #ffffff;
+        }
       }
       &__google{
         margin-top: 32px;

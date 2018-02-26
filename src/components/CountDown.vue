@@ -1,8 +1,11 @@
 <template>
-  <div>
-    CountDown
-    {{timeStamp}}
-    <!-- <chat-room></chat-room> -->
+  <div class="count-down-container">
+    <div class="count-down-container__module">
+      <p class="count-down-container__module__text">The game is about to begin...</p>
+      <p class="count-down-container__module__time">{{timeStamp}}</p>
+    </div>
+    <!--聊天室-->
+    <!--<chat-room></chat-room> -->
   </div>
 </template>
 
@@ -35,4 +38,21 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
+  .count-down-container{
+    width: 100%;
+    /*height:100%;*/
+    &__module{
+      padding-top: 270px;
+      color: #ffffff;
+      text-align: center;
+      font-family:RobotoCondensed-Regular;
+      &__text{
+        font-size: 28px;
+      }
+      &__time{
+        margin-top: 31px;
+        font-size: 156px;
+      }
+    }
+  }
 </style>

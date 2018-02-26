@@ -1,6 +1,9 @@
 <template>
   <div class="await-container">
-    <div class="await-container__top-btn"></div>
+    <div class="await-container__top">
+      <div class="await-container__top__like"></div>
+      <div class="await-container__top__instructions"></div>
+    </div>
     <img src="../assets/images/await-title.png" class="await-container__title">
     <next-time :nextTime="nextTime" :money="money"></next-time>
     <base-info :baseInfo="baseInfo"></base-info>
@@ -50,8 +53,33 @@ export default {
     height: 100%;
     background: url("../assets/images/await-bg.jpg") no-repeat center;
     background-size: cover;
+    &__top{
+      width: 100%;
+      display: flex;
+      padding: 25px 25px 0;
+      justify-content: space-between;
+      &__like, &__instructions{
+        width: 54px;
+        height: 54px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+      }
+      &__like{
+        /*content: '\dafd';*/
+      }
+      &__instructions{
+        /*content: '\dafd';*/
+      }
+      &__logo{
+        width: 168px;
+        align-self: center;
+        img{
+          width: 100%;
+        }
+      }
+    }
     &__title{
-      padding-top: 120px;
+      padding-top: 60px;
       width: 400px;
       margin: 0 auto;
     }
