@@ -6,7 +6,7 @@
     </div>
     <img src="../assets/images/await-title.png" class="await-container__title">
     <next-time :nextTime="nextTime" :money="money"></next-time>
-    <base-info :baseInfo="baseInfo"></base-info>
+    <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
         <base-btn :baseStyle="baseStyle1"></base-btn>
         <base-btn :baseStyle="baseStyle2"></base-btn>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
 import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
@@ -39,6 +40,13 @@ export default {
         rank: '1258'
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
+  },
+  mounted () {
   },
   components: {
     BaseBtn,

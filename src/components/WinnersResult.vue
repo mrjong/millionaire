@@ -77,6 +77,7 @@ export default {
   color: #fff;
 }
 .no-winner-result {
+    height: 785px;
     &__title {
         width: 560px;
         margin: 56px 0 218px 0px;

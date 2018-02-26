@@ -3,30 +3,36 @@
     <div class="main-container__top">
       <div class="main-container__top__online">
         <span class="main-container__top__online__icon"></span>
-        <span class="main-container__top__online__num">123454</span>
+        <span class="main-container__top__online__num">{{onlineAmount}}</span>
       </div>
       <div class="main-container__top__logo">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <!-- 展示倒计时 -->
-    <!-- <count-down></count-down> -->
-    <!-- 展示答题页 -->
-    <respondence class="respondence"></respondence>
+     <count-down v-if="false"></count-down>
+    <respondence v-if="false"></respondence>
+    <winners-result></winners-result>
     <chat-room></chat-room>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
+import winnersResult from '../components/WinnersResult'
 export default {
   name: 'Main',
   data () {
     return {
       state: 'CountDown'
     }
+  },
+  computed: {
+    ...mapGetters({
+      onlineAmount: 'onlineAmount'
+    })
   },
   mounted () {
     this.setRouter()
@@ -38,7 +44,8 @@ export default {
   components: {
     CountDown,
     ChatRoom,
-    Respondence
+    Respondence,
+    winnersResult
   }
 }
 </script>
