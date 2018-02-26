@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
-import BroadCastAwait from '@/views/BroadCastAwait.vue'
+import Await from '@/views/Await.vue'
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 
@@ -18,7 +18,7 @@ export default new Router({
     {
       path: '/await',
       name: 'Await',
-      component: BroadCastAwait
+      component: Await
     },
     {
       path: '/main',
@@ -28,7 +28,7 @@ export default new Router({
         // {
         //   path: 'count-down',
         //   name: 'CountDown',
-        //   component: BroadCastCountDown,
+        //   component: CountDown,
         //   beforeEnter: (to, from, next) => {
         //     if (from.fullPath !== '/home') {
         //       next('/home')
