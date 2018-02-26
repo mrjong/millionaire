@@ -4,13 +4,10 @@
       <p class="count-down-container__module__text">The game is about to begin...</p>
       <p class="count-down-container__module__time">{{timeStamp}}</p>
     </div>
-    <!--聊天室-->
-    <!--<chat-room></chat-room> -->
   </div>
 </template>
 
 <script>
-import ChatRoom from './ChatRoom'
 import publicFn from '../assets/js/publicFn'
 export default {
   name: 'CountDown',
@@ -32,9 +29,7 @@ export default {
     // '1519535000000' 3s
     // '128550' // 时间差时间戳毫秒
   },
-  components: {
-    ChatRoom
-  }
+  components: {}
 }
 </script>
 <style scoped lang="less" type="text/less">
