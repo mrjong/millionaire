@@ -67,7 +67,7 @@ const im = {
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId)
-        this.emitListener(type.CONNECTED, userId)
+        this.emitListener(type.CONNECT_SUCCESS, userId)
         this.joinChatRoom('room10', 10)
       },
       onTokenIncorrect: () => {

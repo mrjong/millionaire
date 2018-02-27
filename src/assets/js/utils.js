@@ -85,8 +85,8 @@ class Timer {
         const date = new Date(offset >= 0 ? offset : 0)
         completeCallback && completeCallback({
           year: date.getUTCFullYear() - 1970,
-          month: date.getUTCMonth() + 1,
-          date: date.getUTCDate(),
+          month: date.getUTCMonth(),
+          date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
           seconds: Math.round(offset / 1000) % 60
