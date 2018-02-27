@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     fetch () {
-      this.$store.dispatch('fetch')
+      // this.$store.dispatch('fetch')
     }
   }
 }

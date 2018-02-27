@@ -17,13 +17,14 @@
     <div class="msg-send-container">
       <input type="text" id="sendmessage" v-model.trim="myMessage">
       <label class="msg-send-container__icon" for="sendmessage"></label>
-      <span class="msg-seng-container__btn" @click="sendMsg">SEND</span>
+      <span class="msg-seng-container__btn" @click="sendMessage">SEND</span>
     </div>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import * as type from '../store/type'
 export default {
   name: 'ChatRoom',
   data () {
@@ -35,19 +36,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      chatRoomState: 'chatRoomState'
+      chatRoomState: 'chatRoomState',
+      userInfo: 'userInfo'
     })
   },
   mounted () {
-    this.$store.dispatch('fetch')
+    this.$store.dispatch(type.CHAT_LIST_FETCH)
   },
   methods: {
-    sendMsg () {
-      this.$store.dispatch('sendMsg', {
+    sendMessage () {
+      this.$store.dispatch(type.CHAT_SEND_MSG, {
         msgObj: {
-          img: '',
+          img: this.userInfo.avatar,
           msg: this.myMessage,
-          nickname: 'liuweiwei'
+          nickname: this.userInfo.userName
         },
         cb: () => {
           this.$nextTick(() => {
@@ -55,31 +57,6 @@ export default {
             msgContainer.scroll(0, 10000)
           })
         }
-      })
-    },
-    staticMsgLen () {
-      let len = this.$refs.msgContainer.children.length
-      while (+len > this.msgLen) {
-        this.$refs.msgContainer.removeChild(this.$refs.msgContainer.firstChild)
-        len = this.$refs.msgContainer.children.length
-      }
-    },
-    createCahtRoom () {
-      this.$store.dispatch('getUserInfo', (userInfo) => {
-        if (userInfo.token) {
-          this.$store.dispatch('initChatRoom', {
-            appKey: 'p5tvi9dsphpf4',
-            token: userInfo.token,
-            protobuf: null,
-            chatRoomId: this.chatRoomId
-          })
-        }
-      })
-    },
-    senMessage () {
-      this.$store.dispatch('sendMessage', {
-        msg: this.myMessage,
-        roomId: this.chatRoomId
       })
     }
   }
