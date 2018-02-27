@@ -1,5 +1,7 @@
 export const EXAMPLE = 'EXAMPLE'
-export const CHAT_LIST = 'CHATLIST'
+
+export const CHAT_LIST_FETCH = 'CHAT_LIST_FETCH'
+export const CHAT_SEND_MSG = 'CHAT_SEND_MSG'
 
 export const _UPDATE_LOGINSTATE = '_UPDATE_LOGINSTATE'
 export const _UPDATE_STARTTIME = '_UPDATE_STARTTIME'
