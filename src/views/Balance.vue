@@ -16,25 +16,36 @@
       </div>
     </div>
     <div class="balance-wrap__operate">
-      <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account">
+      <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account" v-model="myPay">
       <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
-      <p class="balance-wrap__operate__btn">Cash Out</p>
+      <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
+    <balance-mark v-if="false"></balance-mark>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Balance',
   data () {
     return {
+      myPay: ''
     }
   },
   computed: {
     ...mapGetters({
       userInfo: 'userInfo'
     })
+  },
+  methods: {
+    cashOut () {
+      console.log(this.myPay)
+    }
+  },
+  components: {
+    BalanceMark
   }
 }
 </script>
@@ -48,6 +59,7 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
   &__title {
     width: 100%;
     height: 54px;
