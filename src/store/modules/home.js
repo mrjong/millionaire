@@ -3,7 +3,8 @@
 import * as type from '../type'
 
 const state = {
-  userId: '', // IM用户ID
+  imUserId: '', // IM用户ID,
+  userId: '', // 用户ID
   avatar: '', // 用户头像
   userName: '', // 用户名
   balance: 0, // 用户余额

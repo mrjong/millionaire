@@ -89,8 +89,16 @@ class Timer {
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(offset / 1000) % 60
+          seconds: Math.round(offset / 1000) % 60,
+          offset
         })
+        // 如果剩余时间小于间隔
+        if (offset < interval) {
+          this.stop()
+          setTimeout(() => {
+            endCallback && endCallback()
+          }, offset)
+        }
       } else {
         endCallback && endCallback()
         this.stop()
