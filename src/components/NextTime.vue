@@ -7,7 +7,7 @@
       </p>
       <i class="hint__info__line"></i>
       <p class="hint__info__money">
-        ${{money}}
+        {{currencyType}}{{money}}
       </p>
     </div>
   </div>
@@ -21,6 +21,9 @@ export default {
       type: String
     },
     money: {
+      type: Number
+    },
+    currencyType: {
       type: String
     }
   },

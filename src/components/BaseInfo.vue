@@ -8,7 +8,7 @@
     <div class="base-info__other">
       <div class="base-info__other__balance">
         <p class="base-info__balance__text">Balance</p>
-        <p class="base-info__balance__num num">{{baseInfo.currencyType + baseInfo.balance}}</p>
+        <p class="base-info__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
       </div>
       <p class="base-info__other__line"></p>
       <div class="base-info__other__rank">

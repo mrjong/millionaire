@@ -14,7 +14,7 @@ export default new Vuex.Store({
     isOnline: utils.isOnline, // 是否登录
     startTime: Infinity, // 开始时间 时间差
     readyTime: 600000, // 准备时间 默认10分钟
-    status: status._AWAIT, // 当前状态
+    status: status._PLAYING, // 当前状态
     onlineAmount: 0, // 在线人数
     result: null // 游戏结果
   },
@@ -30,10 +30,10 @@ export default new Vuex.Store({
     /**
      * 更新登录状态
      * @param {any} state
-     * @param {any} loginstate
+     * @param {any} loginState
      */
-    [type._UPDATE_LOGINSTATE] (state, loginstate) {
-      state.isOnline = !!loginstate
+    [type._UPDATE_LOGINSTATE] (state, loginState) {
+      state.isOnline = !!loginState
     },
     /**
      * 同步开始时间
@@ -69,6 +69,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    [type._UPDATE_LOGINSTATE] ({commit}, loginState) {
+      // 是否在线
+      commit(type._UPDATE_LOGINSTATE, loginState)
+    },
     /**
      * 初始化
      * @param {any} {commit}
