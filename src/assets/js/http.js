@@ -2,9 +2,10 @@ import axios from 'axios'
 const env = 'test'
 const host = {
   local: '',
-  test: '',
+  test: 'https://mock.apuscn.com/mock/30/millionaire',
   prod: ''
 }
 export default axios.create({
-  baseURL: host[env]
+  baseURL: host[env],
+  withCredentials: true
 })
