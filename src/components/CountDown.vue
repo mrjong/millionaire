@@ -9,7 +9,6 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import publicFn from '../assets/js/publicFn'
 export default {
   name: 'CountDown',
   data () {
@@ -31,12 +30,10 @@ export default {
 <style scoped lang="less" type="text/less">
   .count-down-container{
     width: 100%;
-    /*height:100%;*/
     &__module{
-      padding-top: 270px;
+      padding: 270px 0 346px;
       color: #ffffff;
       text-align: center;
-      font-family:RobotoCondensed-Regular;
       &__text{
         font-size: 28px;
       }
