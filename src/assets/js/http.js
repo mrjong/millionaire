@@ -1,4 +1,10 @@
 import axios from 'axios'
+const env = 'test'
+const host = {
+  local: '',
+  test: '',
+  prod: ''
+}
 export default axios.create({
-//   baseURL: 'http://192.168.221.197:1234'
+  baseURL: host[env]
 })
