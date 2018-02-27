@@ -1,19 +1,22 @@
 <template>
   <div class="respondence-container">
-     <div class="respondence-container__countdown">
+    <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
+    <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50%" cy="50%" r="41%" stroke="#ececef" stroke-width="4"></circle>
         <circle id="circle" cx="50%" cy="50%" r="41%" stroke=" #ffcc03" stroke-width="4.5"></circle>
-        <text x="50%" y="-32%" class="text" fill="#241262" stroke-width="4">{{rangeValue}}</text>
+        <text x="50%" y="-32%" class="text" fill="#241262" stroke-width="4">{{restTime}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
       1.provident quae recusandae similique velit veniam voluptatibus voluptatum? Porro, quod.
     </p>
     <div class="respondence-container__answer">
-      <answer></answer>
-      <answer></answer>
-      <answer></answer>
+      <!--<answer v-for="(val, idx) in options" :key=idx :content="val" @click="answer(val)"></answer>-->
+      <answer content="val"
+              @answer="answer('val')"
+              :is-click="isClick">
+      </answer>
     </div>
   </div>
 </template>
@@ -21,37 +24,77 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import Answer from '../components/Answer.vue'
+import Viewing from '../components/Viewing.vue'
+import * as type from '../store/type'
 export default {
   name: 'Respondence',
   data () {
     return {
-      rangeValue: 10
+      rangeValue: 10,
+      isClick: false,
+      options: ['dfa', 'dsfafasdf', 'twetg']
     }
   },
   mounted () {
-    this.countDown()
+    this.$store.dispatch(type.QUESTION_GET)
   },
   computed: {
     ...mapGetters({
+      question_status: 'question_status',
+      watchingMode: 'watchingMode',
+      contents: 'contents',
+      index: 'index',
+      isAnswered: 'isAnswered',
+      isCorrect: 'isCorrect',
+      correctAnswer: 'correctAnswer',
+      userAnswer: 'userAnswer',
+      result: '',
+      time: 'time',
+      restTime: 'restTime'
     })
   },
   methods: {
     ...mapActions({}),
-    countDown () {
-      let circle = document.getElementById('circle')
-      setTimeout(() => {
-        circle.style.strokeDashoffset = 0
-      }, 100)
-      let timer = setInterval(() => {
-        this.rangeValue -= 1
-        if (this.rangeValue === 0) {
-          clearTimeout(timer)
+    answer (e) {
+      if (this.isClick) {
+        return false
+      }
+      if (this.question_status === 5) {
+        if (this.watchingMode) {
+          // 可以点击
+          console.log('dd')
+          this.isClick = true
+          this.$store.dispatch(type.QUESTION_SUBMIT, e)
+          this.$store.commit(type.QUESTION_UPDATE, {
+            watchingMode: true
+          })
         }
-      }, 1000)
+      } else {
+        // 不可以点击
+        return false
+      }
+    }
+  },
+  watch: {
+    question_status: function () {
+      let circle = document.getElementById('circle')
+      if (this.question_status === 5) {
+        circle.setAttribute('transition', `transition: stroke-dashoffset ${this.restTime} linear;`)
+        setTimeout(() => {
+          circle.style.strokeDashoffset = 0
+        }, 500)
+      } else {
+        this.isClick = false
+        circle.removeAttribute('transition')
+        setTimeout(() => {
+          circle.style.strokeDashoffset = 314
+        }, 500)
+      }
     }
   },
   components: {
-    Answer
+    Answer,
+    Viewing
   }
 }
 </script>
@@ -62,6 +105,12 @@ export default {
     background-color: #fff;
     border-radius: 28px;
     padding: 50px 23px;
+    position: relative;
+    &__viewing{
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
     &__countdown{
       width: 113px;
       height: 113px;
@@ -72,9 +121,6 @@ export default {
       color: #241262;
       margin: 43px auto 50px;
 
-    }
-    &__answer{
-      /*text-align: center;*/
     }
   }
   #circleProcess {

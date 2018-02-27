@@ -43,6 +43,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    [type._UPDATE_LOGINSTATE] ({commit}, loginState) {
+      // 是否在线
+      commit(type._UPDATE_LOGINSTATE, loginState)
+    },
     /**
      * 初始化
      * @param {any} {commit, dispatch, state}

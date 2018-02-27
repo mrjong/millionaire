@@ -5,7 +5,7 @@
       <div class="await-container__top__instructions"></div>
     </div>
     <img src="../assets/images/await-title.png" class="await-container__title">
-    <next-time :nextTime="nextTime" :money="money"></next-time>
+    <next-time nextTime="" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
         <base-btn :baseStyle="baseStyle1"></base-btn>
@@ -19,6 +19,7 @@ import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
 import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
+import * as type from '../store/type'
 export default {
   name: 'Await',
   data () {
@@ -47,6 +48,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.dispatch(type.HOME_UPDATE)
   },
   components: {
     BaseBtn,

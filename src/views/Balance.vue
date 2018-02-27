@@ -1,7 +1,7 @@
 <template>
   <div class="balance-wrap">
     <div class="balance-wrap__title">
-      <p class="balance-wrap__title__back"></p>
+      <p class="balance-wrap__title__back" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
     </div>
     <div class="balance-wrap__contain">
@@ -9,10 +9,10 @@
         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">My balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          {{userInfo.currencyType}}5.8<span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
+          {{userInfo.currencyType}}{{userInfo.balance}}<span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total revenue</p>
-        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}5267.8</p>
+        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
       </div>
     </div>
     <div class="balance-wrap__operate">
@@ -20,7 +20,7 @@
       <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
-    <balance-mark v-if="false"></balance-mark>
+    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @cancelMark='cancelMark'></balance-mark>
   </div>
 </template>
 
@@ -31,7 +31,13 @@ export default {
   name: 'Balance',
   data () {
     return {
-      myPay: ''
+      myPay: '',
+      markInfo: {
+        showMark: false,
+        htmlText: '',
+        shouldSub: false
+      },
+      withdraw: 20
     }
   },
   computed: {
@@ -41,7 +47,39 @@ export default {
   },
   methods: {
     cashOut () {
-      console.log(this.myPay)
+      if (+this.userInfo.balance < +this.withdraw) {
+        this.markInfo = {
+          showMark: true,
+          shouldSub: false,
+          htmlText: `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`
+        }
+      } else {
+        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        const passRule = emailReg.test(this.myPay)
+        if (!passRule) {
+          this.markInfo = {
+            showMark: true,
+            shouldSub: false,
+            htmlText: `Please enter the correct PayTM account!`
+          }
+        } else {
+          this.markInfo = {
+            showMark: true,
+            shouldSub: true,
+            htmlText: `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`
+          }
+        }
+      }
+    },
+    cancelMark (info) {
+      this.markInfo.showMark = false
+      if (info) {
+        // 提交表单
+        console.log('提交提现表单')
+      }
+    },
+    goBack () {
+      this.$router.go(-1)
     }
   },
   components: {
