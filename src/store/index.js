@@ -100,7 +100,7 @@ export default new Vuex.Store({
           } else {
             // 是否进入倒计时
             if (isInRoom) {
-              const timer = utils.Timer(1000, Date.now() + startTime)
+              const timer = utils.Timer(1000, Date.now() + (+startTime))
               timer.addCompleteListener(({offset}) => {
                 commit(type._UPDATE, {
                   startTime: offset
@@ -118,13 +118,15 @@ export default new Vuex.Store({
             } else {
               // 每隔一段时间同步开始时间
               const {readyTime, syncIntervalTime} = state
-              const timer = utils.Timer(syncIntervalTime, Date.now() + startTime - readyTime)
+              const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime) - readyTime)
               timer.addCompleteListener(() => {
                 syncTime().then(({data}) => {
                   if (+data.result === 1 && +data.code === 0) {
+                    const startTime = +data.data
                     commit(type._UPDATE, {
-                      startTime: data.data
+                      startTime
                     })
+                    timer.sync(Date.now() + startTime - readyTime)
                   } else {
                     console.log('同步时间出错:', data.msg)
                   }
