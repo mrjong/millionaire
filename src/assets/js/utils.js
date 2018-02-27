@@ -18,8 +18,8 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : '',
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
+  app_id: clientParams ? clientParams.appId : '100210001',
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? clientParams.isOnline : false,
 
@@ -85,8 +85,8 @@ class Timer {
         const date = new Date(offset >= 0 ? offset : 0)
         completeCallback && completeCallback({
           year: date.getUTCFullYear() - 1970,
-          month: date.getUTCMonth() + 1,
-          date: date.getUTCDate(),
+          month: date.getUTCMonth(),
+          date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
           seconds: Math.round(offset / 1000) % 60

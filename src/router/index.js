@@ -40,7 +40,7 @@ export default new Router({
       ]
     },
     {
-      path: '/balance/:balance/:totalincome', // 用户余额，总收入 具体参数待定
+      path: '/balance', // 用户余额，总收入 具体参数待定
       name: 'Balance',
       component: Balance
     },

@@ -9,6 +9,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+// import publicFn from '../assets/js/publicFn'
 export default {
   name: 'CountDown',
   data () {
