@@ -1,8 +1,8 @@
 <template>
   <div class="balance-mark">
     <div class="balance-mark__wrap">
-      <p class="balance-mark__wrap__title">Please enter the correct PayTM account!</p>
-      <p class="balance-mark__wrap__btn">OK</p>
+      <p class="balance-mark__wrap__title" id="balanceMarkText"></p>
+      <p class="balance-mark__wrap__btn" @click="cancelMark">OK</p>
     </div>
   </div>
 </template>
@@ -10,8 +10,23 @@
 <script>
 export default {
   name: 'BalanceMark',
+  props: {
+    dataInfo: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
+    }
+  },
+  mounted () {
+    const markText = document.getElementById('balanceMarkText')
+    markText.innerHTML = this.dataInfo.htmlText
+  },
+  methods: {
+    cancelMark () {
+      this.$emit('cancelMark', this.dataInfo.shouldSub)
     }
   }
 }
@@ -41,6 +56,7 @@ export default {
       width: 100%;
       height: 160px;
       font-size: 28px;
+      line-height: 30px;
       font-family: 'Roboto-Light';
       color: #000;
     }
