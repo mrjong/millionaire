@@ -1,10 +1,6 @@
 /* eslint-disable no-redeclare */
 'use strict'
-// import http from '../../assets/js/http'
-// import Vue from 'vue'
 import * as type from '../type'
-// import chatRoomIm from '../../assets/js/chatRoomIm'
-// import testData from '../../assets/js/testData'
 import * as listenerType from '../../assets/js/listener-type.js'
 import im from '../../assets/js/im'
 const state = {
@@ -39,6 +35,11 @@ const actions = {
     im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
     commit(type.CHAT_LIST_FETCH, msgObj)
     cb()
+  },
+  [type.CHAT_GET_USER_ID] ({commit}, cb) {
+    im.addListener(listenerType.CONNECT_SUCCESS, (userId) => {
+      cb(userId)
+    })
   }
 }
 export default {

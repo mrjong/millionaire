@@ -9,7 +9,8 @@ const state = {
   balance: 0, // 用户余额
   rank: 0, // 用户排名
   currencyType: '$', // 货币类型
-  bonusAmount: 0 // 奖金数量
+  bonusAmount: 0, // 奖金数量
+  income: 0 // 总收益
 }
 
 const getters = {
