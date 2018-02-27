@@ -1,10 +1,6 @@
 /* eslint-disable no-redeclare */
 'use strict'
-// import http from '../../assets/js/http'
-// import Vue from 'vue'
 import * as type from '../type'
-// import chatRoomIm from '../../assets/js/chatRoomIm'
-// import testData from '../../assets/js/testData'
 import * as listenerType from '../../assets/js/listener-type.js'
 import im from '../../assets/js/im'
 const state = {
