@@ -41,6 +41,11 @@ export default {
     })
   },
   mounted () {
+    this.$store.dispatch(type.CHAT_GET_USER_ID, (userId) => {
+      const userInfos = Object.assign({}, this.userInfo)
+      userInfos.userId = userId
+      this.$store.dispatch(type.HOME_UPDATE, userInfos)
+    })
     this.$store.dispatch(type.CHAT_LIST_FETCH)
   },
   methods: {
