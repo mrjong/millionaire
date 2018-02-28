@@ -9,7 +9,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <p class="chat-global-mark"></p>
+     <!-- <p class="chat-global-mark"></p> -->
     <count-down v-if="status === 2"></count-down>
     <respondence v-else-if="status === 3"></respondence>
     <winners-result v-else></winners-result>
@@ -54,9 +54,10 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg.jpg") no-repeat top left;
+    background: url("../assets/images/main-bg2.jpg") no-repeat top left;
     display: flex;
     flex-direction: column;
+    position: relative;
     &__top{
       width: 100%;
       display: flex;
@@ -95,8 +96,10 @@ export default {
   }
   .chat-global-mark {
     width: 100%;
-    height: 100%;
-    background: url('../assets/images/chat-mark.png') no-repeat left top;
-    background-size: cover;
+    height: 89%;
+    background: url('../assets/images/chat-mark.png') no-repeat top left;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 </style>
