@@ -44,6 +44,22 @@ export default {
    */
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
+  },
+  TimeFormat (timeStap) {
+    const timeSecond = parseInt(timeStap / 1000)
+    let s = parseInt(timeSecond % 60)
+    let m = parseInt(timeSecond / 60 % 60)
+    let h = parseInt(timeSecond / 60 / 60 % 24)
+    if (h <= 9) {
+      h = '0' + h
+    }
+    if (m <= 9) {
+      m = '0' + m
+    }
+    if (s <= 9) {
+      s = '0' + s
+    }
+    return h + ':' + m + ':' + s
   }
 }
 
