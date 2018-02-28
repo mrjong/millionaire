@@ -9,9 +9,9 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="false"></count-down>
-    <respondence v-if="false"></respondence>
-    <winners-result></winners-result>
+    <count-down v-if="status === 2"></count-down>
+    <respondence v-else-if="status === 3"></respondence>
+    <winners-result v-else></winners-result>
     <chat-room></chat-room>
   </div>
 </template>
@@ -26,12 +26,12 @@ export default {
   name: 'Main',
   data () {
     return {
-      state: 'CountDown'
     }
   },
   computed: {
     ...mapGetters({
-      onlineAmount: 'onlineAmount'
+      onlineAmount: 'onlineAmount',
+      status: 'status'
     })
   },
   mounted () {
@@ -53,7 +53,7 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg.jpg");
+    background: url("../assets/images/main-bg.jpg") no-repeat top left;
     display: flex;
     flex-direction: column;
     &__top{

@@ -1,10 +1,14 @@
 <template>
-  <div class="answer-container">
-    <div class="answer-container__state finish-right"></div>
-    <div class="answer-container__base">
-      <span class="answer-container__base__text">bububu</span>
+  <div class="answer-container" @click="answer">
+    <div class="answer-container__state"
+         :class="{'hover': isClick}"
+         ref="answerStatus"
+         id="progress">
+    </div>
+    <div class="answer-container__base" :class="{'font-white':isClick || questionStatus === 7}">
+      <span class="answer-container__base__text">{{content}}</span>
       <div class="answer-container__base__right">
-        <span class="answer-container__base__right__num">7890</span>
+        <span class="answer-container__base__right__num"></span>
         <span class="answer-container__base__right__icon"></span>
       </div>
     </div>
@@ -12,10 +16,46 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
-  name: 'Respondence',
+  name: 'Answer',
+  props: {
+    content: {
+      type: String
+    },
+    isClick: {
+      type: Boolean
+    }
+  },
   data () {
     return {
+    }
+  },
+  computed: {
+    ...mapGetters({
+      question_status: 'question_status',
+      contents: 'contents',
+      correctAnswer: 'correctAnswer'
+    })
+  },
+  mounted () {},
+  methods: {
+    answer () {
+      this.$emit('answer')
+    }
+  },
+  watch: {
+    questionStatus: function () {
+      let progress = document.getElementById('progress')
+      if (this.questionStatus === 5) {
+        if (this.isClick) {
+          progress.className = 'answer-container__state hover'
+        } else {
+          progress.className = 'answer-container__state'
+        }
+      } else if (this.questionStatus === 7) {
+        progress.className = 'answer-container__state hover'
+      }
     }
   }
 }
@@ -38,6 +78,7 @@ export default {
       left:0;
     }
     .hover{
+      width: 100%;
       background-color: #ffc103;
     }
     .finish-right{
@@ -45,6 +86,9 @@ export default {
     }
     .finish-wrong{
       background-color: #fb4c4c;
+    }
+    .font-white{
+      color: #ffffff;
     }
     &__base{
       display:flex;

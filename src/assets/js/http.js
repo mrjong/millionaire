@@ -6,6 +6,5 @@ const host = {
   prod: ''
 }
 export default axios.create({
-  baseURL: host[env],
-  withCredentials: true
+  baseURL: host[env]
 })

@@ -2,28 +2,45 @@
   <div class="login-container">
     <img src="../assets/images/login-title.png" class="login-container__title">
     <div class="login-container__btn">
-      <a href="javascript:void (0)" class="login-container__btn__fb" @click="FbLogin">
-        <i class="login-container__btn__fb__icon fb-icon"></i>
-        Facebook
-      </a>
-      <a href="javascript:void (0)" class="login-container__btn__google" @click="GoogleLogin">
-        <i class="login-container__btn__google__icon google-icon"></i>
-        Google+
-      </a>
+      <p class="login-container__btn__fb" @click="Login">Log in</p>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Login',
   data () {
     return {}
   },
+  computed: {
+    ...mapGetters({
+      status: 'status'
+    })
+  },
   methods: {
     // 登录方法
-    FbLogin () {},
-    GoogleLogin () {}
+    Login: function () {
+      utils.login(() => {
+        // 返回主页面
+        this.$store.commit(type._UPDATE, {
+          isOnline: true
+        })
+        this.$store.dispatch(type._INIT)
+      })
+      this.$store.commit(type._UPDATE, {
+        isOnline: true
+      })
+      this.$store.dispatch(type._INIT)
+      if (this.status === 1) {
+        this.$router.push({path: '/await'})
+      } else {
+        this.$router.push({path: '/main'})
+      }
+    }
   },
   mounted () {}
 }
@@ -32,7 +49,7 @@ export default {
   .login-container{
     width: 100%;
     height: 100%;
-    background: url("../assets/images/login-bg.jpg") no-repeat center;
+    background: url("../assets/images/login-bg.jpg") no-repeat top left;
     background-size: cover;
     position: relative;
     &__title{
@@ -42,11 +59,11 @@ export default {
     }
     &__btn{
       position: absolute;
-      bottom: 80px;
+      bottom: 100px;
       left: 50%;
       transform: translate(-50%);
       text-align: center;
-      &__fb, &__google{
+      &__fb,{
         display: block;
         width: 658px;
         height: 94px;
@@ -54,32 +71,11 @@ export default {
         text-align: center;
         color: #ffffff;
         font-size: 36px;
-        background-color: #4C08F3;
+        background-color: #f0a01b;
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
         position: relative;
-        .fb-icon, .google-icon{
-          display: inline-block;
-          position: absolute;
-          left: 64px;
-          top:50%;
-          transform: translate(0,-50%);
-        }
-        .fb-icon{
-          width: 24px;
-          height: 45px;
-          background-color: #ffffff;
-        }
-        .google-icon{
-          width: 40px;
-          height: 40px;
-          background-color: #ffffff;
-        }
-      }
-      &__google{
-        margin-top: 32px;
-        background-color: #DC427A;
       }
     }
   }
