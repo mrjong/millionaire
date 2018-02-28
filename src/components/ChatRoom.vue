@@ -7,9 +7,11 @@
           v-for="(col, idx) in chatRoomState.msgList"
           :key="idx"
           >
-          <img class="msg-container__item__portrait" :src="col.img" alt="">
-          <span class="msg-container__item__nickname">{{col.nickname}}</span>
-          <span class="msg-container__item__text">{{col.msg}}</span>
+          <span class="msg-container__item__wrap">
+            <img class="msg-container__item__portrait" :src="col.img" alt="">
+            <span class="msg-container__item__nickname">{{col.nickname}}</span>
+            <span class="msg-container__item__text">{{col.msg}}</span>
+          </span>
         </li>
       </transition-group>
     </ul>
@@ -152,11 +154,11 @@ export default {
   height: auto;
   &__item {
     max-width: 100%;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, .2);
-    border-radius: 30px;
-    padding: 8px 7px;
+    // display: flex;
+    // align-items: center;
+    // background: rgba(255, 255, 255, .2);
+    // border-radius: 30px;
+    // padding: 8px 7px;
     margin: 6px 26px;
     box-sizing: border-box;
     img {
@@ -167,14 +169,29 @@ export default {
       font-family: "Roboto Medium";
       text-shadow: #666 1px 1px 1px;
     }
+    &__wrap {
+      background: rgba(255, 255, 255, .2);
+      border-radius: 30px;
+      padding: 0px 20px;
+      box-sizing: border-box;
+      display: inline-block;
+      font-size: 0;
+      position: relative;
+      line-height: 60px;
+      overflow: hidden;
+    }
     &__portrait {
-      width: 51px;
+      width: 50px;
       height: 50px;
       border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
     }
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
+      margin-left: 51px;
     }
     &__text {
       color: #fff;
