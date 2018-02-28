@@ -13,17 +13,17 @@
     </p>
     <div class="respondence-container__answer">
       <!--<answer v-for="(val, idx) in options" :key=idx :content="val" @click="answer(val)"></answer>-->
-      <answer content="val"
+      <!-- <answer content="val"
               @answer="answer('val')"
               :is-click="isClick">
-      </answer>
+      </answer> -->
     </div>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import Answer from '../components/Answer.vue'
+// import Answer from '../components/Answer.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 export default {
@@ -93,7 +93,7 @@ export default {
     }
   },
   components: {
-    Answer,
+    // Answer,
     Viewing
   }
 }

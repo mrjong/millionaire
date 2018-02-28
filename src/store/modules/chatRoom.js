@@ -7,7 +7,8 @@ const state = {
   msgList: []
 }
 const getters = {
-  chatRoomState: state => state
+  chatRoomState: state => state,
+  msgList: (state) => state.msgList
 }
 const mutations = {
   [type.CHAT_LIST_FETCH] (state, item) {
@@ -22,19 +23,20 @@ const mutations = {
 }
 const actions = {
   [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
-    im.addListener(listenerType.MESSAGE_NORMAL, (message) => {
+    const handler = (message) => {
       const obj = {
         img: '',
         nickname: '',
-        msg: message.content.content
+        msg: message.content.content,
+        msgId: message.messageId
       }
       commit(type.CHAT_LIST_FETCH, obj)
-    })
+    }
+    im.addListener(listenerType.MESSAGE_NORMAL, handler)
+    im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
   },
-  [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj, cb}) {
+  [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {
     im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
-    commit(type.CHAT_LIST_FETCH, msgObj)
-    cb()
   }
 }
 export default {
