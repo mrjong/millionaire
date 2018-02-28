@@ -21,7 +21,7 @@ export default {
   app_id: clientParams ? clientParams.appId : '100210001',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? clientParams.isOnline : false,
+  isOnline: clientParams ? !!clientParams.isLoginin : false,
 
   /**
    * 打点

@@ -43,118 +43,124 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    [type._UPDATE_LOGINSTATE] ({commit}, loginState) {
-      // 是否在线
-      commit(type._UPDATE_LOGINSTATE, loginState)
-    },
     /**
      * 初始化
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state}) {
-      init().then(({data}) => {
-        console.log(data)
-        if (data.result === 1 && +data.code === 0) {
-          const info = data.data
-          const {s: isPlaying, r: isInRoom, ui: userId, up: avatar, un: userName, ub: balance, income, ur: rank, sr: startTime, rb: bonusAmount, cc: onlineAmount, m: chamInfo, j: question, a: answer} = info
-          // 更新首页信息
-          commit(type.HOME_UPDATE, {
-            userId,
-            avatar,
-            userName,
-            balance: +balance,
-            income: +income,
-            rank: +rank,
-            bonusAmount: +bonusAmount
-          })
-          commit(type._UPDATE, {
-            startTime: +startTime,
-            onlineAmount: +onlineAmount,
-            chatRoomId: chamInfo.rn,
-            imToken: chamInfo.it
-          })
-          // 如果已经开始
-          if (isPlaying) {
-            // 更新问题信息
-            commit(type.QUESTION_UPDATE, {
-              id: question.ji,
-              index: +question.js,
-              content: question.jc || '',
-              options: question.jo || ['', '', ''],
-              watchingMode: true
+      return new Promise((resolve, reject) => {
+        init().then(({data}) => {
+          console.log(data)
+          if (data.result === 1 && +data.code === 0) {
+            const info = data.data
+            const {s: isPlaying, r: isInRoom, ui: userId, up: avatar, un: userName, ub: balance, income, ur: rank, sr: startTime, rb: bonusAmount, cc: onlineAmount, m: chamInfo, j: question, a: answer} = info
+            // 更新首页信息
+            commit(type.HOME_UPDATE, {
+              userId,
+              avatar,
+              userName,
+              balance: +balance,
+              income: +income,
+              rank: +rank,
+              bonusAmount: +bonusAmount
             })
-            // 如果有答案直接进入答案页面
-            if (answer) {
-              commit(type.QUESTION_UPDATE, {
-                correctAnswer: answer.ac || '',
-                result: answer.as
-              })
-              commit(type.QUESTION_UPDATE, {
-                status: status.QUESTION_END
-              })
-            }
-            // 更新当前状态
             commit(type._UPDATE, {
-              status: status._PLAYING
+              startTime: +startTime,
+              onlineAmount: +onlineAmount,
+              chatRoomId: chamInfo.rn,
+              imToken: chamInfo.it
             })
-          } else {
-            // 是否进入倒计时
-            if (isInRoom) {
-              const timer = utils.Timer(1000, Date.now() + (+startTime))
-              timer.addCompleteListener(({offset}) => {
-                commit(type._UPDATE, {
-                  startTime: offset
-                })
+            // 如果已经开始
+            if (isPlaying) {
+              // 更新问题信息
+              commit(type.QUESTION_UPDATE, {
+                id: question.ji,
+                index: +question.js,
+                content: question.jc || '',
+                options: question.jo || ['', '', ''],
+                watchingMode: true
               })
-              timer.addEndListener(() => {
-                commit(type._UPDATE, {
-                  status: status._PLAYING
+              // 如果有答案直接进入答案页面
+              if (answer) {
+                commit(type.QUESTION_UPDATE, {
+                  correctAnswer: answer.ac || '',
+                  result: answer.as
                 })
-              })
-              timer.start()
+                commit(type.QUESTION_UPDATE, {
+                  status: status.QUESTION_END
+                })
+              }
+              // 更新当前状态
               commit(type._UPDATE, {
-                status: status._READY
+                status: status._PLAYING
               })
             } else {
-              // 每隔一段时间同步开始时间
-              const {readyTime, syncIntervalTime} = state
-              const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime) - readyTime)
-              timer.addCompleteListener(() => {
-                syncTime().then(({data}) => {
-                  if (+data.result === 1 && +data.code === 0) {
-                    const startTime = +data.data
-                    commit(type._UPDATE, {
-                      startTime
-                    })
-                    timer.sync(Date.now() + startTime - readyTime)
-                  } else {
-                    console.log('同步时间出错:', data.msg)
-                  }
-                }, (err) => {
-                  console.log('同步时间失败:', err)
+              // 是否进入倒计时
+              if (isInRoom) {
+                const timer = utils.Timer(1000, Date.now() + (+startTime))
+                timer.addCompleteListener(({offset}) => {
+                  commit(type._UPDATE, {
+                    startTime: offset
+                  })
                 })
-              })
-              timer.addEndListener(() => {
-                dispatch(type._INIT)
-              })
-              timer.start()
+                timer.addEndListener(() => {
+                  commit(type._UPDATE, {
+                    status: status._PLAYING
+                  })
+                })
+                timer.start()
+                commit(type._UPDATE, {
+                  status: status._READY
+                })
+              } else {
+                // 切换至等待状态
+                commit(type._UPDATE, {
+                  status: status._AWAIT
+                })
+                // 每隔一段时间同步开始时间
+                const {readyTime, syncIntervalTime} = state
+                const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime) - readyTime)
+                timer.addCompleteListener(() => {
+                  syncTime().then(({data}) => {
+                    if (+data.result === 1 && +data.code === 0) {
+                      const startTime = +data.data
+                      commit(type._UPDATE, {
+                        startTime
+                      })
+                      timer.sync(Date.now() + startTime - readyTime)
+                    } else {
+                      console.log('同步时间出错:', data.msg)
+                    }
+                  }, (err) => {
+                    console.log('同步时间失败:', err)
+                  })
+                })
+                timer.addEndListener(() => {
+                  dispatch(type._INIT)
+                })
+                timer.start()
+              }
             }
-          }
-          // 如果聊天室开启，进入聊天室
-          if (isInRoom) {
-            im.addListener(CONNECT_SUCCESS, (imUserId) => {
-              commit(type.HOME_UPDATE, {
-                imUserId
+            // 如果聊天室开启，进入聊天室
+            if (isInRoom) {
+              im.addListener(CONNECT_SUCCESS, (imUserId) => {
+                commit(type.HOME_UPDATE, {
+                  imUserId
+                })
+                im.joinChatRoom(state.chatRoomId)
               })
-              im.joinChatRoom(state.chatRoomId)
-            })
-            im.connect(state.imToken)
+              im.connect(state.imToken)
+            }
+
+            resolve()
+          } else {
+            console.log('初始化失败:', data.msg)
+            reject(data.msg)
           }
-        } else {
-          console.log('初始化失败:', data.msg)
-        }
-      }, (err) => {
-        console.log('初始化接口出错', err)
+        }, (err) => {
+          console.log('初始化接口出错', err)
+          reject(err)
+        })
       })
     },
     [type._UPDATE_AMOUNT] ({commit}) {

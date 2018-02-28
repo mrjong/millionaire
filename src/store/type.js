@@ -5,6 +5,8 @@ export const CHAT_SEND_MSG = 'CHAT_SEND_MSG'
 export const CHAT_GET_USER_ID = 'CHAT_GET_USER_ID'
 
 export const _UPDATE = '_UPDATE'
+export const _UPDATE_AMOUNT = '_UPDATE_AMOUNT'
+export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
 export const _INIT = '_INIT'
 
 export const HOME_UPDATE = 'HOME_UPDATE'
