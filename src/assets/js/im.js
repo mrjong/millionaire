@@ -96,8 +96,8 @@ const im = {
             this.emitListener(type.CONNECTED_ERROR, info)
             break
         }
-        this.emitListener(type.CONNECTED_ERROR, info)
         console.log(info)
+        this.reconnect()
       }
     })
   },

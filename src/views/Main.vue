@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="main-container__top">
       <div class="main-container__top__online">
-        <span class="main-container__top__online__icon"></span>
+        <span class="main-container__top__online__icon icon-yonghu iconfont"></span>
         <span class="main-container__top__online__num">{{onlineAmount}}</span>
       </div>
       <div class="main-container__top__logo">
@@ -70,8 +70,8 @@ export default {
           display: inline-block;
           width: 24px;
           height: 24px;
-          content: '\e64a';
-          background-color: yellow;
+          font-size: 24px;
+          line-height: 24px;
           vertical-align: bottom;
         }
         &__num{

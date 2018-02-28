@@ -44,6 +44,22 @@ export default {
    */
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
+  },
+  TimeFormat (timeStap) {
+    const timeSecond = parseInt(timeStap / 1000)
+    let s = parseInt(timeSecond % 60)
+    let m = parseInt(timeSecond / 60 % 60)
+    let h = parseInt(timeSecond / 60 / 60 % 24)
+    if (h <= 9) {
+      h = '0' + h
+    }
+    if (m <= 9) {
+      m = '0' + m
+    }
+    if (s <= 9) {
+      s = '0' + s
+    }
+    return h + ':' + m + ':' + s
   }
 }
 
@@ -77,7 +93,14 @@ class Timer {
    * @memberof Timer
    */
   start () {
-    const interval = this.interval
+    const {interval, endTime} = this
+    // 如果剩余时间小于间隔
+    if (endTime < interval) {
+      setTimeout(() => {
+        this.endCallback && this.endCallback()
+      }, endTime)
+      return
+    }
     this.timer = setInterval(() => {
       const {endTime, completeCallback, endCallback} = this
       const offset = endTime - Date.now()

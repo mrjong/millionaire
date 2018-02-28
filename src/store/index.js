@@ -53,7 +53,8 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = data.data
-            const {s: isPlaying, r: isInRoom, ui: userId, up: avatar, un: userName, ub: balance, income, ur: rank, sr: startTime, rb: bonusAmount, cc: onlineAmount, m: chamInfo, j: question, a: answer} = info
+            const {s: isPlaying, r: isInRoom, ui: userId, up: avatar, un: userName, ub: balance, income, ur: rank, rb: bonusAmount, cc: onlineAmount, m: chamInfo, j: question, a: answer} = info
+            const startTime = +info.sr * 1000
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId,
@@ -65,7 +66,7 @@ export default new Vuex.Store({
               bonusAmount: +bonusAmount
             })
             commit(type._UPDATE, {
-              startTime: +startTime,
+              startTime,
               onlineAmount: +onlineAmount,
               chatRoomId: chamInfo.rn,
               imToken: chamInfo.it
@@ -97,7 +98,7 @@ export default new Vuex.Store({
             } else {
               // 是否进入倒计时
               if (isInRoom) {
-                const timer = utils.Timer(1000, Date.now() + (+startTime))
+                const timer = utils.Timer(1000, Date.now() + startTime)
                 timer.addCompleteListener(({offset}) => {
                   commit(type._UPDATE, {
                     startTime: offset
@@ -117,28 +118,31 @@ export default new Vuex.Store({
                 commit(type._UPDATE, {
                   status: status._AWAIT
                 })
-                // 每隔一段时间同步开始时间
-                const {readyTime, syncIntervalTime} = state
-                const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime) - readyTime)
-                timer.addCompleteListener(() => {
-                  syncTime().then(({data}) => {
-                    if (+data.result === 1 && +data.code === 0) {
-                      const startTime = +data.data
-                      commit(type._UPDATE, {
-                        startTime
-                      })
-                      timer.sync(Date.now() + startTime - readyTime)
-                    } else {
-                      console.log('同步时间出错:', data.msg)
-                    }
-                  }, (err) => {
-                    console.log('同步时间失败:', err)
+                // 如果有下一场信息
+                if (startTime > 0) {
+                  // 每隔一段时间同步开始时间
+                  const {readyTime, syncIntervalTime} = state
+                  const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime) - readyTime)
+                  timer.addCompleteListener(() => {
+                    syncTime().then(({data}) => {
+                      if (+data.result === 1 && +data.code === 0) {
+                        const startTime = +data.data * 1000
+                        commit(type._UPDATE, {
+                          startTime
+                        })
+                        timer.sync(Date.now() + startTime - readyTime)
+                      } else {
+                        console.log('同步时间出错:', data.msg)
+                      }
+                    }, (err) => {
+                      console.log('同步时间失败:', err)
+                    })
                   })
-                })
-                timer.addEndListener(() => {
-                  dispatch(type._INIT)
-                })
-                timer.start()
+                  timer.addEndListener(() => {
+                    dispatch(type._INIT)
+                  })
+                  timer.start()
+                }
               }
             }
             // 如果聊天室开启，进入聊天室

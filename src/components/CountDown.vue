@@ -2,14 +2,13 @@
   <div class="count-down-container">
     <div class="count-down-container__module">
       <p class="count-down-container__module__text">The game is about to begin...</p>
-      <p class="count-down-container__module__time">{{readyTime}}</p>
+      <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-// import publicFn from '../assets/js/publicFn'
 export default {
   name: 'CountDown',
   data () {
@@ -20,8 +19,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      readyTime: 'readyTime'
-    })
+      startTime: 'startTime'
+    }),
+    countDown: function () {
+      const timeSecond = parseInt(this.startTime / 1000)
+      let s = timeSecond % 60
+      let m = parseInt(timeSecond / 60 % 60)
+      let h = parseInt(timeSecond / 60 / 60 % 24)
+      if (h <= 9) {
+        h = '0' + h
+      }
+      if (m <= 9) {
+        m = '0' + m
+      }
+      if (s <= 9) {
+        s = '0' + s
+      }
+      return h + ':' + m + ':' + s
+    }
   },
   mounted () {
   },
