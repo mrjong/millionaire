@@ -1,7 +1,6 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
 const appKey = 'p5tvi9dsphpf4'
-const token = 'eNHrEiy/u/rTtpWbLk9tyu4xTTSorLIemAFyBMeP9TK0HordhE76GWroMJrCOpDekbGK5qZfAiCK3wNfwYWEkw=='
 
 const im = {
 
@@ -211,7 +210,7 @@ const im = {
    */
   emitListener (listenerType, ...args) {
     const listeners = this.listeners[listenerType]
-    if (listeners.length) {
+    if (listeners && listeners.length) {
       listeners.forEach((listener) => {
         listener(...args)
       })
@@ -220,6 +219,5 @@ const im = {
 }
 
 im.init()
-im.connect(token)
 
 export default im
