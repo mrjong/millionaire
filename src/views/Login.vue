@@ -2,7 +2,7 @@
   <div class="login-container">
     <img src="../assets/images/login-title.png" class="login-container__title">
     <div class="login-container__btn">
-      <a href="javascript:void (0)" class="login-container__btn__fb" @click="Login">Log in</a>
+      <p class="login-container__btn__fb" @click="Login">Log in</p>
     </div>
   </div>
 </template>
@@ -26,7 +26,9 @@ export default {
     Login: function () {
       utils.login(() => {
         // 返回主页面
-        this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
+        this.$store.commit(type._UPDATE, {
+          isOnline: true
+        })
         this.$store.dispatch(type._INIT)
       })
       this.$store.commit(type._UPDATE, {
@@ -38,23 +40,6 @@ export default {
       } else {
         this.$router.push({path: '/main'})
       }
-      // eslint-disable-next-line indent
-/*
-      switch (this.status) {
-        case 1:
-          this.$router.push({path: '/await'})
-          break
-        case 2:
-          this.$router.push({path: '/main'})
-          break
-        case 3:
-          this.$router.push({path: '/main'})
-          break
-        case 4:
-          this.$router.push({path: '/main'})
-          break
-      }
-*/
     }
   },
   mounted () {}
@@ -64,7 +49,7 @@ export default {
   .login-container{
     width: 100%;
     height: 100%;
-    background: url("../assets/images/login-bg.jpg") no-repeat center;
+    background: url("../assets/images/login-bg.jpg") no-repeat top left;
     background-size: cover;
     position: relative;
     &__title{
