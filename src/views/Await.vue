@@ -2,7 +2,9 @@
   <div class="await-container">
     <div class="await-container__top">
       <div class="await-container__top__like icon-dianzan iconfont"></div>
-      <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
+      <router-link to="/rule">
+        <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
+      </router-link>
     </div>
     <img src="../assets/images/await-title.png" class="await-container__title">
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
@@ -49,14 +51,15 @@ export default {
   },
   methods: {
     DateFormatter () {
-      let nowDate = new Date().getTime()
-      let targetTime = nowDate + this.startTime
-      let month = targetTime.getMonth() + 1
-      let date = targetTime.getDate()
-      let hour = targetTime.getHours()
-      let minute = targetTime.getMinutes()
-      let second = targetTime.getSeconds()
-      this.targetDate = month + ' - ' + date + '' + hour + ':' + minute + ':' + second
+      let nowDate = new Date(new Date().getTime() + this.startTime)
+      let month = nowDate.getMonth() + 1
+      let date = nowDate.getDate()
+      let hour = nowDate.getHours()
+      let minute = nowDate.getMinutes()
+      if (month <= 9) {
+        month = '0' + month
+      }
+      this.targetDate = month + '.' + date + ' ' + hour + ':' + minute
     }
   },
   components: {

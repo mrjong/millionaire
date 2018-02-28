@@ -29,17 +29,24 @@ export default {
         this.$store.commit(type._UPDATE, {
           isOnline: true
         })
-        this.$store.dispatch(type._INIT)
+        this.$store.dispatch(type._INIT).then(() => {
+          if (this.status === 1) {
+            this.$router.push({path: '/await'})
+          } else {
+            this.$router.push({path: '/main'})
+          }
+        })
       })
       this.$store.commit(type._UPDATE, {
         isOnline: true
       })
-      this.$store.dispatch(type._INIT)
-      if (this.status === 1) {
-        this.$router.push({path: '/await'})
-      } else {
-        this.$router.push({path: '/main'})
-      }
+      this.$store.dispatch(type._INIT).then(() => {
+        if (this.status === 1) {
+          this.$router.push({path: '/await'})
+        } else {
+          this.$router.push({path: '/main'})
+        }
+      })
     }
   },
   mounted () {}
