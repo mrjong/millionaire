@@ -53,7 +53,7 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg.jpg");
+    background: url("../assets/images/main-bg.jpg") no-repeat top left;
     display: flex;
     flex-direction: column;
     &__top{
