@@ -25,12 +25,13 @@ export default {
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
     if (this.isOnline) {
-      this.$store.dispatch(type._INIT)
-      if (this.status === 2) {
-        this.$router.push({path: '/await'})
-      } else {
-        this.$router.push({path: '/main'})
-      }
+      this.$store.dispatch(type._INIT).then(() => {
+        if (this.status === 2) {
+          this.$router.push({path: '/await'})
+        } else {
+          this.$router.push({path: '/main'})
+        }
+      })
     } else {
       this.$router.push({path: '/login'})
     }
