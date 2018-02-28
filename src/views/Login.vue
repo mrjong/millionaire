@@ -2,22 +2,58 @@
   <div class="login-container">
     <img src="../assets/images/login-title.png" class="login-container__title">
     <div class="login-container__btn">
-      <a href="" class="login-container__btn__fb" @click="FbLogin">Facebook</a>
-      <a href="" class="login-container__btn__google" @click="GoogleLogin">Google+</a>
+      <a href="javascript:void (0)" class="login-container__btn__fb" @click="Login">Log in</a>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Login',
   data () {
     return {}
   },
+  computed: {
+    ...mapGetters({
+      status: 'status'
+    })
+  },
   methods: {
     // 登录方法
-    FbLogin () {},
-    GoogleLogin () {}
+    Login: function () {
+      utils.login(() => {
+        // 返回主页面
+        this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
+        this.$store.dispatch(type._INIT)
+      })
+      this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
+      this.$store.dispatch(type._INIT)
+      if (this.status === 1) {
+        this.$router.push({path: '/await'})
+      } else {
+        this.$router.push({path: '/main'})
+      }
+      // eslint-disable-next-line indent
+/*
+      switch (this.status) {
+        case 1:
+          this.$router.push({path: '/await'})
+          break
+        case 2:
+          this.$router.push({path: '/main'})
+          break
+        case 3:
+          this.$router.push({path: '/main'})
+          break
+        case 4:
+          this.$router.push({path: '/main'})
+          break
+      }
+*/
+    }
   },
   mounted () {}
 }
@@ -36,11 +72,11 @@ export default {
     }
     &__btn{
       position: absolute;
-      bottom: 80px;
+      bottom: 100px;
       left: 50%;
       transform: translate(-50%);
       text-align: center;
-      &__fb, &__google{
+      &__fb,{
         display: block;
         width: 658px;
         height: 94px;
@@ -48,14 +84,11 @@ export default {
         text-align: center;
         color: #ffffff;
         font-size: 36px;
-        background-color: #4C08F3;
+        background-color: #f0a01b;
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
-      }
-      &__google{
-        margin-top: 32px;
-        background-color: #DC427A;
+        position: relative;
       }
     }
   }

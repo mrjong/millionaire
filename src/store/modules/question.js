@@ -2,6 +2,10 @@
 
 import * as type from '../type'
 import * as status from '../../assets/js/status'
+import utils from '../../assets/js/utils'
+import im from '../../assets/js/im'
+import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
+import { submitAnswer } from '../../assets/js/api'
 
 const state = {
   status: status.QUESTION_ANSWERING, // 状态
@@ -16,12 +20,12 @@ const state = {
   userAnswer: '', // 用户答案
   result: '', // 结果汇总
   time: 10000, // 作答时间, 默认10秒
-  restTime: 10000, // 剩余时间,
-  timer: null // 计时器
+  restTime: 10000 // 剩余时间
 }
 
 const getters = {
-  status: (state) => state.status,
+  question_status: (state) => state.status,
+  id: (state) => state.id,
   contents: (state) => state.contents,
   options: (state) => state.options,
   index: (state) => state.index,
@@ -30,7 +34,8 @@ const getters = {
   isCorrect: (state) => state.isCorrect,
   correctAnswer: (state) => state.correctAnswer,
   userAnswer: (state) => state.userAnswer,
-  result: (state) => state.result,
+  question_result: (state) => state.result,
+  time: (state) => state.time,
   restTime: (state) => state.restTime
 }
 
@@ -47,29 +52,73 @@ const mutations = {
 
 const actions = {
   /**
-   * 获取题目信息
-   * @param {any} {commit, rootGetters}
+   * 初始化
+   * @param {any} {dispatch}
    */
-  [type.QUESTION_GET] ({commit, rootGetters}) {
-    // 如果已经开始, 直接拉取题目
-    if (rootGetters.status === status._PLAYING) {
-      // TODO: 后端拉取题目
-    }
-    // TODO: 添加监听器至IM, 接受题目
+  [type.QUESTION_INIT] ({dispatch}) {
+    dispatch(type.QUESTION_GET)
+    dispatch(type.QUESTION_RECEIVE_ANSWER)
   },
-  [type.QUESTION_START] ({commit}) {
-    // TODO: 开始答题
+  [type.QUESTION_GET] ({commit}) {
+    im.addListener(MESSAGE_QUESTION, (message) => {
+      // TODO: 消息内容填充至store
+      commit(type.QUESTION_UPDATE, {
+        status: status.QUESTION_ANSWERING
+      })
+    })
   },
-  [type.QUESTION_SUBMIT] ({commit}) {
+
+  /**
+   * 开始答题
+   * @param {any} {commit, getters}
+   */
+  [type.QUESTION_START] ({commit, getters}) {
+    const {time} = getters
+    commit(type.QUESTION_UPDATE, {
+      restTime: time
+    })
+    const timer = utils.Timer(1000, Date.now() + time)
+    timer.addCompleteListener(({offset}) => {
+      commit(type.QUESTION_UPDATE, {
+        restTime: offset
+      })
+    })
+    timer.addEndListener(() => {
+      if (!getters.isAnswered) {
+        commit(type.QUESTION_UPDATE, {
+          watchingMode: true
+        })
+      }
+      commit(type.QUESTION_UPDATE, {
+        status: status.QUESTION_RECIEIVING_ANSWERING
+      })
+    })
+    timer.start()
+  },
+  /**
+   *  提交答案
+   * @param {any} {getters}
+   */
+  [type.QUESTION_SUBMIT] ({getters}) {
     // TODO: 提交答案
+    const {id, userAnswer} = getters
+    submitAnswer(id, userAnswer).then(({data}) => {
+      if (+data.result !== 1 || +data.code !== 0) {
+        console.log('答案提交失败:', id, data.msg)
+      }
+    }, (err) => {
+      console.log('答案提交错误:', err)
+    })
   },
-  [type.QUESTION_RECEIVE_ANSWER] ({commit}, answer) {
-    // TODO: 接收答案
+  [type.QUESTION_RECEIVE_ANSWER] ({commit, getters}, answer) {
+    im.addListener(MESSAGE_ANSWER, (message) => {
+      // TODO: 将答案填充至store， 判断答案是否正确，是否切换至观战模式
+      commit(type.QUESTION_UPDATE, status.QUESTION_END)
+    })
   }
 }
 
 export default {
-  namespaced: true,
   state,
   getters,
   mutations,

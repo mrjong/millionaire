@@ -1,13 +1,13 @@
 <template>
   <div class="hint">
-    <p class="hint__text">The next start time</p>
+    <p class="hint__text"><span>The next start time</span></p>
     <div class="hint__info">
       <p class="hint__info__time">
         {{nextTime}}
       </p>
       <i class="hint__info__line"></i>
       <p class="hint__info__money">
-        ${{money}}
+        {{currencyType}}{{money}}
       </p>
     </div>
   </div>
@@ -21,6 +21,9 @@ export default {
       type: String
     },
     money: {
+      type: Number
+    },
+    currencyType: {
       type: String
     }
   },
@@ -40,7 +43,7 @@ export default {
       height: 43px;
       line-height: 43px;
       font-size: 28px;
-      background-color: #3e3d75;
+      background-color: rgba(255, 255, 255, 0.2);
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;
