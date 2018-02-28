@@ -37,3 +37,7 @@
 
 .icon-guanzhanzhong:before { content: "\e615"; }
 
+.icon-right:before { content: "\e616"; }
+
+.icon-wrong:before { content: "\e617"; }
+

@@ -45,21 +45,39 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  TimeFormat (timeStap) {
-    const timeSecond = parseInt(timeStap / 1000)
-    let s = parseInt(timeSecond % 60)
-    let m = parseInt(timeSecond / 60 % 60)
-    let h = parseInt(timeSecond / 60 / 60 % 24)
-    if (h <= 9) {
-      h = '0' + h
+  TimeFormat (time, fixedDate, countdown) {
+    let timeObj = {
+      month: 0,
+      day: 0,
+      h: 0,
+      m: 0,
+      s: 0
     }
-    if (m <= 9) {
-      m = '0' + m
+    if (fixedDate) {
+      let nowDate = new Date(new Date().getTime() + time)
+      timeObj.month = nowDate.getMonth() + 1
+      timeObj.day = nowDate.getDay()
+      timeObj.h = nowDate.getHours()
+      timeObj.m = nowDate.getMinutes()
     }
-    if (s <= 9) {
-      s = '0' + s
+    if (countdown) {
+      const timeSecond = parseInt(time / 1000)
+      timeObj.s = timeSecond % 60
+      timeObj.m = parseInt(timeSecond / 60 % 60)
+      timeObj.h = parseInt(timeSecond / 60 / 60 % 24)
     }
-    return h + ':' + m + ':' + s
+    return ''
+  },
+  computePercent (obj, val) {
+    let total = 0
+    for (let i in obj) {
+      total += obj[i]
+    }
+    let percent = val / total
+    if (percent < 10 && percent > 0) {
+      percent = 10
+    }
+    return percent
   }
 }
 
@@ -96,7 +114,7 @@ class Timer {
     const {interval} = this
     // 如果剩余时间小于间隔
     const offset = this.endTime - Date.now()
-    if (offset - Date.now() < interval) {
+    if (offset < interval) {
       setTimeout(() => {
         this.endCallback && this.endCallback()
       }, offset)
