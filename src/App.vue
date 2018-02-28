@@ -26,7 +26,7 @@ export default {
     this.$store.dispatch(type._RECEIVE_RESULT)
     if (this.isOnline) {
       this.$store.dispatch(type._INIT).then(() => {
-        if (this.status === 2) {
+        if (this.status === 1) {
           this.$router.push({path: '/await'})
         } else {
           this.$router.push({path: '/main'})
@@ -37,7 +37,16 @@ export default {
     }
   },
   methods: {},
-  components: {}
+  components: {},
+  watch: {
+    status: function (status) {
+      if (status === 1) {
+        this.$router.push({path: '/await'})
+      } else {
+        this.$router.push({path: '/main'})
+      }
+    }
+  }
 }
 </script>
 

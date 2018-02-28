@@ -54,7 +54,8 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg2.jpg") no-repeat top left;
+    background: url("../assets/images/main-bg.jpg") no-repeat top left;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     position: relative;
