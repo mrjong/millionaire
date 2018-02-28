@@ -21,7 +21,7 @@ const mutations = {
   }
 }
 const actions = {
-  [type.CHAT_LIST_FETCH] ({commit}) {
+  [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
     im.addListener(listenerType.MESSAGE_NORMAL, (message) => {
       const obj = {
         img: '',
@@ -31,15 +31,10 @@ const actions = {
       commit(type.CHAT_LIST_FETCH, obj)
     })
   },
-  [type.CHAT_SEND_MSG] ({commit}, {msgObj, cb}) {
+  [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj, cb}) {
     im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
     commit(type.CHAT_LIST_FETCH, msgObj)
     cb()
-  },
-  [type.CHAT_GET_USER_ID] ({commit}, cb) {
-    im.addListener(listenerType.CONNECT_SUCCESS, (userId) => {
-      cb(userId)
-    })
   }
 }
 export default {

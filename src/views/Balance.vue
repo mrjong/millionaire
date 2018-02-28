@@ -1,7 +1,7 @@
 <template>
   <div class="balance-wrap">
     <div class="balance-wrap__title">
-      <p class="balance-wrap__title__back" @click="goBack"></p>
+      <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
     </div>
     <div class="balance-wrap__contain">
@@ -109,10 +109,14 @@ export default {
     display: flex;
     align-items: center;
     &__back {
+      display: inline-block;
       width: 54px;
       height: 54px;
       border-radius: 50%;
       background: rgba(255, 255, 255, .2);
+      font-size: 24px;
+      text-align: center;
+      line-height: 54px;
     }
     &__nickname {
       width: 100%;
