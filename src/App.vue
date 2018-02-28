@@ -5,7 +5,9 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import './assets/css/public.css'
+import * as type from './store/type'
 export default {
   name: 'App',
   data () {
@@ -13,8 +15,20 @@ export default {
       loginStatus: true
     }
   },
+  computed: {
+    ...mapGetters({
+      isOnline: 'isOnline'
+    })
+  },
   mounted () {
-    this.fetch()
+    this.$store.dispatch(type._INIT)
+    this.$store.dispatch(type._UPDATE_AMOUNT)
+    this.$store.dispatch(type._RECEIVE_RESULT)
+    if (this.isOnline) {
+
+    } else {
+      this.$router.push({path: '/login'})
+    }
   },
   methods: {
     fetch () {
