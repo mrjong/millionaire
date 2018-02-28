@@ -53,7 +53,7 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = data.data
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, j: question = {}, a: answer = {}} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, j: question = {}, a: answer} = info
             const startTime = +info.sr * 1000
             // 更新首页信息
             commit(type.HOME_UPDATE, {

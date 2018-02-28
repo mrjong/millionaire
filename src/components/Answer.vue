@@ -5,8 +5,8 @@
          id="progress"
          :style="{width: percent1 + '%'}">
     </div>
-    <div class="answer-container__base" :class="{'font-white':isClick || question_status === 7}">
-      <span class="answer-container__base__text">{{content}}</span>
+    <div class="answer-container__base">
+      <span class="answer-container__base__text" :class="{'font-white':(isClick || question_status === 7) && myChick}">{{content}}</span>
       <div class="answer-container__base__right" v-if="question_status === 7">
         <span class="answer-container__base__right__num">{{result}}</span>
         <span class="answer-container__base__right__icon iconfont icon-right"
