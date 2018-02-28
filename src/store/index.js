@@ -53,11 +53,12 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = data.data
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo, j: question = {}, a: answer = {}} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, j: question = {}, a: answer = {}} = info
             const startTime = +info.sr * 1000
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
+              supaId: userInfo.us || '',
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
               balance: +accountInfo.ub || 0,
@@ -67,9 +68,9 @@ export default new Vuex.Store({
             })
             commit(type._UPDATE, {
               startTime,
-              onlineAmount: +chatRoomInfo.ic,
-              chatRoomId: chatRoomInfo.rn,
-              imToken: chatRoomInfo.it
+              onlineAmount: +chatRoomInfo.ic || 0,
+              chatRoomId: chatRoomInfo.rn || '',
+              imToken: chatRoomInfo.it || ''
             })
             // 如果已经开始
             if (isPlaying) {
@@ -77,7 +78,7 @@ export default new Vuex.Store({
               commit(type.QUESTION_UPDATE, {
                 id: question.ji,
                 index: +question.js,
-                content: question.jc || '',
+                contents: question.jc || '',
                 options: question.jo || ['', '', ''],
                 watchingMode: true
               })
