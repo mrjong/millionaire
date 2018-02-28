@@ -42,7 +42,8 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
-      startTime: 'startTime'
+      startTime: 'startTime',
+      status: 'status'
     })
   },
   mounted () {
@@ -53,13 +54,19 @@ export default {
     DateFormatter () {
       let nowDate = new Date(new Date().getTime() + this.startTime)
       let month = nowDate.getMonth() + 1
-      let date = nowDate.getDate()
+      let day = nowDate.getDay()
       let hour = nowDate.getHours()
       let minute = nowDate.getMinutes()
       if (month <= 9) {
         month = '0' + month
       }
-      this.targetDate = month + '.' + date + ' ' + hour + ':' + minute
+      if (day <= 9) {
+        day = '0' + day
+      }
+      if (minute <= 9) {
+        minute = '0' + minute
+      }
+      this.targetDate = month + '.' + day + ' ' + hour + ':' + minute
     }
   },
   components: {

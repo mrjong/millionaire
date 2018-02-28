@@ -1,6 +1,8 @@
 <template>
   <div class="view-container">
-    <i class="view-container__icon icon-guanzhanzhong iconfont"></i>
+    <div class="view-container__icon">
+      <img src="../assets/images/watchingMode.png" >
+    </div>
     <span class="view-container__text">Viewing</span>
   </div>
 </template>
@@ -15,26 +17,24 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .view-container{
-    width: 144px;
-    height: 38px;
+    height: 50px;
     border-radius: 26px;
     border:1px solid #cac6d8;
-    display: flex;
-    justify-content: center;
+    line-height: 45px;
+    vertical-align: middle;
+    padding:0 12px;
     &__icon{
-      width: 28px;
-      height: 16px;
-      background-color: yellow;
-      align-self: center;
-      margin-right: 16px;
-      font-size: 16px;
-      line-height: 16px;
+      width: 30px;
+      height: 18px;
+      display: inline-block;
+      img{
+        width: 100%;
+      }
     }
     &__text{
       font-size: 20px;
-      text-align: center;
       color: #241262;
-      align-self: center;
+      margin-left: 12px;
     }
   }
 </style>

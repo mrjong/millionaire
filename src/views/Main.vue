@@ -11,7 +11,7 @@
     </div>
      <count-down v-if="status === 2"></count-down>
     <respondence v-else-if="status === 3"></respondence>
-    <winners-result v-else></winners-result> 
+    <winners-result v-else></winners-result>
     <chat-room></chat-room>
   </div>
 </template>
@@ -53,7 +53,8 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg2.jpg") no-repeat top left;
+    background: url("../assets/images/main-bg.jpg") no-repeat top left;
+    background-size: cover;
     display: flex;
     flex-direction: column;
     position: relative;
