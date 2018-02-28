@@ -4,7 +4,6 @@
       <transition-group name='fade'>
         <li
           class="msg-container__item"
-          :class="{'fade-out-top': +idx === 0, 'fade-out-bot': +idx === 1}"
           v-for="(col, idx) in chatRoomState.msgList"
           :key="idx"
           >
@@ -24,7 +23,7 @@
           v-model.trim="myMessage">
         <span class="msg-send-container__wrap__btn" @click="sendMessage">Send</span>
       </p>
-      <label @click="() => {showInput = true}" class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">label</label>
+      <label @click="() => {showInput = true}" class="msg-send-container__icon iconfont icon-pinglun" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}"></label>
     </div>
   </div>
 </template>
@@ -102,7 +101,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   &__icon {
-    display: inline-block;
+    // display: inline-block;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -110,6 +109,10 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+    font-size: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &__hide {
     opacity: 0;
