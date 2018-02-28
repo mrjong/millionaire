@@ -49,12 +49,7 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch(type.CHAT_GET_USER_ID, (userId) => {
-      const userInfos = Object.assign({}, this.userInfo)
-      userInfos.userId = userId
-      this.$store.dispatch(type.HOME_UPDATE, userInfos)
-    })
-    this.$store.dispatch(type.CHAT_LIST_FETCH)
+    this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
@@ -65,7 +60,7 @@ export default {
     sendMessage () {
       if (this.myMessage) {
         this.showInput = false
-        this.$store.dispatch(type.CHAT_SEND_MSG, {
+        this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
           msgObj: {
             img: this.userInfo.avatar,
             msg: this.myMessage,
