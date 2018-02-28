@@ -14,10 +14,17 @@
         </li>
       </transition-group>
     </ul>
-    <div class="msg-send-container">
-      <input type="text" id="sendmessage" v-model.trim="myMessage">
-      <label class="msg-send-container__icon" for="sendmessage"></label>
-      <span class="msg-seng-container__btn" @click="sendMessage">SEND</span>
+    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+       <p class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+        <input
+          class="msg-send-container__wrap__input"
+          id="sendmessage"
+          type="text"
+          @blur="() => {showInput = false}"
+          v-model.trim="myMessage">
+        <span class="msg-send-container__wrap__btn" @click="sendMessage">Send</span>
+      </p>
+      <label @click="() => {showInput = true}" class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">label</label>
     </div>
   </div>
 </template>
@@ -31,7 +38,9 @@ export default {
     return {
       msgLen: 10,
       chatRoomId: 'room10',
-      myMessage: ''
+      myMessage: '',
+      showInput: false,
+      pageHeight: null
     }
   },
   computed: {
@@ -47,22 +56,31 @@ export default {
       this.$store.dispatch(type.HOME_UPDATE, userInfos)
     })
     this.$store.dispatch(type.CHAT_LIST_FETCH)
+    this.$nextTick(() => {
+      const bodys = document.getElementsByTagName('body')[0]
+      const bodyHeight = bodys.clientHeight
+      bodys.style.height = bodyHeight + 'px'
+    })
   },
   methods: {
     sendMessage () {
-      this.$store.dispatch(type.CHAT_SEND_MSG, {
-        msgObj: {
-          img: this.userInfo.avatar,
-          msg: this.myMessage,
-          nickname: this.userInfo.userName
-        },
-        cb: () => {
-          this.$nextTick(() => {
-            const msgContainer = document.getElementById('msgContainer')
-            msgContainer.scroll(0, 10000)
-          })
-        }
-      })
+      if (this.myMessage) {
+        this.showInput = false
+        this.$store.dispatch(type.CHAT_SEND_MSG, {
+          msgObj: {
+            img: this.userInfo.avatar,
+            msg: this.myMessage,
+            nickname: this.userInfo.userName
+          },
+          cb: () => {
+            this.$nextTick(() => {
+              const msgContainer = document.getElementById('msgContainer')
+              msgContainer.scroll(0, 10000)
+              this.myMessage = ''
+            })
+          }
+        })
+      }
     }
   }
 }
@@ -77,22 +95,59 @@ export default {
   position: relative;
 }
 .msg-send-container {
+  width: 60px;
   position: fixed;
   bottom: 33px;
   right: 30px;
-  // input {
-  //   display: none;
-  //   width: 0px;
-  //   height: 0px;
-  //   z-index: -100000;
-  // }
-  // &__icon {
-  //   display: inline-block;
-  //   width: 50px;
-  //   height: 50px;
-  //   background: rgba(255, 255, 255, .5);
-  //   border-radius: 50%;
-  // }
+  display: flex;
+  justify-content: flex-end;
+  &__icon {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &__hide {
+    opacity: 0;
+  }
+  &__show {
+    opacity: 1;
+  }
+  &__wrap {
+    width: 100%;
+    height: 110px;
+    display: flex;
+    padding: 14px;
+    background: #f6f6f6;
+    justify-content: center;
+    align-items: center;
+    &__input {
+      width: 594px;
+      height: 84px;
+      border: 1px solid #dcdcdc;
+      outline: none;
+      font-size: 20px;
+      color: #241262;
+      font-family: 'Roboto-Regular';
+      padding: 0 23px;
+    }
+    &__btn {
+      font-size: 22px;
+      font-family: 'Roboto-Regular';
+      color: #FFB227;
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
+.msg-send-container-showinput {
+  width: 100%;
+  right: 0px;
+  bottom: 0px;
 }
 .msg-container {
   width: 100%;

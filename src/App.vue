@@ -17,33 +17,32 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isOnline: 'isOnline'
+      isOnline: 'isOnline',
+      status: 'status'
     })
   },
   mounted () {
-    this.$store.dispatch(type._INIT)
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
     if (this.isOnline) {
-
+      this.$store.dispatch(type._INIT).then(() => {
+        if (this.status === 2) {
+          this.$router.push({path: '/await'})
+        } else {
+          this.$router.push({path: '/main'})
+        }
+      })
     } else {
       this.$router.push({path: '/login'})
     }
   },
-  methods: {
-    fetch () {
-      this.$http.get('')
-        .then((data) => {
-          // this.loginStatus = data.
-          // this.loginStatus ? this.$router.push('/main') : this.$router.push('/login')
-        })
-    }
-  },
+  methods: {},
   components: {}
 }
 </script>
 
 <style>
+  @import "./assets/css/iconfont/iconfont.css" ;
   html,body,#app{
     width:100%;
     height:100%;

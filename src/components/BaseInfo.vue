@@ -6,15 +6,19 @@
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
-      <div class="base-info__other__balance">
-        <p class="base-info__balance__text">Balance</p>
-        <p class="base-info__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
-      </div>
+      <router-link to="/balance">
+        <div class="base-info__other__balance">
+          <p class="base-info__balance__text">Balance</p>
+          <p class="base-info__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
+        </div>
+      </router-link>
       <p class="base-info__other__line"></p>
-      <div class="base-info__other__rank">
-        <p class="base-info__rank__text">Weekly Rank</p>
-        <p class="base-info__rank__num num">{{baseInfo.rank}}</p>
-      </div>
+      <router-link to="/rank">
+        <div class="base-info__other__rank">
+          <p class="base-info__rank__text">Weekly Rank</p>
+          <p class="base-info__rank__num num">{{baseInfo.rank}}</p>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
