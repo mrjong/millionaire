@@ -67,7 +67,6 @@ const im = {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId)
         this.emitListener(type.CONNECT_SUCCESS, userId)
-        this.joinChatRoom('room10', 10)
       },
       onTokenIncorrect: () => {
         console.log('token无效')
@@ -217,7 +216,5 @@ const im = {
     }
   }
 }
-
-im.init()
 
 export default im

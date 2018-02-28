@@ -7,6 +7,8 @@ import router from './router'
 import http from './assets/js/http'
 import store from './store'
 import 'core-js/modules/es6.promise'
+import im from './assets/js/im'
+im.init()
 
 Vue.config.productionTip = false
 Vue.prototype.$http = http

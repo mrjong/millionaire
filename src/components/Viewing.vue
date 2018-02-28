@@ -1,6 +1,6 @@
 <template>
   <div class="view-container">
-    <i class="view-container__icon"></i>
+    <i class="view-container__icon icon-guanzhanzhong iconfont"></i>
     <span class="view-container__text">Viewing</span>
   </div>
 </template>
@@ -27,6 +27,8 @@ export default {
       background-color: yellow;
       align-self: center;
       margin-right: 16px;
+      font-size: 16px;
+      line-height: 16px;
     }
     &__text{
       font-size: 20px;

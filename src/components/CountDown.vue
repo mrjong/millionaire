@@ -9,7 +9,6 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import publicFn from '../assets/js/publicFn'
 export default {
   name: 'CountDown',
   data () {
@@ -23,11 +22,20 @@ export default {
       startTime: 'startTime'
     }),
     countDown: function () {
-      let b = {}
-      publicFn.timeCountDown(this.startTime, 1000, (t) => {
-        b = t
-      })
-      return b.h + ':' + b.m + ':' + b.s
+      const timeSecond = parseInt(this.startTime / 1000)
+      let s = timeSecond % 60
+      let m = parseInt(timeSecond / 60 % 60)
+      let h = parseInt(timeSecond / 60 / 60 % 24)
+      if (h <= 9) {
+        h = '0' + h
+      }
+      if (m <= 9) {
+        m = '0' + m
+      }
+      if (s <= 9) {
+        s = '0' + s
+      }
+      return h + ':' + m + ':' + s
     }
   },
   mounted () {
