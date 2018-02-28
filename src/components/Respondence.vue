@@ -5,17 +5,22 @@
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50%" cy="50%" r="41%" stroke="#ececef" stroke-width="4"></circle>
         <circle id="circle" cx="50%" cy="50%" r="41%" stroke=" #ffcc03" stroke-width="4.5"></circle>
-        <text x="50%" y="-32%" class="text" fill="#241262" stroke-width="4">{{restTime}}</text>
+        <text x="50%" y="-32%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
-      1.provident quae recusandae similique velit veniam voluptatibus voluptatum? Porro, quod.
+      {{index}}.{{contents}}
     </p>
     <div class="respondence-container__answer">
-      <!--<answer v-for="(val, idx) in options" :key=idx :content="val" @click="answer(val)"></answer>-->
-      <answer content="val"
-              @answer="answer('val')"
-              :is-click="isClick">
+      <answer v-for="(val, idx) in totalResult"
+              :key=idx
+              :content="idx"
+              :result="val && val.answerNum"
+              :percent= "val && val.percent"
+              :isRight="val && val.isRight"
+              @answer="answer(idx)"
+              :is-click="isClick"
+              :myChick="userAnswer === idx">
       </answer>
     </div>
   </div>
@@ -26,17 +31,21 @@ import {mapGetters, mapActions} from 'vuex'
 import Answer from '../components/Answer.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Respondence',
   data () {
     return {
       rangeValue: 10,
-      isClick: false,
-      options: ['dfa', 'dsfafasdf', 'twetg']
+      isClick: false
     }
   },
   mounted () {
+    this.$store.dispatch(type.QUESTION_INIT)
     this.$store.dispatch(type.QUESTION_GET)
+    if (this.question_status === 7) {
+      this.total = utils.computePercent(this.questionResult)
+    }
   },
   computed: {
     ...mapGetters({
@@ -48,10 +57,28 @@ export default {
       isCorrect: 'isCorrect',
       correctAnswer: 'correctAnswer',
       userAnswer: 'userAnswer',
-      result: '',
       time: 'time',
-      restTime: 'restTime'
-    })
+      restTime: 'restTime',
+      options: 'options',
+      questionResult: 'question_result'
+    }),
+    totalResult: function () {
+      let result = {}
+      let totalNum = 0
+      if (this.questionResult) {
+        for (let i in this.questionResult) {
+          totalNum += this.questionResult[i]
+        }
+      }
+      this.options.forEach((val) => {
+        result[val] = {
+          answerNum: (this.questionResult && this.questionResult[val]),
+          percent: this.questionResult && this.computePercent(this.questionResult[val], totalNum),
+          isRight: this.correctAnswer && this.correctAnswer === val
+        }
+      })
+      return result
+    }
   },
   methods: {
     ...mapActions({}),
@@ -62,9 +89,9 @@ export default {
       if (this.question_status === 5) {
         if (this.watchingMode) {
           // 可以点击
-          console.log('dd')
           this.isClick = true
-          this.$store.dispatch(type.QUESTION_SUBMIT, e)
+          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e})
+          this.$store.dispatch(type.QUESTION_SUBMIT)
           this.$store.commit(type.QUESTION_UPDATE, {
             watchingMode: true
           })
@@ -73,22 +100,30 @@ export default {
         // 不可以点击
         return false
       }
+    },
+    computePercent (val, totalNum) {
+      let percent = (val / totalNum) * 100
+      if (percent < 10 && percent > 0) {
+        return 8 + percent
+      }
+      return percent
     }
   },
   watch: {
-    question_status: function () {
+    question_status: function (status) {
       let circle = document.getElementById('circle')
-      if (this.question_status === 5) {
+      if (status === 5) {
         circle.setAttribute('transition', `transition: stroke-dashoffset ${this.restTime} linear;`)
         setTimeout(() => {
           circle.style.strokeDashoffset = 0
         }, 500)
-      } else {
+      } else if (status === 7) {
         this.isClick = false
         circle.removeAttribute('transition')
         setTimeout(() => {
           circle.style.strokeDashoffset = 314
         }, 500)
+        this.percent = utils.computePercent(this.questionResult)
       }
     }
   },
@@ -120,7 +155,8 @@ export default {
       font-size: 28px;
       color: #241262;
       margin: 43px auto 50px;
-
+      padding: 0 16px;
+      line-height: 40px;
     }
   }
   #circleProcess {

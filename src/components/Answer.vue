@@ -1,15 +1,16 @@
 <template>
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
-         :class="{'hover': isClick}"
-         ref="answerStatus"
-         id="progress">
+         :class="{'finish-right': question_status === 7 && isRight, 'finish-wrong': question_status === 7 && !isRight, 'hover': question_status === 5 && isClick && myChick}"
+         id="progress"
+         :style="{width: percent1 + '%'}">
     </div>
-    <div class="answer-container__base" :class="{'font-white':isClick || questionStatus === 7}">
+    <div class="answer-container__base" :class="{'font-white':isClick || question_status === 7}">
       <span class="answer-container__base__text">{{content}}</span>
-      <div class="answer-container__base__right">
-        <span class="answer-container__base__right__num"></span>
-        <span class="answer-container__base__right__icon"></span>
+      <div class="answer-container__base__right" v-if="question_status === 7">
+        <span class="answer-container__base__right__num">{{result}}</span>
+        <span class="answer-container__base__right__icon iconfont icon-right"
+              :class="{'icon-wrong': !isRight}"></span>
       </div>
     </div>
   </div>
@@ -25,6 +26,18 @@ export default {
     },
     isClick: {
       type: Boolean
+    },
+    result: {
+      type: Number
+    },
+    percent: {
+      type: Number
+    },
+    isRight: {
+      type: Boolean
+    },
+    myChick: {
+      type: Boolean
     }
   },
   data () {
@@ -36,26 +49,45 @@ export default {
       question_status: 'question_status',
       contents: 'contents',
       correctAnswer: 'correctAnswer'
-    })
+    }),
+    percent1: function () {
+      console.log(this.precent)
+      if (this.precent < 10) {
+        return 10
+      } else {
+        return this.percent
+      }
+    }
   },
-  mounted () {},
+  mounted () {
+    this.changeStatus(this.question_status)
+  },
   methods: {
     answer () {
       this.$emit('answer')
-    }
-  },
-  watch: {
-    questionStatus: function () {
+    },
+    changeStatus (status) {
       let progress = document.getElementById('progress')
-      if (this.questionStatus === 5) {
+      if (status === 5) {
         if (this.isClick) {
           progress.className = 'answer-container__state hover'
         } else {
           progress.className = 'answer-container__state'
         }
-      } else if (this.questionStatus === 7) {
-        progress.className = 'answer-container__state hover'
+      } else if (status === 7) {
+        console.log(this.isRight)
+        console.log('........')
+        if (this.isRight) {
+          progress.className = 'answer-container__state finish-right'
+        } else {
+          progress.className = 'answer-container__state finish-wrong'
+        }
       }
+    }
+  },
+  watch: {
+    question_status: function (questionStatus) {
+      this.changeStatus(questionStatus)
     }
   }
 }
@@ -70,7 +102,6 @@ export default {
     padding:0 23px;
     position: relative;
     &__state{
-      width: 30%;
       height:100%;
       border-radius: 46px;
       position: absolute;

@@ -1,17 +1,22 @@
 <template>
-  <div class="chat-msg-wrap" id="msgContainer">
+  <div class="chat-msg-wrap" :class="{'chat-msg-wrap-haswrap': showInput}" id="msgContainer">
     <ul class="msg-container">
-      <transition-group name='fade'>
-        <li
+       <transition-group
+        name='fade'
+        tag="li"
+        >
+         <p
           class="msg-container__item"
-          v-for="(col, idx) in chatRoomState.msgList"
-          :key="idx"
+          v-for="col in msgList"
+          :key="col.msgId"
           >
-          <img class="msg-container__item__portrait" :src="col.img" alt="">
-          <span class="msg-container__item__nickname">{{col.nickname}}</span>
-          <span class="msg-container__item__text">{{col.msg}}</span>
-        </li>
-      </transition-group>
+          <span class="msg-container__item__wrap">
+            <img class="msg-container__item__portrait" :src="col.img" alt="">
+            <span class="msg-container__item__nickname">{{col.nickname}}</span>
+            <span class="msg-container__item__text">{{col.msg}}</span>
+          </span>
+         </p>
+       </transition-group>
     </ul>
     <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
        <p class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
@@ -45,6 +50,7 @@ export default {
   computed: {
     ...mapGetters({
       chatRoomState: 'chatRoomState',
+      msgList: 'msgList',
       userInfo: 'userInfo'
     })
   },
@@ -65,28 +71,36 @@ export default {
             img: this.userInfo.avatar,
             msg: this.myMessage,
             nickname: this.userInfo.userName
-          },
-          cb: () => {
-            this.$nextTick(() => {
-              const msgContainer = document.getElementById('msgContainer')
-              msgContainer.scroll(0, 10000)
-              this.myMessage = ''
-            })
           }
         })
       }
+    }
+  },
+  watch: {
+    msgList () {
+      this.$nextTick(() => {
+        const msgContainer = document.getElementById('msgContainer')
+        msgContainer.scroll(0, 10000)
+        this.myMessage = ''
+      })
     }
   }
 }
 </script>
 <style scoped lang="less" type="text/less">
 .chat-msg-wrap {
+  -webkit-mask: url('../assets/images/mask.png') no-repeat;
+  -webkit-mask-size: 100% 100%;
   width: 100%;
+  height: 400px;
   height: 100%;
   flex:1;
   margin-bottom: 35px;
   overflow-y: scroll;
   position: relative;
+}
+.chat-msg-wrap-haswrap {
+  margin-bottom: 0;
 }
 .msg-send-container {
   width: 60px;
@@ -96,13 +110,13 @@ export default {
   display: flex;
   justify-content: flex-end;
   &__icon {
-    // display: inline-block;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background: rgba(255, 255, 255, .2);
     position: absolute;
-    top: 0;
+    // top: 0;
+    bottom: 18px;
     left: 0;
     font-size: 34px;
     display: flex;
@@ -149,14 +163,14 @@ export default {
 }
 .msg-container {
   width: 100%;
-  height: auto;
+  // height: auto;
   &__item {
     max-width: 100%;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, .2);
-    border-radius: 30px;
-    padding: 8px 7px;
+    // display: flex;
+    // align-items: center;
+    // background: rgba(255, 255, 255, .2);
+    // border-radius: 30px;
+    // padding: 8px 7px;
     margin: 6px 26px;
     box-sizing: border-box;
     img {
@@ -167,14 +181,29 @@ export default {
       font-family: "Roboto Medium";
       text-shadow: #666 1px 1px 1px;
     }
+    &__wrap {
+      background: rgba(255, 255, 255, .2);
+      border-radius: 30px;
+      padding: 0px 20px;
+      box-sizing: border-box;
+      display: inline-block;
+      font-size: 0;
+      position: relative;
+      line-height: 60px;
+      overflow: hidden;
+    }
     &__portrait {
-      width: 51px;
+      width: 50px;
       height: 50px;
       border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
     }
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
+      margin-left: 51px;
     }
     &__text {
       color: #fff;
@@ -191,10 +220,11 @@ export default {
 .fade-out-bot {
   opacity: .4
 }
-.fade-enter-active, .fade-enter-active {
-  transition: all .3s;
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+  transform: translate3d(100px, 30px, 0) scale3d(0, 0, 0);
 }
 </style>

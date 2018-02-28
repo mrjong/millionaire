@@ -16,7 +16,7 @@ export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
     startTime: Infinity, // 开始时间 时间差
-    readyTime: 600000, // 准备时间 默认10分钟
+    readyTime: 60000, // 准备时间 默认10分钟
     syncIntervalTime: 600000, // 同步结束时间间隔
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
