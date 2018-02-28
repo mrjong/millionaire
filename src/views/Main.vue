@@ -9,8 +9,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <!-- <p class="chat-global-mark"></p> -->
-    <count-down v-if="status === 2"></count-down>
+     <count-down v-if="status === 2"></count-down>
     <respondence v-else-if="status === 3"></respondence>
     <winners-result v-else></winners-result>
     <chat-room></chat-room>
