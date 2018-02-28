@@ -77,12 +77,13 @@ class Timer {
    * @memberof Timer
    */
   start () {
-    const {interval, endTime} = this
+    const {interval} = this
     // 如果剩余时间小于间隔
-    if (endTime < interval) {
+    const offset = this.endTime - Date.now()
+    if (offset - Date.now() < interval) {
       setTimeout(() => {
         this.endCallback && this.endCallback()
-      }, endTime)
+      }, offset)
       return
     }
     this.timer = setInterval(() => {
