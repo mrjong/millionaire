@@ -54,7 +54,6 @@ export default {
           progress.className = 'answer-container__state'
         }
       } else if (this.questionStatus === 7) {
-
         progress.className = 'answer-container__state hover'
       }
     }

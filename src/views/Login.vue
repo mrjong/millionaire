@@ -29,7 +29,9 @@ export default {
         this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
         this.$store.dispatch(type._INIT)
       })
-      this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
+      this.$store.commit(type._UPDATE, {
+        isOnline: true
+      })
       this.$store.dispatch(type._INIT)
       if (this.status === 1) {
         this.$router.push({path: '/await'})
