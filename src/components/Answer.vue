@@ -9,8 +9,8 @@
       <span class="answer-container__base__text" :class="{'font-white':(isClick || question_status === 7) && myChick}">{{content}}</span>
       <div class="answer-container__base__right" v-if="question_status === 7">
         <span class="answer-container__base__right__num">{{result}}</span>
-        <span class="answer-container__base__right__icon iconfont icon-right"
-              :class="{'icon-wrong': !isRight}"></span>
+        <span class="answer-container__base__right__icon iconfont icon-duihao"
+              :class="{'icon-cuowu': !isRight}"></span>
       </div>
     </div>
   </div>
@@ -51,9 +51,7 @@ export default {
       correctAnswer: 'correctAnswer'
     })
   },
-  mounted () {
-    this.changeStatus(this.question_status)
-  },
+  mounted () {},
   methods: {
     answer () {
       this.$emit('answer')
@@ -117,9 +115,9 @@ export default {
           display: inline-block;
           width: 26px;
           height: 26px;
-          background-color: aquamarine;
           vertical-align: bottom;
           margin-left: 16px;
+          color: #241262;
         }
       }
     }
