@@ -83,6 +83,9 @@ export default {
   methods: {
     ...mapActions({}),
     answer (e) {
+      if (this.watchingMode) {
+        return false
+      }
       if (this.isClick) {
         return false
       }
