@@ -57,7 +57,6 @@ export default {
       isCorrect: 'isCorrect',
       correctAnswer: 'correctAnswer',
       userAnswer: 'userAnswer',
-      result: '',
       time: 'time',
       restTime: 'restTime',
       options: 'options',
@@ -74,7 +73,7 @@ export default {
       this.options.forEach((val) => {
         result[val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
-          percent: this.computePercent(this.questionResult[val], totalNum),
+          percent: this.questionResult && this.computePercent(this.questionResult[val], totalNum),
           isRight: this.correctAnswer && this.correctAnswer === val
         }
       })
@@ -105,7 +104,7 @@ export default {
     computePercent (val, totalNum) {
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
-        return 8 + percent
+        return 10 + percent
       }
       return percent
     }

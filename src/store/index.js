@@ -53,23 +53,24 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = data.data
-            const {s: isPlaying, r: isInRoom, ui: userId, up: avatar, un: userName, ub: balance, income, ur: rank, rb: bonusAmount, cc: onlineAmount, m: chamInfo, j: question, a: answer} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, j: question = {}, a: answer} = info
             const startTime = +info.sr * 1000
             // 更新首页信息
             commit(type.HOME_UPDATE, {
-              userId,
-              avatar,
-              userName,
-              balance: +balance,
-              income: +income,
-              rank: +rank,
-              bonusAmount: +bonusAmount
+              userId: userInfo.ud || '',
+              supaId: userInfo.us || '',
+              avatar: userInfo.up || '',
+              userName: userInfo.un || '',
+              balance: +accountInfo.ub || 0,
+              income: +accountInfo.ui || 0,
+              rank: +accountInfo.ur || 0,
+              bonusAmount: +bonusAmount || 0
             })
             commit(type._UPDATE, {
               startTime,
-              onlineAmount: +onlineAmount,
-              chatRoomId: chamInfo.rn,
-              imToken: chamInfo.it
+              onlineAmount: +chatRoomInfo.ic || 0,
+              chatRoomId: chatRoomInfo.rn || '',
+              imToken: chatRoomInfo.it || ''
             })
             // 如果已经开始
             if (isPlaying) {

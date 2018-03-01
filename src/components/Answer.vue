@@ -3,14 +3,14 @@
     <div class="answer-container__state"
          :class="{'finish-right': question_status === 7 && isRight, 'finish-wrong': question_status === 7 && !isRight, 'hover': question_status === 5 && isClick && myChick}"
          id="progress"
-         :style="{width: percent1 + '%'}">
+         :style="{width: percent + '%'}">
     </div>
-    <div class="answer-container__base" :class="{'font-white':isClick || question_status === 7}">
-      <span class="answer-container__base__text">{{content}}</span>
+    <div class="answer-container__base">
+      <span class="answer-container__base__text" :class="{'font-white':(isClick || question_status === 7) && myChick}">{{content}}</span>
       <div class="answer-container__base__right" v-if="question_status === 7">
         <span class="answer-container__base__right__num">{{result}}</span>
-        <span class="answer-container__base__right__icon iconfont icon-right"
-              :class="{'icon-wrong': !isRight}"></span>
+        <span class="answer-container__base__right__icon iconfont icon-duihao"
+              :class="{'icon-cuowu': !isRight}"></span>
       </div>
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
       type: Boolean
     },
     result: {
-      type: String
+      type: Number
     },
     percent: {
       type: Number
@@ -49,45 +49,16 @@ export default {
       question_status: 'question_status',
       contents: 'contents',
       correctAnswer: 'correctAnswer'
-    }),
-    percent1: function () {
-      console.log(this.precent)
-      if (this.precent < 10) {
-        return 10
-      } else {
-        return this.percent
-      }
-    }
+    })
   },
-  mounted () {
-    this.changeStatus(this.question_status)
-  },
+  mounted () {},
   methods: {
     answer () {
       this.$emit('answer')
-    },
-    changeStatus (status) {
-      let progress = document.getElementById('progress')
-      if (status === 5) {
-        if (this.isClick) {
-          progress.className = 'answer-container__state hover'
-        } else {
-          progress.className = 'answer-container__state'
-        }
-      } else if (status === 7) {
-        console.log(this.isRight)
-        console.log('........')
-        if (this.isRight) {
-          progress.className = 'answer-container__state finish-right'
-        } else {
-          progress.className = 'answer-container__state finish-wrong'
-        }
-      }
     }
   },
   watch: {
     question_status: function (questionStatus) {
-      this.changeStatus(questionStatus)
     }
   }
 }
@@ -144,9 +115,9 @@ export default {
           display: inline-block;
           width: 26px;
           height: 26px;
-          background-color: aquamarine;
           vertical-align: bottom;
           margin-left: 16px;
+          color: #241262;
         }
       }
     }
