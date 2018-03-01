@@ -1,8 +1,8 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-      <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart -->
-      {{compereMsg}}
+       Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart
+      <!-- {{compereMsg}} -->
     </p>
     <img src="../assets/images/supa.png" alt="" class="compere-container__supa">
   </div>
@@ -29,6 +29,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
 .compere-container {
+  min-height: 600px;
   box-sizing: border-box;
   margin: 25px;
   background-color: #fff;
