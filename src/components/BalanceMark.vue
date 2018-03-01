@@ -73,15 +73,20 @@ export default {
       justify-content: space-around;
       span {
         display: inline-block;
-        width: 182px;
+        width: 240px;
         height: 100%;
         border-radius: 38px;
-        background: rgba(250, 167, 23, 0.95);
         color: #fff;
         font-size: 24px;
         font-family: 'Roboto-Light';
         text-align: center;
         line-height: 77px;
+      }
+      &__ok {
+        background: rgba(250, 167, 23, 0.95);
+      }
+      &__cancel {
+        background: #fa5b23;
       }
     }
   }
