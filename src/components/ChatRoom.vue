@@ -90,7 +90,7 @@ export default {
 <style scoped lang="less" type="text/less">
 .chat-msg-wrap {
   -webkit-mask: url('../assets/images/mask.png') no-repeat;
-  -webkit-mask-size: 100% 100%;
+  -webkit-mask-size: 100% 110%;
   width: 100%;
   height: 400px;
   height: 100%;

@@ -10,8 +10,8 @@
       </div>
     </div>
     <count-down v-if="status === 2"></count-down>
-    <winners-result v-else-if="statue === 4"></winners-result>
-    <respondence v-else-if="status === 3 && questionStatus !== 8"></respondence>
+    <winners-result v-if="status === 4"></winners-result>
+    <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
   </div>

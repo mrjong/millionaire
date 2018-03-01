@@ -30,8 +30,8 @@ const actions = {
   [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
     const handler = (message) => {
       const obj = {
-        img: '',
-        nickname: '',
+        img: message.content.user.avatar,
+        nickname: message.content.user.name,
         msg: message.content.content,
         msgId: message.messageId
       }
@@ -46,6 +46,10 @@ const actions = {
   [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
     im.addListener(listenerType.MESSAGE_HOST, (message) => {
       commit(type.GET_COMPERE_MESSAGE, message)
+      console.log('接收到主持人消息，更改答题状态')
+      commit(type.QUESTION_UPDATE, {
+        status: 8
+      })
     })
   }
 }
