@@ -4,13 +4,8 @@
     <ul class="msg-container">
        <transition-group
         name='fade'
-        tag="li"
-        >
-         <p
-          class="msg-container__item"
-          v-for="col in msgList"
-          :key="col.msgId"
-          >
+        tag="li">
+         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -93,7 +88,6 @@ export default {
       const bodyHeight = bodys.clientHeight
       const msgBot = bodyHeight - innerHeight
       msgcontainer.style.bottom = `${msgBot / 100}rem`
-      console.log(msgBot)
     }
   },
   watch: {

@@ -7,7 +7,7 @@
     </div>
     <div class="has-winner-result" v-else>
       <p class="has-winner-result__title">
-        156 Winners!
+        <span class="has-winner-result__title__count">{{winnerCount}}</span>Winners!
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
@@ -46,7 +46,8 @@ export default {
   data () {
     return {
       hasWinner: true,
-      respondenceList: []
+      respondenceList: [],
+      winnerCount: 156
     }
   },
   computed: {
@@ -57,13 +58,10 @@ export default {
   mounted () {
     setTimeout(() => {
       this.respondenceList = testData.respondenceResult
+      this.winnerCount = 1567890
     }, 500)
-    this.fetch()
   },
   methods: {
-    fetch () {
-      // this.$store.dispatch('fetch')
-    }
   }
 }
 </script>
@@ -101,7 +99,16 @@ export default {
     line-height: 94px;
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    &__count {
+      margin-right: 17px;
+      display: inline-block;
+      width: 159px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 }
 .has-winner-result-wrap {
