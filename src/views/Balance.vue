@@ -20,13 +20,14 @@
       <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
-    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @cancelMark='cancelMark'></balance-mark>
+    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
 export default {
   name: 'Balance',
   data () {
@@ -35,7 +36,8 @@ export default {
       markInfo: {
         showMark: false,
         htmlText: '',
-        shouldSub: false
+        shouldSub: false,
+        markType: 0
       },
       withdraw: 20
     }
@@ -51,6 +53,7 @@ export default {
         this.markInfo = {
           showMark: true,
           shouldSub: false,
+          markType: 0,
           htmlText: `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`
         }
       } else {
@@ -60,23 +63,34 @@ export default {
           this.markInfo = {
             showMark: true,
             shouldSub: false,
+            markType: 0,
             htmlText: `Please enter the correct PayTM account!`
           }
         } else {
           this.markInfo = {
             showMark: true,
             shouldSub: true,
+            markType: 1,
             htmlText: `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`
           }
         }
       }
     },
-    cancelMark (info) {
+    okEvent (info) {
       this.markInfo.showMark = false
       if (info) {
         // 提交表单
+        api.balanceApplication({
+          email: '1@w.com'
+        })
+          .then(({data}) => {
+            console.log(data)
+          })
         console.log('提交提现表单')
       }
+    },
+    cancelEvent () {
+      this.markInfo.showMark = false
     },
     goBack () {
       this.$router.go(-1)
