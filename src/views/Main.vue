@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="main-container">
     <div class="main-container__top">
       <div class="main-container__top__online">
