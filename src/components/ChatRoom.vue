@@ -105,7 +105,7 @@ export default {
 .msg-send-container {
   width: 60px;
   position: fixed;
-  bottom: 33px;
+  bottom: 35px;
   right: 30px;
   display: flex;
   justify-content: flex-end;

@@ -4,11 +4,13 @@ import * as type from '../type'
 import * as listenerType from '../../assets/js/listener-type.js'
 import im from '../../assets/js/im'
 const state = {
-  msgList: []
+  msgList: [],
+  compereMsg: ''
 }
 const getters = {
   chatRoomState: state => state,
-  msgList: (state) => state.msgList
+  msgList: (state) => state.msgList,
+  compereMsg: (state) => state.compereMsg
 }
 const mutations = {
   [type.CHAT_LIST_FETCH] (state, item) {
@@ -19,6 +21,9 @@ const mutations = {
     if (+len > staticLen) {
       state.msgList = state.msgList.splice(len - staticLen, len)
     }
+  },
+  [type.GET_COMPERE_MESSAGE] (state, compereMsg) {
+    state.compereMsg = compereMsg.content.content
   }
 }
 const actions = {
@@ -37,6 +42,11 @@ const actions = {
   },
   [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {
     im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
+  },
+  [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
+    im.addListener(listenerType.MESSAGE_HOST, (message) => {
+      commit(type.GET_COMPERE_MESSAGE, message)
+    })
   }
 }
 export default {

@@ -9,9 +9,10 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="status === 2"></count-down>
-    <respondence v-else-if="status === 3"></respondence>
-    <winners-result v-else></winners-result>
+    <count-down v-if="status === 2"></count-down>
+    <winners-result v-else-if="statue === 4"></winners-result>
+    <respondence v-else-if="status === 3 && questionStatus !== 8"></respondence>
+    <compere v-if="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
   </div>
 </template>
@@ -21,7 +22,8 @@ import {mapGetters} from 'vuex'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
-import winnersResult from '../components/WinnersResult'
+import WinnersResult from '../components/WinnersResult'
+import Compere from '../components/Compere'
 export default {
   name: 'Main',
   data () {
@@ -31,7 +33,8 @@ export default {
   computed: {
     ...mapGetters({
       onlineAmount: 'onlineAmount',
-      status: 'status'
+      status: 'status',
+      questionStatus: 'question_status'
     })
   },
   mounted () {
@@ -45,7 +48,8 @@ export default {
     CountDown,
     ChatRoom,
     Respondence,
-    winnersResult
+    WinnersResult,
+    Compere
   }
 }
 </script>
