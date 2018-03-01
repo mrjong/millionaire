@@ -1,16 +1,17 @@
 <template>
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
-         :class="{'finish-right': question_status === 7 && isRight, 'finish-wrong': question_status === 7 && !isRight, 'hover': question_status === 5 && isClick && myChick}"
+         :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
          id="progress"
          :style="{width: percent + '%'}">
     </div>
-    <div class="answer-container__base">
-      <span class="answer-container__base__text" :class="{'font-white':(isClick || question_status === 7) && myChick}">{{content}}</span>
-      <div class="answer-container__base__right" v-if="question_status === 7">
-        <span class="answer-container__base__right__num">{{result}}</span>
-        <span class="answer-container__base__right__icon iconfont icon-duihao"
-              :class="{'icon-cuowu': !isRight}"></span>
+    <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
+      <span class="answer-container__base__text"  ref="answerText"
+            :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</span>
+      <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
+        <p class="answer-container__base__right__num">{{result}}</p>
+        <p class="answer-container__base__right__icon iconfont icon-duihao"
+              :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
       </div>
     </div>
   </div>
@@ -42,23 +43,54 @@ export default {
   },
   data () {
     return {
+      isAnswerWhite: false,
+      isAllWhite: false
     }
   },
   computed: {
     ...mapGetters({
-      question_status: 'question_status',
+      questionStatus: 'question_status',
       contents: 'contents',
       correctAnswer: 'correctAnswer'
-    })
+    }),
+    textWidth: function () {
+      return this.$refs.answerText.getBoundingClientRect().width
+    }
   },
-  mounted () {},
+  mounted () {
+    if (this.questionStatus === 7) {
+      this.computeWidth(this.textWidth)
+    }
+  },
   methods: {
     answer () {
       this.$emit('answer')
+    },
+    computeWidth (ele) {
+      const baseWidth = this.$refs.baseContainer.offsetWidth
+      let resultWidth = this.$refs.resultNum.offsetWidth
+      let bb = ((ele / 2) + resultWidth) - (baseWidth / 2)
+      if (bb >= 0) {
+        // 缩小字体
+        console.log('bb' + bb)
+      }
+      let cc = (this.percent / 100 - 0.95) * baseWidth
+      if (cc >= 0) {
+        // 全部变白
+        this.isAllWhite = true
+      }
+      let dd = (this.percent / 100) * baseWidth - ((baseWidth + resultWidth) / 2)
+      if (dd >= -5) {
+        // 答案变白
+        this.isAnswerWhite = true
+      }
     }
   },
   watch: {
-    question_status: function (questionStatus) {
+    questionStatus: (questionStatus) => {
+      if (questionStatus === 7) {
+        this.computeWidth(this.textWidth)
+      }
     }
   }
 }
@@ -73,11 +105,13 @@ export default {
     padding:0 23px;
     position: relative;
     &__state{
+      width: 0;
       height:100%;
       border-radius: 46px;
       position: absolute;
       top:0;
       left:0;
+      transition: width 300ms linear;
     }
     .hover{
       width: 100%;
@@ -108,16 +142,16 @@ export default {
         top: 50%;
         right: 0;
         transform: translate(0, -50%);
+        display: flex;
         &__num{
           font-style:italic;
+          align-self: center;
         }
         &__icon{
-          display: inline-block;
-          width: 26px;
-          height: 26px;
-          vertical-align: bottom;
+          font-size: 18px;
           margin-left: 16px;
           color: #241262;
+          align-self: center;
         }
       }
     }

@@ -40,13 +40,6 @@ export default {
       isClick: false
     }
   },
-  mounted () {
-    this.$store.dispatch(type.QUESTION_INIT)
-    this.$store.dispatch(type.QUESTION_GET)
-    if (this.question_status === 7) {
-      this.total = utils.computePercent(this.questionResult)
-    }
-  },
   computed: {
     ...mapGetters({
       question_status: 'question_status',
@@ -80,13 +73,15 @@ export default {
       return result
     }
   },
+  mounted () {
+    this.$store.dispatch(type.QUESTION_INIT)
+    this.$store.dispatch(type.QUESTION_GET)
+    this.countDown(this.question_status)
+  },
   methods: {
     ...mapActions({}),
     answer (e) {
-      if (this.watchingMode) {
-        return false
-      }
-      if (this.isClick) {
+      if (this.watchingMode || this.isClick) {
         return false
       }
       if (this.question_status === 5) {
@@ -110,24 +105,26 @@ export default {
         return 10 + percent
       }
       return percent
+    },
+    countDown (status) {
+      let circle = document.getElementById('circle')
+      if (status === 5) {
+        circle.setAttribute('transition', `stroke-dashoffset ${this.restTime} linear;`)
+        setTimeout(() => {
+          circle.style.strokeDashoffset = 0
+        }, 10000)
+      } else if (status === 7) {
+        this.isClick = false
+        setTimeout(() => {
+          circle.removeAttribute('strokeDashoffset')
+        }, 500)
+        this.percent = utils.computePercent(this.questionResult)
+      }
     }
   },
   watch: {
     question_status: function (status) {
-      let circle = document.getElementById('circle')
-      if (status === 5) {
-        circle.setAttribute('transition', `transition: stroke-dashoffset ${this.restTime} linear;`)
-        setTimeout(() => {
-          circle.style.strokeDashoffset = 0
-        }, 500)
-      } else if (status === 7) {
-        this.isClick = false
-        circle.removeAttribute('transition')
-        setTimeout(() => {
-          circle.style.strokeDashoffset = 314
-        }, 500)
-        this.percent = utils.computePercent(this.questionResult)
-      }
+      this.countDown(status)
     }
   },
   components: {

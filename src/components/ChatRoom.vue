@@ -1,15 +1,11 @@
 <template>
-  <div class="chat-msg-wrap" :class="{'chat-msg-wrap-haswrap': showInput}" id="msgContainer">
+<div class="chat-container" id="msgContainer" :class="{'chat-msg-wrap-haswrap': showInput}">
+  <div class="chat-msg-wrap" id="scrollContainer">
     <ul class="msg-container">
        <transition-group
         name='fade'
-        tag="li"
-        >
-         <p
-          class="msg-container__item"
-          v-for="col in msgList"
-          :key="col.msgId"
-          >
+        tag="li">
+         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -18,19 +14,21 @@
          </p>
        </transition-group>
     </ul>
-    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+  </div>
+  <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
        <p class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
         <input
           class="msg-send-container__wrap__input"
           id="sendmessage"
           type="text"
-          @blur="() => {showInput = false}"
+          @focus="focusEvent"
+          @blur="blurEvent"
           v-model.trim="myMessage">
         <span class="msg-send-container__wrap__btn" @click="sendMessage">Send</span>
       </p>
-      <label @click="() => {showInput = true}" class="msg-send-container__icon iconfont icon-pinglun" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}"></label>
+      <label @click="() => {}" class="msg-send-container__icon iconfont icon-pinglun" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}"></label>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -74,13 +72,29 @@ export default {
           }
         })
       }
+    },
+    focusEvent () {
+      this.showInput = true
+      this.reSetMsgBot()
+    },
+    blurEvent () {
+      this.showInput = false
+      this.reSetMsgBot()
+    },
+    reSetMsgBot () {
+      const msgcontainer = document.getElementById('msgcontainer')
+      const bodys = document.getElementsByTagName('body')[0]
+      const innerHeight = window.innerHeight
+      const bodyHeight = bodys.clientHeight
+      const msgBot = bodyHeight - innerHeight
+      msgcontainer.style.bottom = `${msgBot / 100}rem`
     }
   },
   watch: {
     msgList () {
       this.$nextTick(() => {
-        const msgContainer = document.getElementById('msgContainer')
-        msgContainer.scroll(0, 10000)
+        const scrollContainer = document.getElementById('scrollContainer')
+        scrollContainer.scroll(0, 10000)
         this.myMessage = ''
       })
     }
@@ -88,16 +102,20 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
-.chat-msg-wrap {
-  -webkit-mask: url('../assets/images/mask.png') no-repeat;
-  -webkit-mask-size: 100% 100%;
+.chat-container {
   width: 100%;
-  height: 400px;
   height: 100%;
   flex:1;
-  margin-bottom: 35px;
-  overflow-y: scroll;
   position: relative;
+  overflow: hidden;
+  margin-bottom: 35px;
+}
+.chat-msg-wrap {
+  -webkit-mask: url('../assets/images/mask.png') no-repeat;
+  -webkit-mask-size: 100% 110%;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
@@ -105,7 +123,7 @@ export default {
 .msg-send-container {
   width: 60px;
   position: fixed;
-  bottom: 33px;
+  bottom: 35px;
   right: 30px;
   display: flex;
   justify-content: flex-end;
@@ -116,7 +134,7 @@ export default {
     background: rgba(255, 255, 255, .2);
     position: absolute;
     // top: 0;
-    bottom: 18px;
+    bottom: 0;
     left: 0;
     font-size: 34px;
     display: flex;
@@ -163,14 +181,8 @@ export default {
 }
 .msg-container {
   width: 100%;
-  // height: auto;
   &__item {
     max-width: 100%;
-    // display: flex;
-    // align-items: center;
-    // background: rgba(255, 255, 255, .2);
-    // border-radius: 30px;
-    // padding: 8px 7px;
     margin: 6px 26px;
     box-sizing: border-box;
     img {

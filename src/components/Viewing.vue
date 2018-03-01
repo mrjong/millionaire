@@ -22,19 +22,23 @@ export default {
     border:1px solid #cac6d8;
     line-height: 45px;
     vertical-align: middle;
-    padding:0 12px;
+    padding:0 16px;
+    display: flex;
     &__icon{
       width: 30px;
-      height: 18px;
-      display: inline-block;
+      height: 100%;
+      align-self: center;
+      display: flex;
       img{
         width: 100%;
+        align-self: center;
       }
     }
     &__text{
       font-size: 20px;
       color: #241262;
       margin-left: 12px;
+      align-self: center;
     }
   }
 </style>
