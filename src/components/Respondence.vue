@@ -104,7 +104,7 @@ export default {
     computePercent (val, totalNum) {
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
-        return 8 + percent
+        return 10 + percent
       }
       return percent
     }
