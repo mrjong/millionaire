@@ -123,7 +123,6 @@ export default {
       }
     },
     setAllFontSize (textSize, iconSize) {
-      console.log(textSize, iconSize)
       document.getElementsByClassName('answerText')[0].style.fontSize = textSize
       document.getElementsByClassName('resultNum')[0].style.fontSize = textSize
       document.getElementsByClassName('resultIcon')[0].style.fontSize = iconSize

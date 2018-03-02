@@ -2,9 +2,11 @@
   <div class="await-container">
     <div class="await-container__top">
       <div class="await-container__top__like icon-dianzan iconfont"></div>
-      <router-link to="/rule">
-        <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
-      </router-link>
+      <div>
+        <router-link to="/rule">
+          <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
+        </router-link>
+      </div>
     </div>
     <img src="../assets/images/await-title.png" class="await-container__title">
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
@@ -83,7 +85,6 @@ export default {
     background: url("../assets/images/await-bg.jpg") no-repeat top left;
     background-size: cover;
     &__top{
-      width: 100%;
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;

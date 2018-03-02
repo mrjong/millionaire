@@ -8,7 +8,8 @@
       <span class="answer-container__base__text answerText"  ref="answerText"
             :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</span>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
-        <p class="answer-container__base__right__num">{{result}}</p>
+        <p class="answer-container__base__right__num" ref="answerNum"
+           :class="{'font-white': isResultWhite}">{{result}}</p>
         <p class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
            :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
       </div>
@@ -43,7 +44,8 @@ export default {
   data () {
     return {
       isAnswerWhite: false,
-      isAllWhite: false
+      isAllWhite: false,
+      isResultWhite: false
     }
   },
   computed: {
@@ -78,7 +80,6 @@ export default {
       let answerText = this.$refs.answerText
       let resultNum = this.$refs.resultNum
       let fontWidth = 28
-      console.log(fontWidth)
       for (let i = fontWidth; i >= 10; i--) {
         fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
         if (fontWidth / 2 + resultWidth - baseWidth / 2 >= 70) {
@@ -93,6 +94,8 @@ export default {
     changeFontColor () {
       const baseWidth = this.$refs.baseContainer.offsetWidth
       let resultWidth = this.$refs.resultNum.offsetWidth
+      let answerNum = this.$refs.answerNum.offsetWidth
+      console.log(answerNum)
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
         // 全部变白
@@ -102,6 +105,12 @@ export default {
       if (dd >= -5) {
         // 答案变白
         this.isAnswerWhite = true
+      }
+      let ee = (baseWidth - resultWidth + answerNum) - (this.percent / 100) * baseWidth
+      if (ee > 0) {
+        // 答案和数据变白
+        console.log('ee' + ee)
+        this.isResultWhite = true
       }
     }
   },
