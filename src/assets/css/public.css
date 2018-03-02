@@ -155,9 +155,8 @@ html, body {
 }
  a:focus,input:focus {
   -webkit-tap-highlight-color:rgba(0,0,0,0);
-  -webkit-user-modify:read-write-plaintext-only;
   outline:0;
-} 
+}
 html, body {
   font-size: 14px;
   width: 100%;
