@@ -3,8 +3,8 @@
     <div class="balance-mark__wrap">
       <p class="balance-mark__wrap__title" id="balanceMarkText"></p>
       <p class="balance-mark__wrap__btn">
-        <span class="balance-mark__wrap__btn__ok" @click="okEvent">OK</span>
-         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
+        <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
+        <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
       </p>
     </div>
   </div>

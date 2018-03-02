@@ -1,10 +1,10 @@
 <template>
 <div class="chat-container" id="msgContainer" :class="{'chat-msg-wrap-haswrap': showInput}">
   <div class="chat-msg-wrap" id="scrollContainer">
-    <ul class="msg-container">
+    <div class="msg-container">
        <transition-group
         name='fade'
-        tag="li">
+        tag="div">
          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
@@ -13,7 +13,7 @@
           </span>
          </p>
        </transition-group>
-    </ul>
+    </div>
   </div>
   <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
        <p class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
@@ -71,6 +71,7 @@ export default {
             nickname: this.userInfo.userName
           }
         })
+        this.myMessage = ''
       }
     },
     focusEvent () {
@@ -87,14 +88,14 @@ export default {
       const innerHeight = window.innerHeight
       const bodyHeight = bodys.clientHeight
       const msgBot = bodyHeight - innerHeight
-      msgcontainer.style.bottom = `${msgBot / 100}rem`
+      msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
     }
   },
   watch: {
     msgList () {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
-        scrollContainer.scroll(0, 10000)
+        scrollContainer.scrollTop = 100000
         this.myMessage = ''
       })
     }
@@ -133,13 +134,17 @@ export default {
     border-radius: 50%;
     background: rgba(255, 255, 255, .2);
     position: absolute;
-    // top: 0;
     bottom: 0;
     left: 0;
     font-size: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
+    // overflow: hidden;
+    box-sizing: border-box;
+  }
+  .icon-pinglun::before {
+    transform: translate(0, 3px)
   }
   &__hide {
     opacity: 0;

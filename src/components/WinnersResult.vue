@@ -45,7 +45,7 @@ export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      hasWinner: true,
+      hasWinner: false,
       respondenceList: [],
       winnerCount: 156
     }
