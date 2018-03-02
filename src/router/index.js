@@ -9,7 +9,7 @@ const Rank = () => import('@/views/Rank.vue')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -57,3 +57,7 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach()
+
+export default router
