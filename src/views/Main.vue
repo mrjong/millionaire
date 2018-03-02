@@ -1,10 +1,10 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
-      <div class="main-container__top__online">
+      <span class="main-container__top__online">
         <span class="main-container__top__online__icon icon-yonghu iconfont"></span>
         <span class="main-container__top__online__num">{{onlineAmount}}</span>
-      </div>
+      </span>
       <div class="main-container__top__logo">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>

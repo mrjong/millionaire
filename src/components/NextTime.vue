@@ -1,14 +1,14 @@
 <template>
   <div class="hint">
-    <p class="hint__text"><span>The next start time</span></p>
+    <p class="hint__text">The next start time</p>
     <div class="hint__info">
-      <p class="hint__info__time">
+      <span class="hint__info__time">
         {{nextTime}}
-      </p>
+      </span>
       <i class="hint__info__line"></i>
-      <p class="hint__info__money">
+      <span class="hint__info__money">
         {{currencyType}}{{money}}
-      </p>
+      </span>
     </div>
   </div>
 </template>
@@ -41,20 +41,21 @@ export default {
     &__text{
       width:310px;
       height: 43px;
-      line-height: 43px;
       background-color: rgba(255, 255, 255, 0.2);
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;
       font:28px Roboto-Light;
+      line-height: 43px;
     }
     &__info{
-      display: flex;
-      justify-content: center;
+      text-align: center;
       margin-top:15px;
       &__line{
-        margin: 0 16.6px;
+        display: inline-block;
+        margin: 0 16.6px 0 16px;
         width: 2px;
+        height: 28px;
         border: 2px solid #ffffff;
       }
       &__time, &__money{

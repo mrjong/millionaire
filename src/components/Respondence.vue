@@ -15,8 +15,8 @@
       <answer v-for="(val, idx) in totalResult"
               :key=idx
               :content="idx"
-              :result="val && val.answerNum"
-              :percent= "val && val.percent"
+              :result="+ (val && val.answerNum) || 0"
+              :percent= "+(val && val.percent) || 0"
               :isRight="val && val.isRight"
               @answer="answer(idx)"
               :is-click="isClick"
@@ -124,6 +124,9 @@ export default {
     },
     setAllFontSize (textSize, iconSize) {
       console.log(textSize, iconSize)
+      document.getElementsByClassName('answerText')[0].style.fontSize = textSize
+      document.getElementsByClassName('resultNum')[0].style.fontSize = textSize
+      document.getElementsByClassName('resultIcon')[0].style.fontSize = iconSize
     }
   },
   watch: {

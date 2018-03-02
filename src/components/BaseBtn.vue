@@ -24,8 +24,8 @@ export default {
     border-radius: 46px;
     width: 313px;
     height:93px;
-    line-height: 93px;
     text-align: center;
     font: 28px Roboto-Light;
+    line-height: 93px;
   }
 </style>
