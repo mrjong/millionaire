@@ -20,7 +20,8 @@
               :isRight="val && val.isRight"
               @answer="answer(idx)"
               :is-click="isClick"
-              :myChick="userAnswer === idx">
+              :myChick="userAnswer === idx"
+              @setAllFontSize="setAllFontSize">
       </answer>
     </div>
   </div>
@@ -63,7 +64,7 @@ export default {
           totalNum += this.questionResult[i]
         }
       }
-      this.options.forEach((val) => {
+      Array.prototype.slice.call(this.options).forEach((val) => {
         result[val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(this.questionResult[val], totalNum),
@@ -120,6 +121,9 @@ export default {
         }, 500)
         this.percent = utils.computePercent(this.questionResult)
       }
+    },
+    setAllFontSize (textSize, iconSize) {
+      console.log(textSize, iconSize)
     }
   },
   watch: {
@@ -152,11 +156,11 @@ export default {
       margin:0 auto;
     }
     &__question{
-      font-size: 28px;
       color: #241262;
       margin: 43px auto 50px;
       padding: 0 16px;
       line-height: 40px;
+      font: 28px Roboto-Light;
     }
   }
   #circleProcess {
@@ -174,9 +178,9 @@ export default {
   }
   .text{
     transform:rotate(90deg);
-    font-size: 56px;
     color: #241262;
     font-weight: 600;
     text-anchor: middle;
+    font: 56px Roboto-BoldCondensed;
   }
 </style>

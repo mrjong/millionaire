@@ -42,16 +42,15 @@ export default {
       width:310px;
       height: 43px;
       line-height: 43px;
-      font-size: 28px;
       background-color: rgba(255, 255, 255, 0.2);
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;
+      font:28px Roboto-Light;
     }
     &__info{
       display: flex;
       justify-content: center;
-      font-size: 28px;
       margin-top:15px;
       &__line{
         margin: 0 16.6px;
@@ -60,6 +59,7 @@ export default {
       }
       &__time, &__money{
         letter-spacing: 1px;
+        font: 28px Roboto-Light;
       }
     }
   }

@@ -2,16 +2,15 @@
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
-         id="progress"
          :style="{width: percent + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
-      <span class="answer-container__base__text"  ref="answerText"
+      <span class="answer-container__base__text answerText"  ref="answerText"
             :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</span>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num">{{result}}</p>
-        <p class="answer-container__base__right__icon iconfont icon-duihao"
-              :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
+        <p class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
+           :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
       </div>
     </div>
   </div>
@@ -54,26 +53,46 @@ export default {
       correctAnswer: 'correctAnswer'
     }),
     textWidth: function () {
-      return this.$refs.answerText.getBoundingClientRect().width
+      return this.getFontWidth
     }
   },
   mounted () {
     if (this.questionStatus === 7) {
-      this.computeWidth(this.textWidth)
+      this.changeFontColor(this.textWidth)
+      this.setFontSize()
     }
   },
   methods: {
     answer () {
       this.$emit('answer')
     },
-    computeWidth (ele) {
+    getFontWidth (str, font) { // 获取字符串width
+      let canvas = document.createElement('canvas')
+      let ctx = canvas.getContext('2d')
+      ctx.font = font
+      return ctx.measureText(str).width
+    },
+    setFontSize () { // 设置字符串size
       const baseWidth = this.$refs.baseContainer.offsetWidth
       let resultWidth = this.$refs.resultNum.offsetWidth
-      let bb = ((ele / 2) + resultWidth) - (baseWidth / 2)
-      if (bb >= 0) {
-        // 缩小字体
-        console.log('bb' + bb)
+      let answerText = this.$refs.answerText
+      let resultNum = this.$refs.resultNum
+      let fontWidth = 28
+      console.log(fontWidth)
+      for (let i = fontWidth; i >= 10; i--) {
+        fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
+        if (fontWidth / 2 + resultWidth - baseWidth / 2 >= 70) {
+          answerText.style.fontSize = i / 100 + 'rem'
+          resultNum.style.fontSize = i / 100 + 'rem'
+        } else {
+          this.$emit('setAllFontSize', i / 100 + 'rem', (i - 10) / 100 + 'rem')
+          return false
+        }
       }
+    },
+    changeFontColor () {
+      const baseWidth = this.$refs.baseContainer.offsetWidth
+      let resultWidth = this.$refs.resultNum.offsetWidth
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
         // 全部变白
@@ -89,7 +108,8 @@ export default {
   watch: {
     questionStatus: (questionStatus) => {
       if (questionStatus === 7) {
-        this.computeWidth(this.textWidth)
+        this.changeFontColor(this.textWidth)
+        this.setFontSize()
       }
     }
   }
@@ -131,11 +151,12 @@ export default {
       width: 100%;
       height: 100%;
       justify-content: center;
-      font-size: 28px;
       color: #241262;
       position: relative;
       &__text{
         align-self: center;
+        font-size: 28px;
+        font-family: Roboto-Light;
       }
       &__right{
         position: absolute;
@@ -143,6 +164,7 @@ export default {
         right: 0;
         transform: translate(0, -50%);
         display: flex;
+        font-size: 28px;
         &__num{
           font-style:italic;
           align-self: center;

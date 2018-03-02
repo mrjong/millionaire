@@ -22,7 +22,7 @@ export default {
       startTime: 'startTime'
     }),
     countDown: function () {
-      const timeSecond = parseInt(this.startTime / 1000)
+      const timeSecond = Math.round((this.startTime / 1000))
       let s = timeSecond % 60
       let m = parseInt(timeSecond / 60 % 60)
       let h = parseInt(timeSecond / 60 / 60 % 24)
@@ -51,11 +51,11 @@ export default {
       color: #ffffff;
       text-align: center;
       &__text{
-        font-size: 28px;
+        font: 28px Roboto-Light;
       }
       &__time{
         margin-top: 31px;
-        font-size: 156px;
+        font:156px Roboto-Condensed;
       }
     }
   }
