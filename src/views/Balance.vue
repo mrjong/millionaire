@@ -37,7 +37,8 @@ export default {
         showMark: false,
         htmlText: '',
         shouldSub: false,
-        markType: 0
+        markType: 0,
+        okBtnText: ''
       },
       withdraw: 20
     }
@@ -50,29 +51,14 @@ export default {
   methods: {
     cashOut () {
       if (+this.userInfo.balance < +this.withdraw) {
-        this.markInfo = {
-          showMark: true,
-          shouldSub: false,
-          markType: 0,
-          htmlText: `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`
-        }
+        this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
       } else {
         const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         const passRule = emailReg.test(this.myPay)
         if (!passRule) {
-          this.markInfo = {
-            showMark: true,
-            shouldSub: false,
-            markType: 0,
-            htmlText: `Please enter the correct PayTM account!`
-          }
+          this.changeMarkInfo(true, false, 0, `Please enter the correct PayTM account!`)
         } else {
-          this.markInfo = {
-            showMark: true,
-            shouldSub: true,
-            markType: 1,
-            htmlText: `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`
-          }
+          this.changeMarkInfo(true, true, 1, `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`)
         }
       }
     },
@@ -85,6 +71,8 @@ export default {
         })
           .then(({data}) => {
             console.log(data)
+            this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
+            this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
           })
         console.log('提交提现表单')
       }
@@ -94,6 +82,16 @@ export default {
     },
     goBack () {
       this.$router.go(-1)
+    },
+    changeMarkInfo (showMark, shouldSub, markType, htmlText, okBtnText) {
+      const okBtnInnerText = okBtnText || 'OK'
+      this.markInfo = {
+        showMark: showMark,
+        shouldSub: shouldSub,
+        markType: markType,
+        htmlText: htmlText,
+        okBtnText: okBtnInnerText
+      }
     }
   },
   components: {
