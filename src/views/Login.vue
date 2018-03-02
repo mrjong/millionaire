@@ -67,22 +67,19 @@ export default {
     &__btn{
       position: absolute;
       bottom: 100px;
-      left: 50%;
-      transform: translate(-50%);
+      width: 100%;
       text-align: center;
-      &__fb,{
-        display: block;
+      &__fb{
         width: 658px;
         height: 94px;
         line-height: 94px;
-        text-align: center;
         color: #ffffff;
         font-size: 36px;
         background-color: #f0a01b;
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
-        position: relative;
+        font-family: Roboto-Light;
       }
     }
   }
