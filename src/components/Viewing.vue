@@ -26,7 +26,6 @@ export default {
     display: flex;
     &__icon{
       width: 30px;
-      height: 100%;
       align-self: center;
       display: flex;
       img{
