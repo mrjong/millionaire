@@ -153,12 +153,14 @@ export default {
     &__base{
       display:flex;
       width: 100%;
-      height: 100%;
+      height: 93px;
       justify-content: center;
       color: #241262;
       position: relative;
       align-items: center;
       &__text{
+        height: 93px;
+        line-height: 93px;
         align-self: center;
         font-size: 28px;
         font-family: Roboto-Light;
@@ -170,6 +172,7 @@ export default {
         transform: translate(0, -50%);
         display: flex;
         font-size: 28px;
+        align-items: center;
         &__num{
           font-style:italic;
           align-self: center;
