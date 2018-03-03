@@ -19,7 +19,7 @@ export default {
   .view-container{
     height: 50px;
     border-radius: 26px;
-    border:1px solid #cac6d8;
+    box-shadow: 0 0 0 2px #cac6d8;
     padding:0 16px;
     display: flex;
     &__icon{
