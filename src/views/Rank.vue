@@ -6,43 +6,51 @@
       <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">This week</section>
       <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">The total list</section>
     </header>
+    <!-- 前三名 -->
     <div class="topThree flex-box">
-      <section class="second">
-        <img class="avatar" src="http://images.apusapps.com/src/icon-apus-user-system.png" alt="">
+      <section class="second" v-if="rankInfo[mode].cache && rankInfo[mode].list[1]">
+        <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
         <img class="decorate" src="../assets/images/rank-second.png" alt="">
-        <p class="name">zhangpanpan</p>
-        <p class="money">$155.36</p>
+        <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
+        <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
       </section>
-      <section class="first">
-        <img class="avatar" src="http://images.apusapps.com/src/icon-apus-user-system.png" alt="">
+      <section class="first" v-if="rankInfo[mode].cache && rankInfo[mode].list[0]">
+        <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
         <img class="decorate" src="../assets/images/rank-first.png" alt="">
-        <p class="name">zhangpanpan</p>
-        <p class="money">$155.36</p>
+        <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
+        <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
       </section>
-      <section class="three">
-        <img class="avatar" src="http://images.apusapps.com/src/icon-apus-user-system.png" alt="">
+      <section class="third" v-if="rankInfo[mode].cache && rankInfo[mode].list[2]">
+        <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
         <img class="decorate" src="../assets/images/rank-third.png" alt="">
-        <p class="name">zhangpanpan</p>
-        <p class="money">$155.36</p>
+        <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
+        <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
       </section>
     </div>
     <section class="triangle"></section>
-    <div class="rank-items">
-      <rank-item v-for="(val, key) in 10" :key="key">
+    <div class="rank-items" v-if="rankInfo[mode].cache">
+      <rank-item v-for="(item, index) in rankInfo[mode].list" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
       </rank-item>
     </div>
-    <rank-item class="self" :isSelf="true" :isInList="false"></rank-item>
+    <!-- 自己的排名 -->
+    <rank-item class="self" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="rankInfo[mode].self.inboard"></rank-item>
   </div>
 </template>
 
 <script>
 import rankItem from '../components/RankItem'
+import {mapGetters} from 'vuex'
+import { RANK_UPDATE } from '../store/type'
 export default {
   name: 'RankList',
   data () {
     return {
-      mode: 'week'
+      mode: 'week', // 当前选中项 week为周榜 total为总榜
+      loading: false
     }
+  },
+  computed: {
+    ...mapGetters(['rankInfo', 'currencyType'])
   },
   components: {
     'rank-item': rankItem
@@ -50,6 +58,26 @@ export default {
   methods: {
     back () {
       this.$router.go(-1)
+    },
+    getRank () {
+      const {mode} = this
+      const rankInfo = this.rankInfo[mode]
+      if (!rankInfo.cache) {
+        this.loading = true
+        this.$store.dispatch(RANK_UPDATE, mode).then(() => {
+          this.loading = false
+        }, () => {
+          // TODO: 提示错误
+        })
+      }
+    }
+  },
+  created () {
+    this.getRank()
+  },
+  watch: {
+    mode () {
+      this.getRank()
     }
   }
 }
@@ -135,6 +163,7 @@ export default {
         }
         .name {
           font: normal 24px "Roboto-Light";
+          max-width: 180px;
           color: #fff;
         }
         .money {
@@ -146,6 +175,9 @@ export default {
         width: 217px;
         .name,.money {
           font-size: 28px;
+        }
+        .name {
+          max-width: 220px;
         }
         .decorate {
           top: 124px;

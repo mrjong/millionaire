@@ -1,26 +1,47 @@
 <template>
   <div class="rank-item flex-box" :class="{self: isSelf}">
-    <p class="rank-item_index">1333</p>
+    <p class="rank-item_index">{{rank}}</p>
     <section class="rank-item_info flex-box flex-align-center">
-      <img class="avatar" src="http://images.apusapps.com/src/icon-apus-user-system.png" alt="">
-      <span class="name">Cristina</span>
-      <span class="money" v-if="isInList">$100.34</span>
+      <img class="avatar" :src="avatar" alt="">
+      <span class="name ellipsis-1">{{name}}</span>
+      <span class="money" v-if="isInList">{{currencyType}}{{amount}}</span>
       <span class="notInList" v-else>Not on the list</span>
     </section>
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'rank-item',
   data () {
     return {
     }
   },
+  computed: {
+    ...mapGetters(['currencyType'])
+  },
   props: {
-    isSelf: {
-      type: Boolean
+    rank: {
+      type: Number, // 排名
+      default: 0
     },
-    isInList: {
+    avatar: {
+      type: String, // 头像
+      default: 'http://images.apusapps.com/src/icon-apus-user-system.png'
+    },
+    name: {
+      type: String, // 姓名
+      default: 'anonymous user'
+    },
+    amount: {
+      type: Number, // 金额
+      default: 0
+    },
+    isSelf: { // 是否为自己的排名 是则加特殊样式
+      type: Boolean,
+      default: false
+    },
+    isInList: { // 是否在榜单中
       type: Boolean,
       default: true
     }
@@ -52,10 +73,10 @@ export default {
         font: normal 28px "Roboto-Light";
         color: #3e2e75;
         margin-left: 8.5%;
+        max-width: 330px;
       }
       .money, .notInList {
-        font: normal 24px "RobotoCondensed Regular";
-        line-height: 92px;
+        font: normal 24px／92px "RobotoCondensed Regular";
         color: #ffb227;
         position: absolute;
         right: 0;
