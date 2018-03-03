@@ -6,14 +6,16 @@
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
-      <router-link to="/balance">
+      <router-link to="/balance" class="balance-router">
         <div class="base-info__other__balance">
           <p class="base-info__other__balance__text">Balance</p>
           <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
         </div>
       </router-link>
-      <p class="base-info__other__line"></p>
-      <router-link to="/rank">
+      <div class="base-info__other__line">
+        <p class="base-info__other__line__sub"></p>
+      </div>
+      <router-link to="/rank" class="balance-rank">
         <div class="base-info__other__rank">
           <p class="base-info__other__rank__text">Weekly Rank</p>
           <p class="base-info__other__rank__num num">{{baseInfo.rank}}</p>
@@ -43,8 +45,8 @@ export default {
     margin:113px auto 25px;
     padding: 0.5px;
     &__user{
-      margin: -70px auto;
       text-align: center;
+      margin-top: -70px;
       &__head{
         width:160px;
         height:160px;
@@ -61,25 +63,33 @@ export default {
     }
     &__other{
       display: flex;
-      margin-top: 156px;
+      margin-top: 100px;
       justify-content: center;
+      .balance-router, .balance-rank{
+        width: 50%;
+        display: block;
+      }
       &__line{
-        height: 76px;
-        border:1px solid #e0ddea;
-        margin: 0 93px;
         align-self: center;
+        &__sub{
+          width: 0;
+          height: 76px;
+          box-shadow: 0 0 0 5px #e0ddea;
+        }
       }
       &__balance, &__rank {
+        margin: 0 auto;
         font-size: 28px;
         color: #241262;
-        text-align: center;
         &__text{
+          text-align: center;
           font-family: Roboto-Light;
         }
         .num{
           font-size: 56px;
           margin-top: 26px;
           color: #241262;
+          text-align: center;
           font-family: Roboto-BoldCondensed;
         }
       }

@@ -17,11 +17,12 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .view-container{
-    height: 50px;
-    border-radius: 26px;
-    box-shadow: 0 0 0 2px #cac6d8;
-    padding:0 16px;
+    border-radius: 28px;
+    /*box-shadow: 0 0 0 2px #cac6d8;*/
+    border:2px solid #cac6d8;
+    padding:16px;
     display: flex;
+    align-items: center;
     &__icon{
       width: 30px;
       align-self: center;
