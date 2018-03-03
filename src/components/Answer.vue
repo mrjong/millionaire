@@ -182,6 +182,7 @@ export default {
           margin-left: 16px;
           color: #241262;
           align-self: center;
+          vertical-align: middle;
         }
       }
     }
