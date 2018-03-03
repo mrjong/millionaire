@@ -5,12 +5,13 @@
          :style="{width: percent + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
-      <span class="answer-container__base__text answerText"  ref="answerText"
-            :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</span>
+      <p class="answer-container__base__text answerText"  ref="answerText"
+            :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num" ref="answerNum"
            :class="{'font-white': isResultWhite}">{{result}}</p>
         <p class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
+           ref="resultIcon"
            :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
       </div>
     </div>
@@ -53,14 +54,10 @@ export default {
       questionStatus: 'question_status',
       contents: 'contents',
       correctAnswer: 'correctAnswer'
-    }),
-    textWidth: function () {
-      return this.getFontWidth
-    }
+    })
   },
   mounted () {
     if (this.questionStatus === 7) {
-      this.changeFontColor(this.textWidth)
       this.setFontSize()
     }
   },
@@ -79,23 +76,23 @@ export default {
       let resultWidth = this.$refs.resultNum.offsetWidth
       let answerText = this.$refs.answerText
       let resultNum = this.$refs.resultNum
+      let resultIcon = this.$refs.resultIcon
       let fontWidth = 28
       for (let i = fontWidth; i >= 10; i--) {
         fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
         if (fontWidth / 2 + resultWidth - baseWidth / 2 >= 70) {
           answerText.style.fontSize = i / 100 + 'rem'
           resultNum.style.fontSize = i / 100 + 'rem'
+          resultIcon.style.fontSize = (i - 10) / 100 + 'rem'
         } else {
           this.$emit('setAllFontSize', i / 100 + 'rem', (i - 10) / 100 + 'rem')
+          this.changeFontColor(baseWidth, resultWidth)
           return false
         }
       }
     },
-    changeFontColor () {
-      const baseWidth = this.$refs.baseContainer.offsetWidth
-      let resultWidth = this.$refs.resultNum.offsetWidth
+    changeFontColor (baseWidth, resultWidth) {
       let answerNum = this.$refs.answerNum.offsetWidth
-      console.log(answerNum)
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
         // 全部变白
@@ -106,10 +103,9 @@ export default {
         // 答案变白
         this.isAnswerWhite = true
       }
-      let ee = (baseWidth - resultWidth + answerNum) - (this.percent / 100) * baseWidth
+      let ee = (this.percent / 100) * baseWidth - (baseWidth - resultWidth + answerNum)
       if (ee > 0) {
         // 答案和数据变白
-        console.log('ee' + ee)
         this.isResultWhite = true
       }
     }
@@ -117,7 +113,6 @@ export default {
   watch: {
     questionStatus: (questionStatus) => {
       if (questionStatus === 7) {
-        this.changeFontColor(this.textWidth)
         this.setFontSize()
       }
     }
