@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import chatRoom from './modules/chatRoom'
 import question from './modules/question'
+import rank from './modules/rank'
 import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
@@ -20,9 +21,16 @@ export default new Vuex.Store({
     syncIntervalTime: 600000, // 同步结束时间间隔
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
-    result: null, // 游戏结果
-    chatRoomId: '', // 聊天室ID,
-    imToken: '' // 连接IM token
+    chatRoomId: '', // 聊天室ID
+    imToken: '', // 连接IM token
+    /* 游戏结果数据结构:
+      {
+        isFinish: true, // 比赛是否完成  有可能中途一道题没人答对，比赛直接结束
+        bonusAmount: 0, // 总奖金数量
+        winners: [] // 获奖者列表  userId 用户ID avatar 用户头像 name 用户名 bonusAmount 奖金数量
+      }
+     */
+    result: {} // 游戏结果
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -50,7 +58,6 @@ export default new Vuex.Store({
     [type._INIT] ({commit, dispatch, state}) {
       return new Promise((resolve, reject) => {
         init().then(({data}) => {
-          console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = data.data
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, j: question = {}, a: answer} = info
@@ -169,23 +176,45 @@ export default new Vuex.Store({
       })
     },
     [type._UPDATE_AMOUNT] ({commit}) {
-      im.addListener(MESSAGE_AMOUNT, (messgae) => {
+      im.addListener(MESSAGE_AMOUNT, (message) => {
+        const count = +(message.content && message.content.count)
         commit(type._UPDATE, {
-          onlineAmount: messgae && messgae.content && messgae.content.content
+          onlineAmount: count
         })
       })
     },
+    /**
+     * 接收比赛结果
+     * @param {any} {commit}
+     */
     [type._RECEIVE_RESULT] ({commit}) {
-      im.addListener(MESSAGE_RESULT, (messgae) => {
-        commit(type._UPDATE, {
-          result: messgae && messgae.content && messgae.content.content
-        })
+      im.addListener(MESSAGE_RESULT, (message) => {
+        const resultStr = message.content && message.content.summary
+        if (resultStr) {
+          const result = JSON.parse(resultStr)
+          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = []} = result
+          winners.map((winner) => {
+            const obj = {}
+            obj.userId = winner.i
+            obj.name = winner.n
+            obj.avatar = winner.p
+            obj.bonusAmount = winner.b
+            return obj
+          })
+          // 更新结果
+          commit(type._UPDATE, {
+            result: {isFinish, bonusAmount, winners}
+          })
+          // 更新状态
+          commit(type._UPDATE, status._END)
+        }
       })
     }
   },
   modules: {
     chatRoom,
     question,
+    rank,
     home
   },
   strict: debug // 开启严格模式，在mutations外修改state的数据会报错
