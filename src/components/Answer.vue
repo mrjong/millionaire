@@ -157,6 +157,7 @@ export default {
       justify-content: center;
       color: #241262;
       position: relative;
+      align-items: center;
       &__text{
         align-self: center;
         font-size: 28px;

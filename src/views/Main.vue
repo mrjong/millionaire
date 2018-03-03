@@ -2,8 +2,8 @@
   <div class="main-container">
     <div class="main-container__top">
       <div class="main-container__top__online">
-        <span class="main-container__top__online__icon icon-yonghu iconfont"></span>
-        <span class="main-container__top__online__num">{{onlineAmount}}</span>
+        <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
+        <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
       <div class="main-container__top__logo">
         <img src="../assets/images/logo.png" alt="millionaire">
@@ -74,18 +74,20 @@ export default {
         padding: 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
+        display: flex;
+        align-items: center;
         &__icon{
-          display: inline-block;
           width: 24px;
           height: 24px;
           font-size: 24px;
           line-height: 24px;
-          vertical-align: bottom;
+          align-self: center;
+          margin-right: 12px;
         }
         &__num{
-          display: inline-block;
           font-size: 24px;
           color: #fff;
+          align-self: center;
         }
       }
       &__logo{
