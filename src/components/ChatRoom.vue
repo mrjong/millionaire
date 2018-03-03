@@ -4,7 +4,9 @@
     <div class="msg-container">
        <transition-group
         name='fade'
-        tag="div">
+        tag="div"
+        class="msg-contianer__inner"
+        >
          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
@@ -15,7 +17,7 @@
        </transition-group>
     </div>
   </div>
-  <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}"> 
        <div class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
         <input
           class="msg-send-container__wrap__input"
@@ -112,13 +114,16 @@ export default {
   position: relative;
   overflow: hidden;
   margin-bottom: 35px;
+  border: 2px solid red;
 }
 .chat-msg-wrap {
-  -webkit-mask: url('../assets/images/mask.png') no-repeat;
-  -webkit-mask-size: 100% 110%;
+  // -webkit-mask: url('../assets/images/mask.png') no-repeat;
+  // -webkit-mask-size: 100% 110%;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  border: 2px solid yellow;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
@@ -174,7 +179,6 @@ export default {
       padding: 0 23px;
     }
     &__input:focus {
-      outline: none;
       box-shadow: none;
       -webkit-tap-highlight-color:rgba(0,0,0,0);
       -webkit-user-modify:read-write-plaintext-only;
@@ -197,6 +201,11 @@ export default {
 }
 .msg-container {
   width: 100%;
+  height: auto;
+  &__inner {
+    width: 100%;
+    height: auto;
+  }
   &__item {
     max-width: 100%;
     margin: 6px 26px;
