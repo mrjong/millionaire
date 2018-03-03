@@ -16,7 +16,7 @@
     </div>
   </div>
   <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
-       <p class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+       <div class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
         <input
           class="msg-send-container__wrap__input"
           id="sendmessage"
@@ -24,9 +24,11 @@
           @focus="focusEvent"
           @blur="blurEvent"
           v-model.trim="myMessage">
-        <span class="msg-send-container__wrap__btn" @click="sendMessage">Send</span>
-      </p>
-      <label @click="() => {}" class="msg-send-container__icon iconfont icon-pinglun" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}"></label>
+        <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
+      </div>
+      <label @click="() => {}" class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
+        <span class="iconfont icon-pinglun"></span>
+      </label>
     </div>
 </div>
 </template>
@@ -136,15 +138,13 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
-    font-size: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
-    // overflow: hidden;
     box-sizing: border-box;
-  }
-  .icon-pinglun::before {
-    transform: translate(0, 3px)
+    span {
+          font-size: 34px;
+    }
   }
   &__hide {
     opacity: 0;
@@ -164,13 +164,24 @@ export default {
       width: 594px;
       height: 84px;
       border: 1px solid #dcdcdc;
+      border: 0;
       outline: none;
+      box-shadow: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       font-size: 20px;
       color: #241262;
       font-family: 'Roboto-Regular';
       padding: 0 23px;
     }
+    &__input:focus {
+      outline: none;
+      box-shadow: none;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      -webkit-user-modify:read-write-plaintext-only;
+      outline:0;
+    }
     &__btn {
+      width: 100%;
       font-size: 22px;
       font-family: 'Roboto-Regular';
       color: #FFB227;
