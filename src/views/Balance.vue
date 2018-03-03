@@ -197,15 +197,23 @@ export default {
     }
     &__input::-webkit-input-placeholder{
       color: #9F9EA1;
+      text-align: center;
+      line-height: 94px;
     }
     &__input:-ms-input-placeholder{
       color: #9F9EA1;
+      text-align: center;
+      line-height: 94px;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
+      line-height: 94px;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
+      line-height: 94px;
     }
     &__tip {
       width: 100%;
