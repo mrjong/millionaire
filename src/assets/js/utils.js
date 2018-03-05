@@ -3,6 +3,21 @@ const njordGame = window.top.njordGame
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
+const getQuery =
+/**
+* 获取浏览器公共参数
+* @param {any} name
+* @param {string} [url='']
+* @returns
+*/
+function (name, url = '') {
+  const queryUrlArr = url.match(/.*\?(\S+)$/)
+  const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
+  const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
+  const search = queryUrl.match(regx)
+  return (search && decodeURIComponent(search[2])) || null
+}
+
 export default {
   /**
    * 登录
@@ -18,7 +33,7 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : '100210001',
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100210001'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLoginin : false,
@@ -45,6 +60,22 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
+  share () {
+    const {origin, pathname} = window.location
+    const {app_id: appId} = this
+    if (njordGame) {
+      window.location.href = 'tercel://moreshare?url=' + `${origin + pathname}?appId=${appId}`
+    } else {
+      window.location.href = 'http://m.facebook.com/sharer?u=' + `${origin + pathname}?appId=${appId}`
+    }
+  },
+  /**
+   * 时间格式化
+   * @param {any} time 时间戳
+   * @param {any} fixedDate
+   * @param {any} countdown
+   * @returns
+   */
   TimeFormat (time, fixedDate, countdown) {
     let timeObj = {
       month: 0,

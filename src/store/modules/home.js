@@ -16,7 +16,8 @@ const state = {
 }
 
 const getters = {
-  userInfo: (state) => state
+  userInfo: (state) => state,
+  currencyType: (state) => state.currencyType
 }
 
 const mutations = {

@@ -1,5 +1,5 @@
 <template>
-  <div class="rank-item flex-box" :class="{self: isSelf}">
+  <div class="rank-item flex-box" :class="['rank-item', 'flex-box', isSelf ? 'self' : '']">
     <p class="rank-item_index">{{rank}}</p>
     <section class="rank-item_info flex-box flex-align-center">
       <img class="avatar" :src="avatar" alt="">
@@ -68,6 +68,7 @@ export default {
       .avatar {
         width: 60px;
         height: 60px;
+        border-radius: 60px;
       }
       .name {
         font: normal 28px "Roboto-Light";
