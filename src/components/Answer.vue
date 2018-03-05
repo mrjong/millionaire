@@ -125,11 +125,12 @@ export default {
   .answer-container{
     width: 624px;
     height: 93px;
-    margin: 25px auto;
+    margin: 0 auto 20px ;
     background-color: #e9e8f1;
     border-radius: 46px;
     padding:0 23px;
     position: relative;
+    font-family: 'Roboto-Light',serif;
     &__state{
       width: 0;
       height:100%;
@@ -164,7 +165,6 @@ export default {
         height: 93px;
         line-height: 93px;
         align-self: center;
-        font-family: 'Roboto-Light';
         width: 100%;
         text-align: center;
       }

@@ -143,7 +143,7 @@ export default {
     margin: 25px;
     background-color: #fff;
     border-radius: 24px;
-    padding: 50px 23px;
+    padding: 35px 23px;
     position: relative;
     display: flex;
     flex-direction: column;
