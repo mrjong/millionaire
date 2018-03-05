@@ -193,27 +193,46 @@ export default {
       font-size: 34px;
       font-family: 'Roboto-Light';
       text-align: center;
-      line-height: 94px;
+      line-height: normal;
+      // line-height: 94px;
+    }
+    &__input:focus {
+      box-shadow: none;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      -webkit-user-modify:read-write-plaintext-only;
+      outline:0;
     }
     &__input::-webkit-input-placeholder{
       color: #9F9EA1;
+      width: 100%;
+      height: 94px;
       text-align: center;
-      line-height: 94px;
+      padding: 30px 0;
+      // line-height: 94px;
     }
     &__input:-ms-input-placeholder{
       color: #9F9EA1;
+      width: 100%;
+      height: 94px;
       text-align: center;
-      line-height: 94px;
+      padding: 30px 0;
+      // line-height: 94px;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      width: 100%;
+      height: 94px;
       text-align: center;
-      line-height: 94px;
+      padding: 30px 0;
+      // line-height: 94px;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      width: 100%;
+      height: 94px;
       text-align: center;
-      line-height: 94px;
+      padding: 30px 0;
+      // line-height: 94px;
     }
     &__tip {
       width: 100%;
