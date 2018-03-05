@@ -76,7 +76,7 @@ export default {
         max-width: 330px;
       }
       .money, .notInList {
-        font: normal 24px／92px "RobotoCondensed Regular";
+        font: normal 24px/92px "RobotoCondensed Regular";
         color: #ffb227;
         position: absolute;
         right: 0;
