@@ -28,7 +28,7 @@
           v-model.trim="myMessage">
         <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
       </div>
-      <label @click="() => {}" class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
+      <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
         <span class="iconfont icon-pinglun"></span>
       </label>
     </div>

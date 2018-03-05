@@ -21,12 +21,14 @@
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
+    <loading v-if="showLoading"></loading>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
+import Loading from '../components/loading'
 import * as api from '../assets/js/api'
 export default {
   name: 'Balance',
@@ -40,7 +42,8 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 20
+      withdraw: 20,
+      showLoading: false
     }
   },
   computed: {
@@ -64,6 +67,7 @@ export default {
     },
     okEvent (info) {
       this.markInfo.showMark = false
+      this.showLoading = true
       if (info) {
         // 提交表单
         api.balanceApplication({
@@ -71,8 +75,15 @@ export default {
         })
           .then(({data}) => {
             console.log(data)
-            this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
-            this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
+            this.showLoading = false
+            if (+data.data.error !== 0) {
+              this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
+              this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
+            } else {
+            }
+          })
+          .catch((err) => {
+            console.log(err)
           })
         console.log('提交提现表单')
       }
@@ -95,7 +106,8 @@ export default {
     }
   },
   components: {
-    BalanceMark
+    BalanceMark,
+    Loading
   }
 }
 </script>
