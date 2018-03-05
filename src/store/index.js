@@ -87,7 +87,7 @@ export default new Vuex.Store({
                 index: +question.js,
                 contents: question.jc || '',
                 options: question.jo || ['', '', ''],
-                watchingMode: true
+                watchingMode: false
               })
               // 如果有答案直接进入答案页面
               if (answer) {
