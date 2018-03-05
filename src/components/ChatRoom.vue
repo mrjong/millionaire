@@ -17,7 +17,7 @@
        </transition-group>
     </div>
   </div>
-    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}"> 
+    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
        <div class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
         <input
           class="msg-send-container__wrap__input"
