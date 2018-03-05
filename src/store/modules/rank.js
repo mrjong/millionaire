@@ -37,17 +37,17 @@ const actions = {
    * @param {any} type 排行榜类型 week为周排行榜 total为总榜
    * @returns
    */
-  [type.RANK_UPDATE] ({commit, getters}, type) {
+  [type.RANK_UPDATE] ({commit, getters}, rankType) {
     const rankInfo = {}
     return new Promise((resolve, reject) => {
-      getRankInfo(type).then(({data}) => {
+      getRankInfo(rankType).then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {
           rankInfo.cache = true
-          const {sdata: self = [], udata: list = []} = data
+          const {sdata: self = [], udata: list = []} = data.data || {}
           rankInfo.self = self
           rankInfo.list = list
           commit(type.RANK_UPDATE, {
-            [type]: rankInfo
+            [rankType]: rankInfo
           })
           resolve()
         } else {

@@ -29,11 +29,12 @@
     </div>
     <section class="triangle"></section>
     <div class="rank-items" v-if="rankInfo[mode].cache">
-      <rank-item v-for="(item, index) in rankInfo[mode].list" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
+      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
       </rank-item>
     </div>
     <!-- 自己的排名 -->
-    <rank-item class="self" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="rankInfo[mode].self.inboard"></rank-item>
+    <rank-item class="myrank" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
+    <loading v-show="loading"></loading>
   </div>
 </template>
 
@@ -41,6 +42,7 @@
 import rankItem from '../components/RankItem'
 import {mapGetters} from 'vuex'
 import { RANK_UPDATE } from '../store/type'
+import loading from '../components/loading'
 export default {
   name: 'RankList',
   data () {
@@ -53,7 +55,8 @@ export default {
     ...mapGetters(['rankInfo', 'currencyType'])
   },
   components: {
-    'rank-item': rankItem
+    'rank-item': rankItem,
+    loading
   },
   methods: {
     back () {
@@ -89,6 +92,7 @@ export default {
     background: url('../assets/images/rank-bg.jpg') top no-repeat;
     background-size: cover;
     flex-direction: column;
+    position: relative;
 
     header {
       height: 51.5px;
@@ -151,7 +155,9 @@ export default {
         text-align: center;
         position: relative;
         .avatar {
-          width: 78.54%;
+          width: 144px;
+          height: 144px;
+          border-radius: 144px;
           display: inline-block;
           margin-bottom: 40px;
         }
@@ -173,6 +179,11 @@ export default {
       }
       .first {
         width: 217px;
+        .avatar {
+          width: 170px;
+          height: 170px;
+          border-radius: 170px;
+        }
         .name,.money {
           font-size: 28px;
         }
@@ -201,7 +212,7 @@ export default {
       flex: 1;
     }
 
-    .self {
+    .myrank {
       position: fixed;
       bottom: 0;
     }
