@@ -5,6 +5,7 @@
       <p class="hint__info__time">
         {{nextTime}}
       </p>
+      <p class="hint__info__line"></p>
       <p class="hint__info__money">
         {{currencyType}}{{money}}
       </p>
@@ -54,17 +55,35 @@ export default {
       &__time, &__money{
         letter-spacing: 1px;
         font: 28px Roboto-Light;
-        width: 49%;
       }
       &__time{
         padding-right:16px;
         text-align: right;
-        border-right: 2px solid #fff;
+        align-self: center;
       }
       &__money{
         margin-left: 16px;
         text-align: left;
+        align-self: center;
+      }
+      &__line{
+        height: 28px;
+        border-right: 2px solid #fff;
+        align-self: center;
       }
     }
+  }
+  @media screen and (max-width: 321px){
+    .hint{
+      &__info{
+        &__line{
+          height: 28px;
+          border: 5px solid #fff;
+          transform: scaleX(0.5);
+          margin-top: 2px;
+        }
+      }
+    }
+
   }
 </style>

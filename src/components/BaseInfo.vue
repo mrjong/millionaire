@@ -12,9 +12,7 @@
           <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
         </div>
       </router-link>
-      <div class="base-info__other__line">
-        <p class="base-info__other__line__sub"></p>
-      </div>
+      <div class="base-info__other__line"></div>
       <router-link to="/rank" class="balance-rank">
         <div class="base-info__other__rank">
           <p class="base-info__other__rank__text">Weekly Rank</p>
@@ -41,7 +39,7 @@ export default {
     width: 670px;
     height: 463px;
     background-color: #ffffff;
-    border-radius: 46px;
+    border-radius: 24px;
     margin:113px auto 25px;
     padding: 0.5px;
     &__user{
@@ -56,7 +54,7 @@ export default {
         margin: 0 auto;
       }
       &__name{
-        margin-top: 30px;
+        margin-top: 28px;
         color: #241262;
         font: 36px Roboto-Medium;
       }
@@ -71,11 +69,8 @@ export default {
       }
       &__line{
         align-self: center;
-        &__sub{
-          width: 0;
-          height: 76px;
-          box-shadow: 0 0 0 5px #e0ddea;
-        }
+        height: 76px;
+        border: 1px solid rgba(36, 18, 98, 0.11);
       }
       &__balance, &__rank {
         margin: 0 auto;
@@ -91,6 +86,16 @@ export default {
           color: #241262;
           text-align: center;
           font-family: 'Roboto-BoldCondensed';
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 321px){
+   .base-info{
+      &__other{
+        &__line{
+          border:5px solid #e0ddea;
+          transform: scaleX(0.4);
         }
       }
     }

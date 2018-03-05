@@ -1,6 +1,7 @@
 <template>
   <div class="base-btn"
-       :style="{backgroundColor: baseStyle.bgColor}">
+       :style="{backgroundColor: baseStyle.bgColor}"
+       @click="inviteFriends">
     {{baseStyle.text}}
   </div>
 </template>
@@ -13,6 +14,12 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    inviteFriends () {
+      // 分享好友
+      this.$emit('inviteFriends')
     }
   }
 }

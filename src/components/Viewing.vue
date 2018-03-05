@@ -17,10 +17,9 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .view-container{
-    border-radius: 28px;
-    /*box-shadow: 0 0 0 2px #cac6d8;*/
-    border:2px solid #cac6d8;
-    padding:16px;
+    border-radius: 24px;
+    box-shadow: 0 0 0 2px #cac6d8;
+    padding:13px 17px;
     display: flex;
     align-items: center;
     &__icon{
@@ -35,6 +34,11 @@ export default {
       color: #241262;
       margin-left: 12px;
       align-self: center;
+    }
+  }
+  @media screen and (max-width: 321px) {
+    .view-container{
+      box-shadow: 0 0 0 4px #cac6d8;
     }
   }
 </style>

@@ -3,15 +3,15 @@
     <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50%" cy="50%" r="41%" stroke="#ececef" stroke-width="4"></circle>
-        <circle id="circle" cx="50%" cy="50%" r="41%" stroke=" #ffcc03" stroke-width="4.5"></circle>
-        <text x="50%" y="-32%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
+        <circle cx="50%" cy="50%" r="44%" stroke="#acabb0" stroke-width="4" style="stroke-opacity: 0.1"></circle>
+        <circle id="circle" cx="50%" cy="50%" r="44%" stroke=" #ffcc03" stroke-width="4" ref="circle"></circle>
+        <text x="48%" y="66%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
       {{index}}.{{contents}}
     </p>
-    <div class="respondence-container__answer">
+    <div class="respondence-container__answer" ref="answerContainer">
       <answer v-for="(val, idx) in totalResult"
               :key=idx
               :content="idx"
@@ -38,7 +38,8 @@ export default {
   data () {
     return {
       rangeValue: 10,
-      isClick: false
+      isClick: false,
+      fontSize: 28
     }
   },
   computed: {
@@ -86,14 +87,11 @@ export default {
         return false
       }
       if (this.question_status === 5) {
-        if (this.watchingMode) {
+        if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
           this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e})
           this.$store.dispatch(type.QUESTION_SUBMIT)
-          this.$store.commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
         }
       } else {
         // 不可以点击
@@ -108,12 +106,12 @@ export default {
       return percent
     },
     countDown (status) {
-      let circle = document.getElementById('circle')
+      let circle = this.$refs.circle
       if (status === 5) {
         circle.setAttribute('transition', `stroke-dashoffset ${this.restTime} linear;`)
         setTimeout(() => {
           circle.style.strokeDashoffset = 0
-        }, 10000)
+        }, 100)
       } else if (status === 7) {
         this.isClick = false
         setTimeout(() => {
@@ -123,9 +121,10 @@ export default {
       }
     },
     setAllFontSize (textSize, iconSize) {
-      // document.getElementsByClassName('answerText')[0].style.fontSize = textSize
-      // document.getElementsByClassName('resultNum')[0].style.fontSize = textSize
-      // document.getElementsByClassName('resultIcon')[0].style.fontSize = iconSize
+      if (this.fontSize >= textSize) {
+        this.fontSize = textSize
+      }
+      this.$refs.answerContainer.style.fontSize = this.fontSize + 'rem'
     }
   },
   watch: {
@@ -141,12 +140,14 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
-    box-sizing: border-box;
     margin: 25px;
     background-color: #fff;
-    border-radius: 28px;
+    border-radius: 24px;
     padding: 50px 23px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__viewing{
       position: absolute;
       top: 30px;
@@ -155,22 +156,26 @@ export default {
     &__countdown{
       width: 113px;
       height: 113px;
-      margin:0 auto;
+      align-self: center;
+      margin: 0 auto;
     }
     &__question{
+      width: 100%;
       color: #241262;
-      margin: 43px auto 50px;
+      margin: 40px auto;
       padding: 0 16px;
       line-height: 40px;
       font: 28px Roboto-Light;
+      text-align: left;
+    }
+    &__answer{
+      font-size: 28px;
     }
   }
   #circleProcess {
-    position: relative;
     width: 100%;
-    height:100%;
+    height: 100%;
     fill: none;
-    transform:rotate(-90deg);
     background-color: transparent;
   }
   #circle{
@@ -179,8 +184,6 @@ export default {
     transition: stroke-dashoffset 10s linear;
   }
   .text{
-    transform:rotate(90deg);
-    color: #241262;
     font-weight: 600;
     text-anchor: middle;
     font: 56px Roboto-BoldCondensed;
