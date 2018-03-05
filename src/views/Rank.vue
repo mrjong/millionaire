@@ -7,7 +7,7 @@
       <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">The total list</section>
     </header>
     <!-- 前三名 -->
-    <div class="topThree flex-box">
+    <div class="topThree flex-box" v-if="rankInfo[mode].cache">
       <section class="second" v-if="rankInfo[mode].cache && rankInfo[mode].list[1]">
         <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
         <img class="decorate" src="../assets/images/rank-second.png" alt="">
@@ -27,7 +27,7 @@
         <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
       </section>
     </div>
-    <section class="triangle"></section>
+    <section class="triangle" v-if="rankInfo[mode].cache"></section>
     <div class="rank-items" v-if="rankInfo[mode].cache">
       <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
       </rank-item>
