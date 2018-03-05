@@ -16,7 +16,9 @@
       </div>
     </div>
     <div class="balance-wrap__operate">
-      <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account" v-model="myPay">
+      <p class="balance-wrap__operate__wrap__input">
+        <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account" v-model="myPay">
+      </p>
       <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
@@ -71,6 +73,7 @@ export default {
       if (info) {
         // 提交表单
         api.balanceApplication({
+          amount: this.userInfo.balance,
           email: '1@w.com'
         })
           .then(({data}) => {
@@ -194,19 +197,33 @@ export default {
     width: 100%;
     height: 314px;
     margin-bottom: 85px;
-    &__input {
+    display: block;
+    overflow: hidden;
+    &__wrap__input {
       width: 100%;
       height: 94px;
       background: #fff;
       border-radius: 16px;
+      // line-height: 94px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &__input {
+      display:inline-block;
+      width: 100%;
+      // height: 94px;
+      background: #fff;
+      // border-radius: 16px;
       border: none;
       outline: none;
       color: #241262;
       font-size: 34px;
       font-family: 'Roboto-Light';
-      text-align: center;
-      line-height: normal;
+      margin-left: 10px;
+      // text-align: center;
       // line-height: 94px;
+      // vertical-align: text-bottom;
     }
     &__input:focus {
       box-shadow: none;
@@ -215,36 +232,39 @@ export default {
       outline:0;
     }
     &__input::-webkit-input-placeholder{
-      color: #9F9EA1;
+      // display: inline-block;
+      // color: #9F9EA1;
       width: 100%;
-      height: 94px;
-      text-align: center;
-      padding: 30px 0;
-      // line-height: 94px;
+      // height: 94px;
+      // text-align: center;
+      // padding: 30px 0;
     }
     &__input:-ms-input-placeholder{
+      // display: inline-block;
+      // width: 100%;
       color: #9F9EA1;
-      width: 100%;
-      height: 94px;
-      text-align: center;
-      padding: 30px 0;
-      // line-height: 94px;
+      // width: 100%;
+      // height: 94px;
+      // text-align: center;
+      // padding: 30px 0;
     }
     &__input::-moz-placeholder{
+      // display: inline-block;
+      // width: 100%;
       color: #9F9EA1;
-      width: 100%;
-      height: 94px;
-      text-align: center;
-      padding: 30px 0;
-      // line-height: 94px;
+      // width: 100%;
+      // height: 94px;
+      // text-align: center;
+      // padding: 30px 0;
     }
     &__input::-moz-placeholder{
+      // display: inline-block;
+      // width: 100%;
       color: #9F9EA1;
-      width: 100%;
-      height: 94px;
-      text-align: center;
-      padding: 30px 0;
-      // line-height: 94px;
+      // width: 100%;
+      // height: 94px;
+      // text-align: center;
+      // padding: 30px 0;
     }
     &__tip {
       width: 100%;

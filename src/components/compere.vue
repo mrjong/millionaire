@@ -42,7 +42,7 @@ export default {
   &__text {
     font-size: 22px;
     color: #241262;
-    font-family: 'Roboto Medium';
+    font-family: 'Roboto-Medium';
     margin: 0 10px 32px 0;
     text-indent: 44px;
   }

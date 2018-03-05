@@ -79,7 +79,7 @@ export default {
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
-        font-family: Roboto-Light;
+        font-family: 'Roboto-Light';
       }
     }
   }

@@ -135,7 +135,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto Medium';
+  font-family: 'Roboto-Medium';
   &__icon {
     width: 130px;
     border-radius: 50%;
