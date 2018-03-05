@@ -83,14 +83,14 @@ export default {
         color: #241262;
         &__text{
           text-align: center;
-          font-family: Roboto-Light;
+          font-family: 'Roboto-Light';
         }
         .num{
           font-size: 56px;
           margin-top: 26px;
           color: #241262;
           text-align: center;
-          font-family: Roboto-BoldCondensed;
+          font-family: 'Roboto-BoldCondensed';
         }
       }
     }

@@ -163,7 +163,7 @@ export default {
         line-height: 93px;
         align-self: center;
         font-size: 28px;
-        font-family: Roboto-Light;
+        font-family: 'Roboto-Light';
       }
       &__right{
         position: absolute;
