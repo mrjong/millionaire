@@ -2,13 +2,12 @@
   <div class="hint">
     <p class="hint__text">The next start time</p>
     <div class="hint__info">
-      <span class="hint__info__time">
+      <p class="hint__info__time">
         {{nextTime}}
-      </span>
-      <i class="hint__info__line"></i>
-      <span class="hint__info__money">
+      </p>
+      <p class="hint__info__money">
         {{currencyType}}{{money}}
-      </span>
+      </p>
     </div>
   </div>
 </template>
@@ -49,18 +48,22 @@ export default {
       line-height: 43px;
     }
     &__info{
-      text-align: center;
       margin-top:15px;
-      &__line{
-        display: inline-block;
-        margin: 0 16.6px 0 16px;
-        width: 2px;
-        height: 28px;
-        border: 2px solid #ffffff;
-      }
+      display: flex;
+      justify-content: center;
       &__time, &__money{
         letter-spacing: 1px;
         font: 28px Roboto-Light;
+        width: 49%;
+      }
+      &__time{
+        padding-right:16px;
+        text-align: right;
+        border-right: 2px solid #fff;
+      }
+      &__money{
+        margin-left: 16px;
+        text-align: left;
       }
     }
   }

@@ -1,10 +1,12 @@
 import axios from './http'
 import utils from './utils'
+import md5 from 'md5'
 
 export const api = {
   init: '/cmp/ix/', // 初始化
   submitAnswer: '/cmp/ans/', // 提交答案
-  rank: '', // 排行榜
+  weekRank: '/cmp/wboard/', // 周排行榜
+  totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/sct/', // 同步开始时间
   balanceApplication: '/balanceApplication'
 }
@@ -17,11 +19,17 @@ export const init = function () {
   })
 }
 
+export const getRankInfo = function (type) {
+  // 排行榜类型 week为周榜 total为总榜
+  const url = type === 'week' ? api.weekRank : api.totalRank
+  return axios.get(url)
+}
+
 // id为题目ID answer为答案内容
 export const submitAnswer = function (id, answer) {
   return axios.post(api.submitAnswer, {
     subjectId: id,
-    answer
+    answer: md5(answer)
   })
 }
 

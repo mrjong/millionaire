@@ -29,6 +29,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
+            this.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -50,8 +51,23 @@ const im = {
           case RongIMClient.MessageType.TextMessage:
             this.emitListener(type.MESSAGE_NORMAL, message)
             break
+          case type.MESSAGE_AMOUNT:
+            this.emitListener(type.MESSAGE_AMOUNT, message)
+            break
+          case type.MESSAGE_ANSWER:
+            this.emitListener(type.MESSAGE_ANSWER, message)
+            break
+          case type.MESSAGE_HOST:
+            this.emitListener(type.MESSAGE_HOST, message)
+            break
+          case type.MESSAGE_QUESTION:
+            this.emitListener(type.MESSAGE_QUESTION, message)
+            break
+          case type.MESSAGE_RESULT:
+            this.emitListener(type.MESSAGE_RESULT, message)
+            break
           default:
-          // do something...
+            console.log('未知类型消息:' + message)
         }
       }
     })
