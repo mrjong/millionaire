@@ -114,16 +114,16 @@ export default {
   position: relative;
   overflow: hidden;
   margin-bottom: 35px;
-  border: 2px solid red;
+  // border: 2px solid red;
 }
 .chat-msg-wrap {
-  // -webkit-mask: url('../assets/images/mask.png') no-repeat;
-  // -webkit-mask-size: 100% 110%;
+  -webkit-mask: url('../assets/images/mask.png') no-repeat;
+  -webkit-mask-size: 100% 110%;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  border: 2px solid yellow;
+  // border: 2px solid yellow;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
