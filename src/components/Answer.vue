@@ -2,7 +2,7 @@
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
-         :style="{width: percent + '%'}">
+         :style="{width: percent1 + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
       <p class="answer-container__base__text answerText"  ref="answerText"
@@ -46,7 +46,8 @@ export default {
     return {
       isAnswerWhite: false,
       isAllWhite: false,
-      isResultWhite: false
+      isResultWhite: false,
+      percent1: ''
     }
   },
   computed: {
@@ -59,6 +60,9 @@ export default {
   mounted () {
     if (this.questionStatus === 7) {
       this.setFontSize()
+      setTimeout(() => {
+        this.percent1 = this.percent
+      }, 500)
     }
   },
   methods: {
@@ -74,18 +78,11 @@ export default {
     setFontSize () { // 设置字符串size
       const baseWidth = this.$refs.baseContainer.offsetWidth
       let resultWidth = this.$refs.resultNum.offsetWidth
-      let answerText = this.$refs.answerText
-      let resultNum = this.$refs.resultNum
-      let resultIcon = this.$refs.resultIcon
       let fontWidth = 28
       for (let i = fontWidth; i >= 10; i--) {
         fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
-        if (fontWidth / 2 + resultWidth - baseWidth / 2 >= 70) {
-          answerText.style.fontSize = i / 100 + 'rem'
-          resultNum.style.fontSize = i / 100 + 'rem'
-          resultIcon.style.fontSize = (i - 10) / 100 + 'rem'
-        } else {
-          this.$emit('setAllFontSize', i / 100 + 'rem', (i - 10) / 100 + 'rem')
+        if (fontWidth / 2 + resultWidth - baseWidth / 2 < 70) {
+          this.$emit('setAllFontSize', i / 100, (i - 10) / 100)
           this.changeFontColor(baseWidth, resultWidth)
           return false
         }
@@ -115,6 +112,11 @@ export default {
       if (questionStatus === 7) {
         this.setFontSize()
       }
+    },
+    percent: (percent) => {
+      setTimeout(() => {
+        this.percent1 = percent
+      }, 500)
     }
   }
 }
@@ -135,7 +137,7 @@ export default {
       position: absolute;
       top:0;
       left:0;
-      transition: width 300ms linear;
+      transition: width 200ms linear;
     }
     .hover{
       width: 100%;
@@ -162,8 +164,9 @@ export default {
         height: 93px;
         line-height: 93px;
         align-self: center;
-        font-size: 28px;
         font-family: 'Roboto-Light';
+        width: 100%;
+        text-align: center;
       }
       &__right{
         position: absolute;
@@ -171,7 +174,6 @@ export default {
         right: 0;
         transform: translate(0, -50%);
         display: flex;
-        font-size: 28px;
         align-items: center;
         &__num{
           font-style:italic;

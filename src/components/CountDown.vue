@@ -54,7 +54,7 @@ export default {
         font: 28px Roboto-Light;
       }
       &__time{
-        margin-top: 31px;
+        margin-top: 26px;
         font:156px Roboto-Condensed;
       }
     }
