@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class='no-winner-result' v-if='!hasWinner'>
+    <div class='no-winner-result' v-if='!respondence.winners.length'>
       <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
-      <p class= 'no-winner-result__bonus'>$10000</p>
+      <p class= 'no-winner-result__bonus'>{{respondence.bonusAmount}}</p>
       <p class='no-winner-result__tip'>The prize rolls over to the next game</p>
     </div>
     <div class="has-winner-result" v-else>
       <p class="has-winner-result__title">
-        <span class="has-winner-result__title__count">{{winnerCount}}</span>Winners!
+        <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
           <div class="has-winner-result-top-item"
             :class="{'left': +idx === 0, 'middle': +idx === 1}"
-            v-for="(col, idx) in respondenceList"
+            v-for="(col, idx) in respondence.winners"
             :key="idx"
             v-if="+idx < 3">
             <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
@@ -25,7 +25,7 @@
           <div
           class="has-winner-result-top-item"
           :class="{'left': +idx === 3, 'middle': +idx === 4}"
-          v-for="(col, idx) in respondenceList"
+          v-for="(col, idx) in respondence.winners"
           :key="idx"
           v-if="+idx >= 3 && +idx < 6">
             <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
@@ -40,26 +40,25 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import testData from '../assets/js/testData'
+// import testData from '../assets/js/testData'
 export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      hasWinner: true,
-      respondenceList: [],
-      winnerCount: 156
+      // respondenceList: [],
+      // winnerCount: 156
     }
   },
   computed: {
     ...mapGetters({
-      exampleState: 'exampleState'
+      respondence: 'result'
     })
   },
   mounted () {
-    setTimeout(() => {
-      this.respondenceList = testData.respondenceResult
-      this.winnerCount = 1567890
-    }, 500)
+    // setTimeout(() => {
+    //   this.respondenceList = testData.respondenceResult
+    //   this.winnerCount = 1567890
+    // }, 500)
   },
   methods: {
   }
@@ -105,10 +104,12 @@ export default {
     &__count {
       margin-right: 17px;
       display: inline-block;
-      width: 159px;
+      // width: 159px;
+      max-width: 159px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      text-align: center;
     }
   }
 }

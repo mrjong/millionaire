@@ -56,7 +56,7 @@ export default {
     width:100%;
     height:100%;
   }
-  @font-face {
+   @font-face {
   font-family: 'RobotoCondensed-Bold';
   src: url('./assets/font/RobotoCondensed-Bold.ttf')
   }
@@ -68,7 +68,7 @@ export default {
     font-family: 'Roboto-Light';
     src: url('./assets/font/Roboto-Light.ttf')
   }
-    @font-face {
+  @font-face {
     font-family: 'Roboto-Medium';
     src: url('./assets/font/Roboto-Medium.ttf')
   }
