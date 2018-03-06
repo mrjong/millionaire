@@ -229,15 +229,22 @@ export default {
     margin: 6px 26px;
     box-sizing: border-box;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     img {
       display: inline-block;
     }
     span {
       font-size: 26px;
-      font-family: "Roboto-Medium";
       text-shadow: #666 1px 1px 1px;
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &__nickname {
+      font-family: "Roboto-Medium";
+    }
+    &__text {
+      font-family: 'Roboto-Light';
     }
     &__wrap {
       background: rgba(255, 255, 255, .2);

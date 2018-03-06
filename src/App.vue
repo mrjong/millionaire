@@ -72,4 +72,8 @@ export default {
     font-family: 'Roboto-Medium';
     src: url('./assets/font/Roboto-Medium.ttf')
   }
+  @font-face {
+    font-family: 'Roboto-BoldCondensed';
+    src: url('./assets/font/RobotoCondensed-Bold.ttf');
+  }
 </style>
