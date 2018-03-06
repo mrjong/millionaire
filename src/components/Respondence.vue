@@ -42,7 +42,7 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: ''
+      countdownStyle: 'color: #fff;'
     }
   },
   computed: {
@@ -114,13 +114,14 @@ export default {
     countDown (status) {
       let circle = this.$refs.circle
       if (status === 5) {
-        this.countdownStyle = 'transition:stroke-dashoffset ' + this.restTime + ' linear;'
-        this.countdownStyle = 'transition:stroke-dashoffset ' + this.restTime + ' linear; color: #fff;'
+        this.countdownStyle = `transition:stroke-dashoffset ${this.restTime}ms linear;`
         setTimeout(() => {
-          // circle.style.strokeDashoffset = 0
+          circle.style.strokeDashoffset = 0
         }, 100)
       } else if (status === 7) {
         this.isClick = false
+        this.countdownStyle = ''
+        circle.style.strokeDashoffset = 314
         setTimeout(() => {
           circle.removeAttribute('stroke-dashoffset')
         }, 500)
