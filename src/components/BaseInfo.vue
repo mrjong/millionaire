@@ -56,7 +56,7 @@ export default {
       &__name{
         margin-top: 28px;
         color: #241262;
-        font: 36px Roboto-Medium;
+        font: 36px 'Roboto-Medium';
       }
     }
     &__other{

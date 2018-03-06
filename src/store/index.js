@@ -30,7 +30,11 @@ export default new Vuex.Store({
         winners: [] // 获奖者列表  userId 用户ID avatar 用户头像 name 用户名 bonusAmount 奖金数量
       }
      */
-    result: {} // 游戏结果
+    result: {
+      isFinish: true,
+      bonusAmount: 0,
+      winners: []
+    } // 游戏结果
   },
   getters: {
     isOnline: (state) => state.isOnline,
