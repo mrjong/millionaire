@@ -2,6 +2,7 @@
 'use strict'
 import * as type from '../type'
 import * as listenerType from '../../assets/js/listener-type.js'
+import * as statu from '../../assets/js/status'
 import im from '../../assets/js/im'
 const state = {
   msgList: [],
@@ -48,7 +49,7 @@ const actions = {
       commit(type.GET_COMPERE_MESSAGE, message)
       console.log('接收到主持人消息，更改答题状态')
       commit(type.QUESTION_UPDATE, {
-        status: 8
+        status: statu.QUESTION_AWAIT
       })
     })
   }
