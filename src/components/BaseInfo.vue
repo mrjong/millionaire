@@ -37,14 +37,14 @@ export default {
 <style scoped lang="less" type="text/less">
   .base-info{
     width: 670px;
-    height: 463px;
     background-color: #ffffff;
     border-radius: 24px;
     margin:113px auto 25px;
     padding: 0.5px;
+    padding-bottom: 100px;
     &__user{
       text-align: center;
-      margin-top: -70px;
+      transform: translate(0, -70px);
       &__head{
         width:160px;
         height:160px;
@@ -61,7 +61,7 @@ export default {
     }
     &__other{
       display: flex;
-      margin-top: 100px;
+      margin-top: 45px;
       justify-content: center;
       .balance-router, .balance-rank{
         width: 50%;
@@ -92,7 +92,10 @@ export default {
   }
   @media screen and (max-width: 321px){
    .base-info{
+     margin:100px auto 25px;
+     padding-bottom: 80px;
       &__other{
+        margin-top: 25px;
         &__line{
           border:5px solid #e0ddea;
           transform: scaleX(0.4);
