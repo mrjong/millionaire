@@ -33,7 +33,7 @@
       </rank-item>
     </div>
     <!-- 自己的排名 -->
-    <rank-item class="myrank" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
+    <rank-item class="myrank" v-if="rankInfo[mode].cache" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
     <loading v-show="loading"></loading>
   </div>
 </template>
@@ -107,6 +107,7 @@ export default {
         font-size: 24.67px;
         line-height: 51.5px;
         padding: 0;
+        padding-right: 2px;
         text-align: center;
         position: absolute;
         left: 0;
