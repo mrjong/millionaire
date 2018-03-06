@@ -9,7 +9,7 @@
         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">My balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          {{userInfo.currencyType}}{{userInfo.balance}}<span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total revenue</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
@@ -119,6 +119,7 @@ export default {
   width: 100%;
   height: 100%;
   background: url('../assets/images/balance-bg.jpg') no-repeat top left;
+  background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
   overflow: hidden;
@@ -128,7 +129,7 @@ export default {
   &__title {
     width: 100%;
     height: 54px;
-    margin: 24px 0;
+    margin: 24px 0 79px 0;
     box-sizing: border-box;
     font-size: 28px;
     font-family: 'Roboto-Medium';
@@ -173,9 +174,12 @@ export default {
         top: -51px;
         right: 55px;
       }
+      &__symbol {
+        font-family: 'Roboto-BoldCondensed';
+      }
       &__mytitle, &__totaltitle {
         font-size: 28px;
-        font-family: 'Roboto-Light'
+        font-family: 'Roboto-Light';
       }
       &__mybalance, &__totalbalance {
         font-size: 52px;
@@ -204,7 +208,6 @@ export default {
       height: 94px;
       background: #fff;
       border-radius: 16px;
-      // line-height: 94px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -212,18 +215,13 @@ export default {
     &__input {
       display:inline-block;
       width: 100%;
-      // height: 94px;
       background: #fff;
-      // border-radius: 16px;
       border: none;
       outline: none;
       color: #241262;
-      font-size: 34px;
+      font-size: 36px;
       font-family: 'Roboto-Light';
-      margin-left: 10px;
-      // text-align: center;
-      // line-height: 94px;
-      // vertical-align: text-bottom;
+      margin-left: 35px;
     }
     &__input:focus {
       box-shadow: none;
@@ -232,39 +230,16 @@ export default {
       outline:0;
     }
     &__input::-webkit-input-placeholder{
-      // display: inline-block;
-      // color: #9F9EA1;
       width: 100%;
-      // height: 94px;
-      // text-align: center;
-      // padding: 30px 0;
     }
     &__input:-ms-input-placeholder{
-      // display: inline-block;
-      // width: 100%;
       color: #9F9EA1;
-      // width: 100%;
-      // height: 94px;
-      // text-align: center;
-      // padding: 30px 0;
     }
     &__input::-moz-placeholder{
-      // display: inline-block;
-      // width: 100%;
       color: #9F9EA1;
-      // width: 100%;
-      // height: 94px;
-      // text-align: center;
-      // padding: 30px 0;
     }
     &__input::-moz-placeholder{
-      // display: inline-block;
-      // width: 100%;
       color: #9F9EA1;
-      // width: 100%;
-      // height: 94px;
-      // text-align: center;
-      // padding: 30px 0;
     }
     &__tip {
       width: 100%;
@@ -279,10 +254,10 @@ export default {
       height: 94px;
       border-radius: 46px;
       color: #fff;
-      background: RGB(250,167,23, 0.95);
+      background: rgba(250,167,23, 0.95);
       text-align: center;
       line-height: 94px;
-      font-size: 28px;
+      font-size: 36px;
       font-family: 'Roboto-Light';
     }
   }
