@@ -5,7 +5,7 @@
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50%" cy="50%" r="44%" stroke="#acabb0" stroke-width="4" style="stroke-opacity: 0.1"></circle>
         <circle id="circle" cx="50%" cy="50%" r="44%" stroke=" #ffcc03" stroke-width="4" ref="circle"></circle>
-        <text x="48%" y="66%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
+        <text x="50%" y="55%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
@@ -73,6 +73,9 @@ export default {
         }
       })
       return result
+    },
+    restTime1: () => {
+      return Math.round(this.restTime / 1000)
     }
   },
   mounted () {
@@ -115,16 +118,20 @@ export default {
       } else if (status === 7) {
         this.isClick = false
         setTimeout(() => {
-          circle.removeAttribute('strokeDashoffset')
+          circle.removeAttribute('stroke-dashoffset')
         }, 500)
         this.percent = utils.computePercent(this.questionResult)
       }
     },
-    setAllFontSize (textSize, iconSize) {
+    setAllFontSize (textSize) {
       if (this.fontSize >= textSize) {
         this.fontSize = textSize
       }
       this.$refs.answerContainer.style.fontSize = this.fontSize + 'rem'
+      let iconAll = Array.prototype.slice.call(document.querySelectorAll('.resultIcon'))
+      iconAll.forEach((val) => {
+        val.style.fontSize = this.fontSize - 0.1 + 'rem'
+      })
     }
   },
   watch: {
@@ -186,6 +193,7 @@ export default {
   .text{
     font-weight: 600;
     text-anchor: middle;
+    dominant-baseline: middle;
     font: 56px Roboto-BoldCondensed;
   }
 </style>
