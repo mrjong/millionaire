@@ -75,11 +75,11 @@ export default {
         line-height: 94px;
         color: #ffffff;
         font-size: 36px;
-        background-color: #f0a01b;
+        background-color: #faa717;
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
-        font-family: Roboto-Light;
+        font-family: 'Roboto-Light';
       }
     }
   }

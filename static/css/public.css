@@ -6,7 +6,7 @@ ol,ul{list-style:none}
 blockquote,q{quotes:none}
 blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}
 table{border-collapse:collapse;border-spacing:0}
-html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
 body{margin:0}
 article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}
 audio,canvas,progress,video{display:block;vertical-align:baseline}
@@ -28,7 +28,7 @@ svg:not(:root){overflow:hidden}
 figure{margin:1em 40px}
 hr{-webkit-box-sizing:content-box;box-sizing:content-box;height:0}
 pre{overflow:auto}
-code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}
+code,kbd,pre,samp{font-size:1em}
 button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}
 button{overflow:visible}
 button,select{text-transform:none}
@@ -141,15 +141,3 @@ html, body {
 
 /* 清除浮动 */
 .clearfix{overflow:hidden;_zoom:1;}
-@font-face {
-  font-family: 'Roboto-Regular';
-  src: url('../image/roboto/Roboto-Regular.ttf')
-}
- @font-face {
-  font-family: 'RobotoCondensed-Regular';
-  src: url('../image/roboto/Roboto-Condensed.ttf')
-}
- @font-face {
-  font-family: 'Roboto-Light';
-  src: url('../image/roboto/Roboto-Light.ttf')
-}

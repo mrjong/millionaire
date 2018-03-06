@@ -83,7 +83,7 @@ export default {
     &__bonus {
         font-size: 114px;
         margin-bottom: 32px;
-        font-family: 'Roboto-Condensed';
+        font-family: 'RobotoCondensed-Bold';
     }
     &__tip {
         font-size: 28px;
@@ -101,6 +101,7 @@ export default {
     background-size: contain;
     display: flex;
     justify-content: center;
+    font-family: 'RobotoCondensed-Regular';
     &__count {
       margin-right: 17px;
       display: inline-block;
@@ -135,7 +136,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto Medium';
+  font-family: 'Roboto-Medium';
   &__icon {
     width: 130px;
     border-radius: 50%;

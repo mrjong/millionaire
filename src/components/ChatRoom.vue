@@ -1,13 +1,15 @@
 <template>
-<div class="chat-container" id="msgContainer" :class="{'chat-msg-wrap-haswrap': showInput}">
-  <div class="chat-msg-wrap" id="scrollContainer">
-    <div class="msg-container">
+<div class="chat-container"
+  id="msgContainer"
+  :class="{'chat-msg-wrap-haswrap': showInput}">
+  <div class="chat-msg-wrap">
+      <div class="msg-container" id="scrollContainer">
        <transition-group
         name='fade'
         tag="div"
-        class="msg-contianer__inner"
+        class="msg-container__inner"
         >
-         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
+        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -15,7 +17,7 @@
           </span>
          </p>
        </transition-group>
-    </div>
+      </div>
   </div>
     <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
        <div class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
@@ -96,11 +98,14 @@ export default {
     }
   },
   watch: {
-    msgList () {
+    msgList: function () {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
         this.myMessage = ''
+        const msgcontainer = document.getElementById('msgContainer')
+        const containerHeight = msgcontainer.offsetHeight
+        scrollContainer.style.height = containerHeight + 'px'
       })
     }
   }
@@ -109,21 +114,27 @@ export default {
 <style scoped lang="less" type="text/less">
 .chat-container {
   width: 100%;
-  height: 100%;
   flex:1;
   position: relative;
   overflow: hidden;
   margin-bottom: 35px;
-  // border: 2px solid red;
 }
 .chat-msg-wrap {
-  -webkit-mask: url('../assets/images/mask.png') no-repeat;
+  -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
   -webkit-mask-size: 100% 110%;
+  mask: url('../assets/images/mask.png') no-repeat top left;
+  mask-size: 100% 110%;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  // border: 2px solid yellow;
+  overflow: hidden;
+  position: relative;
+  // border: 5px solid yellow;
+}
+.chat-mask {
+  -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
+  -webkit-mask-size: 100% 110%;
+  mask: url('../assets/images/mask.png') no-repeat top left;
+  mask-size: 100% 110%;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
@@ -149,6 +160,7 @@ export default {
     box-sizing: border-box;
     span {
           font-size: 34px;
+          transform: translate(0, 3px);
     }
   }
   &__hide {
@@ -200,23 +212,39 @@ export default {
   bottom: 0px;
 }
 .msg-container {
+  // width: 100%;
+  // height: auto;
   width: 100%;
-  height: auto;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   &__inner {
     width: 100%;
     height: auto;
+    // border: 5px solid red;
   }
   &__item {
     max-width: 100%;
     margin: 6px 26px;
     box-sizing: border-box;
+    overflow: hidden;
     img {
       display: inline-block;
     }
     span {
       font-size: 26px;
-      font-family: "Roboto Medium";
       text-shadow: #666 1px 1px 1px;
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &__nickname {
+      font-family: "Roboto-Medium";
+    }
+    &__text {
+      font-family: 'Roboto-Light';
     }
     &__wrap {
       background: rgba(255, 255, 255, .2);
@@ -228,6 +256,7 @@ export default {
       position: relative;
       line-height: 60px;
       overflow: hidden;
+      color: #fff;
     }
     &__portrait {
       width: 50px;

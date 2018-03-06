@@ -29,7 +29,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
 .compere-container {
-  min-height: 600px;
+  min-height: 500px;
   box-sizing: border-box;
   margin: 25px;
   background-color: #fff;
@@ -42,9 +42,10 @@ export default {
   &__text {
     font-size: 22px;
     color: #241262;
-    font-family: 'Roboto Medium';
+    font-family: 'Roboto-Light';
     margin: 0 10px 32px 0;
     text-indent: 44px;
+    line-height: 36px;
   }
   &__supa {
     width: 109px;

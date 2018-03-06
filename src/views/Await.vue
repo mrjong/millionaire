@@ -12,7 +12,7 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
-        <base-btn :baseStyle="baseStyle1"></base-btn>
+        <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
         <router-link to="/rank">
           <base-btn :baseStyle="baseStyle2"></base-btn>
         </router-link>
@@ -26,17 +26,18 @@ import BaseBtn from '../components/BaseBtn.vue'
 import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Await',
   data () {
     return {
       baseStyle1: {
         text: 'Invite Friends',
-        bgColor: '#f19f20'
+        bgColor: '#faa717'
       },
       baseStyle2: {
         text: 'Leaderboards',
-        bgColor: '#4c0aee'
+        bgColor: '#4c08f3'
       },
       targetDate: ''
     }
@@ -69,6 +70,9 @@ export default {
         minute = '0' + minute
       }
       this.targetDate = month + '.' + day + ' ' + hour + ':' + minute
+    },
+    inviteFriends () {
+      utils.share()
     }
   },
   components: {
