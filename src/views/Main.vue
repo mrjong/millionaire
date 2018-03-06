@@ -24,6 +24,7 @@ import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
+import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -38,11 +39,9 @@ export default {
     })
   },
   mounted () {
-    this.setRouter()
+    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
   },
   methods: {
-    setRouter () {
-    }
   },
   components: {
     CountDown,

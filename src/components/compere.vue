@@ -10,7 +10,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import * as type from '../store/type'
+// import * as type from '../store/type'
 export default {
   name: 'Compere',
   data () {
@@ -23,7 +23,7 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+    // this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
   }
 }
 </script>
