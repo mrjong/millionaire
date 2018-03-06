@@ -47,15 +47,15 @@ export default {
   .count-down-container{
     width: 100%;
     &__module{
-      padding: 270px 0 346px;
+      padding: 270px 0;
       color: #ffffff;
       text-align: center;
       &__text{
-        font: 28px Roboto-Light;
+        font: 28px 'Roboto-Light';
       }
       &__time{
         margin-top: 26px;
-        font:156px Roboto-Condensed;
+        font:156px 'Roboto-Condensed';
       }
     }
   }

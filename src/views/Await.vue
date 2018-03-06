@@ -127,4 +127,11 @@ export default {
       justify-content: space-between;
     }
   }
+  @media screen and (max-width: 321px){
+    .await-container{
+      &__title{
+        padding-top: 50px;
+      }
+    }
+  }
 </style>

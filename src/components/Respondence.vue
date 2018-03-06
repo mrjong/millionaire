@@ -4,8 +4,10 @@
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50%" cy="50%" r="44%" stroke="#acabb0" stroke-width="4" style="stroke-opacity: 0.1"></circle>
-        <circle id="circle" cx="50%" cy="50%" r="44%" stroke=" #ffcc03" stroke-width="4" ref="circle"></circle>
-        <text x="50%" y="55%" class="text" fill="#241262" stroke-width="4">{{restTime / 1000}}</text>
+        <circle id="circle" cx="50%" cy="50%" r="44%" stroke=" #ffcc03" stroke-width="4"
+                ref="circle" :style="countdownStyle">
+        </circle>
+        <text x="50%" y="55%" class="text" fill="#241262" stroke-width="4">{{restTime1}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
@@ -39,7 +41,8 @@ export default {
     return {
       rangeValue: 10,
       isClick: false,
-      fontSize: 28
+      fontSize: 28,
+      countdownStyle: ''
     }
   },
   computed: {
@@ -74,7 +77,7 @@ export default {
       })
       return result
     },
-    restTime1: () => {
+    restTime1: function () {
       return Math.round(this.restTime / 1000)
     }
   },
@@ -111,9 +114,10 @@ export default {
     countDown (status) {
       let circle = this.$refs.circle
       if (status === 5) {
-        circle.setAttribute('transition', `stroke-dashoffset ${this.restTime} linear;`)
+        this.countdownStyle = 'transition:stroke-dashoffset ' + this.restTime + ' linear;'
+        this.countdownStyle = 'transition:stroke-dashoffset ' + this.restTime + ' linear; color: #fff;'
         setTimeout(() => {
-          circle.style.strokeDashoffset = 0
+          // circle.style.strokeDashoffset = 0
         }, 100)
       } else if (status === 7) {
         this.isClick = false
@@ -188,7 +192,6 @@ export default {
   #circle{
     stroke-dasharray: 314px;
     stroke-dashoffset: 314px;
-    transition: stroke-dashoffset 10s linear;
   }
   .text{
     font-weight: 600;
