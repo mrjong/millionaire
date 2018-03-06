@@ -14,11 +14,11 @@
           <div class="has-winner-result-top-item"
             :class="{'left': +idx === 0, 'middle': +idx === 1}"
             v-for="(col, idx) in respondence.winners"
-            :key="idx"
+            :key="col.userId"
             v-if="+idx < 3">
-            <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
-            <p class="has-winner-result-top-item__nickname">{{col.nickname}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonus}}</p>
+            <img :src="col.avatar" alt="" class="has-winner-result-top-item__icon">
+            <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
+            <p class="has-winner-result-top-item__bonus">${{col.bonusAmount}}</p>
           </div>
         </div>
         <div class="has-winner-result-top">
@@ -26,11 +26,11 @@
           class="has-winner-result-top-item"
           :class="{'left': +idx === 3, 'middle': +idx === 4}"
           v-for="(col, idx) in respondence.winners"
-          :key="idx"
+          :key="col.userId"
           v-if="+idx >= 3 && +idx < 6">
-            <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
-            <p class="has-winner-result-top-item__nickname">{{col.nickname}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonus}}</p>
+            <img :src="col.iavatar" alt="" class="has-winner-result-top-item__icon">
+            <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
+            <p class="has-winner-result-top-item__bonus">${{col.bonusAmount}}</p>
           </div>
         </div>
       </div>
