@@ -5,14 +5,17 @@
          :style="{width: percent1 + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
-      <p class="answer-container__base__text answerText"  ref="answerText"
-            :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">{{content}}</p>
+      <p class="answer-container__base__text answerText"
+         ref="answerText"
+         :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">
+        {{content}}
+      </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num" ref="answerNum"
            :class="{'font-white': isResultWhite}">{{result}}</p>
-        <p class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
+        <span class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
            ref="resultIcon"
-           :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></p>
+           :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></span>
       </div>
     </div>
   </div>
@@ -82,20 +85,21 @@ export default {
       for (let i = fontWidth; i >= 10; i--) {
         fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
         if (fontWidth / 2 + resultWidth - baseWidth / 2 < 70) {
-          this.$emit('setAllFontSize', i / 100, (i - 10) / 100)
-          this.changeFontColor(baseWidth, resultWidth)
+          this.$emit('setAllFontSize', i / 100)
+          this.changeFontColor(baseWidth, resultWidth, fontWidth)
           return false
         }
       }
     },
     changeFontColor (baseWidth, resultWidth) {
       let answerNum = this.$refs.answerNum.offsetWidth
+      let answerText = this.$refs.answerText.offsetWidth
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
         // 全部变白
         this.isAllWhite = true
       }
-      let dd = (this.percent / 100) * baseWidth - ((baseWidth + resultWidth) / 2)
+      let dd = (this.percent / 100) * baseWidth - ((baseWidth + answerText) / 2)
       if (dd >= -5) {
         // 答案变白
         this.isAnswerWhite = true
@@ -138,7 +142,7 @@ export default {
       position: absolute;
       top:0;
       left:0;
-      transition: width 200ms linear;
+      transition: width 100ms linear;
     }
     .hover{
       width: 100%;
@@ -165,7 +169,6 @@ export default {
         height: 93px;
         line-height: 93px;
         align-self: center;
-        width: 100%;
         text-align: center;
       }
       &__right{
@@ -180,6 +183,7 @@ export default {
           align-self: center;
         }
         &__icon{
+          display: inline-block;
           font-size: 18px;
           margin-left: 16px;
           color: #241262;
