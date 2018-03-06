@@ -9,10 +9,11 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="status === 2"></count-down>
+    <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
     <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
+    <!-- <winners-result></winners-result> -->
     <chat-room></chat-room>
   </div>
 </template>
