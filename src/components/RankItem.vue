@@ -56,15 +56,16 @@ export default {
     position: relative;
 
     &_index {
-      width: 21.64%;
+      width: 15.64%;
       height: 100%;
       text-align: center;
-      font: normal 28px/92px "Myriad Pro", "Roboto";
+      color: #241262;
+      font: normal 28px/92px "RobotoCondensed Regular";
     }
 
     &_info {
       flex: 1;
-      border-bottom: 1px solid #e4e1eb;
+      border-bottom: 1px solid rgba(36, 18, 98, .08);
       .avatar {
         width: 60px;
         height: 60px;
@@ -72,15 +73,15 @@ export default {
       }
       .name {
         font: normal 28px "Roboto-Light";
-        color: #3e2e75;
-        margin-left: 8.5%;
+        color: #241262;
+        margin-left: 31px;
         max-width: 330px;
       }
       .money, .notInList {
         font: normal 24px/92px "RobotoCondensed Regular";
         color: #ffb227;
         position: absolute;
-        right: 0;
+        right: 2%;
       }
 
       .notInList {

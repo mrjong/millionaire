@@ -14,7 +14,8 @@ export const api = {
 export const init = function () {
   return axios.get(api.init, {
     params: {
-      app_id: utils.app_id
+      app_id: utils.app_id,
+      client_id: utils.clientId
     }
   })
 }
