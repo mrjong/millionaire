@@ -3,6 +3,8 @@ const njordGame = window.top.njordGame
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
+console.log(clientParams)
+
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -33,10 +35,10 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100210001'),
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLoginin : false,
+  isOnline: clientParams ? !!clientParams.isLogin : false,
 
   /**
    * 打点
