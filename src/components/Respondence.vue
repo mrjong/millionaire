@@ -65,13 +65,13 @@ export default {
       let totalNum = 0
       if (this.questionResult) {
         for (let i in this.questionResult) {
-          totalNum += this.questionResult[i]
+          totalNum += Number(this.questionResult[i]) || 0
         }
       }
       Array.prototype.slice.call(this.options).forEach((val) => {
         result[val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
-          percent: this.questionResult && this.computePercent(this.questionResult[val], totalNum),
+          percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
           isRight: this.correctAnswer && this.correctAnswer === val
         }
       })
@@ -105,6 +105,8 @@ export default {
       }
     },
     computePercent (val, totalNum) {
+      console.log(typeof val + '.....' + val)
+      console.log(typeof totalNum + '.....' + totalNum)
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
         return 10 + percent
