@@ -42,7 +42,7 @@ const im = {
   init () {
     // 初始化监听器
     for (let prop in type) {
-      this.listeners[type[prop]] = []
+      this.listeners[type[prop]] = null
     }
     RongIMClient.init(appKey)
 
@@ -117,7 +117,6 @@ const im = {
    * @param {any} token
    */
   connect (token) {
-    console.log('token:', token)
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
@@ -188,8 +187,7 @@ const im = {
    * @param {any} chatRoomId 聊天室ID
    * @param {any} count 拉取历史消息条数
    */
-  joinChatRoom (chatRoomId, count = 10) {
-    console.log('聊天室ID', chatRoomId)
+  joinChatRoom (chatRoomId, count = 0) {
     this.chatRoomId = chatRoomId
     RongIMClient.getInstance().joinChatRoom(chatRoomId, count, {
       onSuccess: () => {
@@ -256,7 +254,7 @@ const im = {
    * @param {any} listener 监听器
    */
   addListener (listenerType, listener) {
-    this.listeners[listenerType].push(listener)
+    this.listeners[listenerType] = listener
   },
 
   /**
@@ -265,12 +263,8 @@ const im = {
    * @param {any} args 参数
    */
   emitListener (listenerType, ...args) {
-    const listeners = this.listeners[listenerType]
-    if (listeners && listeners.length) {
-      listeners.forEach((listener) => {
-        listener(...args)
-      })
-    }
+    const listener = this.listeners[listenerType]
+    listener && listener(...args)
   }
 }
 

@@ -13,14 +13,14 @@ const state = {
   contents: '', // 内容
   options: '', // 选项
   index: 0, // 序号
-  watchingMode: true, // 是否观战模式
+  watchingMode: false, // 是否观战模式
   isAnswered: false, // 是否作答
   isCorrect: false, // 作答是否正确
   correctAnswer: '', // 正确答案
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
-  time: 10000, // 作答时间, 默认10秒
-  restTime: 10000 // 剩余时间
+  time: 10, // 作答时间, 默认10秒
+  restTime: 10 // 剩余时间
 }
 
 const getters = {
@@ -86,22 +86,22 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       restTime: time
     })
-    const timer = utils.Timer(1000, Date.now() + time)
+    const timer = utils.Timer(1000, Date.now() + time * 1000)
     timer.addCompleteListener(({offset}) => {
       commit(type.QUESTION_UPDATE, {
-        restTime: offset
+        restTime: Math.round(offset / 1000)
       })
     })
     // 计时结束
     timer.addEndListener(() => {
-      if (!getters.isAnswered) {
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
-        })
-      }
       commit(type.QUESTION_UPDATE, {
-        status: status.QUESTION_RECIEIVING_ANSWERING
+        restTime: 0
       })
+      if (!getters.isAnswered) {
+        // commit(type.QUESTION_UPDATE, {
+        //   watchingMode: true
+        // })
+      }
     })
     // 答题开始
     timer.start()
@@ -114,8 +114,8 @@ const actions = {
    * @param {any} {getters}
    */
   [type.QUESTION_SUBMIT] ({getters}) {
-    const {id, userAnswer} = getters
-    submitAnswer(id, userAnswer).then(({data}) => {
+    const {id, userAnswer, index} = getters
+    submitAnswer(id, userAnswer, index).then(({data}) => {
       if (+data.result !== 1 || +data.code !== 0) {
         console.log('答案提交失败:', id, data.msg)
       }
@@ -137,11 +137,13 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
         // 判断答案是否正确
-        const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
+        // const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer, result, watchingMode
+          id, correctAnswer, result
         })
-        commit(type.QUESTION_UPDATE, status.QUESTION_END)
+        commit(type.QUESTION_UPDATE, {
+          status: status.QUESTION_END
+        })
       }
     })
   }
