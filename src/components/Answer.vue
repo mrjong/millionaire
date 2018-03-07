@@ -7,7 +7,7 @@
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
       <p class="answer-container__base__text answerText"
          ref="answerText"
-         :class="{'font-white':(isAnswerWhite && questionStatus === 7) || myChick}">
+         :class="{'font-white':(isAnswerWhite && questionStatus === 7) || (questionStatus === 5 && myChick)}">
         {{content}}
       </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
@@ -115,12 +115,10 @@ export default {
     questionStatus: (questionStatus) => {
       if (questionStatus === 7) {
         this.setFontSize()
+        setTimeout(() => {
+          this.percent1 = this.percent
+        }, 500)
       }
-    },
-    percent: (percent) => {
-      setTimeout(() => {
-        this.percent1 = percent
-      }, 500)
     }
   }
 }
