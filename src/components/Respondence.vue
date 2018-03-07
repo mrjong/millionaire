@@ -128,7 +128,7 @@ export default {
         this.isClick = false
         this.countdownStyle = ''
         setTimeout(() => {
-          circle.removeAttribute('stroke-dashoffset')
+          circle.style.strokeDashoffset = 3.14 + 'rem'
         }, 100)
         this.percent = utils.computePercent(this.questionResult)
       }
