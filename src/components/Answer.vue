@@ -92,7 +92,10 @@ export default {
       }
     },
     changeFontColor (baseWidth, resultWidth) {
-      let answerNum = this.$refs.answerNum.offsetWidth
+      let answerNum = 0
+      if (this.$refs.answerNum) {
+        answerNum = this.$refs.answerNum.offsetWidth
+      }
       let answerText = this.$refs.answerText.offsetWidth
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
