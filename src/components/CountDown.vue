@@ -22,7 +22,7 @@ export default {
       startTime: 'startTime'
     }),
     countDown: function () {
-      const timeSecond = Math.round((this.startTime / 1000))
+      const timeSecond = this.startTime
       let s = timeSecond % 60
       let m = parseInt(timeSecond / 60 % 60)
       let h = parseInt(timeSecond / 60 / 60 % 24)

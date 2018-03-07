@@ -69,8 +69,10 @@ export default {
         this.loading = true
         this.$store.dispatch(RANK_UPDATE, mode).then(() => {
           this.loading = false
-        }, () => {
+        }, (err) => {
           // TODO: 提示错误
+          this.loading = false
+          console.log(err)
         })
       }
     }

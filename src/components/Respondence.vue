@@ -7,7 +7,7 @@
         <circle id="circle" cx="50%" cy="50%" r="44%" stroke=" #ffcc03" stroke-width="4"
                 ref="circle" :style="countdownStyle">
         </circle>
-        <text x="50%" y="55%" class="text" fill="#241262" stroke-width="4">{{restTime1}}</text>
+        <text x="50%" y="55%" class="text" fill="#241262" stroke-width="4">{{restTime}}</text>
       </svg>
     </div>
     <p class="respondence-container__question">
@@ -105,8 +105,6 @@ export default {
       }
     },
     computePercent (val, totalNum) {
-      console.log(typeof val + '.....' + val)
-      console.log(typeof totalNum + '.....' + totalNum)
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
         return 10 + percent
@@ -130,8 +128,7 @@ export default {
         this.isClick = false
         this.countdownStyle = ''
         setTimeout(() => {
-          circle.style.strokeDashoffset = 314
-          circle.removeAttribute('stroke-dashoffset')
+          circle.style.strokeDashoffset = 3.14 + 'rem'
         }, 100)
         this.percent = utils.computePercent(this.questionResult)
       }

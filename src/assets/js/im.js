@@ -1,13 +1,40 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
-const appKey = 'p5tvi9dsphpf4' // dev
-// const appKey = 'pvxdm17jp3vvr' // test
+// const appKey = 'p5tvi9dsphpf4' // dev
+const appKey = 'pvxdm17jp3vvr' // test
 
 const im = {
 
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
-  listeners: {}, // 监听器
+  listeners: {}, // 监听器,
+  messageTypes: [ // 消息类型列表
+    {
+      messageName: 'QuestionMessage',
+      propertys: ['content'],
+      objectName: 'APUS:QuestionMsg'
+    },
+    {
+      messageName: 'AnswerMessage',
+      propertys: ['answer', 'summary'],
+      objectName: 'APUS:AnswerMsg'
+    },
+    {
+      messageName: 'PeopleMessage',
+      propertys: ['count'],
+      objectName: 'APUS:PeopleMsg'
+    },
+    {
+      messageName: 'SummaryMessage',
+      propertys: ['summary'],
+      objectName: 'APUS:SummaryMsg'
+    },
+    {
+      messageName: 'HostMessage',
+      propertys: ['content', 'user'],
+      objectName: 'APUS:HostMsg'
+    }
+  ],
 
   /**
    * 初始化
@@ -18,6 +45,16 @@ const im = {
       this.listeners[type[prop]] = []
     }
     RongIMClient.init(appKey)
+
+    // 注册消息类型
+    this.messageTypes.forEach((messageType) => {
+      const messageName = messageType.messageName // 消息类型。
+      const objectName = messageType.objectName // 消息内置名称，请按照此格式命名。
+      const mesasgeTag = new RongIMLib.MessageTag(true, true) // 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
+      const propertys = messageType.propertys// 消息类中的属性名。
+      RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
+    })
+
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
         this.emitListener(status)
@@ -47,6 +84,7 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
+        console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
@@ -79,6 +117,7 @@ const im = {
    * @param {any} token
    */
   connect (token) {
+    console.log('token:', token)
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
@@ -150,6 +189,7 @@ const im = {
    * @param {any} count 拉取历史消息条数
    */
   joinChatRoom (chatRoomId, count = 10) {
+    console.log('聊天室ID', chatRoomId)
     this.chatRoomId = chatRoomId
     RongIMClient.getInstance().joinChatRoom(chatRoomId, count, {
       onSuccess: () => {
