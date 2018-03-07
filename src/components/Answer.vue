@@ -77,7 +77,10 @@ export default {
     },
     setFontSize () { // 设置字符串size
       const baseWidth = this.$refs.baseContainer.offsetWidth
-      let resultWidth = this.$refs.resultNum.offsetWidth
+      let resultWidth = 0
+      if (this.$refs.resultNum) {
+        resultWidth = this.$refs.resultNum.offsetWidth
+      }
       let fontWidth = 28
       for (let i = fontWidth; i >= 10; i--) {
         fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
@@ -89,7 +92,10 @@ export default {
       }
     },
     changeFontColor (baseWidth, resultWidth) {
-      let answerNum = this.$refs.answerNum.offsetWidth
+      let answerNum = 0
+      if (this.$refs.answerNum) {
+        answerNum = this.$refs.answerNum.offsetWidth
+      }
       let answerText = this.$refs.answerText.offsetWidth
       let cc = (this.percent / 100 - 0.95) * baseWidth
       if (cc >= 0) {
@@ -109,7 +115,7 @@ export default {
     }
   },
   watch: {
-    questionStatus: function(questionStatus) {
+    questionStatus: function (questionStatus) {
       if (questionStatus === 7) {
         this.setFontSize()
       }
