@@ -121,10 +121,10 @@ export default {
       } else if (status === 7) {
         this.isClick = false
         this.countdownStyle = ''
-        circle.style.strokeDashoffset = 314
         setTimeout(() => {
+          circle.style.strokeDashoffset = 314
           circle.removeAttribute('stroke-dashoffset')
-        }, 500)
+        }, 100)
         this.percent = utils.computePercent(this.questionResult)
       }
     },
