@@ -2,7 +2,7 @@
   <div class="count-down-container">
     <div class="count-down-container__module">
       <p class="count-down-container__module__text">The game is about to begin...</p>
-      <p class="count-down-container__module__time">{{countDown}}</p>
+      <p class="count-down-container__module__time">{{startTime}}</p>
     </div>
   </div>
 </template>
