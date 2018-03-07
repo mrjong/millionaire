@@ -1,6 +1,6 @@
 import axios from './http'
 import utils from './utils'
-import md5 from 'md5'
+// import md5 from 'md5'
 
 export const api = {
   init: '/cmp/ix/', // 初始化
@@ -23,14 +23,21 @@ export const init = function () {
 export const getRankInfo = function (type) {
   // 排行榜类型 week为周榜 total为总榜
   const url = type === 'week' ? api.weekRank : api.totalRank
-  return axios.get(url)
+  return axios.get(url, {
+    params: {
+      app_id: utils.app_id
+    }
+  })
 }
 
 // id为题目ID answer为答案内容
-export const submitAnswer = function (id, answer) {
-  return axios.post(api.submitAnswer, {
-    subjectId: id,
-    answer: md5(answer)
+export const submitAnswer = function (id, answer, index) {
+  return axios.get(api.submitAnswer, {
+    params: {
+      i: id,
+      a: answer,
+      s: index
+    }
   })
 }
 
