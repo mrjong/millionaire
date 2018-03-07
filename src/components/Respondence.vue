@@ -105,8 +105,8 @@ export default {
       }
     },
     computePercent (val, totalNum) {
-      console.log(typeof val + '.....' + val)
-      console.log(typeof totalNum + '.....' + totalNum)
+      console.log(typeof val + '.....val' + val)
+      console.log(typeof totalNum + '.....totalNum' + totalNum)
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
         return 10 + percent
