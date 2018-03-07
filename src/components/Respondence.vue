@@ -127,9 +127,7 @@ export default {
       } else if (status === 7) {
         this.isClick = false
         this.countdownStyle = ''
-        setTimeout(() => {
-          circle.style.strokeDashoffset = 3.14 + 'rem'
-        }, 100)
+        circle.style.strokeDashoffset = 3.14 + 'rem'
         this.percent = utils.computePercent(this.questionResult)
       }
     },
