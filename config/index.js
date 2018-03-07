@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/preview/millionaire/',
+    assetsPublicPath: './',
     proxyTable: {},
 
     // Various Dev Server settings
@@ -52,7 +52,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     // assetsPublicPath: '/', // 正式
     // assetsPublicPath: '/act/millionaire/', // 测试
-    assetsPublicPath: '/preview/millionaire/', // 测试
+    assetsPublicPath: '/act/millionaire/', // 测试
 
     /**
      * Source Maps
