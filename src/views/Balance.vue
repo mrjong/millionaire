@@ -69,9 +69,9 @@ export default {
     },
     okEvent (info) {
       this.markInfo.showMark = false
-      this.showLoading = true
       if (info) {
         // 提交表单
+        this.showLoading = true
         api.balanceApplication({
           amount: this.userInfo.balance,
           email: '1@w.com'
@@ -88,7 +88,6 @@ export default {
           .catch((err) => {
             console.log(err)
           })
-        console.log('提交提现表单')
       }
     },
     cancelEvent () {
