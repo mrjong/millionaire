@@ -12,7 +12,7 @@ export default {
   name: 'App',
   data () {
     return {
-      loginStatus: true
+      loading: false
     }
   },
   computed: {
@@ -25,12 +25,17 @@ export default {
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
     if (this.isOnline) {
+      this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
+        this.loading = false
         if (this.status === 1) {
           this.$router.push({path: '/await'})
         } else {
           this.$router.push({path: '/main'})
         }
+      }, (err) => {
+        this.loading = false
+        console.log(err)
       })
     } else {
       this.$router.push({path: '/login'})

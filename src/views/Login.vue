@@ -4,6 +4,7 @@
     <div class="login-container__btn">
       <p class="login-container__btn__fb" @click="Login">Log in</p>
     </div>
+    <loading v-if="loading"></loading>
   </div>
 </template>
 
@@ -11,10 +12,13 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import loading from '../components/loading.vue'
 export default {
   name: 'Login',
   data () {
-    return {}
+    return {
+      loading: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -29,27 +33,38 @@ export default {
         this.$store.commit(type._UPDATE, {
           isOnline: true
         })
+        this.loading = true
         this.$store.dispatch(type._INIT).then(() => {
+          this.loading = false
           if (this.status === 1) {
             this.$router.push({path: '/await'})
           } else {
             this.$router.push({path: '/main'})
           }
+        }, () => {
+          this.loading = false
         })
       })
       this.$store.commit(type._UPDATE, {
         isOnline: true
       })
+      this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
+        this.loading = false
         if (this.status === 1) {
           this.$router.push({path: '/await'})
         } else {
           this.$router.push({path: '/main'})
         }
+      }, () => {
+        this.loading = false
       })
     }
   },
-  mounted () {}
+  mounted () {},
+  components: {
+    loading
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">

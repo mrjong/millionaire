@@ -2,7 +2,7 @@
   <div class="count-down-container">
     <div class="count-down-container__module">
       <p class="count-down-container__module__text">The game is about to begin...</p>
-      <p class="count-down-container__module__time">{{startTime}}</p>
+      <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
       startTime: 'startTime'
     }),
     countDown: function () {
-      const timeSecond = Math.round((this.startTime / 1000))
+      const timeSecond = this.startTime
       let s = timeSecond % 60
       let m = parseInt(timeSecond / 60 % 60)
       let h = parseInt(timeSecond / 60 / 60 % 24)
