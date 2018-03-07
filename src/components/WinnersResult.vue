@@ -18,7 +18,7 @@
             v-if="+idx < 3">
             <img :src="col.avatar" alt="" class="has-winner-result-top-item__icon">
             <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonusAmount}}</p>
+            <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
         </div>
         <div class="has-winner-result-top">
@@ -30,7 +30,7 @@
           v-if="+idx >= 3 && +idx < 6">
             <img :src="col.iavatar" alt="" class="has-winner-result-top-item__icon">
             <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonusAmount}}</p>
+            <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
         </div>
       </div>
@@ -51,10 +51,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      respondence: 'result'
+      respondence: 'result',
+      currencyType: 'currencyType'
     })
   },
   mounted () {
+    console.log('result')
+    console.log(this.respondence)
     // setTimeout(() => {
     //   this.respondenceList = testData.respondenceResult
     //   this.winnerCount = 1567890
