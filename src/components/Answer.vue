@@ -63,9 +63,6 @@ export default {
   mounted () {
     if (this.questionStatus === 7) {
       this.setFontSize()
-      setTimeout(() => {
-        this.percent1 = this.percent
-      }, 500)
     }
   },
   methods: {
@@ -112,12 +109,9 @@ export default {
     }
   },
   watch: {
-    questionStatus: (questionStatus) => {
+    questionStatus: function(questionStatus) {
       if (questionStatus === 7) {
-        // this.setFontSize()
-        setTimeout(() => {
-          this.percent1 = this.percent
-        }, 500)
+        this.setFontSize()
       }
     }
   }
