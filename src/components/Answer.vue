@@ -2,12 +2,12 @@
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
-         :style="{width: percent1 + '%'}">
+         :style="{width: percent + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
       <p class="answer-container__base__text answerText"
          ref="answerText"
-         :class="{'font-white':(isAnswerWhite && questionStatus === 7) || (questionStatus === 5 && myChick)}">
+         :class="{'font-white':(isAnswerWhite && questionStatus === 7) || (questionStatus === 5 && isClick && myChick)}">
         {{content}}
       </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
@@ -114,10 +114,12 @@ export default {
   watch: {
     questionStatus: (questionStatus) => {
       if (questionStatus === 7) {
-        this.setFontSize()
+        // this.setFontSize()
         setTimeout(() => {
           this.percent1 = this.percent
         }, 500)
+      } else if (questionStatus === 5) {
+        this.percent = 100
       }
     }
   }

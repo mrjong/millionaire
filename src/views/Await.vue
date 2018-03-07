@@ -57,7 +57,7 @@ export default {
     DateFormatter () {
       let nowDate = new Date(new Date().getTime() + this.startTime)
       let month = nowDate.getMonth() + 1
-      let day = nowDate.getDay()
+      let day = nowDate.getDate()
       let hour = nowDate.getHours()
       let minute = nowDate.getMinutes()
       if (month <= 9) {
