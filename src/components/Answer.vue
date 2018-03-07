@@ -2,7 +2,7 @@
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
-         :style="{width: percent + '%'}">
+         :style="{width: questionStatus === 7 && percent + '%'}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
       <p class="answer-container__base__text answerText"
@@ -118,8 +118,6 @@ export default {
         setTimeout(() => {
           this.percent1 = this.percent
         }, 500)
-      } else if (questionStatus === 5) {
-        this.percent = 100
       }
     }
   }
