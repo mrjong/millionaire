@@ -1,7 +1,7 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-       <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart -->
+        <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really -->
        {{compereMsg}}
     </p>
     <img src="../assets/images/supa.png" alt="" class="compere-container__supa">
@@ -40,6 +40,7 @@ export default {
   flex-direction: column;
   align-items: flex-end;
   &__text {
+    width: 100%;
     font-size: 22px;
     color: #241262;
     font-family: 'Roboto-Light';

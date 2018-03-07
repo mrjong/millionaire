@@ -33,7 +33,13 @@ export default new Vuex.Store({
     result: {
       isFinish: true,
       bonusAmount: 0,
-      winners: []
+      winners: [
+        // {
+        //   name: 'wei',
+        //   bonusAmount: 1000,
+        //   avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg'
+        // }
+      ]
     } // 游戏结果
   },
   getters: {
