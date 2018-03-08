@@ -139,7 +139,8 @@ export default new Vuex.Store({
               } else {
                 // 切换至等待状态
                 commit(type._UPDATE, {
-                  status: status._AWAIT
+                  status: status._AWAIT,
+                  startTime: +startTime
                 })
                 // 如果有下一场信息
                 if (startTime > 0) {
