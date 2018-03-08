@@ -32,6 +32,8 @@ import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
+// import axios from 'axios'
+// import utils from '../assets/js/utils'
 export default {
   name: 'Balance',
   data () {
@@ -55,6 +57,24 @@ export default {
   },
   methods: {
     cashOut () {
+      // 接口调试
+      api.balanceApplication({
+        // amount: this.userInfo.balance,
+        // email: this.myPay,
+        // accountId: this.myPay
+        amount: 50,
+        email: 'liuweiwei@apuscn.com',
+        accountId: 'liuweiwei@apuscn.com'
+      })
+        .then((data) => {
+          console.log('后台返回结果如下')
+          console.log(data)
+        })
+        .catch((err) => {
+          console.log('发送错误如下')
+          console.log(err)
+        })
+      // -----------------
       if (+this.userInfo.balance < +this.withdraw) {
         this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
       } else {
@@ -74,19 +94,21 @@ export default {
         this.showLoading = true
         api.balanceApplication({
           amount: this.userInfo.balance,
-          email: '1@w.com'
+          email: this.myPay,
+          accountId: this.myPay
         })
           .then(({data}) => {
+            console.log('后台返回结果如下')
             console.log(data)
             this.showLoading = false
-            if (+data.data.error !== 0) {
+            if (+data.code !== 0) {
               this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
-              this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
             } else {
+              this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
             }
           })
           .catch((err) => {
-            console.log(err)
+            err && this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
           })
       }
     },

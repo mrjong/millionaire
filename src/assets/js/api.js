@@ -8,7 +8,7 @@ export const api = {
   weekRank: '/cmp/wboard/', // 周排行榜
   totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/sct/', // 同步开始时间
-  balanceApplication: '/balanceApplication'
+  balanceApplication: 'cmp/apply' // 提现申请
 }
 
 export const init = function () {
@@ -47,9 +47,9 @@ export const syncTime = function () {
 
 export const balanceApplication = (valOption) => {
   const baseOption = {
-    app_id: utils.app_id,
-    newClientId: utils.clientId
+    appId: utils.app_id,
+    clientId: utils.clientId
   }
   const fetchObj = Object.assign({}, baseOption, valOption)
-  return axios.post(api.balanceApplication, fetchObj)
+  return axios.post(`${api.balanceApplication}`, fetchObj)
 }
