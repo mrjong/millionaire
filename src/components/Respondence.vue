@@ -112,7 +112,13 @@ export default {
     countDown (status) {
       let circle = this.$refs.circle
       if (status === 5) {
-        this.countdownStyle = `transition:stroke-dashoffset ${this.restTime}s linear;`
+        this.countdownStyle = `
+        transition:stroke-dashoffset ${this.restTime}s linear;
+        -webkit-transition:stroke-dashoffset ${this.restTime}s linear;
+        -o-transition:stroke-dashoffset ${this.restTime}s linear;
+        -moz-transition:stroke-dashoffset ${this.restTime}s linear;
+        -ms-transition:stroke-dashoffset ${this.restTime}s linear;
+        `
         setTimeout(() => {
           circle.style.strokeDashoffset = 0
         }, 200)
