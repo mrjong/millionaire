@@ -108,6 +108,10 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       status: status.QUESTION_ANSWERING
     })
+    // 切换主状态至游戏开始
+    commit(type._UPDATE, {
+      status: status._PLAYING
+    })
   },
   /**
    *  提交答案
