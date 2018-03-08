@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
-    <loading v-show="loading"></loading>
+    <loading v-if="loading"></loading>
   </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
         console.log(err)
       })
     } else {
+      this.loading = false
       this.$router.push({path: '/login'})
     }
   },

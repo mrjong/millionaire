@@ -57,6 +57,7 @@ export default {
           this.$router.push({path: '/main'})
         }
       }, () => {
+        console.log(this.loading)
         this.loading = false
       })
     }
