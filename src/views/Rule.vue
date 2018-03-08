@@ -1,23 +1,25 @@
 <template>
   <div class="rule">
-    <div class="rule__wrap">
-      <p class="header" @click="goback">
+    <p class="header" @click="goback">
          <span class="iconfont icon-fanhui"></span>
       </p>
-      <p class="title">How to play</p>
-      <div class="rule-item" v-for="col in ruleList" :key="col.id">
-        <img :src="col.img" alt="" class="rule-item__img">
-        <div class="rule-item__title">
-          <span class="rule-item__title__index">{{col.id}}</span>
-          {{col.title}}
+    <div class="rule-container">
+      <div class="rule__wrap">
+        <p class="title">How to play</p>
+        <div class="rule-item" v-for="col in ruleList" :key="col.id">
+          <img :src="col.img" alt="" class="rule-item__img">
+          <div class="rule-item__title">
+            <span class="rule-item__title__index">{{col.id}}</span>
+            {{col.title}}
+          </div>
+          <p class="rule-item__text">
+            {{col.describe}}
+          </p>
         </div>
-        <p class="rule-item__text">
-          {{col.describe}}
-        </p>
-      </div>
-      <div class="share">
-        <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
-        <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+        <div class="share">
+          <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
+          <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+        </div>
       </div>
     </div>
   </div>
@@ -85,8 +87,15 @@ export default {
 .rule {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  .rule-container {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    flex: 1;
+  }
   &__wrap {
     width: 100%;
     height: auto;
@@ -101,11 +110,15 @@ export default {
   height: 54px;
   background: #241262;
   border-radius: 50%;
-  text-align: center;
-  line-height: 54px;
-  font-size: 28px;
   margin: 24px 0 38px 25px;
   align-self: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 28px;
+    transform: translate(-2px, 0px);
+  }
 }
 .title {
   width: 281px;
