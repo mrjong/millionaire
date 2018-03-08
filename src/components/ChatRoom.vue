@@ -8,7 +8,6 @@
         name='fade'
         tag="div"
         class="msg-container__inner"
-        id='innermsgcontain'
         >
         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
@@ -102,13 +101,11 @@ export default {
     msgList: function () {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
-        const msgcontainer = document.getElementById('msgContainer')
-        const innermsgcontain = document.getElementById('innermsgcontain')
-        const containerHeight = msgcontainer.offsetHeight
-        scrollContainer.style.height = containerHeight + 'px'
         scrollContainer.scrollTop = 100000
         this.myMessage = ''
-        console.log(innermsgcontain.offsetHeight)
+        const msgcontainer = document.getElementById('msgContainer')
+        const containerHeight = msgcontainer.offsetHeight
+        scrollContainer.style.height = containerHeight + 'px'
       })
     }
   }
