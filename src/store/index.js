@@ -178,8 +178,6 @@ export default new Vuex.Store({
               })
               im.connect(state.imToken)
             }
-            commit(type._UPDATE_AMOUNT)
-            commit(type._RECEIVE_RESULT)
             resolve()
           } else {
             console.log('初始化失败:', data.msg)

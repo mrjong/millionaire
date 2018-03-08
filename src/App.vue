@@ -21,7 +21,7 @@ export default {
       status: 'status'
     })
   },
-  mounted () {
+  created () {
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
     if (this.isOnline) {
