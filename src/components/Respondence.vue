@@ -82,8 +82,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(type.QUESTION_INIT)
-    this.$store.dispatch(type.QUESTION_GET)
     this.countDown(this.question_status)
   },
   methods: {

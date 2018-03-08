@@ -129,7 +129,6 @@ export default new Vuex.Store({
                 })
                 timer.addEndListener(() => {
                   commit(type._UPDATE, {
-                    status: status._PLAYING,
                     startTime: 0
                   })
                 })

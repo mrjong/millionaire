@@ -2,7 +2,8 @@ import axios from 'axios'
 const env = 'test'
 const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
-  test: 'http://dev-millionaire-api.apuscn.com',
+  dev: 'http://dev-millionaire-api.apuscn.com',
+  test: 'http://test-millionaire-api.apuscn.com',
   prod: ''
 }
 export default axios.create({
