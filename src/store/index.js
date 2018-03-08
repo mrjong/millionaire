@@ -17,7 +17,7 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
-    startTime: Infinity, // 开始时间 时间差
+    startTime: -1, // 开始时间 时间差
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 600000, // 同步结束时间间隔
     status: status._AWAIT, // 当前状态
@@ -71,7 +71,7 @@ export default new Vuex.Store({
         init().then(({data}) => {
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
-            const info = data.data
+            const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question = {}, a: answer} = info
             const startTime = +info.sr || 0
             // 更新首页信息
@@ -88,7 +88,7 @@ export default new Vuex.Store({
             })
             console.log(currencyType, currency[currencyType])
             commit(type._UPDATE, {
-              startTime,
+              startTime: +startTime,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || ''
@@ -139,8 +139,7 @@ export default new Vuex.Store({
               } else {
                 // 切换至等待状态
                 commit(type._UPDATE, {
-                  status: status._AWAIT,
-                  startTime: +startTime
+                  status: status._AWAIT
                 })
                 // 如果有下一场信息
                 if (startTime > 0) {
@@ -187,6 +186,8 @@ export default new Vuex.Store({
         }, (err) => {
           console.log('初始化接口出错', err)
           reject(err)
+        }).catch((err) => {
+          console.log('代码逻辑出错:' + err)
         })
       })
     },
