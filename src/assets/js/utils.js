@@ -3,8 +3,6 @@ const njordGame = window.top.njordGame
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
-console.log(clientParams)
-
 const getQuery =
 /**
 * 获取浏览器公共参数
