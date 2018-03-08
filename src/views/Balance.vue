@@ -75,17 +75,17 @@ export default {
           console.log(err)
         })
       // -----------------
-      if (+this.userInfo.balance < +this.withdraw) {
-        this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
-      } else {
-        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const passRule = emailReg.test(this.myPay)
-        if (!passRule) {
-          this.changeMarkInfo(true, false, 0, `Please enter the correct PayTM account!`)
-        } else {
-          this.changeMarkInfo(true, true, 1, `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`)
-        }
-      }
+      // if (+this.userInfo.balance < +this.withdraw) {
+      //   this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
+      // } else {
+      //   const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+      //   const passRule = emailReg.test(this.myPay)
+      //   if (!passRule) {
+      //     this.changeMarkInfo(true, false, 0, `Please enter the correct PayTM account!`)
+      //   } else {
+      //     this.changeMarkInfo(true, true, 1, `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`)
+      //   }
+      // }
     },
     okEvent (info) {
       this.markInfo.showMark = false
