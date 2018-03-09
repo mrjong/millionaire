@@ -7,7 +7,7 @@ import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
-import {init} from '../assets/js/api'
+import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
 import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT} from '../assets/js/listener-type'
@@ -100,8 +100,8 @@ export default new Vuex.Store({
                 id: question.ji,
                 index: +question.js || 0,
                 contents: question.jc || '',
-                options: question.jo || ['', '', '']
-                // watchingMode: false
+                options: question.jo || ['', '', ''],
+                watchingMode: true
               })
               // 如果有答案直接进入答案页面
               if (answer) {
@@ -145,21 +145,21 @@ export default new Vuex.Store({
                   // 每隔一段时间同步开始时间
                   const {readyTime, syncIntervalTime} = state
                   const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime * 1000) - readyTime)
-                  // timer.addCompleteListener(() => {
-                  //   syncTime().then(({data}) => {
-                  //     if (+data.result === 1 && +data.code === 0) {
-                  //       const startTime = +data.data
-                  //       commit(type._UPDATE, {
-                  //         startTime
-                  //       })
-                  //       timer.sync(Date.now() + startTime - readyTime)
-                  //     } else {
-                  //       console.log('同步时间出错:', data.msg)
-                  //     }
-                  //   }, (err) => {
-                  //     console.log('同步时间失败:', err)
-                  //   })
-                  // })
+                  timer.addCompleteListener(() => {
+                    syncTime().then(({data}) => {
+                      if (+data.result === 1 && +data.code === 0) {
+                        const startTime = +data.data
+                        commit(type._UPDATE, {
+                          startTime
+                        })
+                        timer.sync(startTime * 1000 - readyTime)
+                      } else {
+                        console.log('同步时间出错:', data.msg)
+                      }
+                    }, (err) => {
+                      console.log('同步时间失败:', err)
+                    })
+                  })
                   timer.addEndListener(() => {
                     dispatch(type._INIT)
                   })
