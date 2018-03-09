@@ -2,8 +2,9 @@
   <div class="login-container">
     <img src="../assets/images/login-title.png" class="login-container__title">
     <div class="login-container__btn">
-      <a href="javascript:void (0)" class="login-container__btn__fb" @click="Login">Log in</a>
+      <p class="login-container__btn__fb" @click="Login">Log in</p>
     </div>
+    <loading v-if="loading"></loading>
   </div>
 </template>
 
@@ -11,10 +12,13 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import loading from '../components/loading.vue'
 export default {
   name: 'Login',
   data () {
-    return {}
+    return {
+      loading: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -26,43 +30,49 @@ export default {
     Login: function () {
       utils.login(() => {
         // 返回主页面
-        this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
-        this.$store.dispatch(type._INIT)
+        this.$store.commit(type._UPDATE, {
+          isOnline: true
+        })
+        this.loading = true
+        this.$store.dispatch(type._INIT).then(() => {
+          this.loading = false
+          if (this.status === 1) {
+            this.$router.push({path: '/await'})
+          } else {
+            this.$router.push({path: '/main'})
+          }
+        }, () => {
+          this.loading = false
+        })
       })
-      this.$store.dispatch(type._UPDATE_LOGINSTATE, true)
-      this.$store.dispatch(type._INIT)
-      if (this.status === 1) {
-        this.$router.push({path: '/await'})
-      } else {
-        this.$router.push({path: '/main'})
-      }
-      // eslint-disable-next-line indent
-/*
-      switch (this.status) {
-        case 1:
+      this.$store.commit(type._UPDATE, {
+        isOnline: true
+      })
+      this.loading = true
+      this.$store.dispatch(type._INIT).then(() => {
+        this.loading = false
+        if (this.status === 1) {
           this.$router.push({path: '/await'})
-          break
-        case 2:
+        } else {
           this.$router.push({path: '/main'})
-          break
-        case 3:
-          this.$router.push({path: '/main'})
-          break
-        case 4:
-          this.$router.push({path: '/main'})
-          break
-      }
-*/
+        }
+      }, () => {
+        console.log(this.loading)
+        this.loading = false
+      })
     }
   },
-  mounted () {}
+  mounted () {},
+  components: {
+    loading
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">
   .login-container{
     width: 100%;
     height: 100%;
-    background: url("../assets/images/login-bg.jpg") no-repeat center;
+    background: url("../assets/images/login-bg.jpg") no-repeat top left;
     background-size: cover;
     position: relative;
     &__title{
@@ -73,22 +83,19 @@ export default {
     &__btn{
       position: absolute;
       bottom: 100px;
-      left: 50%;
-      transform: translate(-50%);
+      width: 100%;
       text-align: center;
-      &__fb,{
-        display: block;
+      &__fb{
         width: 658px;
         height: 94px;
         line-height: 94px;
-        text-align: center;
         color: #ffffff;
         font-size: 36px;
-        background-color: #f0a01b;
+        background-color: #faa717;
         opacity: 0.95;
         border-radius: 46px;
         margin: 0 auto;
-        position: relative;
+        font-family: 'Roboto-Light';
       }
     }
   }

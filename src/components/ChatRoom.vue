@@ -1,25 +1,40 @@
 <template>
-  <div class="chat-msg-wrap" id="msgContainer">
-    <ul class="msg-container">
-      <transition-group name='fade'>
-        <li
-          class="msg-container__item"
-          :class="{'fade-out-top': +idx === 0, 'fade-out-bot': +idx === 1}"
-          v-for="(col, idx) in chatRoomState.msgList"
-          :key="idx"
-          >
-          <img class="msg-container__item__portrait" :src="col.img" alt="">
-          <span class="msg-container__item__nickname">{{col.nickname}}</span>
-          <span class="msg-container__item__text">{{col.msg}}</span>
-        </li>
-      </transition-group>
-    </ul>
-    <div class="msg-send-container">
-      <input type="text" id="sendmessage" v-model.trim="myMessage">
-      <label class="msg-send-container__icon" for="sendmessage"></label>
-      <span class="msg-seng-container__btn" @click="sendMessage">SEND</span>
-    </div>
+<div class="chat-container"
+  id="msgContainer"
+  :class="{'chat-msg-wrap-haswrap': showInput}">
+  <div class="chat-msg-wrap">
+      <div class="msg-container" id="scrollContainer">
+       <transition-group
+        name='fade'
+        tag="div"
+        class="msg-container__inner"
+        >
+        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
+          <span class="msg-container__item__wrap">
+            <img class="msg-container__item__portrait" :src="col.img" alt="">
+            <span class="msg-container__item__nickname">{{col.nickname}}</span>
+            <span class="msg-container__item__text">{{col.msg}}</span>
+          </span>
+         </p>
+       </transition-group>
+      </div>
   </div>
+    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+       <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+        <input
+          class="msg-send-container__wrap__input"
+          id="sendmessage"
+          type="text"
+          @focus="focusEvent"
+          @blur="blurEvent"
+          v-model.trim="myMessage">
+        <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
+      </div>
+      <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
+        <span class="iconfont icon-pinglun"></span>
+      </label>
+    </div>
+</div>
 </template>
 
 <script>
@@ -31,97 +46,237 @@ export default {
     return {
       msgLen: 10,
       chatRoomId: 'room10',
-      myMessage: ''
+      myMessage: '',
+      showInput: false,
+      pageHeight: null
     }
   },
   computed: {
     ...mapGetters({
       chatRoomState: 'chatRoomState',
+      msgList: 'msgList',
       userInfo: 'userInfo'
     })
   },
   mounted () {
-    this.$store.dispatch(type.CHAT_GET_USER_ID, (userId) => {
-      const userInfos = Object.assign({}, this.userInfo)
-      userInfos.userId = userId
-      this.$store.dispatch(type.HOME_UPDATE, userInfos)
-    })
-    this.$store.dispatch(type.CHAT_LIST_FETCH)
+    this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
+    // this.$nextTick(() => {
+    //   const bodys = document.getElementsByTagName('body')[0]
+    //   const bodyHeight = bodys.clientHeight
+    //   bodys.style.height = bodyHeight + 'px'
+    // })
   },
   methods: {
     sendMessage () {
-      this.$store.dispatch(type.CHAT_SEND_MSG, {
-        msgObj: {
-          img: this.userInfo.avatar,
-          msg: this.myMessage,
-          nickname: this.userInfo.userName
-        },
-        cb: () => {
-          this.$nextTick(() => {
-            const msgContainer = document.getElementById('msgContainer')
-            msgContainer.scroll(0, 10000)
-          })
-        }
+      if (this.myMessage) {
+        this.showInput = false
+        this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
+          msgObj: {
+            img: this.userInfo.avatar,
+            msg: this.myMessage,
+            nickname: this.userInfo.userName
+          }
+        })
+        this.myMessage = ''
+      }
+    },
+    focusEvent (e) {
+      this.showInput = true
+      // this.reSetMsgBot()
+      // ----------
+      // this.$nextTick(() => {
+      //   const bodys = document.getElementsByTagName('body')[0]
+      //   const bodyHeight = bodys.clientHeight
+      //   bodys.style.height = bodyHeight + 'px'
+      // })
+    },
+    blurEvent () {
+      this.showInput = false
+      // this.reSetMsgBot()
+    },
+    reSetMsgBot () {
+      // const msgcontainer = document.getElementById('msgcontainer')
+      // const bodys = document.getElementsByTagName('body')[0]
+      // const innerHeight = window.innerHeight
+      // const bodyHeight = bodys.clientHeight
+      // const msgBot = bodyHeight - innerHeight
+      // msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
+    }
+  },
+  watch: {
+    msgList: function () {
+      this.$nextTick(() => {
+        const scrollContainer = document.getElementById('scrollContainer')
+        scrollContainer.scrollTop = 100000
+        this.myMessage = ''
+        // -----------
+        // const msgcontainer = document.getElementById('msgContainer')
+        // const containerHeight = msgcontainer.offsetHeight
+        // scrollContainer.style.height = containerHeight + 'px'
       })
     }
   }
 }
 </script>
 <style scoped lang="less" type="text/less">
+.chat-container {
+  width: 100%;
+  flex:1;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 35px;
+}
 .chat-msg-wrap {
+  -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
+  -webkit-mask-size: 100% 110%;
+  mask: url('../assets/images/mask.png') no-repeat top left;
+  mask-size: 100% 110%;
   width: 100%;
   height: 100%;
-  flex:1;
-  margin-bottom: 35px;
-  overflow-y: scroll;
+  overflow: hidden;
   position: relative;
+  // border: 5px solid yellow;
+}
+.chat-mask {
+  -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
+  -webkit-mask-size: 100% 110%;
+  mask: url('../assets/images/mask.png') no-repeat top left;
+  mask-size: 100% 110%;
+}
+.chat-msg-wrap-haswrap {
+  margin-bottom: 0;
 }
 .msg-send-container {
+  width: 60px;
   position: fixed;
-  bottom: 33px;
+  bottom: 35px;
   right: 30px;
-  // input {
-  //   display: none;
-  //   width: 0px;
-  //   height: 0px;
-  //   z-index: -100000;
-  // }
-  // &__icon {
-  //   display: inline-block;
-  //   width: 50px;
-  //   height: 50px;
-  //   background: rgba(255, 255, 255, .5);
-  //   border-radius: 50%;
-  // }
+  display: flex;
+  justify-content: flex-end;
+  &__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    span {
+          font-size: 34px;
+          transform: translate(0, 3px);
+    }
+  }
+  &__hide {
+    opacity: 0;
+  }
+  &__show {
+    opacity: 1;
+  }
+  &__wrap {
+    width: 100%;
+    height: 110px;
+    display: flex;
+    padding: 14px;
+    background: #f6f6f6;
+    justify-content: center;
+    align-items: center;
+    &__input {
+      width: 594px;
+      height: 84px;
+      border: 1px solid #dcdcdc;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      font-size: 20px;
+      color: #241262;
+      font-family: 'Roboto-Regular';
+      padding: 0 23px;
+    }
+    &__input:focus {
+      box-shadow: none;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      -webkit-user-modify:read-write-plaintext-only;
+      outline:0;
+    }
+    &__btn {
+      width: 100%;
+      font-size: 22px;
+      font-family: 'Roboto-Regular';
+      color: #FFB227;
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
+.msg-send-container-showinput {
+  width: 100%;
+  right: 0px;
+  bottom: 0px;
 }
 .msg-container {
+  // width: 100%;
+  // height: auto;
   width: 100%;
-  height: auto;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  &__inner {
+    width: 100%;
+    height: auto;
+    // border: 5px solid red;
+  }
   &__item {
     max-width: 100%;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, .2);
-    border-radius: 30px;
-    padding: 8px 7px;
     margin: 6px 26px;
     box-sizing: border-box;
+    overflow: hidden;
     img {
       display: inline-block;
     }
     span {
       font-size: 26px;
-      font-family: "Roboto Medium";
       text-shadow: #666 1px 1px 1px;
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &__nickname {
+      font-family: "Roboto-Medium";
+    }
+    &__text {
+      font-family: 'Roboto-Light';
+    }
+    &__wrap {
+      background: rgba(255, 255, 255, .2);
+      border-radius: 30px;
+      padding: 0px 20px;
+      box-sizing: border-box;
+      display: inline-block;
+      font-size: 0;
+      position: relative;
+      line-height: 60px;
+      overflow: hidden;
+      color: #fff;
     }
     &__portrait {
-      width: 51px;
+      width: 50px;
       height: 50px;
       border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
     }
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
+      margin-left: 51px;
     }
     &__text {
       color: #fff;
@@ -138,10 +293,11 @@ export default {
 .fade-out-bot {
   opacity: .4
 }
-.fade-enter-active, .fade-enter-active {
-  transition: all .3s;
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+  transform: translate3d(100px, 30px, 0) scale3d(0, 0, 0);
 }
 </style>

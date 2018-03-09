@@ -3,12 +3,13 @@ import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
+import Rule from '@/views/Rule.vue'
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -48,6 +49,15 @@ export default new Router({
       path: '/rank',
       name: 'Rankt',
       component: Rank
+    },
+    {
+      path: '/rule',
+      name: 'rule',
+      component: Rule
     }
   ]
 })
+
+router.beforeEach()
+
+export default router

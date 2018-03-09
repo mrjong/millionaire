@@ -1,17 +1,18 @@
-<template>
+ <template>
   <div class="main-container">
     <div class="main-container__top">
       <div class="main-container__top__online">
-        <span class="main-container__top__online__icon"></span>
-        <span class="main-container__top__online__num">{{onlineAmount}}</span>
+        <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
+        <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
       <div class="main-container__top__logo">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <count-down v-if="status === 2"></count-down>
-    <respondence v-else-if="status === 3"></respondence>
-    <winners-result v-else></winners-result>
+     <count-down v-if="status === 2"></count-down>
+    <winners-result v-if="status === 4"></winners-result>
+    <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
+    <compere v-if="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
   </div>
 </template>
@@ -21,7 +22,9 @@ import {mapGetters} from 'vuex'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
-import winnersResult from '../components/WinnersResult'
+import WinnersResult from '../components/WinnersResult'
+import Compere from '../components/Compere'
+import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -31,21 +34,21 @@ export default {
   computed: {
     ...mapGetters({
       onlineAmount: 'onlineAmount',
-      status: 'status'
+      status: 'status',
+      questionStatus: 'question_status'
     })
   },
   mounted () {
-    this.setRouter()
+    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
   },
   methods: {
-    setRouter () {
-    }
   },
   components: {
     CountDown,
     ChatRoom,
     Respondence,
-    winnersResult
+    WinnersResult,
+    Compere
   }
 }
 </script>
@@ -53,9 +56,11 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg.jpg");
+    background: url("../assets/images/main-bg.jpg") no-repeat top left;
+    background-size: cover;
     display: flex;
     flex-direction: column;
+    position: relative;
     &__top{
       width: 100%;
       display: flex;
@@ -65,18 +70,20 @@ export default {
         padding: 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
+        display: flex;
+        align-items: center;
         &__icon{
-          display: inline-block;
           width: 24px;
           height: 24px;
-          content: '\e64a';
-          background-color: yellow;
-          vertical-align: bottom;
+          font-size: 24px;
+          line-height: 24px;
+          align-self: center;
+          margin-right: 12px;
         }
         &__num{
-          display: inline-block;
           font-size: 24px;
           color: #fff;
+          align-self: center;
         }
       }
       &__logo{
@@ -91,5 +98,13 @@ export default {
   .respondence {
     width: 100%;
     height: 785px;
+  }
+  .chat-global-mark {
+    width: 100%;
+    height: 89%;
+    background: url('../assets/images/chat-mark.png') no-repeat top left;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 </style>

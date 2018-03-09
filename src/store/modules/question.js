@@ -13,14 +13,14 @@ const state = {
   contents: '', // 内容
   options: '', // 选项
   index: 0, // 序号
-  watchingMode: true, // 是否观战模式
+  watchingMode: false, // 是否观战模式
   isAnswered: false, // 是否作答
   isCorrect: false, // 作答是否正确
   correctAnswer: '', // 正确答案
   userAnswer: '', // 用户答案
-  result: '', // 结果汇总
-  time: 10000, // 作答时间, 默认10秒
-  restTime: 10000 // 剩余时间
+  result: {}, // 结果汇总
+  time: 10, // 作答时间, 默认10秒
+  restTime: 10 // 剩余时间
 }
 
 const getters = {
@@ -59,12 +59,21 @@ const actions = {
     dispatch(type.QUESTION_GET)
     dispatch(type.QUESTION_RECEIVE_ANSWER)
   },
-  [type.QUESTION_GET] ({commit}) {
+  /**
+   * 获取题目
+   * @param {any} {commit, dispatch}
+   */
+  [type.QUESTION_GET] ({commit, dispatch}) {
     im.addListener(MESSAGE_QUESTION, (message) => {
-      // TODO: 消息内容填充至store
-      commit(type.QUESTION_UPDATE, {
-        status: status.QUESTION_ANSWERING
-      })
+      const content = (message.content && message.content.content) || ''
+      if (content) {
+        const question = JSON.parse(content)
+        const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        commit(type.QUESTION_UPDATE, {
+          id, index, contents, options
+        })
+        dispatch(type.QUESTION_START)
+      }
     })
   },
 
@@ -77,32 +86,40 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       restTime: time
     })
-    const timer = utils.Timer(1000, Date.now() + time)
+    const timer = utils.Timer(1000, Date.now() + time * 1000)
     timer.addCompleteListener(({offset}) => {
       commit(type.QUESTION_UPDATE, {
-        restTime: offset
+        restTime: Math.round(offset / 1000)
       })
     })
+    // 计时结束
     timer.addEndListener(() => {
-      if (!getters.isAnswered) {
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
-        })
-      }
       commit(type.QUESTION_UPDATE, {
-        status: status.QUESTION_RECIEIVING_ANSWERING
+        restTime: 0
       })
+      if (!getters.isAnswered) {
+        // commit(type.QUESTION_UPDATE, {
+        //   watchingMode: true
+        // })
+      }
     })
+    // 答题开始
     timer.start()
+    commit(type.QUESTION_UPDATE, {
+      status: status.QUESTION_ANSWERING
+    })
+    // 切换主状态至游戏开始
+    commit(type._UPDATE, {
+      status: status._PLAYING
+    })
   },
   /**
    *  提交答案
    * @param {any} {getters}
    */
   [type.QUESTION_SUBMIT] ({getters}) {
-    // TODO: 提交答案
-    const {id, userAnswer} = getters
-    submitAnswer(id, userAnswer).then(({data}) => {
+    const {id, userAnswer, index} = getters
+    submitAnswer(id, userAnswer, index).then(({data}) => {
       if (+data.result !== 1 || +data.code !== 0) {
         console.log('答案提交失败:', id, data.msg)
       }
@@ -110,10 +127,28 @@ const actions = {
       console.log('答案提交错误:', err)
     })
   },
+  /**
+   * 接收题目答案
+   * @param {any} {commit, getters}
+   * @param {any} answer
+   */
   [type.QUESTION_RECEIVE_ANSWER] ({commit, getters}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
-      // TODO: 将答案填充至store， 判断答案是否正确，是否切换至观战模式
-      commit(type.QUESTION_UPDATE, status.QUESTION_END)
+      const answerStr = (message.content && message.content.answer) || ''
+      const resultStr = (message.content && message.content.summary) || ''
+      if (answerStr && resultStr) {
+        const answer = JSON.parse(answerStr)
+        const result = JSON.parse(resultStr)
+        const {i: id, a: correctAnswer} = answer
+        // 判断答案是否正确
+        // const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
+        commit(type.QUESTION_UPDATE, {
+          id, correctAnswer, result
+        })
+        commit(type.QUESTION_UPDATE, {
+          status: status.QUESTION_END
+        })
+      }
     })
   }
 }

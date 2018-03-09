@@ -1,7 +1,9 @@
 <template>
   <div class="view-container">
-    <i class="view-container__icon"></i>
-    <span class="view-container__text">Viewing</span>
+    <div class="view-container__icon">
+      <img src="../assets/images/watchingMode.png" >
+    </div>
+    <div class="view-container__text">Viewing</div>
   </div>
 </template>
 
@@ -15,24 +17,28 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .view-container{
-    width: 144px;
-    height: 38px;
-    border-radius: 26px;
-    border:1px solid #cac6d8;
+    border-radius: 24px;
+    box-shadow: 0 0 0 2px #cac6d8;
+    padding:13px 17px;
     display: flex;
-    justify-content: center;
+    align-items: center;
     &__icon{
-      width: 28px;
-      height: 16px;
-      background-color: yellow;
+      width: 30px;
       align-self: center;
-      margin-right: 16px;
+      img{
+        width: 100%;
+      }
     }
     &__text{
       font-size: 20px;
-      text-align: center;
       color: #241262;
+      margin-left: 12px;
       align-self: center;
+    }
+  }
+  @media screen and (max-width: 321px) {
+    .view-container{
+      box-shadow: 0 0 0 4px #cac6d8;
     }
   }
 </style>

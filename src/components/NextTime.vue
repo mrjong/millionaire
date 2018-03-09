@@ -1,11 +1,11 @@
 <template>
   <div class="hint">
-    <p class="hint__text"><span>The next start time</span></p>
+    <p class="hint__text">The next start time</p>
     <div class="hint__info">
       <p class="hint__info__time">
         {{nextTime}}
       </p>
-      <i class="hint__info__line"></i>
+      <p class="hint__info__line"></p>
       <p class="hint__info__money">
         {{currencyType}}{{money}}
       </p>
@@ -41,26 +41,49 @@ export default {
     &__text{
       width:310px;
       height: 43px;
-      line-height: 43px;
-      font-size: 28px;
       background-color: rgba(255, 255, 255, 0.2);
       text-align: center;
       border-radius: 46px;
       margin: 0 auto;
+      font:28px Roboto-Light;
+      line-height: 43px;
     }
     &__info{
+      margin-top:15px;
       display: flex;
       justify-content: center;
-      font-size: 28px;
-      margin-top:15px;
-      &__line{
-        margin: 0 16.6px;
-        width: 2px;
-        border: 2px solid #ffffff;
-      }
       &__time, &__money{
         letter-spacing: 1px;
+        font: 28px Roboto-Light;
+      }
+      &__time{
+        padding-right:16px;
+        text-align: right;
+        align-self: center;
+      }
+      &__money{
+        margin-left: 16px;
+        text-align: left;
+        align-self: center;
+      }
+      &__line{
+        height: 28px;
+        border-right: 2px solid #fff;
+        align-self: center;
       }
     }
+  }
+  @media screen and (max-width: 321px){
+    .hint{
+      &__info{
+        &__line{
+          height: 28px;
+          border: 5px solid #fff;
+          transform: scaleX(0.5);
+          margin-top: 2px;
+        }
+      }
+    }
+
   }
 </style>

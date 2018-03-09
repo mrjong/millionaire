@@ -2,6 +2,20 @@ const njordGame = window.top.njordGame
 
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
+const getQuery =
+/**
+* 获取浏览器公共参数
+* @param {any} name
+* @param {string} [url='']
+* @returns
+*/
+function (name, url = '') {
+  const queryUrlArr = url.match(/.*\?(\S+)$/)
+  const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
+  const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
+  const search = queryUrl.match(regx)
+  return (search && decodeURIComponent(search[2])) || null
+}
 
 export default {
   /**
@@ -18,10 +32,10 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : '100210001',
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? clientParams.isOnline : false,
+  isOnline: clientParams ? !!clientParams.isLogin : false,
 
   /**
    * 打点
@@ -44,6 +58,56 @@ export default {
    */
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
+  },
+  share () {
+    const {origin, pathname} = window.location
+    const {app_id: appId} = this
+    if (njordGame) {
+      window.location.href = 'tercel://moreshare?url=' + `${origin + pathname}?appId=${appId}`
+    } else {
+      window.location.href = 'http://m.facebook.com/sharer?u=' + `${origin + pathname}?appId=${appId}`
+    }
+  },
+  /**
+   * 时间格式化
+   * @param {any} time 时间戳
+   * @param {any} fixedDate
+   * @param {any} countdown
+   * @returns
+   */
+  TimeFormat (time, fixedDate, countdown) {
+    let timeObj = {
+      month: 0,
+      day: 0,
+      h: 0,
+      m: 0,
+      s: 0
+    }
+    if (fixedDate) {
+      let nowDate = new Date(new Date().getTime() + time)
+      timeObj.month = nowDate.getMonth() + 1
+      timeObj.day = nowDate.getDay()
+      timeObj.h = nowDate.getHours()
+      timeObj.m = nowDate.getMinutes()
+    }
+    if (countdown) {
+      const timeSecond = parseInt(time / 1000)
+      timeObj.s = timeSecond % 60
+      timeObj.m = parseInt(timeSecond / 60 % 60)
+      timeObj.h = parseInt(timeSecond / 60 / 60 % 24)
+    }
+    return ''
+  },
+  computePercent (obj, val) {
+    let total = 0
+    for (let i in obj) {
+      total += obj[i]
+    }
+    let percent = val / total
+    if (percent < 10 && percent > 0) {
+      percent = 10
+    }
+    return percent
   }
 }
 
@@ -77,7 +141,15 @@ class Timer {
    * @memberof Timer
    */
   start () {
-    const interval = this.interval
+    const {interval} = this
+    // 如果剩余时间小于间隔
+    const offset = this.endTime - Date.now()
+    if (offset < interval) {
+      setTimeout(() => {
+        this.endCallback && this.endCallback()
+      }, offset)
+      return
+    }
     this.timer = setInterval(() => {
       const {endTime, completeCallback, endCallback} = this
       const offset = endTime - Date.now()

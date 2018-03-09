@@ -8,7 +8,7 @@ module.exports = {
     "autoprefixer": {
       "browsers": [
         "> 1%",
-        "last 10 versions"
+        "last 8 versions"
       ]
     },
     "postcss-pxtorem": {

@@ -2,7 +2,10 @@
   <div class="balance-mark">
     <div class="balance-mark__wrap">
       <p class="balance-mark__wrap__title" id="balanceMarkText"></p>
-      <p class="balance-mark__wrap__btn" @click="cancelMark">OK</p>
+      <p class="balance-mark__wrap__btn">
+        <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
+        <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
+      </p>
     </div>
   </div>
 </template>
@@ -25,8 +28,11 @@ export default {
     markText.innerHTML = this.dataInfo.htmlText
   },
   methods: {
-    cancelMark () {
-      this.$emit('cancelMark', this.dataInfo.shouldSub)
+    okEvent () {
+      this.$emit('okEvent', this.dataInfo.shouldSub)
+    },
+    cancelEvent () {
+      this.$emit('cancelEvent', this.dataInfo.shouldSub)
     }
   }
 }
@@ -61,15 +67,27 @@ export default {
       color: #000;
     }
     &__btn {
-      width: 282px;
+      width: 100%;
       height: 77px;
-      border-radius: 38px;
-      background: rgba(250, 167, 23, 0.95);
-      color: #fff;
-      font-size: 24px;
-      font-family: 'Roboto-Light';
-      text-align: center;
-      line-height: 77px;
+      display: flex;
+      justify-content: space-around;
+      span {
+        display: inline-block;
+        width: 240px;
+        height: 100%;
+        border-radius: 38px;
+        color: #fff;
+        font-size: 24px;
+        font-family: 'Roboto-Light';
+        text-align: center;
+        line-height: 77px;
+      }
+      &__ok {
+        background: rgba(250, 167, 23, 0.95);
+      }
+      &__cancel {
+        background: #fa5b23;
+      }
     }
   }
 }

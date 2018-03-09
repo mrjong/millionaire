@@ -2,12 +2,16 @@
 'use strict'
 import * as type from '../type'
 import * as listenerType from '../../assets/js/listener-type.js'
+import * as status from '../../assets/js/status'
 import im from '../../assets/js/im'
 const state = {
-  msgList: []
+  msgList: [],
+  compereMsg: ''
 }
 const getters = {
-  chatRoomState: state => state
+  chatRoomState: state => state,
+  msgList: (state) => state.msgList,
+  compereMsg: (state) => state.compereMsg
 }
 const mutations = {
   [type.CHAT_LIST_FETCH] (state, item) {
@@ -18,27 +22,38 @@ const mutations = {
     if (+len > staticLen) {
       state.msgList = state.msgList.splice(len - staticLen, len)
     }
+  },
+  [type.GET_COMPERE_MESSAGE] (state, compereMsg) {
+    state.compereMsg = compereMsg.content.content
   }
 }
 const actions = {
-  [type.CHAT_LIST_FETCH] ({commit}) {
-    im.addListener(listenerType.MESSAGE_NORMAL, (message) => {
+  [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
+    const handler = (message) => {
       const obj = {
-        img: '',
-        nickname: '',
-        msg: message.content.content
+        img: message.content.user.avatar,
+        nickname: message.content.user.name,
+        msg: message.content.content,
+        msgId: message.messageId
       }
       commit(type.CHAT_LIST_FETCH, obj)
-    })
+    }
+    im.addListener(listenerType.MESSAGE_NORMAL, handler)
+    im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
   },
-  [type.CHAT_SEND_MSG] ({commit}, {msgObj, cb}) {
+  [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {
     im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
-    commit(type.CHAT_LIST_FETCH, msgObj)
-    cb()
   },
-  [type.CHAT_GET_USER_ID] ({commit}, cb) {
-    im.addListener(listenerType.CONNECT_SUCCESS, (userId) => {
-      cb(userId)
+  [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
+    im.addListener(listenerType.MESSAGE_HOST, (message) => {
+      commit(type.GET_COMPERE_MESSAGE, message)
+      console.log('接收到主持人消息，更改答题状态')
+      commit(type.QUESTION_UPDATE, {
+        status: status.QUESTION_AWAIT
+      })
+      commit(type._UPDATE, {
+        status: status._PLAYING
+      })
     })
   }
 }

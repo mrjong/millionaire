@@ -1,13 +1,40 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
-const appKey = 'p5tvi9dsphpf4'
-const token = 'eNHrEiy/u/rTtpWbLk9tyu4xTTSorLIemAFyBMeP9TK0HordhE76GWroMJrCOpDekbGK5qZfAiCK3wNfwYWEkw=='
+// const appKey = 'p5tvi9dsphpf4' // dev
+const appKey = 'pvxdm17jp3vvr' // test
 
 const im = {
 
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
-  listeners: {}, // 监听器
+  listeners: {}, // 监听器,
+  messageTypes: [ // 消息类型列表
+    {
+      messageName: 'QuestionMessage',
+      propertys: ['content'],
+      objectName: 'APUS:QuestionMsg'
+    },
+    {
+      messageName: 'AnswerMessage',
+      propertys: ['answer', 'summary'],
+      objectName: 'APUS:AnswerMsg'
+    },
+    {
+      messageName: 'PeopleMessage',
+      propertys: ['count'],
+      objectName: 'APUS:PeopleMsg'
+    },
+    {
+      messageName: 'SummaryMessage',
+      propertys: ['summary'],
+      objectName: 'APUS:SummaryMsg'
+    },
+    {
+      messageName: 'HostMessage',
+      propertys: ['content', 'user'],
+      objectName: 'APUS:HostMsg'
+    }
+  ],
 
   /**
    * 初始化
@@ -15,9 +42,19 @@ const im = {
   init () {
     // 初始化监听器
     for (let prop in type) {
-      this.listeners[type[prop]] = []
+      this.listeners[type[prop]] = null
     }
     RongIMClient.init(appKey)
+
+    // 注册消息类型
+    this.messageTypes.forEach((messageType) => {
+      const messageName = messageType.messageName // 消息类型。
+      const objectName = messageType.objectName // 消息内置名称，请按照此格式命名。
+      const mesasgeTag = new RongIMLib.MessageTag(true, true) // 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
+      const propertys = messageType.propertys// 消息类中的属性名。
+      RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
+    })
+
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
         this.emitListener(status)
@@ -30,6 +67,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
+            this.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -46,13 +84,29 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
+        console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             this.emitListener(type.MESSAGE_NORMAL, message)
             break
+          case type.MESSAGE_AMOUNT:
+            this.emitListener(type.MESSAGE_AMOUNT, message)
+            break
+          case type.MESSAGE_ANSWER:
+            this.emitListener(type.MESSAGE_ANSWER, message)
+            break
+          case type.MESSAGE_HOST:
+            this.emitListener(type.MESSAGE_HOST, message)
+            break
+          case type.MESSAGE_QUESTION:
+            this.emitListener(type.MESSAGE_QUESTION, message)
+            break
+          case type.MESSAGE_RESULT:
+            this.emitListener(type.MESSAGE_RESULT, message)
+            break
           default:
-          // do something...
+            console.log('未知类型消息:' + message)
         }
       }
     })
@@ -68,7 +122,6 @@ const im = {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId)
         this.emitListener(type.CONNECT_SUCCESS, userId)
-        this.joinChatRoom('room10', 10)
       },
       onTokenIncorrect: () => {
         console.log('token无效')
@@ -98,8 +151,8 @@ const im = {
             this.emitListener(type.CONNECTED_ERROR, info)
             break
         }
-        this.emitListener(type.CONNECTED_ERROR, info)
         console.log(info)
+        this.reconnect()
       }
     })
   },
@@ -134,7 +187,7 @@ const im = {
    * @param {any} chatRoomId 聊天室ID
    * @param {any} count 拉取历史消息条数
    */
-  joinChatRoom (chatRoomId, count = 10) {
+  joinChatRoom (chatRoomId, count = 0) {
     this.chatRoomId = chatRoomId
     RongIMClient.getInstance().joinChatRoom(chatRoomId, count, {
       onSuccess: () => {
@@ -201,7 +254,7 @@ const im = {
    * @param {any} listener 监听器
    */
   addListener (listenerType, listener) {
-    this.listeners[listenerType].push(listener)
+    this.listeners[listenerType] = listener
   },
 
   /**
@@ -210,16 +263,9 @@ const im = {
    * @param {any} args 参数
    */
   emitListener (listenerType, ...args) {
-    const listeners = this.listeners[listenerType]
-    if (listeners.length) {
-      listeners.forEach((listener) => {
-        listener(...args)
-      })
-    }
+    const listener = this.listeners[listenerType]
+    listener && listener(...args)
   }
 }
-
-im.init()
-im.connect(token)
 
 export default im

@@ -1,36 +1,36 @@
 <template>
   <div>
-    <div class='no-winner-result' v-if='!hasWinner'>
+    <div class='no-winner-result' v-if='!respondence.winners.length'>
       <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
-      <p class= 'no-winner-result__bonus'>$10000</p>
+      <p class= 'no-winner-result__bonus'>{{respondence.bonusAmount}}</p>
       <p class='no-winner-result__tip'>The prize rolls over to the next game</p>
     </div>
     <div class="has-winner-result" v-else>
       <p class="has-winner-result__title">
-        156 Winners!
+        <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
           <div class="has-winner-result-top-item"
             :class="{'left': +idx === 0, 'middle': +idx === 1}"
-            v-for="(col, idx) in respondenceList"
-            :key="idx"
+            v-for="(col, idx) in respondence.winners"
+            :key="col.userId"
             v-if="+idx < 3">
-            <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
-            <p class="has-winner-result-top-item__nickname">{{col.nickname}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonus}}</p>
+            <img :src="col.avatar" alt="" class="has-winner-result-top-item__icon">
+            <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
+            <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
         </div>
         <div class="has-winner-result-top">
           <div
           class="has-winner-result-top-item"
           :class="{'left': +idx === 3, 'middle': +idx === 4}"
-          v-for="(col, idx) in respondenceList"
-          :key="idx"
+          v-for="(col, idx) in respondence.winners"
+          :key="col.userId"
           v-if="+idx >= 3 && +idx < 6">
-            <img :src="col.img" alt="" class="has-winner-result-top-item__icon">
-            <p class="has-winner-result-top-item__nickname">{{col.nickname}}</p>
-            <p class="has-winner-result-top-item__bonus">${{col.bonus}}</p>
+            <img :src="col.iavatar" alt="" class="has-winner-result-top-item__icon">
+            <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
+            <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
         </div>
       </div>
@@ -40,30 +40,30 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import testData from '../assets/js/testData'
+// import testData from '../assets/js/testData'
 export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      hasWinner: true,
-      respondenceList: []
+      // respondenceList: [],
+      // winnerCount: 156
     }
   },
   computed: {
     ...mapGetters({
-      exampleState: 'exampleState'
+      respondence: 'result',
+      currencyType: 'currencyType'
     })
   },
   mounted () {
-    setTimeout(() => {
-      this.respondenceList = testData.respondenceResult
-    }, 500)
-    this.fetch()
+    console.log('result')
+    console.log(this.respondence)
+    // setTimeout(() => {
+    //   this.respondenceList = testData.respondenceResult
+    //   this.winnerCount = 1567890
+    // }, 500)
   },
   methods: {
-    fetch () {
-      // this.$store.dispatch('fetch')
-    }
   }
 }
 </script>
@@ -85,7 +85,7 @@ export default {
     &__bonus {
         font-size: 114px;
         margin-bottom: 32px;
-        font-family: 'Roboto-Condensed';
+        font-family: 'RobotoCondensed-Bold';
     }
     &__tip {
         font-size: 28px;
@@ -101,7 +101,19 @@ export default {
     line-height: 94px;
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-family: 'RobotoCondensed-Regular';
+    &__count {
+      margin-right: 17px;
+      display: inline-block;
+      // width: 159px;
+      max-width: 159px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: center;
+    }
   }
 }
 .has-winner-result-wrap {
@@ -128,7 +140,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto Medium';
+  font-family: 'Roboto-Medium';
   &__icon {
     width: 130px;
     border-radius: 50%;
@@ -144,5 +156,83 @@ export default {
     font-weight: 600;
   }
 
+}
+@-webkit-keyframes tada {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tadaXY {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  50%{
+    -webkit-transform: translate3d(20px, 10px, 0);
+    transform: translate3d(20px, 10px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes tadaYZ {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  50%{
+    -webkit-transform: translate3d(15px, -2px, 5px);
+    transform: translate3d(15px, -2px, 5px);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes tadaXYZ {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  50%{
+    -webkit-transform: translate3d(-20px, 10px, 0);
+    transform: translate3d(-20px, 10px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+.actionXY {
+  animation: tadaYZ 3s infinite;
+}
+.actionYZ {
+  animation: tadaXYZ 3s infinite;
+}
+.actionXYZ {
+  animation: tadaXYZ 3s infinite;
 }
 </style>
