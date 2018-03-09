@@ -70,10 +70,7 @@ export default {
           totalNum += Number(this.questionResult[i]) || 0
         }
       }
-      let newOptions = Array.prototype.slice.call(this.options).sort(() => {
-        return Math.random() > 0.5 ? -1 : 1
-      })
-      newOptions.forEach((val, idx) => {
+      Array.prototype.slice.call(this.options).forEach((val, idx) => {
         result[optionsNumber[idx] + '. ' + val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
