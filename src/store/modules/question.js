@@ -98,9 +98,9 @@ const actions = {
         restTime: 0
       })
       if (!getters.isAnswered) {
-        // commit(type.QUESTION_UPDATE, {
-        //   watchingMode: true
-        // })
+        commit(type.QUESTION_UPDATE, {
+          watchingMode: true
+        })
       }
     })
     // 答题开始
@@ -141,9 +141,9 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
         // 判断答案是否正确
-        // const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
+        const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer, result
+          id, correctAnswer, result, watchingMode
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END

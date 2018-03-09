@@ -1,4 +1,5 @@
 <template>
+  <!-- 排行榜列表项组件 lixuan@apusapps.com -->
   <div class="rank-item flex-box" :class="['rank-item', 'flex-box', isSelf ? 'self' : '']">
     <p class="rank-item_index">{{rank}}</p>
     <section class="rank-item_info flex-box flex-align-center">

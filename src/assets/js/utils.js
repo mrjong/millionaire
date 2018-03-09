@@ -172,7 +172,6 @@ class Timer {
           }, offset)
         }
       } else {
-        endCallback && endCallback()
         this.stop()
       }
     }, interval)
@@ -192,7 +191,7 @@ class Timer {
    * @memberof Timer
    */
   sync (endTime) {
-    this.endTime = endTime
+    this.endTime = Date.now() + endTime
   }
 
   /**
