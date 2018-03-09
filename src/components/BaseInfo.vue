@@ -54,9 +54,11 @@ export default {
         margin: 0 auto;
       }
       &__name{
-        margin-top: 28px;
         color: #241262;
         font: 36px 'Roboto-Medium';
+        width: 60%;
+        text-align: center;
+        margin: 0.28px auto;
       }
     }
     &__other{
