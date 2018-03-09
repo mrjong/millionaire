@@ -25,17 +25,13 @@ export default {
       const timeSecond = this.startTime
       let s = timeSecond % 60
       let m = parseInt(timeSecond / 60 % 60)
-      let h = parseInt(timeSecond / 60 / 60 % 24)
-      if (h <= 9) {
-        h = '0' + h
-      }
       if (m <= 9) {
         m = '0' + m
       }
       if (s <= 9) {
         s = '0' + s
       }
-      return h + ':' + m + ':' + s
+      return m + ':' + s
     }
   },
   mounted () {

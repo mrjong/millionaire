@@ -12,7 +12,7 @@
       </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num" ref="answerNum"
-           :class="{'font-white': isResultWhite}">{{result}}</p>
+           :class="{'font-white': isResultWhite}">{{orderNumber}}. {{result}}</p>
         <span class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
            ref="resultIcon"
            :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></span>
@@ -43,6 +43,9 @@ export default {
     },
     myChick: {
       type: Boolean
+    },
+    orderNumber: {
+      type: String
     }
   },
   data () {
