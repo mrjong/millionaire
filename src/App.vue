@@ -68,6 +68,8 @@ export default {
   html,body,#app{
     width:100%;
     height:100%;
+    background: url('./assets/images/main-bg.jpg') no-repeat top left;
+    background-size: cover;
   }
    @font-face {
   font-family: 'RobotoCondensed-Bold';

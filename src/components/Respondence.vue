@@ -94,7 +94,7 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e})
+          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
           this.$store.dispatch(type.QUESTION_SUBMIT)
         }
       } else {

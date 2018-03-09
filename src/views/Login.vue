@@ -45,21 +45,6 @@ export default {
           this.loading = false
         })
       })
-      this.$store.commit(type._UPDATE, {
-        isOnline: true
-      })
-      this.loading = true
-      this.$store.dispatch(type._INIT).then(() => {
-        this.loading = false
-        if (this.status === 1) {
-          this.$router.push({path: '/await'})
-        } else {
-          this.$router.push({path: '/main'})
-        }
-      }, () => {
-        console.log(this.loading)
-        this.loading = false
-      })
     }
   },
   mounted () {},
