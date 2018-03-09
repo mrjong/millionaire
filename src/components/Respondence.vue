@@ -11,7 +11,7 @@
       </svg>
     </div>
     <p class="respondence-container__question">
-      {{index}}.{{contents}}
+      {{index}}. {{contents}}
     </p>
     <div class="respondence-container__answer" ref="answerContainer">
       <answer v-for="(val, idx) in totalResult"
@@ -74,7 +74,7 @@ export default {
         return Math.random() > 0.5 ? -1 : 1
       })
       newOptions.forEach((val, idx) => {
-        result[optionsNumber[idx] + '.' + val] = {
+        result[optionsNumber[idx] + '. ' + val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
           isRight: this.correctAnswer && this.correctAnswer === val,
