@@ -39,8 +39,7 @@ export default {
       baseStyle2: {
         text: 'Leaderboards',
         bgColor: '#4c08f3'
-      },
-      targetDate: 'coming soon'
+      }
     }
   },
   computed: {
@@ -48,7 +47,28 @@ export default {
       userInfo: 'userInfo',
       startTime: 'startTime',
       status: 'status'
-    })
+    }),
+    targetDate () {
+      if (this.startTime === -1) {
+        return 'coming soon'
+      } else {
+        let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
+        let month = nowDate.getMonth() + 1
+        let day = nowDate.getDate()
+        let hour = nowDate.getHours()
+        let minute = nowDate.getMinutes()
+        if (month <= 9) {
+          month = '0' + month
+        }
+        if (day <= 9) {
+          day = '0' + day
+        }
+        if (minute <= 9) {
+          minute = '0' + minute
+        }
+        return month + '.' + day + ' ' + hour + ':' + minute
+      }
+    }
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
@@ -79,13 +99,6 @@ export default {
     BaseBtn,
     NextTime,
     BaseInfo
-  },
-  watch: {
-    startTime (val) {
-      if (val !== -1) {
-        this.DateFormatter()
-      }
-    }
   }
 }
 </script>
