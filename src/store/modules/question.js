@@ -20,7 +20,7 @@ const state = {
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
-  restTime: 10 // 剩余时间
+  restTime: 0 // 剩余时间
 }
 
 const getters = {
@@ -69,6 +69,9 @@ const actions = {
       if (content) {
         const question = JSON.parse(content)
         const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        options.sort(() => {
+          return Math.random() > 0.5 ? 1 : -1
+        })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options
         })
@@ -143,7 +146,7 @@ const actions = {
         // 判断答案是否正确
         const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer, result, watchingMode
+          id, correctAnswer, result, watchingMode, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END

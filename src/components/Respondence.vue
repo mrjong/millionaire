@@ -70,10 +70,7 @@ export default {
           totalNum += Number(this.questionResult[i]) || 0
         }
       }
-      let newOptions = Array.prototype.slice.call(this.options).sort(() => {
-        return Math.random() > 0.5 ? -1 : 1
-      })
-      newOptions.forEach((val, idx) => {
+      Array.prototype.slice.call(this.options).forEach((val, idx) => {
         result[optionsNumber[idx] + '. ' + val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
@@ -97,7 +94,7 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e})
+          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
           this.$store.dispatch(type.QUESTION_SUBMIT)
         }
       } else {
