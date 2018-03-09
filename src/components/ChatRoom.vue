@@ -8,7 +8,6 @@
         name='fade'
         tag="div"
         class="msg-container__inner"
-        id='innermsgcontain'
         >
         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
@@ -21,7 +20,7 @@
       </div>
   </div>
     <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
-       <div class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+       <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
         <input
           class="msg-send-container__wrap__input"
           id="sendmessage"
@@ -61,11 +60,11 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
-    this.$nextTick(() => {
-      const bodys = document.getElementsByTagName('body')[0]
-      const bodyHeight = bodys.clientHeight
-      bodys.style.height = bodyHeight + 'px'
-    })
+    // this.$nextTick(() => {
+    //   const bodys = document.getElementsByTagName('body')[0]
+    //   const bodyHeight = bodys.clientHeight
+    //   bodys.style.height = bodyHeight + 'px'
+    // })
   },
   methods: {
     sendMessage () {
@@ -81,34 +80,39 @@ export default {
         this.myMessage = ''
       }
     },
-    focusEvent () {
+    focusEvent (e) {
       this.showInput = true
-      this.reSetMsgBot()
+      // this.reSetMsgBot()
+      // ----------
+      // this.$nextTick(() => {
+      //   const bodys = document.getElementsByTagName('body')[0]
+      //   const bodyHeight = bodys.clientHeight
+      //   bodys.style.height = bodyHeight + 'px'
+      // })
     },
     blurEvent () {
       this.showInput = false
-      this.reSetMsgBot()
+      // this.reSetMsgBot()
     },
     reSetMsgBot () {
-      const msgcontainer = document.getElementById('msgcontainer')
-      const bodys = document.getElementsByTagName('body')[0]
-      const innerHeight = window.innerHeight
-      const bodyHeight = bodys.clientHeight
-      const msgBot = bodyHeight - innerHeight
-      msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
+      // const msgcontainer = document.getElementById('msgcontainer')
+      // const bodys = document.getElementsByTagName('body')[0]
+      // const innerHeight = window.innerHeight
+      // const bodyHeight = bodys.clientHeight
+      // const msgBot = bodyHeight - innerHeight
+      // msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
     }
   },
   watch: {
     msgList: function () {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
-        const msgcontainer = document.getElementById('msgContainer')
-        const innermsgcontain = document.getElementById('innermsgcontain')
-        const containerHeight = msgcontainer.offsetHeight
-        scrollContainer.style.height = containerHeight + 'px'
         scrollContainer.scrollTop = 100000
         this.myMessage = ''
-        console.log(innermsgcontain.offsetHeight)
+        // -----------
+        // const msgcontainer = document.getElementById('msgContainer')
+        // const containerHeight = msgcontainer.offsetHeight
+        // scrollContainer.style.height = containerHeight + 'px'
       })
     }
   }

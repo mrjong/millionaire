@@ -11,18 +11,19 @@
       </svg>
     </div>
     <p class="respondence-container__question">
-      {{index}}.{{contents}}
+      {{index}}. {{contents}}
     </p>
     <div class="respondence-container__answer" ref="answerContainer">
       <answer v-for="(val, idx) in totalResult"
               :key=idx
               :content="idx"
+              :orderNumber="val && val.orderNumber"
               :result="+ (val && val.answerNum) || 0"
               :percent= "+(val && val.percent) || 0"
               :isRight="val && val.isRight"
-              @answer="answer(idx)"
+              @answer="answer(val.answerText)"
               :is-click="isClick"
-              :myChick="userAnswer === idx"
+              :myChick="userAnswer === val.answerText"
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
@@ -63,27 +64,27 @@ export default {
     totalResult: function () {
       let result = {}
       let totalNum = 0
+      let optionsNumber = ['A', 'B', 'C']
       if (this.questionResult) {
         for (let i in this.questionResult) {
           totalNum += Number(this.questionResult[i]) || 0
         }
       }
-      Array.prototype.slice.call(this.options).forEach((val) => {
-        result[val] = {
+      let newOptions = Array.prototype.slice.call(this.options).sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      })
+      newOptions.forEach((val, idx) => {
+        result[optionsNumber[idx] + '. ' + val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
-          isRight: this.correctAnswer && this.correctAnswer === val
+          isRight: this.correctAnswer && this.correctAnswer === val,
+          answerText: val
         }
       })
       return result
-    },
-    restTime1: function () {
-      return Math.round(this.restTime / 1000)
     }
   },
   mounted () {
-    this.$store.dispatch(type.QUESTION_INIT)
-    this.$store.dispatch(type.QUESTION_GET)
     this.countDown(this.question_status)
   },
   methods: {
@@ -114,7 +115,13 @@ export default {
     countDown (status) {
       let circle = this.$refs.circle
       if (status === 5) {
-        this.countdownStyle = `transition:stroke-dashoffset ${this.restTime}s linear;`
+        this.countdownStyle = `
+        transition:stroke-dashoffset ${this.restTime}s linear;
+        -webkit-transition:stroke-dashoffset ${this.restTime}s linear;
+        -o-transition:stroke-dashoffset ${this.restTime}s linear;
+        -moz-transition:stroke-dashoffset ${this.restTime}s linear;
+        -ms-transition:stroke-dashoffset ${this.restTime}s linear;
+        `
         setTimeout(() => {
           circle.style.strokeDashoffset = 0
         }, 200)

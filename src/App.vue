@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <loading v-if="loading"></loading>
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import {mapGetters} from 'vuex'
 import './assets/css/public.css'
 import * as type from './store/type'
+import loading from './components/loading.vue'
 export default {
   name: 'App',
   data () {
@@ -22,27 +24,33 @@ export default {
     })
   },
   created () {
+    this.$store.dispatch(type.QUESTION_INIT)
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
+    this.loading = true
     if (this.isOnline) {
-      this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
-        this.loading = false
-        if (this.status === 1) {
-          this.$router.push({path: '/await'})
-        } else {
-          this.$router.push({path: '/main'})
-        }
+        setTimeout(() => {
+          this.loading = false
+          if (this.status === 1) {
+            this.$router.push({path: '/await'})
+          } else {
+            this.$router.push({path: '/main'})
+          }
+        }, 500)
       }, (err) => {
         this.loading = false
         console.log(err)
       })
     } else {
+      this.loading = false
       this.$router.push({path: '/login'})
     }
   },
   methods: {},
-  components: {},
+  components: {
+    loading
+  },
   watch: {
     status: function (status) {
       if (status === 1) {

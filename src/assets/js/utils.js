@@ -2,7 +2,6 @@ const njordGame = window.top.njordGame
 
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
-
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -173,7 +172,6 @@ class Timer {
           }, offset)
         }
       } else {
-        endCallback && endCallback()
         this.stop()
       }
     }, interval)
@@ -193,7 +191,7 @@ class Timer {
    * @memberof Timer
    */
   sync (endTime) {
-    this.endTime = endTime
+    this.endTime = Date.now() + endTime
   }
 
   /**

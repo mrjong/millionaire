@@ -51,11 +51,10 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
-    this.DateFormatter()
   },
   methods: {
     DateFormatter () {
-      let nowDate = new Date(new Date().getTime() + this.startTime)
+      let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
       let month = nowDate.getMonth() + 1
       let day = nowDate.getDate()
       let hour = nowDate.getHours()
@@ -79,6 +78,13 @@ export default {
     BaseBtn,
     NextTime,
     BaseInfo
+  },
+  watch: {
+    startTime (val) {
+      if (val !== -1) {
+        this.DateFormatter()
+      }
+    }
   }
 }
 </script>
