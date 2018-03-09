@@ -39,7 +39,7 @@ export default {
         text: 'Leaderboards',
         bgColor: '#4c08f3'
       },
-      targetDate: ''
+      targetDate: 'loading error'
     }
   },
   computed: {
