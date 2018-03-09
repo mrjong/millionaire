@@ -1,7 +1,8 @@
 <template>
   <div class="await-container">
     <div class="await-container__top">
-      <div class="await-container__top__like icon-dianzan iconfont"></div>
+      <a class="await-container__top__like icon-dianzan iconfont" href="https://m.facebook.com/APUS-Browser-1532330666785144/">
+      </a>
       <div>
         <router-link to="/rule">
           <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
@@ -39,7 +40,7 @@ export default {
         text: 'Leaderboards',
         bgColor: '#4c08f3'
       },
-      targetDate: 'loading error'
+      targetDate: 'coming soon'
     }
   },
   computed: {
@@ -109,7 +110,7 @@ export default {
         line-height: 54px;
       }
       &__like{
-        /*content: '\dafd';*/
+        display: block;
       }
       &__instructions{
         font-size: 28px;
