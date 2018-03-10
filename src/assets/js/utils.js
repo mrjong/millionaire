@@ -173,6 +173,7 @@ class Timer {
         }
       } else {
         this.stop()
+        endCallback && endCallback()
       }
     }, interval)
   }
