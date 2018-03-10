@@ -10,7 +10,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -66,13 +66,13 @@ export default new Vuex.Store({
      * 初始化
      * @param {any} {commit, dispatch, state}
      */
-    [type._INIT] ({commit, dispatch, state}) {
+    [type._INIT] ({commit, dispatch, state}, isRefreshToken = false) {
       return new Promise((resolve, reject) => {
-        init().then(({data}) => {
+        init(isRefreshToken).then(({data}) => {
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question = {}, a: answer} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question, a: answer} = info
             const startTime = +info.sr || 0
             // 更新首页信息
             commit(type.HOME_UPDATE, {
@@ -97,17 +97,22 @@ export default new Vuex.Store({
             if (isPlaying) {
               // 更新问题信息
               commit(type.QUESTION_UPDATE, {
-                id: question.ji,
+                id: question.ji || '',
                 index: +question.js || 0,
                 contents: question.jc || '',
-                options: question.jo || ['', '', ''],
-                watchingMode: true
+                options: question.jo || ['', '', '']
               })
+              // 如果已经下发题目 开启观战模式
+              if (question) {
+                commit(type.QUESTION_UPDATE, {
+                  watchingMode: true
+                })
+              }
               // 如果有答案直接进入答案页面
               if (answer) {
                 commit(type.QUESTION_UPDATE, {
                   correctAnswer: answer.ac || '',
-                  result: answer.as
+                  result: answer.as || {}
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
@@ -175,6 +180,10 @@ export default new Vuex.Store({
                 })
                 im.joinChatRoom(state.chatRoomId)
               })
+              // 若token过期，重新初始化刷新token
+              im.addListener(INVALID_TOKEN, () => {
+                dispatch(type._INIT, true)
+              })
               im.connect(state.imToken)
             }
             resolve()
@@ -193,7 +202,6 @@ export default new Vuex.Store({
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
         const count = +(message.content && message.content.count)
-        console.log('在线人数:' + count)
         commit(type._UPDATE, {
           onlineAmount: count
         })
@@ -206,7 +214,6 @@ export default new Vuex.Store({
     [type._RECEIVE_RESULT] ({commit, getters, dispatch}) {
       im.addListener(MESSAGE_RESULT, (message) => {
         const resultStr = message.content && message.content.summary
-        console.log('游戏结束：' + resultStr)
         if (resultStr) {
           const result = JSON.parse(resultStr)
           const {c: isFinish = false, td: bonusAmount = 0, ws: winners = []} = result
@@ -232,6 +239,15 @@ export default new Vuex.Store({
             dispatch(type._INIT)
           }, 60000)
         }
+      })
+    },
+    /**
+     * 比赛结束
+     * @param {any} {dispatch}
+     */
+    [type._END] ({dispatch}) {
+      im.addListener(MESSAGE_END, (message) => {
+        dispatch(type._INIT)
       })
     }
   },
