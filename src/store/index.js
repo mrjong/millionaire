@@ -95,16 +95,14 @@ export default new Vuex.Store({
             })
             // 如果已经开始
             if (isPlaying) {
-              // 更新问题信息
-              commit(type.QUESTION_UPDATE, {
-                id: question.ji || '',
-                index: +question.js || 0,
-                contents: question.jc || '',
-                options: question.jo || ['', '', '']
-              })
               // 如果已经下发题目 开启观战模式
               if (question) {
+                // 更新问题信息
                 commit(type.QUESTION_UPDATE, {
+                  id: question.ji || '',
+                  index: +question.js || 0,
+                  contents: question.jc || '',
+                  options: question.jo || ['', '', ''],
                   watchingMode: true
                 })
               }
@@ -117,11 +115,13 @@ export default new Vuex.Store({
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
                 })
+                // 更新当前状态
+                commit(type._UPDATE, {
+                  status: status._PLAYING
+                })
               }
-              // 更新当前状态
-              commit(type._UPDATE, {
-                status: status._PLAYING
-              })
+
+              // TODO: 如果有串词直接显示串词
             } else {
               // 是否进入倒计时
               if (isInRoom) {
