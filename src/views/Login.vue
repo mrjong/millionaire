@@ -29,10 +29,11 @@ export default {
     // 登录方法
     Login: function () {
       utils.login(() => {
-        // 返回主页面
+        // 更新登陆状态
         this.$store.commit(type._UPDATE, {
           isOnline: true
         })
+        utils.isOnline = true
         this.loading = true
         this.$store.dispatch(type._INIT).then(() => {
           this.loading = false
