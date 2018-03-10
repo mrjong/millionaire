@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
   }
   if (to.name === 'login') {
     if (utils.isOnline) {
-      router.push('/await')
+      router.push({path: '/await'})
     }
   }
   next()
