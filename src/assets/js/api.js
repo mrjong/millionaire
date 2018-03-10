@@ -11,12 +11,17 @@ export const api = {
   balanceApplication: 'cmp/apply' // 提现申请
 }
 
-export const init = function () {
+export const init = function (isRefreshToken) {
+  const params = {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  }
+  // 是否刷新token
+  if (isRefreshToken) {
+    params.r = true
+  }
   return axios.get(api.init, {
-    params: {
-      app_id: utils.app_id,
-      client_id: utils.clientId
-    }
+    params
   })
 }
 

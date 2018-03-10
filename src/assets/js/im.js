@@ -33,6 +33,11 @@ const im = {
       messageName: 'HostMessage',
       propertys: ['content', 'user'],
       objectName: 'APUS:HostMsg'
+    },
+    {
+      messageName: 'GameEndMessage',
+      propertys: ['end'],
+      objectName: 'APUS:GameEndMsg'
     }
   ],
 
@@ -125,7 +130,7 @@ const im = {
       },
       onTokenIncorrect: () => {
         console.log('token无效')
-        this.emitListener(type.CONNECTED_ERROR, 'token无效')
+        this.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         let info = ''
@@ -133,6 +138,7 @@ const im = {
           case RongIMLib.ErrorCode.TIMEOUT:
             info = '超时'
             this.emitListener(type.CONNECTED_TIMEOUT, info)
+            this.reconnect()
             break
           case RongIMLib.ErrorCode.UNKNOWN_ERROR:
             info = '未知错误'
