@@ -1,7 +1,8 @@
 <template>
   <div class="await-container">
     <div class="await-container__top">
-      <div class="await-container__top__like icon-dianzan iconfont"></div>
+      <a class="await-container__top__like icon-dianzan iconfont" href="https://m.facebook.com/APUS-Browser-1532330666785144/">
+      </a>
       <div>
         <router-link to="/rule">
           <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
@@ -38,8 +39,7 @@ export default {
       baseStyle2: {
         text: 'Leaderboards',
         bgColor: '#4c08f3'
-      },
-      targetDate: ''
+      }
     }
   },
   computed: {
@@ -47,15 +47,35 @@ export default {
       userInfo: 'userInfo',
       startTime: 'startTime',
       status: 'status'
-    })
+    }),
+    targetDate () {
+      if (this.startTime === -1) {
+        return 'coming soon'
+      } else {
+        let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
+        let month = nowDate.getMonth() + 1
+        let day = nowDate.getDate()
+        let hour = nowDate.getHours()
+        let minute = nowDate.getMinutes()
+        if (month <= 9) {
+          month = '0' + month
+        }
+        if (day <= 9) {
+          day = '0' + day
+        }
+        if (minute <= 9) {
+          minute = '0' + minute
+        }
+        return month + '.' + day + ' ' + hour + ':' + minute
+      }
+    }
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
-    this.DateFormatter()
   },
   methods: {
     DateFormatter () {
-      let nowDate = new Date(new Date().getTime() + this.startTime)
+      let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
       let month = nowDate.getMonth() + 1
       let day = nowDate.getDate()
       let hour = nowDate.getHours()
@@ -103,7 +123,7 @@ export default {
         line-height: 54px;
       }
       &__like{
-        /*content: '\dafd';*/
+        display: block;
       }
       &__instructions{
         font-size: 28px;

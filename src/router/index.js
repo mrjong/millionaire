@@ -13,41 +13,27 @@ const router = new Router({
   routes: [
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: Login
     },
     {
       path: '/await',
-      name: 'Await',
+      name: 'await',
       component: Await
     },
     {
       path: '/main',
-      name: 'Main',
-      component: Main,
-      children: [
-        // {
-        //   path: 'count-down',
-        //   name: 'CountDown',
-        //   component: CountDown,
-        //   beforeEnter: (to, from, next) => {
-        //     if (from.fullPath !== '/home') {
-        //       next('/home')
-        //       return
-        //     }
-        //     next()
-        //   }
-        // }
-      ]
+      name: 'main',
+      component: Main
     },
     {
       path: '/balance', // 用户余额，总收入 具体参数待定
-      name: 'Balance',
+      name: 'balance',
       component: Balance
     },
     {
       path: '/rank',
-      name: 'Rankt',
+      name: 'rank',
       component: Rank
     },
     {
@@ -57,7 +43,5 @@ const router = new Router({
     }
   ]
 })
-
-router.beforeEach()
 
 export default router

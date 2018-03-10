@@ -3,11 +3,12 @@
   id="msgContainer"
   :class="{'chat-msg-wrap-haswrap': showInput}">
   <div class="chat-msg-wrap">
-      <div class="msg-container" id="scrollContainer">
+      <div class="msg-container" id="scrollContainer" ref="scrollContainer">
        <transition-group
         name='fade'
         tag="div"
         class="msg-container__inner"
+        id="msgContainerInner"
         >
         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
           <span class="msg-container__item__wrap">
@@ -115,7 +116,16 @@ export default {
         scrollContainer.style.height = containerHeight + 'px'
       })
     }
+  },
+  updated () {
+    let msgContainerInner = document.getElementById('msgContainerInner')
+    let scrollContainer = this.$refs.scrollContainer.offsetHeight.offsetHeight
+    let scrollTop = scrollContainer - msgContainerInner.offsetHeight
+    if (scrollTop < 0) {
+      msgContainerInner.scrollTop = scrollTop
+    }
   }
+
 }
 </script>
 <style scoped lang="less" type="text/less">

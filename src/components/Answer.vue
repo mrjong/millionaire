@@ -43,6 +43,9 @@ export default {
     },
     myChick: {
       type: Boolean
+    },
+    orderNumber: {
+      type: String
     }
   },
   data () {

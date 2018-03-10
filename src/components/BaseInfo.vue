@@ -54,9 +54,11 @@ export default {
         margin: 0 auto;
       }
       &__name{
-        margin-top: 28px;
         color: #241262;
         font: 36px 'Roboto-Medium';
+        width: 60%;
+        text-align: center;
+        margin: 0.28px auto;
       }
     }
     &__other{
@@ -70,7 +72,8 @@ export default {
       &__line{
         align-self: center;
         height: 76px;
-        border: 1px solid rgba(36, 18, 98, 0.11);
+        border: 1px solid #e0ddea;
+        opacity: 0.5;
       }
       &__balance, &__rank {
         margin: 0 auto;
@@ -98,6 +101,7 @@ export default {
         margin-top: 25px;
         &__line{
           border:5px solid #e0ddea;
+          opacity: 0.5;
           transform: scaleX(0.4);
         }
       }

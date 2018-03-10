@@ -87,6 +87,7 @@ export default {
 .rule {
   width: 100%;
   height: 100%;
+  background-color: #fff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -182,9 +183,9 @@ export default {
   &__describe {
     color: #241262;
     font-family: 'Roboto-Medium';
-    font-size: 32px;
+    font-size: 30px;
     line-height: 35px;
-    margin-bottom: 140px;
+    margin: 28px 0 140px;
   }
 }
 </style>

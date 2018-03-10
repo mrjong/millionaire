@@ -20,7 +20,7 @@ const state = {
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
-  restTime: 10 // 剩余时间
+  restTime: 0 // 剩余时间
 }
 
 const getters = {
@@ -69,6 +69,9 @@ const actions = {
       if (content) {
         const question = JSON.parse(content)
         const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        options.sort(() => {
+          return Math.random() > 0.5 ? 1 : -1
+        })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options
         })
@@ -98,15 +101,19 @@ const actions = {
         restTime: 0
       })
       if (!getters.isAnswered) {
-        // commit(type.QUESTION_UPDATE, {
-        //   watchingMode: true
-        // })
+        commit(type.QUESTION_UPDATE, {
+          watchingMode: true
+        })
       }
     })
     // 答题开始
     timer.start()
     commit(type.QUESTION_UPDATE, {
       status: status.QUESTION_ANSWERING
+    })
+    // 切换主状态至游戏开始
+    commit(type._UPDATE, {
+      status: status._PLAYING
     })
   },
   /**
@@ -137,9 +144,9 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
         // 判断答案是否正确
-        // const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
+        const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer, result
+          id, correctAnswer, result, watchingMode, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END

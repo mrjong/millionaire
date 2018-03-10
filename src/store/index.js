@@ -7,7 +7,7 @@ import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
-import {init} from '../assets/js/api'
+import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
 import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT} from '../assets/js/listener-type'
@@ -17,7 +17,7 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
-    startTime: Infinity, // 开始时间 时间差
+    startTime: -1, // 开始时间 时间差
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 600000, // 同步结束时间间隔
     status: status._AWAIT, // 当前状态
@@ -71,7 +71,7 @@ export default new Vuex.Store({
         init().then(({data}) => {
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
-            const info = data.data
+            const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question = {}, a: answer} = info
             const startTime = +info.sr || 0
             // 更新首页信息
@@ -88,7 +88,7 @@ export default new Vuex.Store({
             })
             console.log(currencyType, currency[currencyType])
             commit(type._UPDATE, {
-              startTime,
+              startTime: +startTime,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || ''
@@ -100,8 +100,8 @@ export default new Vuex.Store({
                 id: question.ji,
                 index: +question.js || 0,
                 contents: question.jc || '',
-                options: question.jo || ['', '', '']
-                // watchingMode: false
+                options: question.jo || ['', '', ''],
+                watchingMode: true
               })
               // 如果有答案直接进入答案页面
               if (answer) {
@@ -129,7 +129,6 @@ export default new Vuex.Store({
                 })
                 timer.addEndListener(() => {
                   commit(type._UPDATE, {
-                    status: status._PLAYING,
                     startTime: 0
                   })
                 })
@@ -146,21 +145,21 @@ export default new Vuex.Store({
                   // 每隔一段时间同步开始时间
                   const {readyTime, syncIntervalTime} = state
                   const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime * 1000) - readyTime)
-                  // timer.addCompleteListener(() => {
-                  //   syncTime().then(({data}) => {
-                  //     if (+data.result === 1 && +data.code === 0) {
-                  //       const startTime = +data.data
-                  //       commit(type._UPDATE, {
-                  //         startTime
-                  //       })
-                  //       timer.sync(Date.now() + startTime - readyTime)
-                  //     } else {
-                  //       console.log('同步时间出错:', data.msg)
-                  //     }
-                  //   }, (err) => {
-                  //     console.log('同步时间失败:', err)
-                  //   })
-                  // })
+                  timer.addCompleteListener(() => {
+                    syncTime().then(({data}) => {
+                      if (+data.result === 1 && +data.code === 0) {
+                        const startTime = +data.data
+                        commit(type._UPDATE, {
+                          startTime
+                        })
+                        timer.sync(startTime * 1000 - readyTime)
+                      } else {
+                        console.log('同步时间出错:', data.msg)
+                      }
+                    }, (err) => {
+                      console.log('同步时间失败:', err)
+                    })
+                  })
                   timer.addEndListener(() => {
                     dispatch(type._INIT)
                   })
@@ -178,8 +177,6 @@ export default new Vuex.Store({
               })
               im.connect(state.imToken)
             }
-            commit(type._UPDATE_AMOUNT)
-            commit(type._RECEIVE_RESULT)
             resolve()
           } else {
             console.log('初始化失败:', data.msg)
@@ -188,6 +185,8 @@ export default new Vuex.Store({
         }, (err) => {
           console.log('初始化接口出错', err)
           reject(err)
+        }).catch((err) => {
+          console.log('代码逻辑出错:' + err)
         })
       })
     },
