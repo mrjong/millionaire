@@ -33,6 +33,11 @@ const im = {
       messageName: 'HostMessage',
       propertys: ['content', 'user'],
       objectName: 'APUS:HostMsg'
+    },
+    {
+      messageName: 'GameEndMessage',
+      propertys: ['end'],
+      objectName: 'APUS:GameEndMsg'
     }
   ],
 

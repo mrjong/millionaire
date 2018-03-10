@@ -10,7 +10,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -206,7 +206,6 @@ export default new Vuex.Store({
     [type._RECEIVE_RESULT] ({commit, getters, dispatch}) {
       im.addListener(MESSAGE_RESULT, (message) => {
         const resultStr = message.content && message.content.summary
-        console.log('游戏结束：' + resultStr)
         if (resultStr) {
           const result = JSON.parse(resultStr)
           const {c: isFinish = false, td: bonusAmount = 0, ws: winners = []} = result
@@ -232,6 +231,15 @@ export default new Vuex.Store({
             dispatch(type._INIT)
           }, 60000)
         }
+      })
+    },
+    /**
+     * 比赛结束
+     * @param {any} {dispatch}
+     */
+    [type._END] ({dispatch}) {
+      im.addListener(MESSAGE_END, (message) => {
+        dispatch(type._INIT)
       })
     }
   },
