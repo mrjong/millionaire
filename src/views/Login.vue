@@ -29,22 +29,25 @@ export default {
     // 登录方法
     Login: function () {
       utils.login(() => {
-        // 更新登陆状态
+      // 更新登陆状态
         this.$store.commit(type._UPDATE, {
           isOnline: true
         })
         utils.isOnline = true
-        this.loading = true
-        this.$store.dispatch(type._INIT).then(() => {
-          this.loading = false
-          if (this.status === 1) {
-            this.$router.push({path: '/await'})
-          } else {
-            this.$router.push({path: '/main'})
-          }
-        }, () => {
-          this.loading = false
-        })
+        this.init()
+      })
+    },
+    init () {
+      this.loading = true
+      this.$store.dispatch(type._INIT).then(() => {
+        this.loading = false
+        if (this.status === 1) {
+          this.$router.push({path: '/await'})
+        } else {
+          this.$router.push({path: '/main'})
+        }
+      }, () => {
+        this.loading = false
       })
     }
   },
