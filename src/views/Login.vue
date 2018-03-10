@@ -28,18 +28,14 @@ export default {
   methods: {
     // 登录方法
     Login: function () {
-      if (utils.isOnline) {
-        this.init()
-      } else {
-        utils.login(() => {
-        // 更新登陆状态
-          this.$store.commit(type._UPDATE, {
-            isOnline: true
-          })
-          utils.isOnline = true
-          this.init()
+      utils.login(() => {
+      // 更新登陆状态
+        this.$store.commit(type._UPDATE, {
+          isOnline: true
         })
-      }
+        utils.isOnline = true
+        this.init()
+      })
     },
     init () {
       this.loading = true
