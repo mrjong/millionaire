@@ -1,7 +1,7 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-        <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really -->
+         Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really 
        {{compereMsg}}
     </p>
     <img src="../assets/images/supa.png" alt="" class="compere-container__supa">
@@ -31,25 +31,23 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  margin: 25px;
-  background-color: #fff;
-  border-radius: 28px;
-  padding: 222px 43px 0px 53px;
+  padding: 200px 29px 0px 44px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   &__text {
     width: 100%;
-    font-size: 22px;
-    color: #241262;
+    font-size: 40px;
+    // color: #241262;
+    color: #fff;
     font-family: 'Roboto-Light';
     margin: 0 10px 32px 0;
     text-indent: 44px;
     line-height: 36px;
   }
   &__supa {
-    width: 109px;
+    width: 211px;
   }
 }
 </style>
