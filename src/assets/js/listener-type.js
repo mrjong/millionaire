@@ -17,6 +17,7 @@ export const MESSAGE_SEND_FAIL = 'MESSAGE_SEND_FAIL' // 消息发送失败
 export const CONNECTED = RongIMLib.ConnectionStatus.CONNECTED
 export const CONNECT_SUCCESS = 'CONNECT_SUCCESS'
 export const CONNECTED_ERROR = 'CONNECTED_ERROR'
+export const INVALID_TOKEN = 'INVALID_TOKEN' // token 无效
 export const CONNECTING = RongIMLib.ConnectionStatus.CONNECTING
 export const CONNECTED_TIMEOUT = 'CONNECTED_TIMEOUT'
 export const DISCONNECTED = RongIMLib.ConnectionStatus.DISCONNECTED
