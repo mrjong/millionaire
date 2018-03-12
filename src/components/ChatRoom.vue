@@ -84,12 +84,6 @@ export default {
     focusEvent (e) {
       this.showInput = true
       this.reSetMsgBot()
-      // ----------
-      // this.$nextTick(() => {
-      //   const bodys = document.getElementsByTagName('body')[0]
-      //   const bodyHeight = bodys.clientHeight
-      //   bodys.style.height = bodyHeight + 'px'
-      // })
     },
     blurEvent () {
       this.showInput = false
@@ -110,10 +104,11 @@ export default {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
         this.myMessage = ''
+        console.log(scrollContainer)
         // -----------
-        const msgcontainer = document.getElementById('msgContainer')
-        const containerHeight = msgcontainer.offsetHeight
-        scrollContainer.style.height = containerHeight + 'px'
+        // const msgcontainer = document.getElementById('msgContainer')
+        // const containerHeight = msgcontainer.offsetHeight
+        // scrollContainer.style.height = containerHeight + 'px'
       })
     }
   },
@@ -131,9 +126,11 @@ export default {
 <style scoped lang="less" type="text/less">
 .chat-container {
   width: 100%;
+  height: 100%;
   flex:1;
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow: auto;
   margin-bottom: 35px;
 }
 .chat-msg-wrap {
@@ -143,9 +140,9 @@ export default {
   mask-size: 100% 110%;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
-  // border: 5px solid yellow;
+  border: 5px solid red;
 }
 .chat-mask {
   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
@@ -236,6 +233,7 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  border: 5px solid greenyellow;
   &__inner {
     width: 100%;
     height: auto;

@@ -1,10 +1,13 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-         Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really 
+         <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really -->
        {{compereMsg}}
     </p>
-    <img src="../assets/images/supa.png" alt="" class="compere-container__supa">
+    <div class="compere-container__supa">
+      <img :src="supa" alt="" class="supa">
+      <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
+    </div>
   </div>
 </template>
 
@@ -15,6 +18,9 @@ export default {
   name: 'Compere',
   data () {
     return {
+      supaTimer: null,
+      supaOrder: 1,
+      supa: require('../assets/images/supa1.png')
     }
   },
   computed: {
@@ -24,6 +30,19 @@ export default {
   },
   mounted () {
     // this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+    this.changeSupa()
+  },
+  methods: {
+    changeSupa () {
+      this.supaTimer && clearInterval(this.supaTimer)
+      this.supaTimer = setInterval(() => {
+        if (this.supaOrder > 3) {
+          this.supaOrder = 1
+        }
+        this.supa = require('../assets/images/supa' + this.supaOrder + '.png')
+        this.supaOrder++
+      }, 800)
+    }
   }
 }
 </script>
@@ -48,6 +67,17 @@ export default {
   }
   &__supa {
     width: 211px;
+    height: 355px;
+    position: relative;
+    .supa {
+      width: 100%;
+    }
+    .supa-desk {
+      width: 100%;
+      position: absolute;
+      top: 199px;
+      left: -3px;
+    }
   }
 }
 </style>
