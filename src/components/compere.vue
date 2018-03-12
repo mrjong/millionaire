@@ -20,17 +20,16 @@ export default {
     return {
       supaTimer: null,
       supaOrder: 1,
+      compereMsg: '',
       supa: require('../assets/images/supa1.png')
     }
   },
   computed: {
-    ...mapGetters({
-      compereMsg: 'compereMsg'
-    })
+    ...mapGetters(['hostIntervalTime', 'hostMsgList'])
   },
   mounted () {
-    // this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
     this.changeSupa()
+    this.swiperMsg()
   },
   methods: {
     changeSupa () {
@@ -42,6 +41,28 @@ export default {
         this.supa = require('../assets/images/supa' + this.supaOrder + '.png')
         this.supaOrder++
       }, 800)
+    },
+    // 轮播消息
+    swiperMsg () {
+      const list = this.hostMsgList
+      if (list && list.length) {
+        let count = 0
+        const interval = this.hostIntervalTime
+        let timer = setInterval(() => {
+          if (++count < list.length) {
+            this.compereMsg = list[count]
+          } else {
+            clearInterval(timer)
+          }
+        }, interval)
+        this.compereMsg = list[count]
+      }
+    }
+  },
+  watch: {
+    hostMsgList (val) {
+      console.log(val)
+      this.swiperMsg()
     }
   }
 }
