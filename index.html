@@ -32,9 +32,13 @@
   </body>
   <script>
     var loginCallback = null
+    var playAudioCallback = null
     function loginSuccess () {
       console.log('login Success')
       loginCallback && loginCallback()
+    }
+    function playAudio () {
+      playAudioCallback && playAudioCallback()
     }
   </script>
 </html>

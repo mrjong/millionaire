@@ -1,5 +1,5 @@
 import axios from 'axios'
-const env = 'local'
+const env = 'dev'
 const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
   dev: 'http://dev-millionaire-api.apuscn.com',
@@ -8,5 +8,5 @@ const host = {
 }
 export default axios.create({
   baseURL: host[env],
-  // withCredentials: true
+  withCredentials: true
 })

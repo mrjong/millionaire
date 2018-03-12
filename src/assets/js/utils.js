@@ -1,4 +1,16 @@
+/* global */
 const njordGame = window.top.njordGame
+
+const TercelAutoPlayJs = window.top.TercelAutoPlayJs
+
+const sounds = {
+  countDown: {
+    url: ''
+  },
+  bg: {
+    url: 'http://static.subcdn.com/201803121452531a3de85f9a.mp3'
+  }
+}
 
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
@@ -108,6 +120,42 @@ export default {
       percent = 10
     }
     return percent
+  },
+  /**
+   * 加载音乐
+   */
+  loadSounds () {
+    for (let prop in sounds) {
+      const url = sounds[prop].url
+      if (url) {
+        const sound = new Audio(url)
+        sound.oncanplay = () => {
+          console.log(`${prop}可以播放`)
+        }
+        sound.onerror = () => {
+          console.log(`${prop}加载失败`)
+        }
+        sound.load()
+      }
+    }
+  },
+  /**
+   * 播放音乐
+   * @param {any} name
+   */
+  playSound (name) {
+    if (name) {
+      const url = sounds[name] && sounds[name].url
+      if (url) {
+        const sound = new Audio(url)
+        sound.oncanplaythrough = () => {
+          window.playAudioCallback = () => {
+            sound.play()
+          }
+          TercelAutoPlayJs && TercelAutoPlayJs.setAutoPlay && TercelAutoPlayJs.setAutoPlay('playAudio')
+        }
+      }
+    }
   }
 }
 
