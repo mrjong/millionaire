@@ -4,9 +4,11 @@
       <p class="count-down-container__module__text">The game is about to begin...</p>
       <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
-    <div class="count-down-container__animation" v-else>
+    <div class="count-down-container__animation" v-else-if = 'startTime <= 10 && startTime !== 0'>
       <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
-      <img class="count-down-container__animation__number" :src="require('../assets/images/' + startTime + '.png')"/>
+      <img class="count-down-container__animation__number"
+           ref="animationNumber"
+           :src="require('../assets/images/' + startTime + '.png')"/>
       <img class="count-down-container__animation__top" src="../assets/images/right.png"/>
     </div>
   </div>
@@ -18,8 +20,6 @@ export default {
   name: 'CountDown',
   data () {
     return {
-      timeStamp: null,
-      intervalTime: 1000
     }
   },
   computed: {
@@ -40,8 +40,25 @@ export default {
     }
   },
   mounted () {
+    this.playingAudio(this.startTime)
   },
-  components: {}
+  methods: {
+    playingAudio (time) {
+      let countdown = new Audio()
+      countdown.src = require('../assets/audio/click.mp3')
+      countdown.preload = 'auto'
+      countdown.load()
+      if (time <= 10 && time !== 0) {
+        countdown.play()
+      }
+    }
+  },
+  components: {},
+  watch: {
+    startTime: function (startTime) {
+      this.playingAudio(startTime)
+    }
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">
@@ -64,7 +81,7 @@ export default {
       position: relative;
       padding: 400px 0 300px;
       &__number{
-        width: 150px;
+        width: 350px;
         position: absolute;
         left: 50%;
         top:50%;
@@ -89,10 +106,10 @@ export default {
   }
   @keyframes zoom {
     from{
-      width: 70px;
+      width: 150px;
     }
     to{
-      width: 150px;
+      width: 350px;
     }
   }
   @keyframes downFlash {
