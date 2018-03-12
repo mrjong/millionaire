@@ -10,7 +10,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -20,6 +20,8 @@ export default new Vuex.Store({
     startTime: -1, // 开始时间 时间差
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 600000, // 同步结束时间间隔
+    hostIntervalTime: 3000, // 规则轮播间隔
+    hostMsgList: [], // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -46,6 +48,8 @@ export default new Vuex.Store({
   getters: {
     isOnline: (state) => state.isOnline,
     startTime: (state) => state.startTime,
+    hostIntervalTime: (state) => state.hostIntervalTime,
+    hostMsgList: (state) => state.hostMsgList,
     status: (state) => state.status,
     result: (state) => state.result,
     onlineAmount: (status) => status.onlineAmount,
@@ -72,7 +76,7 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question, a: answer} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
             // 更新首页信息
             commit(type.HOME_UPDATE, {
@@ -91,10 +95,19 @@ export default new Vuex.Store({
               startTime: +startTime,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || ''
+              imToken: chatRoomInfo.it || '',
+              hostIntervalTime
             })
             // 如果已经开始
             if (isPlaying) {
+              // 如果已经开始串词
+              if (hostMsgList) {
+                im.emitListener(MESSAGE_HOST, {
+                  content: {
+                    content: JSON.stringify(hostMsgList)
+                  }
+                })
+              }
               // 如果已经下发题目 开启观战模式
               if (question) {
                 // 更新问题信息
@@ -120,8 +133,6 @@ export default new Vuex.Store({
                   status: status._PLAYING
                 })
               }
-
-              // TODO: 如果有串词直接显示串词
             } else {
               // 是否进入倒计时
               if (isInRoom) {

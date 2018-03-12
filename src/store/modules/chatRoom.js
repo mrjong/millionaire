@@ -22,9 +22,6 @@ const mutations = {
     if (+len > staticLen) {
       state.msgList = state.msgList.splice(len - staticLen, len)
     }
-  },
-  [type.GET_COMPERE_MESSAGE] (state, compereMsg) {
-    state.compereMsg = compereMsg.content.content
   }
 }
 const actions = {
@@ -46,8 +43,13 @@ const actions = {
   },
   [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
     im.addListener(listenerType.MESSAGE_HOST, (message) => {
-      commit(type.GET_COMPERE_MESSAGE, message)
-      console.log('接收到主持人消息，更改答题状态')
+      const msgList = (message.content && message.content.content) || ''
+      if (msgList) {
+        const hostMsgList = JSON.parse(msgList) || []
+        commit(type._UPDATE, {
+          hostMsgList
+        })
+      }
       commit(type.QUESTION_UPDATE, {
         status: status.QUESTION_AWAIT
       })
