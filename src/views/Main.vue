@@ -39,7 +39,6 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
   },
   methods: {
   },
