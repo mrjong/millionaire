@@ -7,7 +7,7 @@ const state = {
   userId: '', // 用户ID
   supaId: '',
   avatar: 'http://images.apusapps.com/src/icon-apus-user-system.png', // 用户头像
-  userName: 'APUS Millionaire', // 用户名
+  userName: 'millionaire', // 用户名
   balance: 0, // 用户余额
   rank: 0, // 用户排名
   currencyType: '$', // 货币类型
