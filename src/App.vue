@@ -40,6 +40,7 @@ export default {
           }
         }, 500)
       }, (err) => {
+        this.$router.push({path: '/login'})
         this.loading = false
         console.log(err)
       })
