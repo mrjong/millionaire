@@ -1,7 +1,7 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-         <!-- Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really lly smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really smart Your are really -->
+      <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart -->
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
@@ -10,7 +10,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 // import * as type from '../store/type'
@@ -21,6 +20,7 @@ export default {
       supaTimer: null,
       supaOrder: 1,
       compereMsg: '',
+      supaRound: 1,
       supa: require('../assets/images/supa1.png')
     }
   },
@@ -35,7 +35,7 @@ export default {
     changeSupa () {
       this.supaTimer && clearInterval(this.supaTimer)
       this.supaTimer = setInterval(() => {
-        if (this.supaOrder > 3) {
+        if (this.supaOrder > 5) {
           this.supaOrder = 1
         }
         this.supa = require('../assets/images/supa' + this.supaOrder + '.png')
@@ -71,20 +71,25 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 200px 29px 0px 44px;
+  padding: 150px 29px 0px 44px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   &__text {
     width: 100%;
+    height: 200px;
     font-size: 40px;
-    // color: #241262;
     color: #fff;
-    font-family: 'Roboto-Light';
-    margin: 0 10px 32px 0;
+    font-family: 'Roboto-Midum';
+    margin: 0 10px 20px 0;
     text-indent: 44px;
-    line-height: 36px;
+    line-height: 48px;
+    // overflow: hidden;
+    position: relative;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   &__supa {
     width: 211px;
