@@ -48,7 +48,7 @@ export default {
       if (time <= 10 && time !== 1) {
         utils.playSound('countDown10-before')
       } else if (time <= 10 && time === 1 && time !== 0) {
-        utils.stop('countDown10-before')
+        utils.stopSound('countDown10-before')
         utils.playSound('countDown10-after')
       }
     }
