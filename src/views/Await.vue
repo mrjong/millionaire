@@ -33,11 +33,11 @@ export default {
   data () {
     return {
       baseStyle1: {
-        text: 'Invite Friends',
+        text: 'Share with friends',
         bgColor: '#faa717'
       },
       baseStyle2: {
-        text: 'Leaderboards',
+        text: 'Leaderboard',
         bgColor: '#4c08f3'
       }
     }
