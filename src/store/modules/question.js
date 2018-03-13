@@ -115,6 +115,8 @@ const actions = {
     commit(type._UPDATE, {
       status: status._PLAYING
     })
+
+    utils.playSound('go')
   },
   /**
    *  提交答案
@@ -144,7 +146,16 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
         // 判断答案是否正确
-        const watchingMode = getters.watchingMode ? true : !(correctAnswer === getters.userAnswer)
+        const isCorrect = correctAnswer === getters.userAnswer
+
+        // 根据答案是否正确播放提示音
+        if (isCorrect && !getters.watchingMode) {
+          utils.playSound('succeed')
+        } else if (!isCorrect && !getters.watchingMode) {
+          utils.playSound('failed')
+        }
+        // 更新观战模式
+        const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
           id, correctAnswer, result, watchingMode, restTime: 0
         })

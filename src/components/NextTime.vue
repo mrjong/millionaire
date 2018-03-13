@@ -2,7 +2,7 @@
   <div class="hint">
     <div class="hint__time">
       <p class="hint__time__text">
-        Next Quiz
+        Next Game
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
       <p class="hint__time__hour">

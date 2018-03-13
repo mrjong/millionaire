@@ -143,6 +143,12 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+    },
+    restTime: function (restTime) {
+      if (restTime === 4) {
+        // 答题倒计时
+        utils.playSound('countDown5')
+      }
     }
   },
   components: {
