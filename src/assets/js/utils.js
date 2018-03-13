@@ -177,6 +177,7 @@ export default {
    * @param {any} name
    */
   playSound (name) {
+    this.stopSound(name)
     if (name) {
       const url = sounds[name] && sounds[name].url
       if (url) {
