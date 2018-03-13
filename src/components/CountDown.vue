@@ -1,7 +1,7 @@
 <template>
   <div class="count-down-container">
     <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
-      <p class="count-down-container__module__text">The game is about to begin...</p>
+      <p class="count-down-container__module__text">Starting in</p>
       <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
     <div class="count-down-container__animation" v-else-if = 'startTime <= 10 && startTime !== 0'>
