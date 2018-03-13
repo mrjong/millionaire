@@ -145,7 +145,7 @@ export default {
       this.countDown(status)
     },
     restTime: function (restTime) {
-      if (restTime === 5) {
+      if (restTime === 4) {
         // 答题倒计时
         utils.playSound('countDown5')
       }
