@@ -7,19 +7,19 @@
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
-        <p class="balance-wrap__contain__wrap__mytitle">My balance</p>
+        <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}} {{withdraw}})</span>
         </p>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total revenue</p>
+        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
       </div>
     </div>
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__wrap__input">
-        <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account" v-model="myPay">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
-      <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
+      <p class="balance-wrap__operate__tip">Please verify that your Paytm account is a valid account, and the payouts will be made in 15 days.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
@@ -58,34 +58,31 @@ export default {
   methods: {
     cashOut () {
       // 接口调试
-      api.balanceApplication({
-        // amount: this.userInfo.balance,
-        // email: this.myPay,
-        // accountId: this.myPay
-        amount: 50,
-        email: 'liuweiwei@apuscn.com',
-        accountId: 'liuweiwei@apuscn.com'
-      })
-        .then((data) => {
-          console.log('后台返回结果如下')
-          console.log(data)
-        })
-        .catch((err) => {
-          console.log('发送错误如下')
-          console.log(err)
-        })
+      // api.balanceApplication({
+      //   amount: 50,
+      //   email: 'liuweiwei@apuscn.com',
+      //   accountId: 'liuweiwei@apuscn.com'
+      // })
+      //   .then((data) => {
+      //     console.log('后台返回结果如下')
+      //     console.log(data)
+      //   })
+      //   .catch((err) => {
+      //     console.log('发送错误如下')
+      //     console.log(err)
+      //   })
       // -----------------
-      // if (+this.userInfo.balance < +this.withdraw) {
-      //   this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
-      // } else {
-      //   const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-      //   const passRule = emailReg.test(this.myPay)
-      //   if (!passRule) {
-      //     this.changeMarkInfo(true, false, 0, `Please enter the correct PayTM account!`)
-      //   } else {
-      //     this.changeMarkInfo(true, true, 1, `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`)
-      //   }
-      // }
+      if (+this.userInfo.balance < +this.withdraw) {
+        this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
+      } else {
+        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        const passRule = emailReg.test(this.myPay)
+        if (!passRule) {
+          this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+        } else {
+          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
+        }
+      }
     },
     okEvent (info) {
       this.markInfo.showMark = false
@@ -98,17 +95,16 @@ export default {
           accountId: this.myPay
         })
           .then(({data}) => {
-            console.log('后台返回结果如下')
             console.log(data)
             this.showLoading = false
             if (+data.code !== 0) {
-              this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
+              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
             } else {
-              this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
+              this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
             }
           })
           .catch((err) => {
-            err && this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
+            err && this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
           })
       }
     },

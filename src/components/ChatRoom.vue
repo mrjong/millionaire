@@ -2,9 +2,9 @@
 <div class="chat-container"
   id="msgContainer"
   :class="{'chat-msg-wrap-haswrap': showInput}">
-  <div class="chat-msg-wrap">
+  <div class="chat-msg-wrap" id='chatmsgwrap'>
       <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-       <transition-group
+         <transition-group
         name='fade'
         tag="div"
         class="msg-container__inner"
@@ -41,6 +41,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
+// import dataTest from '../assets/js/testData.js'
 export default {
   name: 'ChatRoom',
   data () {
@@ -50,6 +51,7 @@ export default {
       myMessage: '',
       showInput: false,
       pageHeight: null
+      // msgList: []
     }
   },
   computed: {
@@ -60,11 +62,13 @@ export default {
     })
   },
   mounted () {
+    // this.msgList = dataTest.chatMesList
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
+      this.setMsgOuterHeight()
     })
   },
   methods: {
@@ -96,6 +100,16 @@ export default {
       const bodyHeight = bodys.clientHeight
       const msgBot = bodyHeight - innerHeight
       msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
+    },
+    setMsgOuterHeight () {
+      setTimeout(() => {
+        const chatmsgwrap = document.getElementById('msgContainer')
+        const scrollContainer = document.getElementById('chatmsgwrap')
+        const _H = chatmsgwrap.offsetHeight
+        console.log(_H)
+        // alert(_H)
+        scrollContainer.style.height = _H + 'px'
+      }, 0)
     }
   },
   watch: {
@@ -129,9 +143,10 @@ export default {
   height: 100%;
   flex:1;
   position: relative;
-  // overflow: hidden;
+  overflow: hidden;
   overflow: auto;
   margin-bottom: 35px;
+  box-sizing: border-box;
 }
 .chat-msg-wrap {
   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
@@ -141,14 +156,16 @@ export default {
   width: 100%;
   height: 100%;
   // overflow: hidden;
-  position: relative;
+  // position: relative;
+  // border: 5px solid palevioletred;
+  box-sizing: border-box;
 }
-.chat-mask {
-  -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
-  -webkit-mask-size: 100% 110%;
-  mask: url('../assets/images/mask.png') no-repeat top left;
-  mask-size: 100% 110%;
-}
+// .chat-mask {
+//   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
+//   -webkit-mask-size: 100% 110%;
+//   mask: url('../assets/images/mask.png') no-repeat top left;
+//   mask-size: 100% 110%;
+// }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
 }
@@ -232,6 +249,7 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  // border: 5px solid greenyellow;
   &__inner {
     width: 100%;
     height: auto;
