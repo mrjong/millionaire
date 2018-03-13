@@ -118,6 +118,10 @@ export default new Vuex.Store({
                   options: question.jo || ['', '', ''],
                   watchingMode: true
                 })
+                // 更新当前状态
+                commit(type._UPDATE, {
+                  status: status._PLAYING
+                })
               }
               // 如果有答案直接进入答案页面
               if (answer) {
