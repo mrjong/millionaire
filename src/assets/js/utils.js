@@ -166,6 +166,7 @@ export default {
           console.log(`${prop}加载失败`)
         }
         sound.loop = obj.loop
+        sound.preload = 'true'
         sound.load()
         obj.instance = sound
       }
@@ -176,6 +177,7 @@ export default {
    * @param {any} name
    */
   playSound (name) {
+    this.stopSound(name)
     if (name) {
       const url = sounds[name] && sounds[name].url
       if (url) {
