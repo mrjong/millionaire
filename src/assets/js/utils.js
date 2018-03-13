@@ -166,6 +166,7 @@ export default {
           console.log(`${prop}加载失败`)
         }
         sound.loop = obj.loop
+        sound.preload = 'true'
         sound.load()
         obj.instance = sound
       }
