@@ -4,8 +4,13 @@ const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
-  countDown: {
-    url: 'http://static.subcdn.com/countdown.mp3',
+  'countDown10-before': {
+    url: 'http://static.subcdn.com/countDown10-before.mp3',
+    instance: null,
+    loop: false
+  },
+  'countDown10-after': {
+    url: 'http://static.subcdn.com/countDown10-after.mp3',
     instance: null,
     loop: false
   },
@@ -13,6 +18,26 @@ const sounds = {
     url: 'http://static.subcdn.com/20180313142418c250602c5b.mp3',
     instance: null,
     loop: true
+  },
+  countDown5: {
+    url: 'http://static.subcdn.com/5s-countdown.mp3',
+    instance: null,
+    loop: false
+  },
+  go: {
+    url: 'http://static.subcdn.com/20180313173916879991205a.mp3',
+    instance: null,
+    loop: false
+  },
+  failed: {
+    url: 'http://static.subcdn.com/2018031317404850dad39593.mp3',
+    instance: null,
+    loop: false
+  },
+  succeed: {
+    url: 'http://static.subcdn.com/201803131742354229751a36.mp3',
+    instance: null,
+    loop: false
   }
 }
 
@@ -165,6 +190,15 @@ export default {
         }
       }
     }
+  },
+  /**
+   * 停止音乐
+   * @param {any} name
+   */
+  stopSound (name) {
+    const sound = sounds[name].instance
+    !sound.paused && sound.pause()
+    sound.currentTime = 0
   }
 }
 

@@ -4,7 +4,6 @@ import * as type from '../type'
 import * as listenerType from '../../assets/js/listener-type.js'
 import * as status from '../../assets/js/status'
 import im from '../../assets/js/im'
-import utils from '../../assets/js/utils'
 const state = {
   msgList: [],
   compereMsg: ''
@@ -46,10 +45,6 @@ const actions = {
     im.addListener(listenerType.MESSAGE_HOST, (message) => {
       const msgList = (message.content && message.content.content) || ''
       if (msgList) {
-        // 开始展示首页规则时播放背景音乐
-        if (getters.hostMsgList && !getters.hostMsgList.length) {
-          utils.playSound('bg')
-        }
         const hostMsgList = JSON.parse(msgList) || []
         commit(type._UPDATE, {
           hostMsgList
