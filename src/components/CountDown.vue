@@ -16,7 +16,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import utils from '../assets/js/utils'
+// import utils from '../assets/js/utils'
 export default {
   name: 'CountDown',
   data () {
@@ -46,8 +46,7 @@ export default {
   methods: {
     playingAudio (time) {
       if (time <= 10 && time !== 0) {
-        console.log('.................')
-        utils.playSound('countDown')
+        // utils.playSound('countDown')
       }
     }
   },

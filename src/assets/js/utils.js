@@ -152,6 +152,7 @@ export default {
           window.playAudioCallback = () => {
             sound.play()
           }
+          sound.play()
           TercelAutoPlayJs && TercelAutoPlayJs.setAutoPlay && TercelAutoPlayJs.setAutoPlay('playAudio')
         }
       }
