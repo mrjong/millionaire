@@ -3,7 +3,7 @@
     <div class='no-winner-result' v-if='!respondence.winners.length'>
       <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
       <p class= 'no-winner-result__bonus'>{{respondence.bonusAmount}}</p>
-      <p class='no-winner-result__tip'>The prize rolls over to the next game</p>
+      <p class='no-winner-result__tip'>Prize rolls over to next game</p>
     </div>
     <div class="has-winner-result" v-else>
       <p class="has-winner-result__title">
@@ -40,13 +40,10 @@
 
 <script>
 import {mapGetters} from 'vuex'
-// import testData from '../assets/js/testData'
 export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      // respondenceList: [],
-      // winnerCount: 156
     }
   },
   computed: {
@@ -56,12 +53,6 @@ export default {
     })
   },
   mounted () {
-    console.log('result')
-    console.log(this.respondence)
-    // setTimeout(() => {
-    //   this.respondenceList = testData.respondenceResult
-    //   this.winnerCount = 1567890
-    // }, 500)
   },
   methods: {
   }

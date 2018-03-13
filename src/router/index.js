@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
 import Rule from '@/views/Rule.vue'
+import test from '../components/test.vue'
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 
@@ -40,6 +41,11 @@ const router = new Router({
       path: '/rule',
       name: 'rule',
       component: Rule
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: test
     }
   ]
 })
