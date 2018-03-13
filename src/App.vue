@@ -10,6 +10,7 @@ import {mapGetters} from 'vuex'
 import './assets/css/public.css'
 import * as type from './store/type'
 import loading from './components/loading.vue'
+import utils from './assets/js/utils'
 export default {
   name: 'App',
   data () {
@@ -59,6 +60,13 @@ export default {
         this.$router.push({path: '/await'})
       } else {
         this.$router.push({path: '/main'})
+      }
+
+      // 比赛开始时，播放背景音乐
+      if (status !== 3) {
+        utils.stopSound('bg')
+      } else {
+        utils.playSound('bg')
       }
     }
   }
