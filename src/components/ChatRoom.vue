@@ -142,7 +142,6 @@ export default {
   height: 100%;
   // overflow: hidden;
   position: relative;
-  border: 5px solid red;
 }
 .chat-mask {
   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
@@ -233,7 +232,6 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  border: 5px solid greenyellow;
   &__inner {
     width: 100%;
     height: auto;
