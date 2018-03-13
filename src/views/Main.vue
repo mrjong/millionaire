@@ -9,7 +9,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="status === 2"></count-down>
+    <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
     <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
@@ -24,7 +24,6 @@ import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
-import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -39,7 +38,6 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
   },
   methods: {
   },

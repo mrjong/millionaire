@@ -6,7 +6,7 @@
     <title>millionaire</title>
     <script src="//cdn.ronghub.com/protobuf-2.3.0.min.js"></script>
     <script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
-    <!-- <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script>   -->
+     <!-- <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script>  -->
     <script>
       (function (doc, win) {
         var docEl = doc.documentElement
@@ -32,9 +32,13 @@
   </body>
   <script>
     var loginCallback = null
+    var playAudioCallback = null
     function loginSuccess () {
       console.log('login Success')
       loginCallback && loginCallback()
+    }
+    function playAudio () {
+      playAudioCallback && playAudioCallback()
     }
   </script>
 </html>

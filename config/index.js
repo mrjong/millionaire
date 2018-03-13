@@ -51,8 +51,8 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     // assetsPublicPath: '/', // 正式
-    // assetsPublicPath: '/act/millionaire/', // 测试
     assetsPublicPath: '/act/millionaire/', // 测试
+    // assetsPublicPath: '/preview/millionaire/', // 测试
 
     /**
      * Source Maps

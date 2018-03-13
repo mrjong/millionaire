@@ -9,7 +9,7 @@
         </router-link>
       </div>
     </div>
-    <img src="../assets/images/await-title.png" class="await-container__title">
+    <img src="../assets/images/logo.png" class="await-container__title">
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
@@ -50,7 +50,7 @@ export default {
     }),
     targetDate () {
       if (this.startTime === -1) {
-        return 'coming soon'
+        return ['', 'coming soon']
       } else {
         let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
         let month = nowDate.getMonth() + 1
@@ -66,7 +66,7 @@ export default {
         if (minute <= 9) {
           minute = '0' + minute
         }
-        return month + '.' + day + ' ' + hour + ':' + minute
+        return [month + '/' + day, hour + ':' + minute]
       }
     }
   },
@@ -74,23 +74,6 @@ export default {
     this.$store.dispatch(type.HOME_UPDATE)
   },
   methods: {
-    DateFormatter () {
-      let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
-      let month = nowDate.getMonth() + 1
-      let day = nowDate.getDate()
-      let hour = nowDate.getHours()
-      let minute = nowDate.getMinutes()
-      if (month <= 9) {
-        month = '0' + month
-      }
-      if (day <= 9) {
-        day = '0' + day
-      }
-      if (minute <= 9) {
-        minute = '0' + minute
-      }
-      this.targetDate = month + '.' + day + ' ' + hour + ':' + minute
-    },
     inviteFriends () {
       utils.share()
     }
@@ -137,7 +120,6 @@ export default {
       }
     }
     &__title{
-      padding-top: 60px;
       width: 400px;
       margin: 0 auto;
     }
@@ -145,13 +127,6 @@ export default {
       display: flex;
       padding:0 25px;
       justify-content: space-between;
-    }
-  }
-  @media screen and (max-width: 321px){
-    .await-container{
-      &__title{
-        padding-top: 50px;
-      }
     }
   }
 </style>

@@ -168,9 +168,9 @@ export default {
       line-height: 54px;
     }
     &__nickname {
-      width: 100%;
       text-align: center;
       flex: 1;
+      padding-right: 54px;
     }
   }
   &__contain {

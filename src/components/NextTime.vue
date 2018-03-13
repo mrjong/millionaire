@@ -1,12 +1,18 @@
 <template>
   <div class="hint">
-    <p class="hint__text">The next start time</p>
-    <div class="hint__info">
-      <p class="hint__info__time">
-        {{nextTime}}
+    <div class="hint__time">
+      <p class="hint__time__text">
+        Next Quiz
+        <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <p class="hint__info__line"></p>
-      <p class="hint__info__money">
+      <p class="hint__time__hour">
+        {{nextTime[1]}}
+      </p>
+    </div>
+    <div class="hint__line"></div>
+    <div class="hint__money">
+      <p class="hint__money__text">Next Bonus</p>
+      <p class="hint__money__number">
         {{currencyType}}{{money}}
       </p>
     </div>
@@ -18,7 +24,7 @@ export default {
   name: 'NextTime',
   props: {
     nextTime: {
-      type: String
+      type: Array
     },
     money: {
       type: Number
@@ -38,52 +44,37 @@ export default {
     font-size: 28px;
     opacity: 0.95;
     margin-top: 46.6px;
-    &__text{
-      width:310px;
-      height: 43px;
-      background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    &__time, &__money{
+      width: 50%;
+      display: block;
       text-align: center;
-      border-radius: 46px;
-      margin: 0 auto;
-      font:28px Roboto-Light;
-      line-height: 43px;
+      &__text{
+        font-family: 'Roboto-Light';
+        font-size: 28px;
+        &__day{
+          color: #ffb227;
+        }
+      }
+      &__hour,&__number{
+        margin-top: 25px;
+        color: #ffb227;
+        font-size: 56px;
+        font-family: 'Roboto-BoldCondensed';
+      }
+      &__hour{
+        color: #fff;
+      }
     }
-    &__info{
-      margin-top:15px;
-      display: flex;
-      justify-content: center;
-      &__time, &__money{
-        letter-spacing: 1px;
-        font: 28px Roboto-Light;
-      }
-      &__time{
-        padding-right:16px;
-        text-align: right;
-        align-self: center;
-      }
-      &__money{
-        margin-left: 16px;
-        text-align: left;
-        align-self: center;
-      }
-      &__line{
-        height: 28px;
-        border-right: 2px solid #fff;
-        align-self: center;
-      }
+    &__line{
+      opacity: 0.3;
+      width: 2px;
+      height: 76px;
+      background-color: #fff;
+      align-self: center;
     }
   }
   @media screen and (max-width: 321px){
-    .hint{
-      &__info{
-        &__line{
-          height: 28px;
-          border: 5px solid #fff;
-          transform: scaleX(0.5);
-          margin-top: 2px;
-        }
-      }
-    }
-
   }
 </style>
