@@ -147,7 +147,7 @@ export default {
     restTime: function (restTime) {
       if (restTime === 5) {
         // 答题倒计时
-        utils.playSound('countdown5')
+        utils.playSound('countDown5')
       }
     }
   },
