@@ -10,7 +10,7 @@ import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 im.init()
-// utils.loadSounds()
+utils.loadSounds()
 Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.prototype.$http = http
