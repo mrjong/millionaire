@@ -1,6 +1,6 @@
 <template>
   <div class="count-down-container">
-    <div class="count-down-container__module" v-if="startTime > 10">
+    <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
       <p class="count-down-container__module__text">The game is about to begin...</p>
       <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
@@ -16,6 +16,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import utils from '../assets/js/utils'
 export default {
   name: 'CountDown',
   data () {
@@ -44,12 +45,9 @@ export default {
   },
   methods: {
     playingAudio (time) {
-      let countdown = new Audio()
-      countdown.src = require('../assets/audio/click.mp3')
-      countdown.preload = 'auto'
-      countdown.load()
       if (time <= 10 && time !== 0) {
-        countdown.play()
+        console.log('.................')
+        utils.playSound('countDown')
       }
     }
   },

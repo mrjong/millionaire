@@ -5,7 +5,7 @@ const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
   countDown: {
-    url: ''
+    url: 'http://static.subcdn.com/201803131150049d81f9e0f9.mp3'
   },
   bg: {
     url: 'http://static.subcdn.com/201803121452531a3de85f9a.mp3'

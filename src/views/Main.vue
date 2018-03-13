@@ -24,7 +24,6 @@ import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
-import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {

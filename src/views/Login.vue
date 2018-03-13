@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <img src="../assets/images/login-title.png" class="login-container__title">
+    <img src="../assets/images/logo.png" class="login-container__title">
     <div class="login-container__btn">
       <p class="login-container__btn__fb" @click="Login">Log in</p>
     </div>
@@ -69,7 +69,7 @@ export default {
     background-size: cover;
     position: relative;
     &__title{
-      padding-top: 120px;
+      padding-top: 86px;
       width: 592px;
       margin: 0 auto;
     }
