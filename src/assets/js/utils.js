@@ -83,12 +83,30 @@ export default {
    * @static
    * @memberof Utils
    */
-  statistic (params = {}) {
+  statistic (name = '', event = 0, params = {}, from = '') {
+    let eventType
+    switch (event) {
+      case 0: // ALEX_SHOW
+        eventType = '67240565'
+        break
+      case 1: // ALEX_CLICK
+        eventType = '67262581'
+        break
+      case 2: // GAME_ANSWER
+        eventType = ''
+        break
+      case 3: // ALEX_SHARE
+        eventType = ''
+        break
+      case 4: // TAKE_CASH
+        eventType = ''
+        break
+    }
     const args = {
-      event_name: 'Millionaire',
-      from: 'Millionaire',
+      event_name: name,
+      from: from,
       extra: {
-        event: '67244405',
+        event: eventType,
         ...params
       }
     }

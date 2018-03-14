@@ -9,7 +9,7 @@
         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}} {{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
@@ -33,6 +33,7 @@ import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
+// import utils from '../assets/js/utils'
 export default {
   name: 'Balance',
   data () {
@@ -55,6 +56,8 @@ export default {
     })
   },
   mounted () {
+    console.log(navigator.language)
+    this.utils.statistic('wait_page', 0)
   },
   methods: {
     cashOut () {
@@ -81,13 +84,25 @@ export default {
           accountId: this.myPay
         })
           .then(({data}) => {
+            let takeCash = ''
             this.showLoading = false
             if (+data.code !== 0) {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+              if (+data.code === 3106) { // 账户记录不存在
+                this.changeMarkInfo(true, false, 0, `账户记录不存在`)
+              } else if (+data.code === 3106) { // 可用金额不足
+                this.changeMarkInfo(true, false, 0, `可用金额不足`)
+              } else {
+                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                // takeCash = ''
+              }
             } else {
               this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
               this.$store.dispatch(type._INIT)
+              // takeCash = 'success'
             }
+            this.utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
           })
           .catch((err) => {
             err && this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
@@ -105,7 +120,7 @@ export default {
       this.markInfo = {
         showMark: showMark,
         shouldSub: shouldSub,
-        markType: markType,
+        markType: markType, // 是否有cancel按钮
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
@@ -173,7 +188,7 @@ export default {
       &__img {
         position: absolute;
         width: 103px;
-        height: 103px;
+        // height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;
