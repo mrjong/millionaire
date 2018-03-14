@@ -42,6 +42,7 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+// import dataTest from '../assets/js/testData'
 export default {
   name: 'ChatRoom',
   data () {
@@ -63,6 +64,7 @@ export default {
     })
   },
   mounted () {
+    // this.msgList = dataTest.chatMesList
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
@@ -124,7 +126,6 @@ export default {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
         this.myMessage = ''
-        console.log(scrollContainer)
         // -----------
         // const msgcontainer = document.getElementById('msgContainer')
         // const containerHeight = msgcontainer.offsetHeight
@@ -239,18 +240,14 @@ export default {
   bottom: 0px;
 }
 .msg-container {
-  // width: 100%;
-  // height: auto;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  // border: 5px solid greenyellow;
   &__inner {
     width: 100%;
     height: auto;
-    // border: 5px solid red;
   }
   &__item {
     max-width: 100%;
@@ -277,7 +274,7 @@ export default {
     &__wrap {
       background: rgba(255, 255, 255, .2);
       border-radius: 30px;
-      padding: 0px 20px;
+      padding: 1px 20px 0px 20px;
       box-sizing: border-box;
       display: inline-block;
       font-size: 0;
@@ -292,12 +289,13 @@ export default {
       border-radius: 50%;
       position: absolute;
       top: 50%;
+      left: 8px;
       transform: translate(0, -50%);
     }
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
-      margin-left: 51px;
+      margin-left: 36px;
     }
     &__text {
       color: #fff;
@@ -319,6 +317,6 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
-  transform: translate3d(100px, 30px, 0) scale3d(0, 0, 0);
+  transform: translate3d(100px, 0px, 0) scale3d(0, 0, 0);
 }
 </style>
