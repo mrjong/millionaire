@@ -1,8 +1,7 @@
 <template>
   <div class="await-container">
     <div class="await-container__top">
-      <a class="await-container__top__like icon-dianzan iconfont" href="https://m.facebook.com/APUS-Browser-1532330666785144/">
-      </a>
+      <a class="await-container__top__like icon-dianzan iconfont" ref="toFbBrowser"></a>
       <div>
         <router-link to="/rule">
           <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
@@ -77,10 +76,20 @@ export default {
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
     })
+    this.toFb()
   },
   methods: {
     inviteFriends () {
       utils.share()
+    },
+    toFb () {
+      let toFbBrowser = this.$refs.toFbBrowser
+      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+      if (isFbApp) {
+        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
+      } else {
+        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
+      }
     }
   },
   components: {

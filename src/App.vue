@@ -34,10 +34,10 @@ export default {
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
           this.loading = false
-          if (this.status === 1) {
-            this.$router.push({path: '/await'})
-          } else {
+          if (this.status !== 1) {
             this.$router.push({path: '/main'})
+          } else {
+            this.$router.push({path: '/'})
           }
         }, 500)
       }, (err) => {
@@ -56,10 +56,10 @@ export default {
   },
   watch: {
     status: function (status) {
-      if (status === 1) {
-        this.$router.push({path: '/await'})
-      } else {
+      if (status !== 1) {
         this.$router.push({path: '/main'})
+      } else {
+        this.$router.push({path: '/'})
       }
 
       // 比赛开始时，播放背景音乐
