@@ -9,7 +9,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-    <count-down v-if="status === 2"></count-down>
+      <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
     <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
@@ -38,13 +38,7 @@ export default {
       questionStatus: 'question_status'
     })
   },
-  mounted () {
-    this.$nextTick(() => {
-      const bodys = document.getElementsByTagName('body')[0]
-      const bodyHeight = bodys.clientHeight
-      bodys.style.height = bodyHeight + 'px'
-    })
-  },
+  mounted () {},
   methods: {
   },
   components: {
