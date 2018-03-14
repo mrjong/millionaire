@@ -41,6 +41,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'ChatRoom',
   data () {
@@ -56,7 +57,9 @@ export default {
     ...mapGetters({
       chatRoomState: 'chatRoomState',
       msgList: 'msgList',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      status: 'status',
+      questionStatus: 'question_status'
     })
   },
   mounted () {
@@ -80,6 +83,14 @@ export default {
           }
         })
         this.myMessage = ''
+        let fromSource = ''
+        if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
+          fromSource = 'game_page'
+        }
+        if (+this.status === 2) { // 倒计时页
+          fromSource = 'countdown_page'
+        }
+        utils.statistic('speaking', 3, {}, fromSource)
       }
     },
     focusEvent (e) {

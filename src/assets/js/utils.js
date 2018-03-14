@@ -86,7 +86,7 @@ export default {
    */
   statistic (name = '', event = 0, params = {}, from = '') {
     let eventType
-    switch (event) {
+    switch (+event) {
       case 0: // ALEX_SHOW
         eventType = '67240565'
         break
