@@ -70,13 +70,13 @@ export default new Vuex.Store({
      * 初始化
      * @param {any} {commit, dispatch, state}
      */
-    [type._INIT] ({commit, dispatch, state}, isRefreshToken = false) {
+    [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
             // 更新首页信息
             commit(type.HOME_UPDATE, {
@@ -101,7 +101,7 @@ export default new Vuex.Store({
             // 如果已经开始
             if (isPlaying) {
               // 如果已经开始串词
-              if (hostMsgList) {
+              if (hostMsgList && !question) {
                 im.emitListener(MESSAGE_HOST, {
                   content: {
                     content: JSON.stringify(hostMsgList)
@@ -111,11 +111,14 @@ export default new Vuex.Store({
               // 如果已经下发题目 开启观战模式
               if (question) {
                 // 更新问题信息
+                const options = question.jo || ['', '', '']
+                const optionsMd5Map = utils.generateMd5Map(options)
                 commit(type.QUESTION_UPDATE, {
                   id: question.ji || '',
                   index: +question.js || 0,
                   contents: question.jc || '',
-                  options: question.jo || ['', '', ''],
+                  options,
+                  optionsMd5Map,
                   watchingMode: true
                 })
                 // 更新当前状态
@@ -125,9 +128,10 @@ export default new Vuex.Store({
               }
               // 如果有答案直接进入答案页面
               if (answer) {
+                const md5Map = getters.optionsMd5Map
                 commit(type.QUESTION_UPDATE, {
-                  correctAnswer: answer.ac || '',
-                  result: answer.as || {}
+                  correctAnswer: md5Map[answer.ac] || '',
+                  result: utils.parseMd5(answer.as, md5Map) || {}
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END

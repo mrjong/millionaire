@@ -1,6 +1,6 @@
 import axios from './http'
 import utils from './utils'
-// import md5 from 'md5'
+import md5 from 'md5'
 
 export const api = {
   init: '/cmp/ix/', // 初始化
@@ -41,7 +41,7 @@ export const submitAnswer = function (id, answer, index) {
   return axios.get(api.submitAnswer, {
     params: {
       i: id,
-      a: answer,
+      a: md5(answer),
       s: index
     }
   })

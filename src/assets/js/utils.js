@@ -1,4 +1,5 @@
 /* global */
+import md5 from 'md5'
 const njordGame = window.top.njordGame
 
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -201,6 +202,32 @@ export default {
     const sound = sounds[name].instance
     !sound.paused && sound.pause()
     sound.currentTime = 0
+  },
+  /**
+   * 生成md5Map
+   * @param {any} arr
+   * @returns
+   */
+  generateMd5Map (arr) {
+    const obj = {}
+    if (arr.length) {
+      arr.forEach((item) => {
+        obj[md5(item)] = item
+      })
+    }
+    return obj
+  },
+  /**
+   * 解析md5
+   * @param {any} [md5Obj={}] md5 对象
+   * @param {any} [md5Map={}] md5 映射
+   */
+  parseMd5 (md5Obj = {}, md5Map = {}) {
+    const obj = {}
+    for (let prop in md5Obj) {
+      obj[md5Map[prop]] = md5Obj[prop]
+    }
+    return obj
   }
 }
 
