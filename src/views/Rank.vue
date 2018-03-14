@@ -4,7 +4,7 @@
       <button class="back iconfont icon-fanhui" @click="back">
       </button>
       <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">Weekly Rank</section>
-      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All time</section>
+      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All Time</section>
     </header>
     <!-- 前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
@@ -27,8 +27,8 @@
         <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
       </section>
     </div>
-    <section class="triangle" v-if="rankInfo[mode].cache"></section>
-    <div class="rank-items" v-if="rankInfo[mode].cache">
+    <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
+    <div class="rank-items" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
       <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
       </rank-item>
     </div>
@@ -64,17 +64,14 @@ export default {
     },
     getRank () {
       const {mode} = this
-      const rankInfo = this.rankInfo[mode]
-      if (!rankInfo.cache) {
-        this.loading = true
-        this.$store.dispatch(RANK_UPDATE, mode).then(() => {
-          this.loading = false
-        }, (err) => {
-          // TODO: 提示错误
-          this.loading = false
-          console.log(err)
-        })
-      }
+      this.loading = true
+      this.$store.dispatch(RANK_UPDATE, mode).then(() => {
+        this.loading = false
+      }, (err) => {
+        // TODO: 提示错误
+        this.loading = false
+        console.log(err)
+      })
     }
   },
   created () {
