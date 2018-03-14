@@ -16,7 +16,7 @@
             {{col.describe}}
           </p>
         </div>
-        <div class="share">
+        <div class="share" @click="share">
           <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
           <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
         </div>
@@ -77,6 +77,16 @@ export default {
     }
   },
   methods: {
+    share () {
+      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+      if (isFbApp) {
+        // 掉起app
+        // window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144/'
+      } else {
+        // 添加连接
+        // window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144/'
+      }
+    },
     goback () {
       this.$router.go(-1)
     }
@@ -167,6 +177,7 @@ export default {
     line-height: 32px;
     font-size: 28px;
     color: #241262;
+    text-align: center;
   }
 }
 .share {
@@ -186,6 +197,7 @@ export default {
     font-size: 30px;
     line-height: 35px;
     margin: 28px 0 140px;
+    text-align: center;
   }
 }
 </style>
