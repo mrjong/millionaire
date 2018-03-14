@@ -1,7 +1,7 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-      <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart -->
+        <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart   -->
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
@@ -79,7 +79,7 @@ export default {
     width: 100%;
     height: 200px;
     font-size: 40px;
-    color: #fff;
+    color: #fed331;
     font-family: 'Roboto-Midum';
     margin: 0 10px 20px 0;
     // text-indent: 44px;
@@ -103,7 +103,7 @@ export default {
     .supa-desk {
       width: 100%;
       position: absolute;
-      top: 199px;
+      top: 175px;
       left: -13px;
     }
   }

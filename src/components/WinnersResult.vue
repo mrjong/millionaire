@@ -63,7 +63,9 @@ export default {
     if (!this.watchingMode) {
       api.ifSelfWon()
         .then((data) => {
-          this.isWon = +data.result === 1
+          if (+data.result === 1) {
+            this.isWon = data.data
+          }
         })
     }
   },
