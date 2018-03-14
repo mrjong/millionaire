@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style>
-  @import "./assets/css/iconfont/iconfont.css";
+  @import "assets/css/iconfont.css";
   html,body,#app{
     width:100%;
     height:100%;
