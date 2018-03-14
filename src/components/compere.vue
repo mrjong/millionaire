@@ -5,8 +5,9 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-      <img :src="supa" alt="" class="supa">
-      <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
+       <img :src="supa" alt="" class="supa">
+      <!-- <p class="supa" :style="supaStyle"></p> -->
+       <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
   </div>
 </template>
@@ -21,13 +22,15 @@ export default {
       supaOrder: 1,
       compereMsg: '',
       supaRound: 1,
-      supa: require('../assets/images/supa1.png')
+      supa: require('../assets/images/supa1.png'),
+      supaStyle: ''
     }
   },
   computed: {
     ...mapGetters(['hostIntervalTime', 'hostMsgList'])
   },
   mounted () {
+    // this.supaStyle = 'background: url() no-repeat top left;'
     this.changeSupa()
     this.swiperMsg()
   },
@@ -96,7 +99,9 @@ export default {
     height: 355px;
     position: relative;
     .supa {
-      width: 100%;
+      width: 183px;
+      height: 256px;
+      background-size: cover;
     }
     .supa-desk {
       width: 100%;

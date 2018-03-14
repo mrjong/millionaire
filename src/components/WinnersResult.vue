@@ -59,7 +59,6 @@ export default {
     })
   },
   mounted () {
-    this.respondence.winners = [{}]
     api.ifSelfWon()
       .then((data) => {
         +data.result === 1 ? this.isWon = true : this.isWon = false
