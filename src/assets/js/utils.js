@@ -4,11 +4,40 @@ const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
-  countDown: {
-    url: 'http://static.subcdn.com/201803131150049d81f9e0f9.mp3'
+  'countDown10-before': {
+    url: 'http://static.subcdn.com/countDown10-before.mp3',
+    instance: null,
+    loop: false
+  },
+  'countDown10-after': {
+    url: 'http://static.subcdn.com/countDown10-after.mp3',
+    instance: null,
+    loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/201803121452531a3de85f9a.mp3'
+    url: 'http://static.subcdn.com/20180313142418c250602c5b.mp3',
+    instance: null,
+    loop: true
+  },
+  countDown5: {
+    url: 'http://static.subcdn.com/5s-countdown.mp3',
+    instance: null,
+    loop: false
+  },
+  go: {
+    url: 'http://static.subcdn.com/20180313173916879991205a.mp3',
+    instance: null,
+    loop: false
+  },
+  failed: {
+    url: 'http://static.subcdn.com/2018031317404850dad39593.mp3',
+    instance: null,
+    loop: false
+  },
+  succeed: {
+    url: 'http://static.subcdn.com/201803131742354229751a36.mp3',
+    instance: null,
+    loop: false
   }
 }
 
@@ -47,7 +76,7 @@ export default {
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : false,
+  isOnline: clientParams ? !!clientParams.isLogin : true,
 
   /**
    * 打点
@@ -126,7 +155,8 @@ export default {
    */
   loadSounds () {
     for (let prop in sounds) {
-      const url = sounds[prop].url
+      const obj = sounds[prop]
+      const url = obj.url
       if (url) {
         const sound = new Audio(url)
         sound.oncanplay = () => {
@@ -135,7 +165,10 @@ export default {
         sound.onerror = () => {
           console.log(`${prop}加载失败`)
         }
+        sound.loop = obj.loop
+        sound.preload = 'true'
         sound.load()
+        obj.instance = sound
       }
     }
   },
@@ -144,19 +177,30 @@ export default {
    * @param {any} name
    */
   playSound (name) {
+    this.stopSound(name)
     if (name) {
       const url = sounds[name] && sounds[name].url
       if (url) {
-        const sound = new Audio(url)
-        sound.oncanplaythrough = () => {
-          window.playAudioCallback = () => {
-            sound.play()
-          }
+        const sound = sounds[name].instance
+        window.playAudioCallback = () => {
           sound.play()
-          TercelAutoPlayJs && TercelAutoPlayJs.setAutoPlay && TercelAutoPlayJs.setAutoPlay('playAudio')
+        }
+        if (TercelAutoPlayJs) {
+          TercelAutoPlayJs.setAutoPlay && TercelAutoPlayJs.setAutoPlay('playAudio')
+        } else {
+          sound.play()
         }
       }
     }
+  },
+  /**
+   * 停止音乐
+   * @param {any} name
+   */
+  stopSound (name) {
+    const sound = sounds[name].instance
+    !sound.paused && sound.pause()
+    sound.currentTime = 0
   }
 }
 

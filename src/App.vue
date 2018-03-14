@@ -10,6 +10,7 @@ import {mapGetters} from 'vuex'
 import './assets/css/public.css'
 import * as type from './store/type'
 import loading from './components/loading.vue'
+import utils from './assets/js/utils'
 export default {
   name: 'App',
   data () {
@@ -60,13 +61,20 @@ export default {
       } else {
         this.$router.push({path: '/main'})
       }
+
+      // 比赛开始时，播放背景音乐
+      if (status !== 3) {
+        utils.stopSound('bg')
+      } else {
+        utils.playSound('bg')
+      }
     }
   }
 }
 </script>
 
 <style>
-  @import "./assets/css/iconfont/iconfont.css";
+  @import "assets/css/iconfont.css";
   html,body,#app{
     width:100%;
     height:100%;

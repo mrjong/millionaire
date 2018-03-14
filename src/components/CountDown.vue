@@ -1,7 +1,7 @@
 <template>
   <div class="count-down-container">
     <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
-      <p class="count-down-container__module__text">The game is about to begin...</p>
+      <p class="count-down-container__module__text">Starting in</p>
       <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
     <div class="count-down-container__animation" v-else-if = 'startTime <= 10 && startTime !== 0'>
@@ -16,7 +16,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-// import utils from '../assets/js/utils'
+import utils from '../assets/js/utils'
 export default {
   name: 'CountDown',
   data () {
@@ -45,8 +45,10 @@ export default {
   },
   methods: {
     playingAudio (time) {
-      if (time <= 10 && time !== 0) {
-        // utils.playSound('countDown')
+      if (time <= 10 && time !== 1 && time !== 0) {
+        utils.playSound('countDown10-before')
+      } else if (time <= 10 && time === 1 && time !== 0) {
+        utils.playSound('countDown10-after')
       }
     }
   },
