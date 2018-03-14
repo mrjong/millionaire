@@ -60,5 +60,5 @@ export const balanceApplication = (valOption) => {
   return axios.post(`${api.balanceApplication}`, fetchObj)
 }
 export const ifSelfWon = () => {
-  return axios.get(`${api.isWon}?app_id=${utils.app_id}&?client_id=${utils.clientId}`)
+  return axios.get(`${api.isWon}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
 }
