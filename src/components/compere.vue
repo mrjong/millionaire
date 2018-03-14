@@ -38,7 +38,7 @@ export default {
         if (this.supaOrder >= 5) {
           this.supaOrder = 0
         }
-        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 25) + '%'
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 24.95) + '%'
         this.supaOrder++
       }, 800)
     },
@@ -82,7 +82,7 @@ export default {
     color: #fff;
     font-family: 'Roboto-Midum';
     margin: 0 10px 20px 0;
-    text-indent: 44px;
+    // text-indent: 44px;
     line-height: 48px;
     position: relative;
     font-smoothing: antialiased;
