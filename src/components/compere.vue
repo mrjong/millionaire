@@ -5,8 +5,8 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-       <img :src="supa" alt="" class="supa">
-      <!-- <p class="supa" :style="supaStyle"></p> -->
+       <!-- <img :src="supa" alt="" class="supa"> -->
+       <p class="supa" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
   </div>
@@ -21,16 +21,13 @@ export default {
       supaTimer: null,
       supaOrder: 1,
       compereMsg: '',
-      supaRound: 1,
-      supa: require('../assets/images/supa1.png'),
-      supaStyle: ''
+      supaStyle: `background-position: 0% 0%;`
     }
   },
   computed: {
     ...mapGetters(['hostIntervalTime', 'hostMsgList'])
   },
   mounted () {
-    // this.supaStyle = 'background: url() no-repeat top left;'
     this.changeSupa()
     this.swiperMsg()
   },
@@ -38,10 +35,10 @@ export default {
     changeSupa () {
       this.supaTimer && clearInterval(this.supaTimer)
       this.supaTimer = setInterval(() => {
-        if (this.supaOrder > 5) {
-          this.supaOrder = 1
+        if (this.supaOrder >= 5) {
+          this.supaOrder = 0
         }
-        this.supa = require('../assets/images/supa' + this.supaOrder + '.png')
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 25) + '%'
         this.supaOrder++
       }, 800)
     },
@@ -64,7 +61,6 @@ export default {
   },
   watch: {
     hostMsgList (val) {
-      console.log(val)
       this.swiperMsg()
     }
   }
@@ -88,7 +84,6 @@ export default {
     margin: 0 10px 20px 0;
     text-indent: 44px;
     line-height: 48px;
-    // overflow: hidden;
     position: relative;
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
@@ -99,15 +94,17 @@ export default {
     height: 355px;
     position: relative;
     .supa {
-      width: 183px;
+      width: 186px;
       height: 256px;
+      // border: 1px solid red;
+      background: url(../assets/images/supaes.png) no-repeat;
       background-size: cover;
     }
     .supa-desk {
       width: 100%;
       position: absolute;
       top: 199px;
-      left: -3px;
+      left: -13px;
     }
   }
 }
