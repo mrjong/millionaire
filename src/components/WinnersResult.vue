@@ -55,14 +55,17 @@ export default {
   computed: {
     ...mapGetters({
       respondence: 'result',
-      currencyType: 'currencyType'
+      currencyType: 'currencyType',
+      watchingMode: 'watchingMode'
     })
   },
   mounted () {
-    api.ifSelfWon()
-      .then((data) => {
-        +data.result === 1 ? this.isWon = true : this.isWon = false
-      })
+    if (!this.watchingMode) {
+      api.ifSelfWon()
+        .then((data) => {
+          +data.result === 1 ? this.isWon = true : this.isWon = false
+        })
+    }
   },
   methods: {
   }
