@@ -33,7 +33,7 @@ import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
-// import utils from '../assets/js/utils'
+import utils from '../assets/js/utils'
 export default {
   name: 'Balance',
   data () {
@@ -57,7 +57,7 @@ export default {
   },
   mounted () {
     console.log(navigator.language)
-    this.utils.statistic('wait_page', 0)
+    utils.statistic('wait_page', 0)
   },
   methods: {
     cashOut () {
@@ -86,26 +86,40 @@ export default {
           .then(({data}) => {
             let takeCash = ''
             this.showLoading = false
-            if (+data.code !== 0) {
-              if (+data.code === 3106) { // 账户记录不存在
-                this.changeMarkInfo(true, false, 0, `账户记录不存在`)
-              } else if (+data.code === 3106) { // 可用金额不足
-                this.changeMarkInfo(true, false, 0, `可用金额不足`)
+            if (+data.result === 1) {
+              if (+data.code !== 0) {
+                if (+data.code === 3106) { // 账户记录不存在
+                  this.changeMarkInfo(true, false, 0, `账户记录不存在`)
+                  takeCash = 'bad_account'
+                } else if (+data.code === 3116) { // 可用金额不足
+                  this.changeMarkInfo(true, false, 0, `可用金额不足`)
+                  takeCash = 'no_enough_money'
+                } else {
+                  this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                  takeCash = 'network_error'
+                }
               } else {
-                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-                // takeCash = ''
+                this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+                this.$store.dispatch(type._INIT)
+                takeCash = 'success'
               }
+              utils.statistic('', 4, {
+                result_code_s: takeCash
+              })
             } else {
-              this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
-              this.$store.dispatch(type._INIT)
-              // takeCash = 'success'
+              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+              utils.statistic('', 4, {
+                result_code_s: 'network_error'
+              })
             }
-            this.utils.statistic('', 4, {
-              result_code_s: takeCash
-            })
           })
           .catch((err) => {
-            err && this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+            if (err) {
+              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+              utils.statistic('', 4, {
+                result_code_s: 'network_error'
+              })
+            }
           })
       }
     },
