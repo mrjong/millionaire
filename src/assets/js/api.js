@@ -8,7 +8,8 @@ export const api = {
   weekRank: '/cmp/wboard/', // 周排行榜
   totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/sct/', // 同步开始时间
-  balanceApplication: 'cmp/apply' // 提现申请
+  balanceApplication: '/cmp/apply', // 提现申请
+  isWon: '/cmp/k/' // 用户是否获得奖金
 }
 
 export const init = function (isRefreshToken) {
@@ -57,4 +58,7 @@ export const balanceApplication = (valOption) => {
   }
   const fetchObj = Object.assign({}, baseOption, valOption)
   return axios.post(`${api.balanceApplication}`, fetchObj)
+}
+export const ifSelfWon = () => {
+  return axios.get(`${api.isWon}`)
 }

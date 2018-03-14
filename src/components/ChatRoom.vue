@@ -41,7 +41,6 @@
 <script>
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
-// import dataTest from '../assets/js/testData.js'
 export default {
   name: 'ChatRoom',
   data () {
@@ -51,7 +50,6 @@ export default {
       myMessage: '',
       showInput: false,
       pageHeight: null
-      // msgList: []
     }
   },
   computed: {
@@ -62,7 +60,6 @@ export default {
     })
   },
   mounted () {
-    // this.msgList = dataTest.chatMesList
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
@@ -106,8 +103,6 @@ export default {
         const chatmsgwrap = document.getElementById('msgContainer')
         const scrollContainer = document.getElementById('chatmsgwrap')
         const _H = chatmsgwrap.offsetHeight
-        console.log(_H)
-        // alert(_H)
         scrollContainer.style.height = _H + 'px'
       }, 0)
     }

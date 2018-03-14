@@ -46,7 +46,7 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 20,
+      withdraw: 150, // 可提现金额
       showLoading: false
     }
   },
@@ -54,6 +54,8 @@ export default {
     ...mapGetters({
       userInfo: 'userInfo'
     })
+  },
+  mounted () {
   },
   methods: {
     cashOut () {
@@ -173,6 +175,7 @@ export default {
     width: 100%;
     height: 100%;
     flex: 1;
+    // margin-bottom: 150px;
     min-height: 384px;
     &__wrap {
       width: 100%;
