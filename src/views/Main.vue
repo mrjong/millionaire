@@ -65,7 +65,7 @@ export default {
       padding: 25px 25px 0;
       justify-content: space-between;
       &__online{
-        padding: 18px;
+        padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
         display: flex;
@@ -85,10 +85,9 @@ export default {
         }
       }
       &__logo{
-        width: 168px;
         align-self: center;
         img{
-         width: 100%;
+         width: 135px;
         }
       }
     }
