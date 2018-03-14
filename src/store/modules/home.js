@@ -9,7 +9,7 @@ const state = {
   avatar: 'http://images.apusapps.com/src/icon-apus-user-system.png', // 用户头像
   userName: 'millionaire', // 用户名
   balance: 0, // 用户余额
-  rank: 0, // 用户排名
+  rank: -1, // 用户排名
   currencyType: '$', // 货币类型
   bonusAmount: 0, // 奖金数量
   income: 0 // 总收益

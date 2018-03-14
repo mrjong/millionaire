@@ -16,7 +16,7 @@
       <router-link to="/rank" class="balance-rank">
         <div class="base-info__other__rank">
           <p class="base-info__other__rank__text">Weekly Rank</p>
-          <p class="base-info__other__rank__num num">{{baseInfo.rank}}</p>
+          <p class="base-info__other__rank__num num">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
         </div>
       </router-link>
     </div>
