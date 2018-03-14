@@ -49,7 +49,9 @@ export default {
     }),
     targetDate () {
       if (this.startTime === -1) {
-        return ['', 'coming soon']
+        return ['', 'Coming Soon']
+      } else if (this.startTime === 0) {
+        return ['', 'Living']
       } else {
         let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
         let month = nowDate.getMonth() + 1
