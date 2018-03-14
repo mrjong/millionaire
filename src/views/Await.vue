@@ -72,6 +72,11 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
+    this.$nextTick(() => {
+      const bodys = document.getElementsByTagName('body')[0]
+      const bodyHeight = bodys.clientHeight
+      bodys.style.height = bodyHeight + 'px'
+    })
   },
   methods: {
     inviteFriends () {
