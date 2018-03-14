@@ -32,8 +32,7 @@ import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
-// import axios from 'axios'
-// import utils from '../assets/js/utils'
+import * as type from '../store/type'
 export default {
   name: 'Balance',
   data () {
@@ -59,21 +58,6 @@ export default {
   },
   methods: {
     cashOut () {
-      // 接口调试
-      // api.balanceApplication({
-      //   amount: 50,
-      //   email: 'liuweiwei@apuscn.com',
-      //   accountId: 'liuweiwei@apuscn.com'
-      // })
-      //   .then((data) => {
-      //     console.log('后台返回结果如下')
-      //     console.log(data)
-      //   })
-      //   .catch((err) => {
-      //     console.log('发送错误如下')
-      //     console.log(err)
-      //   })
-      // -----------------
       if (+this.userInfo.balance < +this.withdraw) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
@@ -97,12 +81,12 @@ export default {
           accountId: this.myPay
         })
           .then(({data}) => {
-            console.log(data)
             this.showLoading = false
             if (+data.code !== 0) {
               this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
             } else {
               this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+              this.$store.dispatch(type._INIT)
             }
           })
           .catch((err) => {

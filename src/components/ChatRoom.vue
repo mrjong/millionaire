@@ -150,17 +150,8 @@ export default {
   mask-size: 100% 110%;
   width: 100%;
   height: 100%;
-  // overflow: hidden;
-  // position: relative;
-  // border: 5px solid palevioletred;
   box-sizing: border-box;
 }
-// .chat-mask {
-//   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
-//   -webkit-mask-size: 100% 110%;
-//   mask: url('../assets/images/mask.png') no-repeat top left;
-//   mask-size: 100% 110%;
-// }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
 }
@@ -210,7 +201,7 @@ export default {
       outline: none;
       box-shadow: none;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-size: 20px;
+      font-size: 28px;
       color: #241262;
       font-family: 'Roboto-Regular';
       padding: 0 23px;
@@ -223,7 +214,7 @@ export default {
     }
     &__btn {
       width: 100%;
-      font-size: 22px;
+      font-size: 28px;
       font-family: 'Roboto-Regular';
       color: #FFB227;
       flex: 1;
