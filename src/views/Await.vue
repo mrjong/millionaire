@@ -13,10 +13,10 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
-        <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
         <router-link to="/rank">
           <base-btn :baseStyle="baseStyle2"></base-btn>
         </router-link>
+      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>
   </div>
 </template>
