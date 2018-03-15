@@ -115,6 +115,8 @@ export default {
       }
     }
     njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
+    console.log('打点接受到的数据如下：')
+    console.log(args)
   },
   /**
    * 计时器

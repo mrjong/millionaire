@@ -85,6 +85,8 @@ export default {
           accountId: this.myPay
         })
           .then(({data}) => {
+            console.log('提现申请后台返回结果如下')
+            console.log(data)
             let takeCash = ''
             this.showLoading = false
             if (+data.result === 1) {
@@ -108,14 +110,6 @@ export default {
                 result_code_s: takeCash
               })
             } else {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-              utils.statistic('', 4, {
-                result_code_s: 'network_error'
-              })
-            }
-          })
-          .catch((err) => {
-            if (err) {
               this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
               utils.statistic('', 4, {
                 result_code_s: 'network_error'
