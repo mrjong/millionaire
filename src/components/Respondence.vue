@@ -104,9 +104,9 @@ export default {
           this.isClick = true
           this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
           this.$store.dispatch(type.QUESTION_SUBMIT)
-          this.game_answer.current_question_l = this.index
-          this.game_answer.cost_time_l = this.restTime
-          this.game_answer.question_id_l = this.id
+          // this.game_answer.current_question_l = this.index
+          // this.game_answer.cost_time_l = this.restTime
+          // this.game_answer.question_id_l = this.id
         }
       } else {
         // 不可以点击
@@ -154,10 +154,10 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
-      if (status === 7 && !this.watchingMode) {
-        this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
-        utils.statistic('', 2, this.game_answer)
-      }
+    //  if (status === 7 && !this.watchingMode) {
+    //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
+    //    utils.statistic('', 2, this.game_answer)
+    //  }
     },
     restTime: function (restTime) {
       if (restTime === 4) {
@@ -201,6 +201,7 @@ export default {
       line-height: 40px;
       font: 28px Roboto-Light;
       text-align: left;
+      min-height: 28px;
     }
     &__answer{
       font-size: 28px;
