@@ -169,6 +169,9 @@ const actions = {
         })
       }
     })
+  },
+  [type.QUESTION_YOU_WON] ({commit}, question) {
+    commit(type.QUESTION_UPDATE, question)
   }
 }
 

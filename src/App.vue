@@ -76,6 +76,9 @@ export default {
           .then((data) => {
             if (+data.result === 1) {
               // this.isWon = data.data
+              this.$store.dispatch(type.QUESTION_YOU_WON, {
+                isWon: data.data
+              })
             }
           })
       }

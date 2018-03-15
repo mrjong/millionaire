@@ -44,7 +44,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import * as api from '../assets/js/api'
+// import * as type from '../store/type'
 export default {
   name: 'NoWinnersResult',
   data () {
@@ -56,28 +56,29 @@ export default {
     ...mapGetters({
       respondence: 'result',
       currencyType: 'currencyType',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      isWon: 'isWon'
     })
   },
   mounted () {
-    this.wonStatue()
+    // this.wonStatue()
   },
   methods: {
-    wonStatue () {
-      if (!this.watchingMode) {
-        api.ifSelfWon()
-          .then((data) => {
-            if (+data.result === 1) {
-              this.isWon = data.data
-            }
-          })
-      }
-    }
+    // wonStatue () {
+    //   if (!this.watchingMode) {
+    //     api.ifSelfWon()
+    //       .then((data) => {
+    //         if (+data.result === 1) {
+    //           this.isWon = data.data
+    //         }
+    //       })
+    //   }
+    // }
   },
   watch: {
-    watchingMode: function () {
-      this.wonStatue()
-    }
+    // watchingMode: function () {
+    //   this.wonStatue()
+    // }
   }
 }
 </script>

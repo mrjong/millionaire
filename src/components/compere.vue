@@ -104,7 +104,7 @@ export default {
       width: 100%;
       position: absolute;
       top: 175px;
-      left: -13px;
+      left: -16px;
     }
   }
 }
