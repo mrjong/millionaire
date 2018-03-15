@@ -46,7 +46,7 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 150, // 可提现金额
+      withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
     }
   },
@@ -60,7 +60,10 @@ export default {
   },
   methods: {
     cashOut () {
-      if (+this.userInfo.balance < +this.withdraw) {
+      // let test = '2,030,000,000'
+      // test = +test.replace(/,/g, '')
+      // console.log(test)
+      if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
@@ -89,32 +92,27 @@ export default {
             console.log(data)
             let takeCash = ''
             this.showLoading = false
-            if (+data.result === 1) {
-              if (+data.code !== 0) {
-                if (+data.code === 3106) { // 账户记录不存在
-                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
-                  takeCash = 'bad_account'
-                } else if (+data.code === 3116) { // 可用金额不足
-                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
-                  takeCash = 'no_enough_money'
-                } else {
-                  this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-                  takeCash = 'network_error'
-                }
-              } else {
+            if (+data.result === 1) { // 请求成功 code必为0
+              if (+data.code === 0) {
                 this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
               }
-              utils.statistic('', 4, {
-                result_code_s: takeCash
-              })
-            } else {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-              utils.statistic('', 4, {
-                result_code_s: 'network_error'
-              })
+            } else { // 请求失败，判断code
+              if (+data.code === 3106) { // 账户记录不存在
+                this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                takeCash = 'bad_account'
+              } else if (+data.code === 3116) { // 可用金额不足
+                this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                takeCash = 'no_enough_money'
+              } else {
+                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                takeCash = 'network_error'
+              }
             }
+            utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
           })
       }
     },
