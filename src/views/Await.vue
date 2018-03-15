@@ -19,6 +19,9 @@
         </router-link>
       <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>
+    <div class="await-container__bottom">
+      <img src="../assets/images/apus-logo.png" class="await-container__bottom__apus">
+    </div>
   </div>
 </template>
 
@@ -150,6 +153,15 @@ export default {
       display: flex;
       padding:0 25px;
       justify-content: space-between;
+    }
+    &__bottom{
+      width: 100%;
+      position: absolute;
+      bottom: 40px;
+      &__apus{
+        width: 134px;
+        margin: 0 auto;
+      }
     }
   }
 </style>
