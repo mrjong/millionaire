@@ -45,9 +45,9 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:113px auto 25px;
+    margin:100px auto 25px;
     padding: 0.5px;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
     &__user{
       text-align: center;
       transform: translate(0, -70px);
@@ -69,7 +69,7 @@ export default {
     }
     &__other{
       display: flex;
-      margin-top: 35px;
+      margin-top: 20px;
       justify-content: center;
       .balance-router, .balance-rank{
         width: 50%;
@@ -102,7 +102,7 @@ export default {
   }
   @media screen and (max-width: 321px){
    .base-info{
-     margin:100px auto 25px;
+     margin:80px auto 25px;
      padding-bottom: 80px;
       &__other{
         margin-top: 20px;
