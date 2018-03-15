@@ -89,6 +89,7 @@ export default new Vuex.Store({
               balance: +accountInfo.ub || 0,
               balanceShow: accountInfo.sub || '',
               income: +accountInfo.ui || 0,
+              incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,
               bonusAmount: +bonusAmount || 0,
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
