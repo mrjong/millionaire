@@ -33,14 +33,12 @@ export default {
       } else {
         utils.login(() => {
         // 更新登陆状态
-          this.$store.commit(type._UPDATE, {
-            isOnline: true
-          })
+          this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
           this.init()
+          utils.statistic('login_page', 1, {}, 'login_page')
         })
       }
-      // utils.statistic('login_page', 1, {}, 'login_page')
     },
     init () {
       this.loading = true
