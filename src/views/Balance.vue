@@ -9,7 +9,7 @@
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
@@ -60,9 +60,6 @@ export default {
   },
   methods: {
     cashOut () {
-      // let test = '2,030,000,000'
-      // test = +test.replace(/,/g, '')
-      // console.log(test)
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
