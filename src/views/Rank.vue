@@ -62,7 +62,7 @@ export default {
     ...mapGetters(['rankInfo', 'currencyType'])
   },
   mounted () {
-    utils.statistic('wait_page', 0)
+    utils.statistic('rank_page', 0)
   },
   components: {
     'rank-item': rankItem,

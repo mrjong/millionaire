@@ -36,7 +36,7 @@ export default {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
           this.init()
-          utils.statistic('login_page', 1, {}, 'login_page')
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
         })
       }
     },

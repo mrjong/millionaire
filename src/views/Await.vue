@@ -84,7 +84,7 @@ export default {
       bodys.style.height = bodyHeight + 'px'
     })
     this.toFb()
-    utils.statistic('wait_page', 'ALEX_SHOW')
+    utils.statistic('wait_page', 0)
   },
   methods: {
     inviteFriends () {
@@ -101,6 +101,7 @@ export default {
       }
     },
     btnStatistic (destination) {
+      console.log(destination)
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     }
   },
