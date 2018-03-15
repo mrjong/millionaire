@@ -35,7 +35,7 @@
     </div>
     <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
     <div class="rank-items" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
-      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
+      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick">
       </rank-item>
     </div>
     <!-- 自己的排名 -->

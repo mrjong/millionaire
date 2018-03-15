@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      startTime: 'startTime'
+      startTime: 'startTimeOffset'
     }),
     countDown: function () {
       const timeSecond = this.startTime

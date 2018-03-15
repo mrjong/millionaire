@@ -123,13 +123,7 @@ export default {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
   share () {
-    const {origin, pathname} = window.location
-    const {app_id: appId} = this
-    if (njordGame) {
-      window.location.href = 'tercel://moreshare?url=' + `${origin + pathname}?appId=${appId}`
-    } else {
-      window.location.href = 'http://m.facebook.com/sharer?u=' + `${origin + pathname}?appId=${appId}`
-    }
+    window.njordInvite && window.njordInvite.share && window.njordInvite.share('')
   },
   /**
    * 时间格式化
@@ -180,17 +174,19 @@ export default {
       const obj = sounds[prop]
       const url = obj.url
       if (url) {
-        const sound = new Audio(url)
-        sound.oncanplay = () => {
-          console.log(`${prop}可以播放`)
-        }
-        sound.onerror = () => {
-          console.log(`${prop}加载失败`)
-        }
+        const sound = document.createElement('audio')
+        sound.src = url
         sound.loop = obj.loop
         sound.preload = 'true'
-        sound.load()
+        sound.oncanplay = function () {
+          console.log(`${prop} 可以播放`)
+          sound.oncanplay = null
+        }
+        sound.onerror = function () {
+          console.log(`${prop} 加载失败`)
+        }
         obj.instance = sound
+        document.body.appendChild(sound)
       }
     }
   },
@@ -260,6 +256,12 @@ export default {
       obj[md5Map[prop]] = md5Obj[prop]
     }
     return obj
+  },
+  /**
+   * 设置游戏状态
+   */
+  setGameState (isPlaying = false) {
+    window.ma_js_i && window.ma_js_i.refreshStatus && window.ma_js_i.refreshStatus(isPlaying)
   }
 }
 

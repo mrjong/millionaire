@@ -33,6 +33,9 @@
   <script>
     var loginCallback = null
     var playAudioCallback = null
+    var resumeCallback = null
+    var pauseCallback = null
+    var njordCallback = {}
     function loginSuccess () {
       console.log('login Success')
       loginCallback && loginCallback()
@@ -40,7 +43,17 @@
     function playAudio () {
       playAudioCallback && playAudioCallback()
     }
-</script>
-<!-- <script src="./src/assets/js/libphonenumber.js"></script>  
-<script src="./src/assets/js/libphonenumber_IN.js"></script>  -->
+    njordCallback.onResume = function () {
+      var sounds = document.getElementsByTagName('audio')
+      for (var i = 0; i < sounds.length; i++) {
+        sounds[i].muted = false
+      }
+    }
+    njordCallback.onPause = function () {
+      var sounds = document.getElementsByTagName('audio')
+      for (var i = 0; i < sounds.length; i++) {
+        sounds[i].muted = true
+      }
+    }
+  </script>
 </html>
