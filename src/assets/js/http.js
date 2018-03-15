@@ -14,5 +14,7 @@ const imAppKey = {
 }
 export const appKey = imAppKey[env]
 export default axios.create({
-  baseURL: host[env]
+  baseURL: host[env],
+  withCredentials: true,
+  timeout: 30000
 })
