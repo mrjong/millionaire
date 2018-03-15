@@ -16,7 +16,7 @@ const sounds = {
     loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/20180313142418c250602c5b.mp3',
+    url: 'http://static.subcdn.com/20180314200629b0edee0942.ogg',
     instance: null,
     loop: true
   },
@@ -223,6 +223,17 @@ export default {
     const sound = sounds[name].instance
     !sound.paused && sound.pause()
     sound.currentTime = 0
+  },
+  /**
+   * 设置静音
+   */
+  setMute (muted = false) {
+    for (let prop in sounds) {
+      const instance = sounds[prop].instance
+      if (instance) {
+        instance.muted = muted
+      }
+    }
   },
   /**
    * 生成md5Map
