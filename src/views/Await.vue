@@ -159,8 +159,9 @@ export default {
     &__bottom{
       width: 100%;
       position: absolute;
+      bottom: 10px;
       &__apus{
-        width: 135px;
+        width: 134px;
         margin: 0 auto;
       }
     }
