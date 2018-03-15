@@ -87,6 +87,7 @@ export default new Vuex.Store({
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
               balance: +accountInfo.ub || 0,
+              balanceShow: accountInfo.sub || '',
               income: +accountInfo.ui || 0,
               rank: +accountInfo.ur || 0,
               bonusAmount: +bonusAmount || 0,
