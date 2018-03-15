@@ -45,10 +45,10 @@ export default {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         this.loading = false
-        if (this.status !== 1) {
-          this.$router.push({path: '/main'})
-        } else {
+        if (this.status === 1) {
           this.$router.push({path: '/'})
+        } else {
+          this.$router.push({path: '/main'})
         }
       }, () => {
         this.loading = false

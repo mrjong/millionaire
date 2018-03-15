@@ -29,15 +29,13 @@ export default {
     this.$store.dispatch(type.QUESTION_INIT)
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
-    this.loading = true
     if (this.isOnline) {
+      this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
           this.loading = false
           if (this.status !== 1) {
             this.$router.push({path: '/main'})
-          } else {
-            this.$router.push({path: '/'})
           }
         }, 500)
       }, (err) => {
@@ -45,9 +43,6 @@ export default {
         this.loading = false
         console.log(err)
       })
-    } else {
-      this.loading = false
-      this.$router.push({path: '/login'})
     }
   },
   methods: {},
