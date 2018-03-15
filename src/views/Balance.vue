@@ -65,7 +65,7 @@ export default {
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         // const passRule = emailReg.test(this.myPay)
-        const phone = /^\d{10}$/
+        const phone = /\+?\d[\d -]{8,12}\d/
         const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
