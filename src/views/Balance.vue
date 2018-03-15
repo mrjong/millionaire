@@ -80,7 +80,7 @@ export default {
         // 提交表单
         this.showLoading = true
         api.balanceApplication({
-          amount: this.userInfo.balance,
+          amount: +this.userInfo.balance,
           email: '',
           accountId: this.myPay
         })
