@@ -5,8 +5,9 @@
          ref="toFbBrowser"
          @click="btnStatistic('like_page')"></a>
       <div>
-        <router-link to="/rule" @click="btnStatistic('help_page')">
-          <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
+        <router-link to="/rule">
+          <div class="await-container__top__instructions icon-youxishuoming iconfont"
+               @click="btnStatistic('help_page')"></div>
         </router-link>
       </div>
     </div>
@@ -14,8 +15,8 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
-        <router-link to="/rank" @click="btnStatistic('rank_page')">
-          <base-btn :baseStyle="baseStyle2"></base-btn>
+        <router-link to="/rank">
+          <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
         </router-link>
       <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>

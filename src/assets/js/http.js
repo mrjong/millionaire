@@ -14,6 +14,5 @@ const imAppKey = {
 }
 export const appKey = imAppKey[env]
 export default axios.create({
-  baseURL: host[env],
-  withCredentials: true
+  baseURL: host[env]
 })
