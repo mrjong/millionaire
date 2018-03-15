@@ -6,7 +6,7 @@
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-        <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
+         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
           <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
@@ -56,7 +56,7 @@ export default {
     })
   },
   mounted () {
-    console.log(navigator.language)
+    // console.log(navigator.language)
     utils.statistic('wait_page', 0)
   },
   methods: {
