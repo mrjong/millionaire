@@ -1,5 +1,8 @@
 <template>
   <div class="rule">
+    <!-- <div class="header-wrap">
+
+    </div> -->
     <p class="header" @click="goback">
          <span class="iconfont icon-fanhui"></span>
       </p>
@@ -115,6 +118,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 24px;
   }
 }
 .header {
@@ -127,6 +131,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
   span {
     font-size: 28px;
     transform: translate(-2px, 0px);
