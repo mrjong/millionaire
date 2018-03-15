@@ -23,7 +23,7 @@ import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
-import Compere from '../components/Compere'
+import Compere from '../components/compere'
 export default {
   name: 'Main',
   data () {
