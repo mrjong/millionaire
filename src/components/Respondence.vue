@@ -43,7 +43,8 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;'
+      countdownStyle: 'color: #fff;',
+      game_answer: {}
     }
   },
   computed: {
@@ -59,7 +60,8 @@ export default {
       time: 'time',
       restTime: 'restTime',
       options: 'options',
-      questionResult: 'question_result'
+      questionResult: 'question_result',
+      id: 'id'
     }),
     totalResult: function () {
       let result = {}
@@ -83,6 +85,7 @@ export default {
   },
   mounted () {
     this.countDown(this.question_status)
+    utils.statistic('game_page', 0)
   },
   methods: {
     ...mapActions({}),
@@ -96,6 +99,7 @@ export default {
           this.isClick = true
           this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
           this.$store.dispatch(type.QUESTION_SUBMIT)
+          utils.statistic('', 2, {current_question_l: this.index, cost_time_l: this.restTime, question_id_l: this.id})
         }
       } else {
         // 不可以点击

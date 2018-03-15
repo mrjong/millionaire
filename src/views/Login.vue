@@ -40,6 +40,7 @@ export default {
           this.init()
         })
       }
+      // utils.statistic('login_page', 1, {}, 'login_page')
     },
     init () {
       this.loading = true
@@ -55,7 +56,9 @@ export default {
       })
     }
   },
-  mounted () {},
+  mounted () {
+    utils.statistic('login_page', 0)
+  },
   components: {
     loading
   }

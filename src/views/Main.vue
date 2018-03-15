@@ -87,6 +87,7 @@ export default {
       &__logo{
         align-self: center;
         img{
+          height: 52px;
          width: 135px;
         }
       }
