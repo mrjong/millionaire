@@ -89,10 +89,10 @@ export default {
             if (+data.result === 1) {
               if (+data.code !== 0) {
                 if (+data.code === 3106) { // 账户记录不存在
-                  this.changeMarkInfo(true, false, 0, `账户记录不存在`)
+                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
                   takeCash = 'bad_account'
                 } else if (+data.code === 3116) { // 可用金额不足
-                  this.changeMarkInfo(true, false, 0, `可用金额不足`)
+                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
                   takeCash = 'no_enough_money'
                 } else {
                   this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')

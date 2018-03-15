@@ -60,16 +60,24 @@ export default {
     })
   },
   mounted () {
-    if (!this.watchingMode) {
-      api.ifSelfWon()
-        .then((data) => {
-          if (+data.result === 1) {
-            this.isWon = data.data
-          }
-        })
-    }
+    this.wonStatue()
   },
   methods: {
+    wonStatue () {
+      if (!this.watchingMode) {
+        api.ifSelfWon()
+          .then((data) => {
+            if (+data.result === 1) {
+              this.isWon = data.data
+            }
+          })
+      }
+    }
+  },
+  watch: {
+    watchingMode: function () {
+      this.wonStatue()
+    }
   }
 }
 </script>
