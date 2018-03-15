@@ -56,7 +56,6 @@ export default {
     })
   },
   mounted () {
-    // console.log(navigator.language)
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -64,8 +63,10 @@ export default {
       if (+this.userInfo.balance < +this.withdraw) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
-        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const passRule = emailReg.test(this.myPay)
+        // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        // const passRule = emailReg.test(this.myPay)
+        const phone = /^\d{10}$/
+        const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
         } else {
@@ -80,7 +81,7 @@ export default {
         this.showLoading = true
         api.balanceApplication({
           amount: this.userInfo.balance,
-          email: this.myPay,
+          email: '',
           accountId: this.myPay
         })
           .then(({data}) => {
