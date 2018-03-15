@@ -1,4 +1,5 @@
 /* global */
+import md5 from 'md5'
 const njordGame = window.top.njordGame
 
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -15,7 +16,7 @@ const sounds = {
     loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/20180313142418c250602c5b.mp3',
+    url: 'http://static.subcdn.com/20180314200629b0edee0942.ogg',
     instance: null,
     loop: true
   },
@@ -83,12 +84,33 @@ export default {
    * @static
    * @memberof Utils
    */
-  statistic (params = {}) {
+  statistic (name = '', event = 0, params = {}, from = '') {
+    let eventType
+    switch (+event) {
+      case 0: // ALEX_SHOW
+        eventType = '67240565'
+        break
+      case 1: // ALEX_CLICK
+        eventType = '67262581'
+        break
+      case 2: // GAME_ANSWER
+        eventType = '67279733'
+        break
+      case 3: // ALEX_SHARE
+        eventType = '67241845'
+        break
+      case 4: // TAKE_CASH 使用公共事件XALEX_OPERATION
+        eventType = '67244405'
+        break
+      case 5: // GAME_OVER
+        eventType = '67278965'
+        break
+    }
     const args = {
-      event_name: 'Millionaire',
-      from: 'Millionaire',
+      event_name: name,
+      from: from,
       extra: {
-        event: '67244405',
+        event: eventType,
         ...params
       }
     }
@@ -201,6 +223,43 @@ export default {
     const sound = sounds[name].instance
     !sound.paused && sound.pause()
     sound.currentTime = 0
+  },
+  /**
+   * 设置静音
+   */
+  setMute (muted = false) {
+    for (let prop in sounds) {
+      const instance = sounds[prop].instance
+      if (instance) {
+        instance.muted = muted
+      }
+    }
+  },
+  /**
+   * 生成md5Map
+   * @param {any} arr
+   * @returns
+   */
+  generateMd5Map (arr) {
+    const obj = {}
+    if (arr.length) {
+      arr.forEach((item) => {
+        obj[md5(item)] = item
+      })
+    }
+    return obj
+  },
+  /**
+   * 解析md5
+   * @param {any} [md5Obj={}] md5 对象
+   * @param {any} [md5Map={}] md5 映射
+   */
+  parseMd5 (md5Obj = {}, md5Map = {}) {
+    const obj = {}
+    for (let prop in md5Obj) {
+      obj[md5Map[prop]] = md5Obj[prop]
+    }
+    return obj
   }
 }
 

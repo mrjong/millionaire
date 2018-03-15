@@ -1,12 +1,13 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-      <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart -->
+        <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart   -->
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-      <img :src="supa" alt="" class="supa">
-      <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
+       <!-- <img :src="supa" alt="" class="supa"> -->
+       <p class="supa" :style="supaStyle"></p>
+       <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
   </div>
 </template>
@@ -20,8 +21,7 @@ export default {
       supaTimer: null,
       supaOrder: 1,
       compereMsg: '',
-      supaRound: 1,
-      supa: require('../assets/images/supa1.png')
+      supaStyle: `background-position: 0% 0%;`
     }
   },
   computed: {
@@ -35,10 +35,10 @@ export default {
     changeSupa () {
       this.supaTimer && clearInterval(this.supaTimer)
       this.supaTimer = setInterval(() => {
-        if (this.supaOrder > 5) {
-          this.supaOrder = 1
+        if (this.supaOrder >= 5) {
+          this.supaOrder = 0
         }
-        this.supa = require('../assets/images/supa' + this.supaOrder + '.png')
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 24.95) + '%'
         this.supaOrder++
       }, 800)
     },
@@ -61,7 +61,6 @@ export default {
   },
   watch: {
     hostMsgList (val) {
-      console.log(val)
       this.swiperMsg()
     }
   }
@@ -80,12 +79,11 @@ export default {
     width: 100%;
     height: 200px;
     font-size: 40px;
-    color: #fff;
+    color: #fed331;
     font-family: 'Roboto-Midum';
     margin: 0 10px 20px 0;
-    text-indent: 44px;
+    // text-indent: 44px;
     line-height: 48px;
-    // overflow: hidden;
     position: relative;
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
@@ -96,13 +94,17 @@ export default {
     height: 355px;
     position: relative;
     .supa {
-      width: 100%;
+      width: 186px;
+      height: 256px;
+      // border: 1px solid red;
+      background: url(../assets/images/supaes.png) no-repeat;
+      background-size: cover;
     }
     .supa-desk {
       width: 100%;
       position: absolute;
-      top: 199px;
-      left: -3px;
+      top: 175px;
+      left: -16px;
     }
   }
 }

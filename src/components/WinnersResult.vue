@@ -6,8 +6,12 @@
       <p class='no-winner-result__tip'>Prize rolls over to next game</p>
     </div>
     <div class="has-winner-result" v-else>
-      <p class="has-winner-result__title">
+       <p class="has-winner-result__title" v-if="!isWon">
         <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
+      </p>
+      <p class="has-winner-result__title" v-else>
+        You Won!
+        <b>Congrats! {{respondence.winners.length}} winners in this game!</b>
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
@@ -40,21 +44,41 @@
 
 <script>
 import {mapGetters} from 'vuex'
+// import * as type from '../store/type'
 export default {
   name: 'NoWinnersResult',
   data () {
     return {
+      isWon: false
     }
   },
   computed: {
     ...mapGetters({
       respondence: 'result',
-      currencyType: 'currencyType'
+      currencyType: 'currencyType',
+      watchingMode: 'watchingMode',
+      isWon: 'isWon'
     })
   },
   mounted () {
+    // this.wonStatue()
   },
   methods: {
+    // wonStatue () {
+    //   if (!this.watchingMode) {
+    //     api.ifSelfWon()
+    //       .then((data) => {
+    //         if (+data.result === 1) {
+    //           this.isWon = data.data
+    //         }
+    //       })
+    //   }
+    // }
+  },
+  watch: {
+    // watchingMode: function () {
+    //   this.wonStatue()
+    // }
   }
 }
 </script>
@@ -93,8 +117,20 @@ export default {
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
     display: flex;
+    // flex-direction: column;
     justify-content: center;
     font-family: 'RobotoCondensed-Regular';
+    position: relative;
+    b {
+      display: block;
+      font-weight: normal;
+      position: absolute;
+      width: 100%;
+      font-size: 24px;
+      top: 100px;
+      left: 0px;
+      text-align: center;
+    }
     &__count {
       margin-right: 17px;
       display: inline-block;

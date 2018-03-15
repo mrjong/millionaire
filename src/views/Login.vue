@@ -40,13 +40,14 @@ export default {
           this.init()
         })
       }
+      // utils.statistic('login_page', 1, {}, 'login_page')
     },
     init () {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         this.loading = false
         if (this.status === 1) {
-          this.$router.push({path: '/await'})
+          this.$router.push({path: '/'})
         } else {
           this.$router.push({path: '/main'})
         }
@@ -55,7 +56,9 @@ export default {
       })
     }
   },
-  mounted () {},
+  mounted () {
+    utils.statistic('login_page', 0)
+  },
   components: {
     loading
   }

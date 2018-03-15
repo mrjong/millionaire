@@ -1,7 +1,6 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
-// const appKey = 'p5tvi9dsphpf4' // dev
-const appKey = 'pvxdm17jp3vvr' // test
+import {appKey} from './http'
 
 const im = {
 
