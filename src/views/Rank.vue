@@ -43,6 +43,7 @@ import rankItem from '../components/RankItem'
 import {mapGetters} from 'vuex'
 import { RANK_UPDATE } from '../store/type'
 import loading from '../components/loading'
+import utils from '../assets/js/utils'
 export default {
   name: 'RankList',
   data () {
@@ -53,6 +54,9 @@ export default {
   },
   computed: {
     ...mapGetters(['rankInfo', 'currencyType'])
+  },
+  mounted () {
+    utils.statistic('wait_page', 0)
   },
   components: {
     'rank-item': rankItem,

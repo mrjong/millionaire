@@ -42,6 +42,7 @@ export default {
   },
   mounted () {
     this.playingAudio(this.startTime)
+    utils.statistic('wait_page', 1)
   },
   methods: {
     playingAudio (time) {
@@ -68,10 +69,9 @@ export default {
       color: #ffffff;
       text-align: center;
       &__text{
-        font: 28px 'Roboto-Light';
+        font: 32px 'Roboto-Light';
       }
       &__time{
-        margin-top: 26px;
         font:156px 'Roboto-Condensed';
       }
     }
