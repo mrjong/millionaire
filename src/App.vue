@@ -25,7 +25,8 @@ export default {
     ...mapGetters({
       isOnline: 'isOnline',
       status: 'status',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      questionStatus: 'question_status'
     })
   },
   created () {
@@ -62,8 +63,14 @@ export default {
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
+        utils.statistic('millionaire', 0, {style_s: 'waiting'})
+        this.$router.push({path: '/'})
       }
-
+      if (status === 2) {
+        utils.statistic('millionaire', 0, {style_s: 'countdown'})
+      } else if (status === 3) {
+        utils.statistic('millionaire', 0, {style_s: 'playing'})
+      }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
