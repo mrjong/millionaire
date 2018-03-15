@@ -10,6 +10,8 @@ import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 im.init()
+
+// 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
 Vue.config.devtools = true

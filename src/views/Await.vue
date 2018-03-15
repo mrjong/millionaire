@@ -55,7 +55,7 @@ export default {
       } else if (this.startTime === 0) {
         return ['', 'Living']
       } else {
-        let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
+        let nowDate = new Date(this.startTime)
         let month = nowDate.getMonth() + 1
         let day = nowDate.getDate()
         let hour = nowDate.getHours()

@@ -7,7 +7,7 @@ import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
-import {init, syncTime} from '../assets/js/api'
+import {init} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
 import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
@@ -18,6 +18,7 @@ export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
     startTime: -1, // 开始时间 时间差
+    startTimeOffset: 0,
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 600000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
@@ -48,6 +49,7 @@ export default new Vuex.Store({
   getters: {
     isOnline: (state) => state.isOnline,
     startTime: (state) => state.startTime,
+    startTimeOffset: (state) => state.startTimeOffset,
     hostIntervalTime: (state) => state.hostIntervalTime,
     hostMsgList: (state) => state.hostMsgList,
     status: (state) => state.status,
@@ -92,7 +94,8 @@ export default new Vuex.Store({
             })
             console.log(currencyType, currency[currencyType])
             commit(type._UPDATE, {
-              startTime: +startTime,
+              startTime,
+              startTimeOffset: Math.floor((startTime - Date.now()) / 1000),
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
@@ -144,16 +147,16 @@ export default new Vuex.Store({
             } else {
               // 是否进入倒计时
               if (isInRoom) {
-                const timer = utils.Timer(1000, Date.now() + startTime * 1000)
+                const timer = utils.Timer(1000, startTime)
                 timer.start()
                 timer.addCompleteListener(({offset}) => {
                   commit(type._UPDATE, {
-                    startTime: Math.round(offset / 1000)
+                    startTimeOffset: parseInt(offset / 1000)
                   })
                 })
                 timer.addEndListener(() => {
                   commit(type._UPDATE, {
-                    startTime: 0
+                    startTimeOffset: 0
                   })
                 })
                 commit(type._UPDATE, {
@@ -165,25 +168,10 @@ export default new Vuex.Store({
                   status: status._AWAIT
                 })
                 // 如果有下一场信息
-                if (startTime > 0) {
+                if (startTime > getters.readyTime) {
                   // 每隔一段时间同步开始时间
                   const {readyTime, syncIntervalTime} = state
-                  const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime * 1000) - readyTime)
-                  timer.addCompleteListener(() => {
-                    syncTime().then(({data}) => {
-                      if (+data.result === 1 && +data.code === 0) {
-                        const startTime = +data.data
-                        commit(type._UPDATE, {
-                          startTime
-                        })
-                        timer.sync(startTime * 1000 - readyTime)
-                      } else {
-                        console.log('同步时间出错:', data.msg)
-                      }
-                    }, (err) => {
-                      console.log('同步时间失败:', err)
-                    })
-                  })
+                  const timer = utils.Timer(syncIntervalTime, +startTime - readyTime)
                   timer.addEndListener(() => {
                     dispatch(type._INIT)
                   })
