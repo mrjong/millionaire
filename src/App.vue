@@ -11,6 +11,7 @@ import './assets/css/public.css'
 import * as type from './store/type'
 import loading from './components/loading.vue'
 import utils from './assets/js/utils'
+import * as api from './assets/js/api'
 export default {
   name: 'App',
   data () {
@@ -21,7 +22,8 @@ export default {
   computed: {
     ...mapGetters({
       isOnline: 'isOnline',
-      status: 'status'
+      status: 'status',
+      watchingMode: 'watchingMode'
     })
   },
   created () {
@@ -67,6 +69,15 @@ export default {
         utils.stopSound('bg')
       } else {
         utils.playSound('bg')
+      }
+      // 是否展示you won
+      if (+status === 4 && !this.watchingMode) {
+        api.ifSelfWon()
+          .then((data) => {
+            if (+data.result === 1) {
+              // this.isWon = data.data
+            }
+          })
       }
     }
   }
