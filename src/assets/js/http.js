@@ -1,5 +1,5 @@
 import axios from 'axios'
-const env = 'test'
+const env = 'dev'
 const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
   dev: 'http://dev-millionaire-api.apuscn.com',
@@ -14,6 +14,6 @@ const imAppKey = {
 }
 export const appKey = imAppKey[env]
 export default axios.create({
-  baseURL: host[env]
-  // withCredentials: true
+  baseURL: host[env],
+  withCredentials: true
 })

@@ -44,13 +44,10 @@
 
 <script>
 import {mapGetters} from 'vuex'
-// import * as type from '../store/type'
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {
-      isWon: false
-    }
+    return {}
   },
   computed: {
     ...mapGetters({
@@ -62,6 +59,8 @@ export default {
   },
   mounted () {
     // this.wonStatue()
+    console.log('结果页接受到的you won 数据如下')
+    console.log(this.isWon)
   },
   methods: {
     // wonStatue () {
