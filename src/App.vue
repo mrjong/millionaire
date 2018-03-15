@@ -73,7 +73,7 @@ export default {
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
         api.ifSelfWon()
-          .then((data) => {
+          .then(({data}) => {
             console.log('是否显示you won 后台返回数据如下')
             console.log(data)
             if (+data.result === 1) {
