@@ -43,7 +43,7 @@ const actions = {
       getRankInfo(rankType).then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {
           rankInfo.cache = true
-          const {sdata: self = [], udata: list = []} = data.data || {}
+          const {sdata: self = {}, udata: list = []} = data.data || {}
           rankInfo.self = self
           rankInfo.list = list
           commit(type.RANK_UPDATE, {

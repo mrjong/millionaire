@@ -7,11 +7,11 @@
     </div>
     <div class="has-winner-result" v-else>
        <p class="has-winner-result__title" v-if="!isWon">
-        <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
+        <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>Winners!
       </p>
       <p class="has-winner-result__title" v-else>
         You Won!
-        <b>Congrats! {{respondence.winners.length}} winners in this game!</b>
+        <b>Congrats! {{respondence.winnerAmount}} winners in this game!</b>
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">

@@ -38,7 +38,7 @@ export default {
           this.loading = false
         }, 500)
       }, (err) => {
-        this.$router.push({path: '/login'})
+        this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
@@ -64,7 +64,6 @@ export default {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
         utils.statistic('millionaire', 0, {style_s: 'waiting'})
-        this.$router.push({path: '/'})
       }
       if (status === 2) {
         utils.statistic('millionaire', 0, {style_s: 'countdown'})

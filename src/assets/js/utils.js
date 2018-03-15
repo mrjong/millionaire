@@ -309,7 +309,7 @@ class Timer {
     this.timer = setInterval(() => {
       const {endTime, completeCallback, endCallback} = this
       const offset = endTime - Date.now()
-      if (endTime <= 0 || offset > 0) {
+      if (offset > 0) {
         const date = new Date(offset >= 0 ? offset : 0)
         completeCallback && completeCallback({
           year: date.getUTCFullYear() - 1970,

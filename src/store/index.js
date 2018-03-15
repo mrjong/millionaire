@@ -13,6 +13,9 @@ import currency from '../assets/js/currency'
 import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
+const MAX_INIT_COUNT = 5 // 最大初始化次数
+let initCount = 0
+
 const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
@@ -43,7 +46,8 @@ export default new Vuex.Store({
         //   bonusAmount: 1000,
         //   avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg'
         // }
-      ]
+      ],
+      winnerAmount: 0 // 获胜者数量
     } // 游戏结果
   },
   getters: {
@@ -73,6 +77,7 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
+      initCount++
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           console.log(data)
@@ -80,6 +85,7 @@ export default new Vuex.Store({
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
+            const startTimeOffset = +info.ls || 0
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
@@ -97,7 +103,7 @@ export default new Vuex.Store({
             console.log(currencyType, currency[currencyType])
             commit(type._UPDATE, {
               startTime,
-              startTimeOffset: Math.floor((startTime - Date.now()) / 1000),
+              startTimeOffset,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
@@ -153,7 +159,7 @@ export default new Vuex.Store({
                 timer.start()
                 timer.addCompleteListener(({offset}) => {
                   commit(type._UPDATE, {
-                    startTimeOffset: parseInt(offset / 1000)
+                    startTimeOffset: getters.startTimeOffset - 1
                   })
                 })
                 timer.addEndListener(() => {
@@ -170,12 +176,12 @@ export default new Vuex.Store({
                   status: status._AWAIT
                 })
                 // 如果有下一场信息
-                if (startTime > getters.readyTime) {
+                if (startTimeOffset * 1000 > getters.readyTime) {
                   // 每隔一段时间同步开始时间
                   const {readyTime, syncIntervalTime} = state
                   const timer = utils.Timer(syncIntervalTime, +startTime - readyTime)
                   timer.addEndListener(() => {
-                    dispatch(type._INIT)
+                    initCount < MAX_INIT_COUNT && dispatch(type._INIT)
                   })
                   timer.start()
                 }
@@ -225,7 +231,7 @@ export default new Vuex.Store({
         const resultStr = message.content && message.content.summary
         if (resultStr) {
           const result = JSON.parse(resultStr)
-          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = []} = result
+          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
           let winnersMap = winners.map((winner) => {
             const obj = {}
             obj.userId = winner.i
@@ -236,7 +242,7 @@ export default new Vuex.Store({
           })
           // 更新结果
           commit(type._UPDATE, {
-            result: {isFinish, bonusAmount, winners: winnersMap}
+            result: {isFinish, bonusAmount, winners: winnersMap, winnerAmount}
           })
           // 更新状态
           commit(type._UPDATE, {
