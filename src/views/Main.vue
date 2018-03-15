@@ -64,12 +64,15 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
+      min-height: 59px;
       &__online{
         padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
         display: flex;
         align-items: center;
+        align-self: center;
+        height: 52px;
         &__icon{
           width: 24px;
           height: 24px;
@@ -87,22 +90,9 @@ export default {
       &__logo{
         align-self: center;
         img{
-          height: 52px;
-         width: 135px;
+          width: 135px;
         }
       }
     }
-  }
-  .respondence {
-    width: 100%;
-    height: 785px;
-  }
-  .chat-global-mark {
-    width: 100%;
-    height: 89%;
-    background: url('../assets/images/chat-mark.png') no-repeat top left;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 </style>
