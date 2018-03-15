@@ -1,13 +1,19 @@
 <template>
   <div class="hint">
-    <p class="hint__text">The next start time</p>
-    <div class="hint__info">
-      <p class="hint__info__time">
-        {{nextTime}}
+    <div class="hint__time">
+      <p class="hint__time__text">
+        Next Game
+        <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <i class="hint__info__line"></i>
-      <p class="hint__info__money">
-        ${{money}}
+      <p class="hint__time__hour">
+        {{nextTime[1]}}
+      </p>
+    </div>
+    <div class="hint__line"></div>
+    <div class="hint__money">
+      <p class="hint__money__text">Next Bonus</p>
+      <p class="hint__money__number">
+        {{currencyType}}{{money}}
       </p>
     </div>
   </div>
@@ -18,9 +24,12 @@ export default {
   name: 'NextTime',
   props: {
     nextTime: {
-      type: String
+      type: Array
     },
     money: {
+      type: Number
+    },
+    currencyType: {
       type: String
     }
   },
@@ -35,29 +44,37 @@ export default {
     font-size: 28px;
     opacity: 0.95;
     margin-top: 46.6px;
-    &__text{
-      width:310px;
-      height: 43px;
-      line-height: 43px;
-      font-size: 28px;
-      background-color: #3e3d75;
+    display: flex;
+    justify-content: center;
+    &__time, &__money{
+      width: 50%;
+      display: block;
       text-align: center;
-      border-radius: 46px;
-      margin: 0 auto;
-    }
-    &__info{
-      display: flex;
-      justify-content: center;
-      font-size: 28px;
-      margin-top:15px;
-      &__line{
-        margin: 0 16.6px;
-        width: 2px;
-        border: 2px solid #ffffff;
+      &__text{
+        font-family: 'Roboto-Light';
+        font-size: 28px;
+        &__day{
+          color: #ffb227;
+        }
       }
-      &__time, &__money{
-        letter-spacing: 1px;
+      &__hour,&__number{
+        margin-top: 25px;
+        color: #ffb227;
+        font-size: 56px;
+        font-family: 'Roboto-BoldCondensed';
+      }
+      &__hour{
+        color: #fff;
       }
     }
+    &__line{
+      opacity: 0.3;
+      width: 2px;
+      height: 76px;
+      background-color: #fff;
+      align-self: center;
+    }
+  }
+  @media screen and (max-width: 321px){
   }
 </style>

@@ -3,51 +3,45 @@ import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
+import Rule from '@/views/Rule.vue'
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/await',
-      name: 'Await',
+      path: '/',
+      name: 'home',
       component: Await
     },
     {
-      path: '/main',
-      name: 'Main',
-      component: Main,
-      children: [
-        // {
-        //   path: 'count-down',
-        //   name: 'CountDown',
-        //   component: CountDown,
-        //   beforeEnter: (to, from, next) => {
-        //     if (from.fullPath !== '/home') {
-        //       next('/home')
-        //       return
-        //     }
-        //     next()
-        //   }
-        // }
-      ]
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
-      path: '/balance/:balance/:totalincome', // 用户余额，总收入 具体参数待定
-      name: 'Balance',
+      path: '/main',
+      name: 'main',
+      component: Main
+    },
+    {
+      path: '/balance', // 用户余额，总收入 具体参数待定
+      name: 'balance',
       component: Balance
     },
     {
       path: '/rank',
-      name: 'Rankt',
+      name: 'rank',
       component: Rank
+    },
+    {
+      path: '/rule',
+      name: 'rule',
+      component: Rule
     }
   ]
 })
+
+export default router

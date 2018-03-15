@@ -3,13 +3,26 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import utils from './assets/js/utils'
 // import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
 import 'core-js/modules/es6.promise'
+import im from './assets/js/im'
+im.init()
 
+// 读取声音
+utils.loadSounds()
 Vue.config.productionTip = false
+Vue.config.devtools = true
 Vue.prototype.$http = http
+router.beforeEach((to, from, next) => {
+  if (!utils.isOnline && to.name !== 'login') {
+    next({path: '/login', replace: true})
+  } else {
+    next()
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
