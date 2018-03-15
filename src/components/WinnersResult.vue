@@ -49,9 +49,9 @@ export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      respondence: {
-        winners: []
-      }
+      // respondence: {
+      //   winners: []
+      // }
     }
   },
   computed: {
