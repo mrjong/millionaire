@@ -70,7 +70,7 @@ export default {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
-      this.setMsgOuterHeight()
+      // this.setMsgOuterHeight()
     })
   },
   methods: {
@@ -163,6 +163,7 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  position: absolute;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
