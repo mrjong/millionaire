@@ -12,6 +12,7 @@ import * as type from './store/type'
 import loading from './components/loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
+import {_AWAIT} from './assets/js/status'
 export default {
   name: 'App',
   data () {
@@ -76,6 +77,14 @@ export default {
               })
             }
           })
+      }
+    },
+    '$route' (route) {
+      // 路由变化切换状态
+      if (route.path !== '/main') {
+        this.$store.commit(type._UPDATE, {
+          status: _AWAIT
+        })
       }
     }
   }
