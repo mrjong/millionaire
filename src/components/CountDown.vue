@@ -42,7 +42,7 @@ export default {
   },
   mounted () {
     this.playingAudio(this.startTime)
-    utils.statistic('wait_page', 1)
+    utils.statistic('countdown_page', 0)
   },
   methods: {
     playingAudio (time) {

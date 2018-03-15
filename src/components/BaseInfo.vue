@@ -6,15 +6,15 @@
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
-      <router-link to="/balance" class="balance-router" @click="routerStatistic('take_cash_page')">
-        <div class="base-info__other__balance">
+      <router-link to="/balance" class="balance-router" >
+        <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
           <p class="base-info__other__balance__text">Balance</p>
-          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
+          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balanceShow}}</p>
         </div>
       </router-link>
       <div class="base-info__other__line"></div>
-      <router-link to="/rank" class="balance-rank" @click="routerStatistic('rank_page')">
-        <div class="base-info__other__rank">
+      <router-link to="/rank" class="balance-rank">
+        <div class="base-info__other__rank"  @click="routerStatistic('rank_page')">
           <p class="base-info__other__rank__text">Weekly Rank</p>
           <p class="base-info__other__rank__num num">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
         </div>
@@ -45,9 +45,9 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:113px auto 25px;
+    margin:100px auto 25px;
     padding: 0.5px;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
     &__user{
       text-align: center;
       transform: translate(0, -70px);
@@ -69,7 +69,7 @@ export default {
     }
     &__other{
       display: flex;
-      margin-top: 35px;
+      margin-top: 20px;
       justify-content: center;
       .balance-router, .balance-rank{
         width: 50%;
@@ -102,7 +102,7 @@ export default {
   }
   @media screen and (max-width: 321px){
    .base-info{
-     margin:100px auto 25px;
+     margin:80px auto 25px;
      padding-bottom: 80px;
       &__other{
         margin-top: 20px;

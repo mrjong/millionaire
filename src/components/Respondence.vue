@@ -43,13 +43,13 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;',
-      game_answer: {
-        current_question_l: 0,
-        cost_time_l: 0,
-        question_id_l: 0,
-        resule_code_s: ''
-      }
+      countdownStyle: 'color: #fff;'
+      // game_answer: {
+      //   current_question_l: 0,
+      //   cost_time_l: 0,
+      //   question_id_l: 0,
+      //   resule_code_s: ''
+      // }
     }
   },
   computed: {

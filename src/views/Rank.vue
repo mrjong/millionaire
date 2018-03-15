@@ -39,7 +39,7 @@
       </rank-item>
     </div>
     <!-- 自己的排名 -->
-    <rank-item class="myrank" v-if="rankInfo[mode].cache" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
+    <rank-item class="myrank" v-if="rankInfo[mode].cache && rankInfo[mode].list.length" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
     <loading v-show="loading"></loading>
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
     ...mapGetters(['rankInfo', 'currencyType'])
   },
   mounted () {
-    utils.statistic('wait_page', 0)
+    utils.statistic('rank_page', 0)
   },
   components: {
     'rank-item': rankItem,

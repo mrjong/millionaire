@@ -7,11 +7,11 @@
     </div>
     <div class="has-winner-result" v-else>
        <p class="has-winner-result__title" v-if="!isWon">
-        <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
+        <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>Winners!
       </p>
       <p class="has-winner-result__title" v-else>
         You Won!
-        <b>Congrats! {{respondence.winners.length}} winners in this game!</b>
+        <b>Congrats! {{respondence.winnerAmount}} winners in this game!</b>
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
@@ -57,28 +57,8 @@ export default {
       isWon: 'isWon'
     })
   },
-  mounted () {
-    // this.wonStatue()
-    console.log('结果页接受到的you won 数据如下')
-    console.log(this.isWon)
-  },
-  methods: {
-    // wonStatue () {
-    //   if (!this.watchingMode) {
-    //     api.ifSelfWon()
-    //       .then((data) => {
-    //         if (+data.result === 1) {
-    //           this.isWon = data.data
-    //         }
-    //       })
-    //   }
-    // }
-  },
-  watch: {
-    // watchingMode: function () {
-    //   this.wonStatue()
-    // }
-  }
+  mounted () {},
+  methods: {}
 }
 </script>
 <style scoped lang="less" type="text/less">
@@ -116,7 +96,6 @@ export default {
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
     display: flex;
-    // flex-direction: column;
     justify-content: center;
     font-family: 'RobotoCondensed-Regular';
     position: relative;
@@ -133,7 +112,6 @@ export default {
     &__count {
       margin-right: 17px;
       display: inline-block;
-      // width: 159px;
       max-width: 159px;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -161,6 +139,7 @@ export default {
 }
 .has-winner-result-top-item {
   width: auto;
+  max-width: 160px;
   height: 203px;
   display: flex;
   flex-direction: column;
@@ -172,9 +151,13 @@ export default {
     border-radius: 50%;
   }
   &__nickname {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 30px;
     color: #fff;
     margin: 10px 0;
+    text-align: center;
   }
   &__bonus {
     font-size: 26px;

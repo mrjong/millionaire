@@ -42,7 +42,6 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
-// import dataTest from '../assets/js/testData'
 export default {
   name: 'ChatRoom',
   data () {
@@ -64,7 +63,6 @@ export default {
     })
   },
   mounted () {
-    // this.msgList = dataTest.chatMesList
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
@@ -125,10 +123,6 @@ export default {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
-        // -----------
-        // const msgcontainer = document.getElementById('msgContainer')
-        // const containerHeight = msgcontainer.offsetHeight
-        // scrollContainer.style.height = containerHeight + 'px'
       })
     }
   },
