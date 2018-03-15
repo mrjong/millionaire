@@ -15,10 +15,11 @@ Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.prototype.$http = http
 router.beforeEach((to, from, next) => {
-  if (!utils.isOnline) {
-    router.push({path: '/login'})
+  if (!utils.isOnline && to.name !== 'login') {
+    next({path: '/login', replace: true})
+  } else {
+    next()
   }
-  next()
 })
 /* eslint-disable no-new */
 new Vue({

@@ -12,6 +12,7 @@ import * as type from './store/type'
 import loading from './components/loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
+import {_AWAIT} from './assets/js/status'
 export default {
   name: 'App',
   data () {
@@ -31,15 +32,13 @@ export default {
     this.$store.dispatch(type.QUESTION_INIT)
     this.$store.dispatch(type._UPDATE_AMOUNT)
     this.$store.dispatch(type._RECEIVE_RESULT)
-    this.loading = true
     if (this.isOnline) {
+      this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
           this.loading = false
           if (this.status !== 1) {
             this.$router.push({path: '/main'})
-          } else {
-            this.$router.push({path: '/'})
           }
         }, 500)
       }, (err) => {
@@ -47,9 +46,6 @@ export default {
         this.loading = false
         console.log(err)
       })
-    } else {
-      this.loading = false
-      this.$router.push({path: '/login'})
     }
   },
   methods: {},
@@ -65,7 +61,7 @@ export default {
       }
 
       // 比赛开始时，播放背景音乐
-      if (status !== 3) {
+      if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
       } else {
         utils.playSound('bg')
@@ -81,6 +77,14 @@ export default {
               })
             }
           })
+      }
+    },
+    '$route' (route) {
+      // 路由变化切换状态
+      if (route.path !== '/main') {
+        this.$store.commit(type._UPDATE, {
+          status: _AWAIT
+        })
       }
     }
   }
