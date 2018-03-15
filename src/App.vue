@@ -84,7 +84,6 @@ export default {
             console.log('是否显示you won 后台返回数据如下')
             console.log(data)
             if (+data.result === 1) {
-              // this.isWon = data.data
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon: data.data
               })

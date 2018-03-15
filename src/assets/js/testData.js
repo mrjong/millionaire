@@ -75,34 +75,34 @@ export default {
   ],
   respondenceResult: [
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '234'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '234'
     },
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '456'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '456'
     },
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '789'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '789'
     },
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '110'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '110'
     },
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '112'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '112'
     },
     {
-      img: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      nickname: 'Cristina',
-      bonus: '113'
+      avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
+      name: 'Cristina',
+      bonusAmount: '113'
     }
   ]
 }

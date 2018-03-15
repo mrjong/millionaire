@@ -44,10 +44,15 @@
 
 <script>
 import {mapGetters} from 'vuex'
+// import testData from '../assets/js/testData'
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {}
+    return {
+      respondence: {
+        winners: []
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -58,27 +63,9 @@ export default {
     })
   },
   mounted () {
-    // this.wonStatue()
-    console.log('结果页接受到的you won 数据如下')
-    console.log(this.isWon)
+    // this.respondence.winners = testData.respondenceResult
   },
-  methods: {
-    // wonStatue () {
-    //   if (!this.watchingMode) {
-    //     api.ifSelfWon()
-    //       .then((data) => {
-    //         if (+data.result === 1) {
-    //           this.isWon = data.data
-    //         }
-    //       })
-    //   }
-    // }
-  },
-  watch: {
-    // watchingMode: function () {
-    //   this.wonStatue()
-    // }
-  }
+  methods: {}
 }
 </script>
 <style scoped lang="less" type="text/less">
