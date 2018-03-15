@@ -1,5 +1,5 @@
 <template>
-  <div class="respondence-container">
+  <div class="respondence-container" ref="respondenceContainer">
     <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
@@ -91,6 +91,10 @@ export default {
   mounted () {
     this.countDown(this.question_status)
     utils.statistic('game_page', 0)
+    this.$nextTick(() => {
+      // set height
+      this.$refs.respondenceContainer.style.minHeight = 'auto'
+    })
   },
   methods: {
     ...mapActions({}),
@@ -182,6 +186,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 460px;
     &__viewing{
       position: absolute;
       top: 30px;
