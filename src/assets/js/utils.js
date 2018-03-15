@@ -94,13 +94,16 @@ export default {
         eventType = '67262581'
         break
       case 2: // GAME_ANSWER
-        eventType = ''
+        eventType = '67279733'
         break
       case 3: // ALEX_SHARE
-        eventType = ''
+        eventType = '67241845'
         break
-      case 4: // TAKE_CASH
-        eventType = ''
+      case 4: // TAKE_CASH 使用公共事件XALEX_OPERATION
+        eventType = '67244405'
+        break
+      case 5: // GAME_OVER
+        eventType = '67278965'
         break
     }
     const args = {

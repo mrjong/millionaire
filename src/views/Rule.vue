@@ -16,9 +16,11 @@
             {{col.describe}}
           </p>
         </div>
-        <div class="share" @click="share">
-          <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
-          <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+        <div class="share" @click="toFb">
+          <a class="share__fb" ref="toFbBrowser">
+            <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
+            <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+          </a>
         </div>
       </div>
     </div>
@@ -77,14 +79,13 @@ export default {
     }
   },
   methods: {
-    share () {
+    toFb () {
+      let toFbBrowser = this.$refs.toFbBrowser
       const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
       if (isFbApp) {
-        // 掉起app
-        // window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144/'
+        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
       } else {
-        // 添加连接
-        // window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144/'
+        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
       }
     },
     goback () {
@@ -183,11 +184,15 @@ export default {
 .share {
   width: 100%;
   padding: 0 156px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 100px;
+  &__fb {
+    display: block;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   &__icon {
     width: 135px;
   }

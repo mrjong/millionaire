@@ -11,6 +11,7 @@ import './assets/css/public.css'
 import * as type from './store/type'
 import loading from './components/loading.vue'
 import utils from './assets/js/utils'
+import * as api from './assets/js/api'
 export default {
   name: 'App',
   data () {
@@ -21,7 +22,8 @@ export default {
   computed: {
     ...mapGetters({
       isOnline: 'isOnline',
-      status: 'status'
+      status: 'status',
+      watchingMode: 'watchingMode'
     })
   },
   created () {
@@ -58,10 +60,22 @@ export default {
       }
 
       // 比赛开始时，播放背景音乐
-      if (status !== 3) {
+      if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
       } else {
         utils.playSound('bg')
+      }
+      // 是否展示you won
+      if (+status === 4 && !this.watchingMode) {
+        api.ifSelfWon()
+          .then((data) => {
+            if (+data.result === 1) {
+              // this.isWon = data.data
+              this.$store.dispatch(type.QUESTION_YOU_WON, {
+                isWon: data.data
+              })
+            }
+          })
       }
     }
   }

@@ -6,7 +6,7 @@
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-        <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
+         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
           <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
@@ -56,7 +56,7 @@ export default {
     })
   },
   mounted () {
-    console.log(navigator.language)
+    // console.log(navigator.language)
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -89,10 +89,10 @@ export default {
             if (+data.result === 1) {
               if (+data.code !== 0) {
                 if (+data.code === 3106) { // 账户记录不存在
-                  this.changeMarkInfo(true, false, 0, `账户记录不存在`)
+                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
                   takeCash = 'bad_account'
                 } else if (+data.code === 3116) { // 可用金额不足
-                  this.changeMarkInfo(true, false, 0, `可用金额不足`)
+                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
                   takeCash = 'no_enough_money'
                 } else {
                   this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')

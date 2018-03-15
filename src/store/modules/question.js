@@ -21,7 +21,8 @@ const state = {
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
-  restTime: 0 // 剩余时间
+  restTime: 0, // 剩余时间
+  isWon: false // 是否展示you won
 }
 
 const getters = {
@@ -38,7 +39,8 @@ const getters = {
   userAnswer: (state) => state.userAnswer,
   question_result: (state) => state.result,
   time: (state) => state.time,
-  restTime: (state) => state.restTime
+  restTime: (state) => state.restTime,
+  isWon: (state) => state.isWon
 }
 
 const mutations = {
@@ -167,6 +169,9 @@ const actions = {
         })
       }
     })
+  },
+  [type.QUESTION_YOU_WON] ({commit}, question) {
+    commit(type.QUESTION_UPDATE, question)
   }
 }
 
