@@ -70,7 +70,7 @@ export default {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
-      this.setMsgOuterHeight()
+      // this.setMsgOuterHeight()
     })
   },
   methods: {
@@ -125,7 +125,6 @@ export default {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
-        this.myMessage = ''
         // -----------
         // const msgcontainer = document.getElementById('msgContainer')
         // const containerHeight = msgcontainer.offsetHeight
@@ -151,7 +150,7 @@ export default {
   flex:1;
   position: relative;
   overflow: hidden;
-  overflow: auto;
+  // overflow: auto;
   margin-bottom: 35px;
   box-sizing: border-box;
 }
@@ -163,6 +162,7 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  position: absolute;
 }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
@@ -242,8 +242,9 @@ export default {
 .msg-container {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  // overflow-y: scroll;
+  // overflow-x: hidden;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   &__inner {
     width: 100%;

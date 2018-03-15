@@ -6,14 +6,14 @@
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
-      <router-link to="/balance" class="balance-router">
+      <router-link to="/balance" class="balance-router" @click="routerStatistic('take_cash_page')">
         <div class="base-info__other__balance">
           <p class="base-info__other__balance__text">Balance</p>
           <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
         </div>
       </router-link>
       <div class="base-info__other__line"></div>
-      <router-link to="/rank" class="balance-rank">
+      <router-link to="/rank" class="balance-rank" @click="routerStatistic('rank_page')">
         <div class="base-info__other__rank">
           <p class="base-info__other__rank__text">Weekly Rank</p>
           <p class="base-info__other__rank__num num">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import utils from '../assets/js/utils'
 export default {
   name: 'BaseInfo',
   props: {
@@ -31,6 +32,11 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    routerStatistic (destination) {
+      utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    }
   }
 }
 </script>
