@@ -8,23 +8,29 @@
     </header>
     <!-- 前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
-      <section class="second" v-if="rankInfo[mode].cache && rankInfo[mode].list[1]">
-        <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-second.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+      <section class="second">
+        <div v-if="rankInfo[mode].list[1]">
+          <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-second.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+        </div>
       </section>
-      <section class="first" v-if="rankInfo[mode].cache && rankInfo[mode].list[0]">
-        <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-first.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+      <section class="first" >
+        <div v-if="rankInfo[mode].list[0]">
+          <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-first.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+        </div>
       </section>
-      <section class="third" v-if="rankInfo[mode].cache && rankInfo[mode].list[2]">
-        <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-third.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+      <section class="third" >
+        <div v-if="rankInfo[mode].list[2]">
+          <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-third.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+        </div>
       </section>
     </div>
     <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
