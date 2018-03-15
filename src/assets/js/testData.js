@@ -82,11 +82,11 @@ export default {
     {
       avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
       name: 'Cristina',
-      bonusAmount: '456'
+      bonusAmount: '111,456000'
     },
     {
       avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg',
-      name: 'Cristina',
+      name: 'CristinaCristinaCristina',
       bonusAmount: '789'
     },
     {

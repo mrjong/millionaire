@@ -44,15 +44,10 @@
 
 <script>
 import {mapGetters} from 'vuex'
-// import testData from '../assets/js/testData'
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {
-      // respondence: {
-      //   winners: []
-      // }
-    }
+    return {}
   },
   computed: {
     ...mapGetters({
@@ -62,9 +57,7 @@ export default {
       isWon: 'isWon'
     })
   },
-  mounted () {
-    // this.respondence.winners = testData.respondenceResult
-  },
+  mounted () {},
   methods: {}
 }
 </script>
@@ -103,7 +96,6 @@ export default {
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
     display: flex;
-    // flex-direction: column;
     justify-content: center;
     font-family: 'RobotoCondensed-Regular';
     position: relative;
@@ -120,7 +112,6 @@ export default {
     &__count {
       margin-right: 17px;
       display: inline-block;
-      // width: 159px;
       max-width: 159px;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -148,6 +139,7 @@ export default {
 }
 .has-winner-result-top-item {
   width: auto;
+  max-width: 160px;
   height: 203px;
   display: flex;
   flex-direction: column;
@@ -159,9 +151,13 @@ export default {
     border-radius: 50%;
   }
   &__nickname {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 30px;
     color: #fff;
     margin: 10px 0;
+    text-align: center;
   }
   &__bonus {
     font-size: 26px;
