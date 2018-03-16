@@ -14,7 +14,6 @@ im.init()
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
-Vue.config.devtools = true
 Vue.prototype.$http = http
 router.beforeEach((to, from, next) => {
   if (!utils.isOnline && to.name !== 'login') {

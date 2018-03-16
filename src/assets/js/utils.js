@@ -44,20 +44,6 @@ const sounds = {
 
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
-const getQuery =
-/**
-* 获取浏览器公共参数
-* @param {any} name
-* @param {string} [url='']
-* @returns
-*/
-function (name, url = '') {
-  const queryUrlArr = url.match(/.*\?(\S+)$/)
-  const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
-  const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
-  const search = queryUrl.match(regx)
-  return (search && decodeURIComponent(search[2])) || null
-}
 
 export default {
   /**
@@ -74,10 +60,10 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '37da3d194cf76e46c676eaf03867b3b6',
+  app_id: clientParams ? clientParams.appId : '',
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : true,
+  isOnline: clientParams ? !!clientParams.isLogin : false,
 
   /**
    * 打点
