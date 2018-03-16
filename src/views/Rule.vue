@@ -1,8 +1,5 @@
 <template>
   <div class="rule">
-    <!-- <div class="header-wrap">
-
-    </div> -->
     <p class="header" @click="goback">
          <span class="iconfont icon-fanhui"></span>
       </p>
@@ -10,7 +7,9 @@
       <div class="rule__wrap">
         <p class="title">How to play</p>
         <div class="rule-item" v-for="col in ruleList" :key="col.id">
-          <img :src="col.img" alt="" class="rule-item__img">
+          <div class="rule-item__wrap">
+            <img :src="col.img" alt="" class="rule-item__wrap__img">
+          </div>
           <div class="rule-item__title">
             <span class="rule-item__title__index">{{col.id}}</span>
             {{col.title}}
@@ -21,7 +20,9 @@
         </div>
         <div class="share" @click="toFb">
           <a class="share__fb" ref="toFbBrowser">
-            <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
+            <p class="share__wrap">
+              <img src="../assets/images/facebook-icon.png" alt="" class="share__wrap__icon">
+            </p>
             <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
           </a>
         </div>
@@ -158,8 +159,11 @@ export default {
   justify-content: center;
   align-items: center;
   margin-top: 100px;
-  &__img {
+  &__wrap {
     width: 277px;
+    &__img {
+      width: 100%;
+    }
   }
   &__title {
     font-family: 'Roboto-Medium';
@@ -200,8 +204,11 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  &__icon {
+  &__wrap {
     width: 135px;
+    &__icon {
+      width: 100%;
+    }
   }
   &__describe {
     color: #241262;

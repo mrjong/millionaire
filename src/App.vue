@@ -25,7 +25,8 @@ export default {
     ...mapGetters({
       isOnline: 'isOnline',
       status: 'status',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      questionStatus: 'question_status'
     })
   },
   created () {
@@ -37,7 +38,7 @@ export default {
           this.loading = false
         }, 500)
       }, (err) => {
-        this.$router.push({path: '/login'})
+        this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
@@ -62,8 +63,13 @@ export default {
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
+        utils.statistic('millionaire', 0, {style_s: 'waiting'})
       }
-
+      if (status === 2) {
+        utils.statistic('millionaire', 0, {style_s: 'countdown'})
+      } else if (status === 3) {
+        utils.statistic('millionaire', 0, {style_s: 'playing'})
+      }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
@@ -73,11 +79,8 @@ export default {
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
         api.ifSelfWon()
-          .then((data) => {
+          .then(({data}) => {
             if (+data.result === 1) {
-              // this.isWon = data.data
-              console.log('是否显示you won 后台返回数据如下')
-              console.log(data)
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon: data.data
               })
