@@ -1,11 +1,9 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-          <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart  -->
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-       <!-- <img :src="supa" alt="" class="supa"> -->
        <p class="supa" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
@@ -13,7 +11,6 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
-// import * as type from '../store/type'
 export default {
   name: 'Compere',
   data () {
