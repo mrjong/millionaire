@@ -93,25 +93,24 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       restTime: time
     })
-    const timer = utils.Timer(1000, Date.now() + time * 1000)
-    timer.addCompleteListener(({offset}) => {
-      commit(type.QUESTION_UPDATE, {
-        restTime: Math.round(offset / 1000)
-      })
-    })
-    // 计时结束
-    timer.addEndListener(() => {
-      commit(type.QUESTION_UPDATE, {
-        restTime: 0
-      })
-      if (!getters.isAnswered) {
+    const timer = setInterval(() => {
+      if (getters.restTime <= 0) {
+        clearInterval(timer)
         commit(type.QUESTION_UPDATE, {
-          watchingMode: true
+          restTime: 0
+        })
+        if (!getters.isAnswered) {
+          commit(type.QUESTION_UPDATE, {
+            watchingMode: true
+          })
+        }
+      } else {
+        commit(type.QUESTION_UPDATE, {
+          restTime: getters.restTime - 1
         })
       }
-    })
+    }, 1000)
     // 答题开始
-    timer.start()
     commit(type.QUESTION_UPDATE, {
       status: status.QUESTION_ANSWERING
     })

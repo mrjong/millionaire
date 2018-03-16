@@ -280,14 +280,14 @@ class Timer {
   /**
    * Creates an instance of Timer.
    * @param {any} interval 间隔时间
-   * @param {any} endTime 结束时间
+   * @param {any} offset 结束时间差
    * @param {any} completeCallback 每次完成时的回调
    * @param {any} endCallback 计时结束后的回调
    * @memberof Timer
    */
-  constructor (interval = 1000, endTime = 0, completeCallback, endCallback) {
+  constructor (interval = 1000, offset = 0, completeCallback, endCallback) {
     this.interval = interval
-    this.endTime = endTime
+    this.offset = offset
     this.completeCallback = completeCallback
     this.endCallback = endCallback
   }
@@ -299,7 +299,7 @@ class Timer {
   start () {
     const {interval} = this
     // 如果剩余时间小于间隔
-    const offset = this.endTime - Date.now()
+    const offset = this.offset
     if (offset < interval) {
       setTimeout(() => {
         this.endCallback && this.endCallback()
@@ -307,8 +307,7 @@ class Timer {
       return
     }
     this.timer = setInterval(() => {
-      const {endTime, completeCallback, endCallback} = this
-      const offset = endTime - Date.now()
+      const {offset, completeCallback, endCallback} = this
       if (offset > 0) {
         const date = new Date(offset >= 0 ? offset : 0)
         completeCallback && completeCallback({
