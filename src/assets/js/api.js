@@ -7,7 +7,7 @@ export const api = {
   submitAnswer: '/cmp/ans/', // 提交答案
   weekRank: '/cmp/wboard/', // 周排行榜
   totalRank: '/cmp/tboard/', // 总排行榜
-  syncStartTime: '/cmp/sct/', // 同步开始时间
+  syncStartTime: '/cmp/rst/', // 同步开始时间
   balanceApplication: '/cmp/apply', // 提现申请
   isWon: '/cmp/k/' // 用户是否获得奖金
 }
@@ -42,11 +42,14 @@ export const submitAnswer = function (id, answer, index) {
     params: {
       i: id,
       a: md5(answer),
-      s: index
+      s: index,
+      app_id: utils.app_id,
+      client_id: utils.clientId
     }
   })
 }
 
+// 同步开始时间
 export const syncTime = function () {
   return axios.get(api.syncStartTime)
 }
