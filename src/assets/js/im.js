@@ -48,7 +48,11 @@ const im = {
     for (let prop in type) {
       this.listeners[type[prop]] = null
     }
-    RongIMClient.init(appKey)
+
+    // 初始化融云
+    RongIMClient.init(appKey, null, {
+      navi: 'navsg01-glb.ronghub.com'
+    })
 
     // 注册消息类型
     this.messageTypes.forEach((messageType) => {
