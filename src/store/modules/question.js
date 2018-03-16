@@ -93,10 +93,10 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       restTime: time
     })
-    const timer = utils.Timer(1000, Date.now() + time * 1000)
+    const timer = utils.Timer(1000, time * 1000)
     timer.addCompleteListener(({offset}) => {
       commit(type.QUESTION_UPDATE, {
-        restTime: Math.round(offset / 1000)
+        restTime: getters.restTime - 1
       })
     })
     // 计时结束
