@@ -36,6 +36,18 @@ const actions = {
       commit(type.CHAT_LIST_FETCH, obj)
     }
     im.addListener(listenerType.MESSAGE_NORMAL, handler)
+    // im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
+  },
+  [type.GET_MY_MESSAGE] ({commit}) {
+    const handler = (message) => {
+      const obj = {
+        img: message.content.user.avatar,
+        nickname: message.content.user.name,
+        msg: message.content.content,
+        msgId: message.messageId
+      }
+      commit(type.CHAT_LIST_FETCH, obj)
+    }
     im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
   },
   [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {

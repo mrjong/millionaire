@@ -219,6 +219,7 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         console.log('Send successfully')
+        console.log(message)
         this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {

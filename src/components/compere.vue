@@ -1,7 +1,7 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-        <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart   -->
+          <!-- ar really Your are really smart smart smart smart Your are really smart Your are really smart smart Your are really smart  -->
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
@@ -82,7 +82,6 @@ export default {
     color: #fed331;
     font-family: 'Roboto-Midum';
     margin: 0 10px 20px 0;
-    // text-indent: 44px;
     line-height: 48px;
     position: relative;
     font-smoothing: antialiased;
@@ -96,7 +95,6 @@ export default {
     .supa {
       width: 186px;
       height: 256px;
-      // border: 1px solid red;
       background: url(../assets/images/supaes.png) no-repeat;
       background-size: cover;
     }
