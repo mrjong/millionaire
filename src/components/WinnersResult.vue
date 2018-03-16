@@ -32,7 +32,7 @@
           v-for="(col, idx) in respondence.winners"
           :key="col.userId"
           v-if="+idx >= 3 && +idx < 6">
-            <img :src="col.iavatar" alt="" class="has-winner-result-top-item__icon">
+            <img :src="col.avatar" alt="" class="has-winner-result-top-item__icon">
             <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
             <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
