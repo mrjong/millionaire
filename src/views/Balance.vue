@@ -9,10 +9,10 @@
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
-        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
+        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
     </div>
     <div class="balance-wrap__operate">
@@ -46,7 +46,7 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 150, // 可提现金额
+      withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
     }
   },
@@ -56,16 +56,17 @@ export default {
     })
   },
   mounted () {
-    // console.log(navigator.language)
     utils.statistic('wait_page', 0)
   },
   methods: {
     cashOut () {
-      if (+this.userInfo.balance < +this.withdraw) {
+      if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
-        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const passRule = emailReg.test(this.myPay)
+        // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        // const passRule = emailReg.test(this.myPay)
+        const phone = /\+?\d[\d -]{8,12}\d/
+        const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
         } else {
@@ -79,47 +80,36 @@ export default {
         // 提交表单
         this.showLoading = true
         api.balanceApplication({
-          amount: this.userInfo.balance,
-          email: this.myPay,
+          amount: +this.userInfo.balance,
+          email: '',
           accountId: this.myPay
         })
           .then(({data}) => {
+            console.log('提现申请后台返回结果如下')
+            console.log(data)
             let takeCash = ''
             this.showLoading = false
-            if (+data.result === 1) {
-              if (+data.code !== 0) {
-                if (+data.code === 3106) { // 账户记录不存在
-                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
-                  takeCash = 'bad_account'
-                } else if (+data.code === 3116) { // 可用金额不足
-                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
-                  takeCash = 'no_enough_money'
-                } else {
-                  this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-                  takeCash = 'network_error'
-                }
-              } else {
+            if (+data.result === 1) { // 请求成功 code必为0
+              if (+data.code === 0) {
                 this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
               }
-              utils.statistic('', 4, {
-                result_code_s: takeCash
-              })
-            } else {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-              utils.statistic('', 4, {
-                result_code_s: 'network_error'
-              })
+            } else { // 请求失败，判断code
+              if (+data.code === 3106) { // 账户记录不存在
+                this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                takeCash = 'bad_account'
+              } else if (+data.code === 3116) { // 可用金额不足
+                this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                takeCash = 'no_enough_money'
+              } else {
+                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                takeCash = 'network_error'
+              }
             }
-          })
-          .catch((err) => {
-            if (err) {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-              utils.statistic('', 4, {
-                result_code_s: 'network_error'
-              })
-            }
+            utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
           })
       }
     },

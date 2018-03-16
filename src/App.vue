@@ -13,6 +13,7 @@ import loading from './components/loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
 import {_AWAIT} from './assets/js/status'
+import im from './assets/js/im'
 export default {
   name: 'App',
   data () {
@@ -24,42 +25,51 @@ export default {
     ...mapGetters({
       isOnline: 'isOnline',
       status: 'status',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      questionStatus: 'question_status'
     })
   },
   created () {
-    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-    this.$store.dispatch(type.QUESTION_INIT)
-    this.$store.dispatch(type._UPDATE_AMOUNT)
-    this.$store.dispatch(type._RECEIVE_RESULT)
+    this.init()
     if (this.isOnline) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
           this.loading = false
-          if (this.status !== 1) {
-            this.$router.push({path: '/main'})
-          }
         }, 500)
       }, (err) => {
-        this.$router.push({path: '/login'})
+        this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
     }
   },
-  methods: {},
+  methods: {
+    init () {
+      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+      this.$store.dispatch(type.QUESTION_INIT)
+      this.$store.dispatch(type._UPDATE_AMOUNT)
+      this.$store.dispatch(type._RECEIVE_RESULT)
+    }
+  },
   components: {
     loading
   },
   watch: {
     status: function (status) {
       if (status !== 1) {
-        this.$router.push({path: '/main'})
+        this.$router.replace({path: '/main'})
+        utils.setGameState(true)
       } else {
-        this.$router.push({path: '/'})
+        this.$router.replace({path: '/'})
+        utils.setGameState(false)
+        utils.statistic('millionaire', 0, {style_s: 'waiting'})
       }
-
+      if (status === 2) {
+        utils.statistic('millionaire', 0, {style_s: 'countdown'})
+      } else if (status === 3) {
+        utils.statistic('millionaire', 0, {style_s: 'playing'})
+      }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
@@ -69,9 +79,8 @@ export default {
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
         api.ifSelfWon()
-          .then((data) => {
+          .then(({data}) => {
             if (+data.result === 1) {
-              // this.isWon = data.data
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon: data.data
               })
@@ -85,6 +94,9 @@ export default {
         this.$store.commit(type._UPDATE, {
           status: _AWAIT
         })
+        im.removeLister()
+      } else {
+        this.init()
       }
     }
   }

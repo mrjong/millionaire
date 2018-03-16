@@ -35,11 +35,11 @@
     </div>
     <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
     <div class="rank-items" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
-      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
+      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick">
       </rank-item>
     </div>
     <!-- 自己的排名 -->
-    <rank-item class="myrank" v-if="rankInfo[mode].cache" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
+    <rank-item class="myrank" v-if="rankInfo[mode].cache && rankInfo[mode].list.length" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
     <loading v-show="loading"></loading>
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
     ...mapGetters(['rankInfo', 'currencyType'])
   },
   mounted () {
-    utils.statistic('wait_page', 0)
+    utils.statistic('rank_page', 0)
   },
   components: {
     'rank-item': rankItem,

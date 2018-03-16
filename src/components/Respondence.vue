@@ -1,5 +1,5 @@
 <template>
-  <div class="respondence-container">
+  <div class="respondence-container" ref="respondenceContainer">
     <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
@@ -43,8 +43,13 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;',
-      game_answer: {}
+      countdownStyle: 'color: #fff;'
+      // game_answer: {
+      //   current_question_l: 0,
+      //   cost_time_l: 0,
+      //   question_id_l: 0,
+      //   resule_code_s: ''
+      // }
     }
   },
   computed: {
@@ -86,6 +91,10 @@ export default {
   mounted () {
     this.countDown(this.question_status)
     utils.statistic('game_page', 0)
+    this.$nextTick(() => {
+      // set height
+      this.$refs.respondenceContainer.style.minHeight = 'auto'
+    })
   },
   methods: {
     ...mapActions({}),
@@ -99,7 +108,9 @@ export default {
           this.isClick = true
           this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
           this.$store.dispatch(type.QUESTION_SUBMIT)
-          utils.statistic('', 2, {current_question_l: this.index, cost_time_l: this.restTime, question_id_l: this.id})
+          // this.game_answer.current_question_l = this.index
+          // this.game_answer.cost_time_l = this.restTime
+          // this.game_answer.question_id_l = this.id
         }
       } else {
         // 不可以点击
@@ -147,6 +158,10 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+    //  if (status === 7 && !this.watchingMode) {
+    //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
+    //    utils.statistic('', 2, this.game_answer)
+    //  }
     },
     restTime: function (restTime) {
       if (restTime === 4) {
@@ -171,6 +186,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 460px;
     &__viewing{
       position: absolute;
       top: 30px;
@@ -190,6 +206,7 @@ export default {
       line-height: 40px;
       font: 28px Roboto-Light;
       text-align: left;
+      min-height: 28px;
     }
     &__answer{
       font-size: 28px;

@@ -5,8 +5,9 @@
          ref="toFbBrowser"
          @click="btnStatistic('like_page')"></a>
       <div>
-        <router-link to="/rule" @click="btnStatistic('help_page')">
-          <div class="await-container__top__instructions icon-youxishuoming iconfont"></div>
+        <router-link to="/rule">
+          <div class="await-container__top__instructions icon-youxishuoming iconfont"
+               @click="btnStatistic('help_page')"></div>
         </router-link>
       </div>
     </div>
@@ -14,10 +15,13 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await-container__btn">
-        <router-link to="/rank" @click="btnStatistic('rank_page')">
-          <base-btn :baseStyle="baseStyle2"></base-btn>
+        <router-link to="/rank">
+          <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
         </router-link>
       <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
+    </div>
+    <div class="await-container__bottom">
+      <img src="../assets/images/apus-logo.png" class="await-container__bottom__apus">
     </div>
   </div>
 </template>
@@ -55,7 +59,7 @@ export default {
       } else if (this.startTime === 0) {
         return ['', 'Living']
       } else {
-        let nowDate = new Date(new Date().getTime() + this.startTime * 1000)
+        let nowDate = new Date(this.startTime)
         let month = nowDate.getMonth() + 1
         let day = nowDate.getDate()
         let hour = nowDate.getHours()
@@ -81,7 +85,7 @@ export default {
       bodys.style.height = bodyHeight + 'px'
     })
     this.toFb()
-    utils.statistic('wait_page', 'ALEX_SHOW')
+    utils.statistic('wait_page', 0)
   },
   methods: {
     inviteFriends () {
@@ -98,6 +102,7 @@ export default {
       }
     },
     btnStatistic (destination) {
+      console.log(destination)
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     }
   },
@@ -150,6 +155,15 @@ export default {
       display: flex;
       padding:0 25px;
       justify-content: space-between;
+    }
+    &__bottom{
+      width: 100%;
+      position: absolute;
+      bottom: 10px;
+      &__apus{
+        width: 134px;
+        margin: 0 auto;
+      }
     }
   }
 </style>

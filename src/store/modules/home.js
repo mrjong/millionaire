@@ -9,10 +9,12 @@ const state = {
   avatar: '', // 用户头像
   userName: '', // 用户名
   balance: 0, // 用户余额
+  balanceShow: '', // 用户余额-展示
   rank: 0, // 用户排名
   currencyType: '₹', // 货币类型
   bonusAmount: 0, // 奖金数量
-  income: 0 // 总收益
+  income: 0, // 总收益,
+  incomeShow: '0' // 总收益展示
 }
 
 const getters = {

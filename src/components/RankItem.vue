@@ -28,11 +28,11 @@ export default {
     },
     avatar: {
       type: String, // 头像
-      default: 'http://images.apusapps.com/src/icon-apus-user-system.png'
+      default: ''
     },
     name: {
       type: String, // 姓名
-      default: 'anonymous user'
+      default: ''
     },
     amount: {
       type: Number, // 金额
