@@ -74,8 +74,8 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '37da3d194cf76e46c676eaf03867b3b6',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : true,
 
