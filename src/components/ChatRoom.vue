@@ -64,7 +64,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
-    this.$store.dispatch(type.GET_MY_MESSAGE)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
