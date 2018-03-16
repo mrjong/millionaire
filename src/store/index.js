@@ -77,7 +77,6 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
-      initCount++
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           console.log(data)
@@ -181,6 +180,7 @@ export default new Vuex.Store({
                   const {readyTime, syncIntervalTime} = state
                   const timer = utils.Timer(syncIntervalTime, +startTime - readyTime)
                   timer.addEndListener(() => {
+                    initCount++
                     initCount < MAX_INIT_COUNT && dispatch(type._INIT)
                   })
                   timer.start()
