@@ -6,13 +6,13 @@
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-        <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
+         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}} {{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
-        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
+        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
     </div>
     <div class="balance-wrap__operate">
@@ -32,8 +32,8 @@ import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
-// import axios from 'axios'
-// import utils from '../assets/js/utils'
+import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Balance',
   data () {
@@ -46,7 +46,7 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 20,
+      withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
     }
   },
@@ -55,28 +55,18 @@ export default {
       userInfo: 'userInfo'
     })
   },
+  mounted () {
+    utils.statistic('wait_page', 0)
+  },
   methods: {
     cashOut () {
-      // 接口调试
-      // api.balanceApplication({
-      //   amount: 50,
-      //   email: 'liuweiwei@apuscn.com',
-      //   accountId: 'liuweiwei@apuscn.com'
-      // })
-      //   .then((data) => {
-      //     console.log('后台返回结果如下')
-      //     console.log(data)
-      //   })
-      //   .catch((err) => {
-      //     console.log('发送错误如下')
-      //     console.log(err)
-      //   })
-      // -----------------
-      if (+this.userInfo.balance < +this.withdraw) {
+      if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
-        const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const passRule = emailReg.test(this.myPay)
+        // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        // const passRule = emailReg.test(this.myPay)
+        const phone = /\+?\d[\d -]{8,12}\d/
+        const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
         } else {
@@ -90,21 +80,36 @@ export default {
         // 提交表单
         this.showLoading = true
         api.balanceApplication({
-          amount: this.userInfo.balance,
-          email: this.myPay,
+          amount: +this.userInfo.balance,
+          email: '',
           accountId: this.myPay
         })
           .then(({data}) => {
+            console.log('提现申请后台返回结果如下')
             console.log(data)
+            let takeCash = ''
             this.showLoading = false
-            if (+data.code !== 0) {
-              this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-            } else {
-              this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+            if (+data.result === 1) { // 请求成功 code必为0
+              if (+data.code === 0) {
+                this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+                this.$store.dispatch(type._INIT)
+                takeCash = 'success'
+              }
+            } else { // 请求失败，判断code
+              if (+data.code === 3106) { // 账户记录不存在
+                this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                takeCash = 'bad_account'
+              } else if (+data.code === 3116) { // 可用金额不足
+                this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                takeCash = 'no_enough_money'
+              } else {
+                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                takeCash = 'network_error'
+              }
             }
-          })
-          .catch((err) => {
-            err && this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+            utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
           })
       }
     },
@@ -119,7 +124,7 @@ export default {
       this.markInfo = {
         showMark: showMark,
         shouldSub: shouldSub,
-        markType: markType,
+        markType: markType, // 是否有cancel按钮
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
@@ -173,6 +178,7 @@ export default {
     width: 100%;
     height: 100%;
     flex: 1;
+    // margin-bottom: 150px;
     min-height: 384px;
     &__wrap {
       width: 100%;
@@ -186,7 +192,7 @@ export default {
       &__img {
         position: absolute;
         width: 103px;
-        height: 103px;
+        // height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;

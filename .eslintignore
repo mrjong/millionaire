@@ -2,3 +2,5 @@
 /config/
 /dist/
 /*.js
+/src/assets/js/libphonenumber_IN.js
+/src/assets/js/libphonenumber.js

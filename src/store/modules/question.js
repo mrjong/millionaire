@@ -11,7 +11,8 @@ const state = {
   status: status.QUESTION_ANSWERING, // 状态
   id: '', // ID
   contents: '', // 内容
-  options: '', // 选项
+  options: [], // 选项
+  optionsMd5Map: {},
   index: 0, // 序号
   watchingMode: false, // 是否观战模式
   isAnswered: false, // 是否作答
@@ -20,7 +21,8 @@ const state = {
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
-  restTime: 0 // 剩余时间
+  restTime: 0, // 剩余时间
+  isWon: false // 是否展示you won
 }
 
 const getters = {
@@ -28,6 +30,7 @@ const getters = {
   id: (state) => state.id,
   contents: (state) => state.contents,
   options: (state) => state.options,
+  optionsMd5Map: (state) => state.optionsMd5Map,
   index: (state) => state.index,
   watchingMode: (state) => state.watchingMode,
   isAnswered: (state) => state.isAnswered,
@@ -36,7 +39,8 @@ const getters = {
   userAnswer: (state) => state.userAnswer,
   question_result: (state) => state.result,
   time: (state) => state.time,
-  restTime: (state) => state.restTime
+  restTime: (state) => state.restTime,
+  isWon: (state) => state.isWon
 }
 
 const mutations = {
@@ -73,7 +77,7 @@ const actions = {
           return Math.random() > 0.5 ? 1 : -1
         })
         commit(type.QUESTION_UPDATE, {
-          id, index, contents, options
+          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options)
         })
         dispatch(type.QUESTION_START)
       }
@@ -139,6 +143,7 @@ const actions = {
    */
   [type.QUESTION_RECEIVE_ANSWER] ({commit, getters}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
+      const md5Map = getters.optionsMd5Map
       const answerStr = (message.content && message.content.answer) || ''
       const resultStr = (message.content && message.content.summary) || ''
       if (answerStr && resultStr) {
@@ -146,7 +151,7 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
         // 判断答案是否正确
-        const isCorrect = correctAnswer === getters.userAnswer
+        const isCorrect = md5Map[correctAnswer] === getters.userAnswer
 
         // 根据答案是否正确播放提示音
         if (isCorrect && !getters.watchingMode) {
@@ -157,13 +162,16 @@ const actions = {
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer, result, watchingMode, restTime: 0
+          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
         })
       }
     })
+  },
+  [type.QUESTION_YOU_WON] ({commit}, question) {
+    commit(type.QUESTION_UPDATE, question)
   }
 }
 

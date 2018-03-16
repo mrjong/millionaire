@@ -6,8 +6,12 @@
       <p class='no-winner-result__tip'>Prize rolls over to next game</p>
     </div>
     <div class="has-winner-result" v-else>
-      <p class="has-winner-result__title">
-        <span class="has-winner-result__title__count">{{respondence.winners.length}}</span>Winners!
+       <p class="has-winner-result__title" v-if="!isWon">
+        <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>Winners!
+      </p>
+      <p class="has-winner-result__title" v-else>
+        You Won!
+        <b>Congrats! {{respondence.winnerAmount}} winners in this game!</b>
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
@@ -43,19 +47,18 @@ import {mapGetters} from 'vuex'
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapGetters({
       respondence: 'result',
-      currencyType: 'currencyType'
+      currencyType: 'currencyType',
+      watchingMode: 'watchingMode',
+      isWon: 'isWon'
     })
   },
-  mounted () {
-  },
-  methods: {
-  }
+  mounted () {},
+  methods: {}
 }
 </script>
 <style scoped lang="less" type="text/less">
@@ -95,10 +98,20 @@ export default {
     display: flex;
     justify-content: center;
     font-family: 'RobotoCondensed-Regular';
+    position: relative;
+    b {
+      display: block;
+      font-weight: normal;
+      position: absolute;
+      width: 100%;
+      font-size: 24px;
+      top: 100px;
+      left: 0px;
+      text-align: center;
+    }
     &__count {
       margin-right: 17px;
       display: inline-block;
-      // width: 159px;
       max-width: 159px;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -126,6 +139,7 @@ export default {
 }
 .has-winner-result-top-item {
   width: auto;
+  max-width: 160px;
   height: 203px;
   display: flex;
   flex-direction: column;
@@ -137,9 +151,13 @@ export default {
     border-radius: 50%;
   }
   &__nickname {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 30px;
     color: #fff;
     margin: 10px 0;
+    text-align: center;
   }
   &__bonus {
     font-size: 26px;

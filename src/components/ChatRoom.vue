@@ -41,7 +41,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
-// import dataTest from '../assets/js/testData.js'
+import utils from '../assets/js/utils'
 export default {
   name: 'ChatRoom',
   data () {
@@ -51,24 +51,24 @@ export default {
       myMessage: '',
       showInput: false,
       pageHeight: null
-      // msgList: []
     }
   },
   computed: {
     ...mapGetters({
       chatRoomState: 'chatRoomState',
       msgList: 'msgList',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      status: 'status',
+      questionStatus: 'question_status'
     })
   },
   mounted () {
-    // this.msgList = dataTest.chatMesList
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
-      this.setMsgOuterHeight()
+      // this.setMsgOuterHeight()
     })
   },
   methods: {
@@ -83,6 +83,14 @@ export default {
           }
         })
         this.myMessage = ''
+        let fromSource = ''
+        if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
+          fromSource = 'game_page'
+        }
+        if (+this.status === 2) { // 倒计时页
+          fromSource = 'countdown_page'
+        }
+        utils.statistic('speaking', 3, {}, fromSource)
       }
     },
     focusEvent (e) {
@@ -106,8 +114,6 @@ export default {
         const chatmsgwrap = document.getElementById('msgContainer')
         const scrollContainer = document.getElementById('chatmsgwrap')
         const _H = chatmsgwrap.offsetHeight
-        console.log(_H)
-        // alert(_H)
         scrollContainer.style.height = _H + 'px'
       }, 0)
     }
@@ -117,12 +123,6 @@ export default {
       this.$nextTick(() => {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
-        this.myMessage = ''
-        console.log(scrollContainer)
-        // -----------
-        // const msgcontainer = document.getElementById('msgContainer')
-        // const containerHeight = msgcontainer.offsetHeight
-        // scrollContainer.style.height = containerHeight + 'px'
       })
     }
   },
@@ -144,7 +144,7 @@ export default {
   flex:1;
   position: relative;
   overflow: hidden;
-  overflow: auto;
+  // overflow: auto;
   margin-bottom: 35px;
   box-sizing: border-box;
 }
@@ -155,17 +155,9 @@ export default {
   mask-size: 100% 110%;
   width: 100%;
   height: 100%;
-  // overflow: hidden;
-  // position: relative;
-  // border: 5px solid palevioletred;
   box-sizing: border-box;
+  position: absolute;
 }
-// .chat-mask {
-//   -webkit-mask: url('../assets/images/mask.png') no-repeat top left;
-//   -webkit-mask-size: 100% 110%;
-//   mask: url('../assets/images/mask.png') no-repeat top left;
-//   mask-size: 100% 110%;
-// }
 .chat-msg-wrap-haswrap {
   margin-bottom: 0;
 }
@@ -215,7 +207,7 @@ export default {
       outline: none;
       box-shadow: none;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-size: 20px;
+      font-size: 28px;
       color: #241262;
       font-family: 'Roboto-Regular';
       padding: 0 23px;
@@ -228,7 +220,7 @@ export default {
     }
     &__btn {
       width: 100%;
-      font-size: 22px;
+      font-size: 28px;
       font-family: 'Roboto-Regular';
       color: #FFB227;
       flex: 1;
@@ -242,18 +234,15 @@ export default {
   bottom: 0px;
 }
 .msg-container {
-  // width: 100%;
-  // height: auto;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  // overflow-y: scroll;
+  // overflow-x: hidden;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
-  // border: 5px solid greenyellow;
   &__inner {
     width: 100%;
     height: auto;
-    // border: 5px solid red;
   }
   &__item {
     max-width: 100%;
@@ -280,7 +269,7 @@ export default {
     &__wrap {
       background: rgba(255, 255, 255, .2);
       border-radius: 30px;
-      padding: 0px 20px;
+      padding: 1px 20px 0px 20px;
       box-sizing: border-box;
       display: inline-block;
       font-size: 0;
@@ -295,12 +284,13 @@ export default {
       border-radius: 50%;
       position: absolute;
       top: 50%;
+      left: 8px;
       transform: translate(0, -50%);
     }
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
-      margin-left: 51px;
+      margin-left: 36px;
     }
     &__text {
       color: #fff;
@@ -322,6 +312,6 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
-  transform: translate3d(100px, 30px, 0) scale3d(0, 0, 0);
+  transform: translate3d(100px, 0px, 0) scale3d(0, 0, 0);
 }
 </style>

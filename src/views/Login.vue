@@ -33,11 +33,10 @@ export default {
       } else {
         utils.login(() => {
         // 更新登陆状态
-          this.$store.commit(type._UPDATE, {
-            isOnline: true
-          })
+          this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
           this.init()
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
         })
       }
     },
@@ -46,7 +45,7 @@ export default {
       this.$store.dispatch(type._INIT).then(() => {
         this.loading = false
         if (this.status === 1) {
-          this.$router.push({path: '/await'})
+          this.$router.push({path: '/'})
         } else {
           this.$router.push({path: '/main'})
         }
@@ -55,7 +54,9 @@ export default {
       })
     }
   },
-  mounted () {},
+  mounted () {
+    utils.statistic('login_page', 0)
+  },
   components: {
     loading
   }

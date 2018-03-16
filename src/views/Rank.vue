@@ -4,36 +4,42 @@
       <button class="back iconfont icon-fanhui" @click="back">
       </button>
       <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">Weekly Rank</section>
-      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All time</section>
+      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All Time</section>
     </header>
     <!-- 前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
-      <section class="second" v-if="rankInfo[mode].cache && rankInfo[mode].list[1]">
-        <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-second.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+      <section class="second">
+        <div v-if="rankInfo[mode].list[1]">
+          <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-second.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+        </div>
       </section>
-      <section class="first" v-if="rankInfo[mode].cache && rankInfo[mode].list[0]">
-        <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-first.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+      <section class="first" >
+        <div v-if="rankInfo[mode].list[0]">
+          <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-first.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+        </div>
       </section>
-      <section class="third" v-if="rankInfo[mode].cache && rankInfo[mode].list[2]">
-        <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
-        <img class="decorate" src="../assets/images/rank-third.png" alt="">
-        <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
-        <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+      <section class="third" >
+        <div v-if="rankInfo[mode].list[2]">
+          <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
+          <img class="decorate" src="../assets/images/rank-third.png" alt="">
+          <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
+          <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+        </div>
       </section>
     </div>
-    <section class="triangle" v-if="rankInfo[mode].cache"></section>
-    <div class="rank-items" v-if="rankInfo[mode].cache">
-      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick" :isSelf="item.rank === rankInfo[mode].self.rank">
+    <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
+    <div class="rank-items" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
+      <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick">
       </rank-item>
     </div>
     <!-- 自己的排名 -->
-    <rank-item class="myrank" v-if="rankInfo[mode].cache" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
+    <rank-item class="myrank" v-if="rankInfo[mode].cache && rankInfo[mode].list.length" :avatar="rankInfo[mode].self.upic" :amount="rankInfo[mode].self.amount" :rank="rankInfo[mode].self.rank" :name="rankInfo[mode].self.nick" :isSelf="true" :isInList="!!rankInfo[mode].self.inboard"></rank-item>
     <loading v-show="loading"></loading>
   </div>
 </template>
@@ -43,6 +49,7 @@ import rankItem from '../components/RankItem'
 import {mapGetters} from 'vuex'
 import { RANK_UPDATE } from '../store/type'
 import loading from '../components/loading'
+import utils from '../assets/js/utils'
 export default {
   name: 'RankList',
   data () {
@@ -54,6 +61,9 @@ export default {
   computed: {
     ...mapGetters(['rankInfo', 'currencyType'])
   },
+  mounted () {
+    utils.statistic('rank_page', 0)
+  },
   components: {
     'rank-item': rankItem,
     loading
@@ -64,17 +74,14 @@ export default {
     },
     getRank () {
       const {mode} = this
-      const rankInfo = this.rankInfo[mode]
-      if (!rankInfo.cache) {
-        this.loading = true
-        this.$store.dispatch(RANK_UPDATE, mode).then(() => {
-          this.loading = false
-        }, (err) => {
-          // TODO: 提示错误
-          this.loading = false
-          console.log(err)
-        })
-      }
+      this.loading = true
+      this.$store.dispatch(RANK_UPDATE, mode).then(() => {
+        this.loading = false
+      }, (err) => {
+        // TODO: 提示错误
+        this.loading = false
+        console.log(err)
+      })
     }
   },
   created () {

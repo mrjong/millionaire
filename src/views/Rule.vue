@@ -7,7 +7,9 @@
       <div class="rule__wrap">
         <p class="title">How to play</p>
         <div class="rule-item" v-for="col in ruleList" :key="col.id">
-          <img :src="col.img" alt="" class="rule-item__img">
+          <div class="rule-item__wrap">
+            <img :src="col.img" alt="" class="rule-item__wrap__img">
+          </div>
           <div class="rule-item__title">
             <span class="rule-item__title__index">{{col.id}}</span>
             {{col.title}}
@@ -16,9 +18,13 @@
             {{col.describe}}
           </p>
         </div>
-        <div class="share">
-          <img src="../assets/images/facebook-icon.png" alt="" class="share__icon">
-          <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+        <div class="share" @click="toFb">
+          <a class="share__fb" ref="toFbBrowser">
+            <p class="share__wrap">
+              <img src="../assets/images/facebook-icon.png" alt="" class="share__wrap__icon">
+            </p>
+            <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+          </a>
         </div>
       </div>
     </div>
@@ -77,6 +83,15 @@ export default {
     }
   },
   methods: {
+    toFb () {
+      let toFbBrowser = this.$refs.toFbBrowser
+      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+      if (isFbApp) {
+        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
+      } else {
+        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
+      }
+    },
     goback () {
       this.$router.go(-1)
     }
@@ -104,6 +119,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 24px;
   }
 }
 .header {
@@ -116,6 +132,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
   span {
     font-size: 28px;
     transform: translate(-2px, 0px);
@@ -140,8 +159,11 @@ export default {
   justify-content: center;
   align-items: center;
   margin-top: 100px;
-  &__img {
+  &__wrap {
     width: 277px;
+    &__img {
+      width: 100%;
+    }
   }
   &__title {
     font-family: 'Roboto-Medium';
@@ -167,18 +189,26 @@ export default {
     line-height: 32px;
     font-size: 28px;
     color: #241262;
+    text-align: center;
   }
 }
 .share {
   width: 100%;
   padding: 0 156px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 100px;
-  &__icon {
+  &__fb {
+    display: block;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  &__wrap {
     width: 135px;
+    &__icon {
+      width: 100%;
+    }
   }
   &__describe {
     color: #241262;
@@ -186,6 +216,7 @@ export default {
     font-size: 30px;
     line-height: 35px;
     margin: 28px 0 140px;
+    text-align: center;
   }
 }
 </style>

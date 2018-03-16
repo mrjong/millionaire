@@ -1,7 +1,6 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
-// const appKey = 'p5tvi9dsphpf4' // dev
-const appKey = 'pvxdm17jp3vvr' // test
+import {appKey} from './http'
 
 const im = {
 
@@ -170,7 +169,7 @@ const im = {
     const callback = {
       onSuccess: (userId) => {
         console.log('Reconnect successfully.' + userId)
-        this.emitListener(type.CONNECTED)
+        this.emitListener(type.CONNECT_SUCCESS)
       },
       onTokenIncorrect: function () {
         console.log('token无效')
@@ -271,6 +270,23 @@ const im = {
   emitListener (listenerType, ...args) {
     const listener = this.listeners[listenerType]
     listener && listener(...args)
+  },
+  /**
+   * 删除监听器
+   * @param {any} listenerType
+   */
+  removeLister (listenerType) {
+    if (listenerType) {
+      const listener = this.listeners[listenerType]
+      if (listener) {
+        this.listeners[listenerType] = null
+      }
+    } else {
+      const listeners = this.listeners
+      for (let prop in listeners) {
+        listeners[prop] = null
+      }
+    }
   }
 }
 

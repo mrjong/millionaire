@@ -1,6 +1,6 @@
 import axios from './http'
 import utils from './utils'
-// import md5 from 'md5'
+import md5 from 'md5'
 
 export const api = {
   init: '/cmp/ix/', // 初始化
@@ -8,7 +8,8 @@ export const api = {
   weekRank: '/cmp/wboard/', // 周排行榜
   totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/sct/', // 同步开始时间
-  balanceApplication: 'cmp/apply' // 提现申请
+  balanceApplication: '/cmp/apply', // 提现申请
+  isWon: '/cmp/k/' // 用户是否获得奖金
 }
 
 export const init = function (isRefreshToken) {
@@ -40,7 +41,7 @@ export const submitAnswer = function (id, answer, index) {
   return axios.get(api.submitAnswer, {
     params: {
       i: id,
-      a: answer,
+      a: md5(answer),
       s: index
     }
   })
@@ -57,4 +58,7 @@ export const balanceApplication = (valOption) => {
   }
   const fetchObj = Object.assign({}, baseOption, valOption)
   return axios.post(`${api.balanceApplication}`, fetchObj)
+}
+export const ifSelfWon = () => {
+  return axios.get(`${api.isWon}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
 }

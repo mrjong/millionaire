@@ -9,7 +9,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="status === 2"></count-down>
+    <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
     <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
@@ -37,8 +37,7 @@ export default {
       questionStatus: 'question_status'
     })
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
   },
   components: {
@@ -64,12 +63,15 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
+      min-height: 59px;
       &__online{
-        padding: 18px;
+        padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
         display: flex;
         align-items: center;
+        align-self: center;
+        height: 52px;
         &__icon{
           width: 24px;
           height: 24px;
@@ -85,24 +87,11 @@ export default {
         }
       }
       &__logo{
-        width: 168px;
         align-self: center;
         img{
-         width: 100%;
+          width: 135px;
         }
       }
     }
-  }
-  .respondence {
-    width: 100%;
-    height: 785px;
-  }
-  .chat-global-mark {
-    width: 100%;
-    height: 89%;
-    background: url('../assets/images/chat-mark.png') no-repeat top left;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 </style>
