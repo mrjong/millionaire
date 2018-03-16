@@ -42,7 +42,9 @@ export const submitAnswer = function (id, answer, index) {
     params: {
       i: id,
       a: md5(answer),
-      s: index
+      s: index,
+      app_id: utils.app_id,
+      client_id: utils.clientId
     }
   })
 }

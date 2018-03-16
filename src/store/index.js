@@ -20,7 +20,7 @@ export default new Vuex.Store({
     startTime: -1, // 开始时间 时间差
     startTimeOffset: 0,
     readyTime: 600000, // 准备时间 默认10分钟
-    syncIntervalTime: 120000, // 同步结束时间间隔
+    syncIntervalTime: 60000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
     hostMsgList: [], // 主持人消息列表
     status: status._AWAIT, // 当前状态
@@ -185,6 +185,13 @@ export default new Vuex.Store({
                   })
                   timer.start()
                 }
+
+                // 如果没有开始时间，每隔两分钟轮询
+                if (getters.startTime < 0) {
+                  setTimeout(() => {
+                    dispatch(type._INIT)
+                  }, state.syncIntervalTime)
+                }
               }
             }
             // 如果聊天室开启，进入聊天室
@@ -227,13 +234,13 @@ export default new Vuex.Store({
         } else {
           syncTime().then(({data}) => {
             commit(type._UPDATE, {
-              startTimeOffset: data
+              startTimeOffset: +data.data || 0
             })
           }, (err) => {
             console.log('同步时间失败：' + err)
           })
         }
-      }, 5000)
+      }, 15000)
     },
     /**
      * 更新在线人数
