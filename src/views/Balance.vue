@@ -56,7 +56,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('wait_page', 0)
+    utils.statistic('take_cash_page', 0)
   },
   methods: {
     cashOut () {
