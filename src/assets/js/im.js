@@ -81,6 +81,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
+            setTimeout(this.reconnect, 3000)
             break
         }
       }
@@ -174,6 +175,7 @@ const im = {
       onTokenIncorrect: function () {
         console.log('token无效')
         this.emitListener(type.CONNECTED_ERROR, 'token无效')
+        this.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         console.log(`重新连接出错 错误码：${errorCode}`)
