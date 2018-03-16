@@ -64,7 +64,6 @@ export default {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        // const passRule = emailReg.test(this.myPay)
         const phone = /\+?\d[\d -]{8,12}\d/
         const passRule = phone.test(this.myPay)
         if (!passRule) {
@@ -178,7 +177,6 @@ export default {
     width: 100%;
     height: 100%;
     flex: 1;
-    // margin-bottom: 150px;
     min-height: 384px;
     &__wrap {
       width: 100%;
@@ -192,7 +190,6 @@ export default {
       &__img {
         position: absolute;
         width: 103px;
-        // height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;

@@ -144,7 +144,6 @@ export default {
   flex:1;
   position: relative;
   overflow: hidden;
-  // overflow: auto;
   margin-bottom: 35px;
   box-sizing: border-box;
 }
@@ -236,8 +235,6 @@ export default {
 .msg-container {
   width: 100%;
   height: 100%;
-  // overflow-y: scroll;
-  // overflow-x: hidden;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   &__inner {
