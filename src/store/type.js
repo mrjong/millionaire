@@ -11,6 +11,7 @@ export const GET_COMPERE_MESSAGE_ACTION = 'GET_COMPERE_MESSAGE'
 // 首页
 export const _UPDATE = '_UPDATE'
 export const _UPDATE_AMOUNT = '_UPDATE_AMOUNT'
+export const _SYNC_TIME = '_SYNC_TIME'
 export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
 export const _INIT = '_INIT'
 export const _END = '_END'
