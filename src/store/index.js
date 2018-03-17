@@ -79,7 +79,7 @@ export default new Vuex.Store({
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
             // 更新首页信息
@@ -93,7 +93,7 @@ export default new Vuex.Store({
               income: +accountInfo.ui || 0,
               incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,
-              bonusAmount: +bonusAmount || 0,
+              bonusAmount,
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
             commit(type._UPDATE, {
@@ -151,7 +151,6 @@ export default new Vuex.Store({
               // 是否进入倒计时
               if (isInRoom) {
                 const timer = utils.Timer(1000, startTimeOffset * 1000)
-                timer.start()
                 timer.addCompleteListener(() => {
                   commit(type._UPDATE, {
                     startTimeOffset: getters.startTimeOffset - 1
@@ -162,6 +161,7 @@ export default new Vuex.Store({
                     startTimeOffset: 0
                   })
                 })
+                timer.start()
                 commit(type._UPDATE, {
                   status: status._READY
                 })
@@ -172,25 +172,13 @@ export default new Vuex.Store({
                 commit(type._UPDATE, {
                   status: status._AWAIT
                 })
-                // 如果有下一场信息
-                if (startTimeOffset * 1000 > getters.readyTime) {
+                // 如果剩余剩余时间大于十分钟 或者 无下场信息
+                if (startTimeOffset * 1000 > getters.readyTime || getters.startTime < 0) {
                   // 每隔一段时间同步开始时间
-                  const {readyTime, syncIntervalTime} = state
-                  const timer = utils.Timer(syncIntervalTime, startTimeOffset * 1000 - readyTime)
-                  timer.addCompleteListener(() => {
-                    dispatch(type._INIT)
-                  })
-                  timer.addEndListener(() => {
-                    dispatch(type._INIT)
-                  })
-                  timer.start()
-                }
-
-                // 如果没有开始时间，每隔两分钟轮询
-                if (getters.startTime < 0) {
+                  const {syncIntervalTime} = state
                   setTimeout(() => {
                     dispatch(type._INIT)
-                  }, state.syncIntervalTime)
+                  }, syncIntervalTime)
                 }
               }
             }
