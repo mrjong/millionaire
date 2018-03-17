@@ -107,7 +107,9 @@ export default {
           // 可以点击
           this.isClick = true
           this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
-          this.$store.dispatch(type.QUESTION_SUBMIT)
+          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
+            this.$emit('error', err)
+          })
           // this.game_answer.current_question_l = this.index
           // this.game_answer.cost_time_l = this.restTime
           // this.game_answer.question_id_l = this.id
