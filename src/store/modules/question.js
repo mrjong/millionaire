@@ -93,23 +93,25 @@ const actions = {
     commit(type.QUESTION_UPDATE, {
       restTime: time
     })
-    const timer = setInterval(() => {
-      if (getters.restTime <= 0) {
-        clearInterval(timer)
-        commit(type.QUESTION_UPDATE, {
-          restTime: 0
-        })
-        if (!getters.isAnswered) {
-          commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
-        }
-      } else {
+    const timer = utils.Timer(1000, time * 1000)
+    timer.addCompleteListener(() => {
+      if (getters.restTime > 0) {
         commit(type.QUESTION_UPDATE, {
           restTime: getters.restTime - 1
         })
       }
-    }, 1000)
+    })
+    timer.addEndListener(() => {
+      commit(type.QUESTION_UPDATE, {
+        restTime: 0
+      })
+      if (!getters.isAnswered) {
+        commit(type.QUESTION_UPDATE, {
+          watchingMode: true
+        })
+      }
+    })
+    timer.start()
     // 答题开始
     commit(type.QUESTION_UPDATE, {
       status: status.QUESTION_ANSWERING
@@ -125,14 +127,31 @@ const actions = {
    *  提交答案
    * @param {any} {getters}
    */
-  [type.QUESTION_SUBMIT] ({getters}) {
+  [type.QUESTION_SUBMIT] ({commit, getters}) {
     const {id, userAnswer, index} = getters
-    submitAnswer(id, userAnswer, index).then(({data}) => {
-      if (+data.result !== 1 || +data.code !== 0) {
-        console.log('答案提交失败:', id, data.msg)
-      }
-    }, (err) => {
-      console.log('答案提交错误:', err)
+    return new Promise((resolve, reject) => {
+      /* eslint-disable prefer-promise-reject-errors */
+      submitAnswer(id, userAnswer, index).then(({data}) => {
+        if (data && +data.result !== 1) {
+          commit(type.QUESTION_UPDATE, {
+            watchingMode: true
+          })
+          if (+data.code === 1005) {
+            reject('Time is out, you can view only.')
+          } else {
+            reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+          }
+          console.log('答案提交失败:', id, data.msg)
+        } else if (data && +data.result === 1) {
+          resolve()
+        }
+      }, (err) => {
+        commit(type.QUESTION_UPDATE, {
+          watchingMode: true
+        })
+        console.log('答案提交错误:', err)
+        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+      })
     })
   },
   /**

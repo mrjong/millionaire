@@ -11,9 +11,10 @@
     </div>
     <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
-    <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
+    <respondence @error="onError" v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
   </div>
 </template>
 
@@ -23,11 +24,19 @@ import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
-import Compere from '../components/compere'
+import Compere from '../components/Compere'
+import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Main',
   data () {
     return {
+      showDialog: false,
+      dialogInfo: {
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
+      }
     }
   },
   computed: {
@@ -39,13 +48,21 @@ export default {
   },
   mounted () {},
   methods: {
+    sure () {
+      this.showDialog = false
+    },
+    onError (err) {
+      this.dialogInfo.htmlText = err
+      this.showDialog = true
+    }
   },
   components: {
     CountDown,
     ChatRoom,
     Respondence,
     WinnersResult,
-    Compere
+    Compere,
+    BalanceMark
   }
 }
 </script>

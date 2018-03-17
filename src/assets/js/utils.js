@@ -293,28 +293,29 @@ class Timer {
       return
     }
     this.timer = setInterval(() => {
-      const {offset, completeCallback, endCallback} = this
-      if (offset > 0) {
-        const date = new Date(offset >= 0 ? offset : 0)
-        completeCallback && completeCallback({
+      if (this.offset > 0) {
+        const date = new Date(this.offset)
+        this.completeCallback && this.completeCallback({
           year: date.getUTCFullYear() - 1970,
           month: date.getUTCMonth(),
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(offset / 1000) % 60,
-          offset
+          seconds: Math.round(this.offset / 1000) % 60,
+          offset: this.offset
         })
         // 如果剩余时间小于间隔
-        if (offset < interval) {
+        if (this.offset < interval) {
           this.stop()
           setTimeout(() => {
-            endCallback && endCallback()
+            this.endCallback && this.endCallback()
           }, offset)
+        } else {
+          this.offset -= interval
         }
       } else {
         this.stop()
-        endCallback && endCallback()
+        this.endCallback && this.endCallback()
       }
     }, interval)
   }
