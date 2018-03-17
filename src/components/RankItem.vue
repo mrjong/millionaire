@@ -1,7 +1,7 @@
 <template>
   <!-- 排行榜列表项组件 lixuan@apusapps.com -->
   <div class="rank-item flex-box" :class="['rank-item', 'flex-box', isSelf ? 'self' : '']">
-    <p class="rank-item_index">{{rank}}</p>
+    <p class="rank-item_index">{{rank > 0 ? rank : '-'}}</p>
     <section class="rank-item_info flex-box flex-align-center">
       <img class="avatar" :src="avatar" alt="">
       <span class="name ellipsis-1">{{name}}</span>

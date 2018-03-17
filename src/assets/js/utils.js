@@ -280,14 +280,14 @@ class Timer {
   /**
    * Creates an instance of Timer.
    * @param {any} interval 间隔时间
-   * @param {any} endTime 结束时间
+   * @param {any} offset 结束时间差
    * @param {any} completeCallback 每次完成时的回调
    * @param {any} endCallback 计时结束后的回调
    * @memberof Timer
    */
-  constructor (interval = 1000, endTime = 0, completeCallback, endCallback) {
+  constructor (interval = 1000, offset = 0, completeCallback, endCallback) {
     this.interval = interval
-    this.endTime = endTime
+    this.offset = offset
     this.completeCallback = completeCallback
     this.endCallback = endCallback
   }
@@ -299,7 +299,7 @@ class Timer {
   start () {
     const {interval} = this
     // 如果剩余时间小于间隔
-    const offset = this.endTime - Date.now()
+    const offset = this.offset
     if (offset < interval) {
       setTimeout(() => {
         this.endCallback && this.endCallback()
@@ -307,29 +307,29 @@ class Timer {
       return
     }
     this.timer = setInterval(() => {
-      const {endTime, completeCallback, endCallback} = this
-      const offset = endTime - Date.now()
-      if (offset > 0) {
-        const date = new Date(offset >= 0 ? offset : 0)
-        completeCallback && completeCallback({
+      if (this.offset > 0) {
+        const date = new Date(this.offset)
+        this.completeCallback && this.completeCallback({
           year: date.getUTCFullYear() - 1970,
           month: date.getUTCMonth(),
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(offset / 1000) % 60,
-          offset
+          seconds: Math.round(this.offset / 1000) % 60,
+          offset: this.offset
         })
         // 如果剩余时间小于间隔
-        if (offset < interval) {
+        if (this.offset < interval) {
           this.stop()
           setTimeout(() => {
-            endCallback && endCallback()
+            this.endCallback && this.endCallback()
           }, offset)
+        } else {
+          this.offset -= interval
         }
       } else {
         this.stop()
-        endCallback && endCallback()
+        this.endCallback && this.endCallback()
       }
     }, interval)
   }

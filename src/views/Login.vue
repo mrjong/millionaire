@@ -1,8 +1,10 @@
 <template>
   <div class="login-container">
     <img src="../assets/images/logo.png" class="login-container__title">
-    <div class="login-container__btn">
-      <p class="login-container__btn__fb" @click="Login">Log in</p>
+    <div class="login-container__info">
+      <p class="login-container__info__hint">Log in to join Go! Millionaire</p>
+      <p class="login-container__info__hint">Win real cash up to Rs. 1,000,000 every 20:00</p>
+      <p class="login-container__info__fb" @click="Login">Log in</p>
     </div>
     <loading v-if="loading"></loading>
   </div>
@@ -74,7 +76,7 @@ export default {
       width: 592px;
       margin: 0 auto;
     }
-    &__btn{
+    &__info{
       position: absolute;
       bottom: 100px;
       width: 100%;
@@ -88,8 +90,16 @@ export default {
         background-color: #faa717;
         opacity: 0.95;
         border-radius: 46px;
-        margin: 0 auto;
+        margin: 28px auto 0;
         font-family: 'Roboto-Light';
+      }
+      &__hint{
+        width: 100%;
+        font-size: 24px;
+        font-family: 'Roboto-Regular';
+        color: #ffe033;
+        text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
+        line-height: 32px;
       }
     }
   }

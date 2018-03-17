@@ -81,6 +81,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
+            setTimeout(this.reconnect, 3000)
             break
         }
       }
@@ -169,21 +170,22 @@ const im = {
     const callback = {
       onSuccess: (userId) => {
         console.log('Reconnect successfully.' + userId)
-        this.emitListener(type.CONNECT_SUCCESS)
+        im.emitListener(type.CONNECT_SUCCESS)
       },
       onTokenIncorrect: function () {
         console.log('token无效')
-        this.emitListener(type.CONNECTED_ERROR, 'token无效')
+        im.emitListener(type.CONNECTED_ERROR, 'token无效')
+        im.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         console.log(`重新连接出错 错误码：${errorCode}`)
-        this.emitListener(type.CONNECTED_ERROR, `重新连接出错 错误码：${errorCode}`)
+        im.emitListener(type.CONNECTED_ERROR, `重新连接出错 错误码：${errorCode}`)
       }
     }
     const config = {
       auto: true,
-      url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
-      rate: [100, 1000, 2000, 3000, 30000]
+      url: 'cdn.ronghub.com/RongIMLib-2.3.0.min.js',
+      rate: [500, 1000, 2000, 3000, 5000, 8000, 10000, 20000]
     }
     RongIMClient.reconnect(callback, config)
   },
@@ -219,6 +221,7 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         console.log('Send successfully')
+        console.log(message)
         this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {

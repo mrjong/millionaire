@@ -1,27 +1,29 @@
 <template>
-  <div class="await-container">
-    <div class="await-container__top">
-      <a class="await-container__top__like icon-dianzan iconfont"
+  <div class="await">
+    <div class="await__top">
+      <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"
          @click="btnStatistic('like_page')"></a>
       <div>
         <router-link to="/rule">
-          <div class="await-container__top__instructions icon-youxishuoming iconfont"
+          <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
         </router-link>
       </div>
     </div>
-    <img src="../assets/images/logo.png" class="await-container__title">
+    <div class="await__title">
+      <img src="../assets/images/logo.png">
+    </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <div class="await-container__btn">
+    <div class="await__btn">
         <router-link to="/rank">
           <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
         </router-link>
       <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>
-    <div class="await-container__bottom">
-      <img src="../assets/images/apus-logo.png" class="await-container__bottom__apus">
+    <div class="await__bottom">
+      <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
   </div>
 </template>
@@ -102,7 +104,6 @@ export default {
       }
     },
     btnStatistic (destination) {
-      console.log(destination)
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     }
   },
@@ -114,7 +115,7 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
-  .await-container{
+  .await{
     width: 100%;
     height: 100%;
     background: url("../assets/images/await-bg.jpg") no-repeat top left;
@@ -150,6 +151,9 @@ export default {
     &__title{
       width: 400px;
       margin: 0 auto;
+      img{
+        width: 100%;
+      }
     }
     &__btn{
       display: flex;
@@ -163,6 +167,7 @@ export default {
       &__apus{
         width: 134px;
         margin: 0 auto;
+        font-family: 'Roboto-Regular,serif';
       }
     }
   }
