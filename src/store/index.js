@@ -151,7 +151,6 @@ export default new Vuex.Store({
               // 是否进入倒计时
               if (isInRoom) {
                 const timer = utils.Timer(1000, startTimeOffset * 1000)
-                timer.start()
                 timer.addCompleteListener(() => {
                   commit(type._UPDATE, {
                     startTimeOffset: getters.startTimeOffset - 1
@@ -162,6 +161,7 @@ export default new Vuex.Store({
                     startTimeOffset: 0
                   })
                 })
+                timer.start()
                 commit(type._UPDATE, {
                   status: status._READY
                 })
