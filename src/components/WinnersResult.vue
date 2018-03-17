@@ -32,7 +32,7 @@
           v-for="(col, idx) in respondence.winners"
           :key="col.userId"
           v-if="+idx >= 3 && +idx < 6">
-            <img :src="col.iavatar" alt="" class="has-winner-result-top-item__icon">
+            <img :src="col.avatar" alt="" class="has-winner-result-top-item__icon">
             <p class="has-winner-result-top-item__nickname">{{col.name}}</p>
             <p class="has-winner-result-top-item__bonus">{{currencyType}}{{col.bonusAmount}}</p>
           </div>
@@ -164,84 +164,5 @@ export default {
     color: #ffb227;
     font-weight: 600;
   }
-
-}
-@-webkit-keyframes tada {
-  0% {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-
-  10%, 20% {
-    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-  }
-
-  30%, 50%, 70%, 90% {
-    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-  }
-
-  40%, 60%, 80% {
-    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-  }
-
-  100% {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-@keyframes tadaXY {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-  50%{
-    -webkit-transform: translate3d(20px, 10px, 0);
-    transform: translate3d(20px, 10px, 0);
-  }
-  100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-}
-@keyframes tadaYZ {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-  50%{
-    -webkit-transform: translate3d(15px, -2px, 5px);
-    transform: translate3d(15px, -2px, 5px);
-  }
-  100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-}
-@keyframes tadaXYZ {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-  50%{
-    -webkit-transform: translate3d(-20px, 10px, 0);
-    transform: translate3d(-20px, 10px, 0);
-  }
-  100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-}
-.actionXY {
-  animation: tadaYZ 3s infinite;
-}
-.actionYZ {
-  animation: tadaXYZ 3s infinite;
-}
-.actionXYZ {
-  animation: tadaXYZ 3s infinite;
 }
 </style>
