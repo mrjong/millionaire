@@ -91,10 +91,6 @@ export default {
   mounted () {
     this.countDown(this.question_status)
     utils.statistic('game_page', 0)
-    this.$nextTick(() => {
-      // set height
-      this.$refs.respondenceContainer.style.minHeight = 'auto'
-    })
   },
   methods: {
     ...mapActions({}),
@@ -126,7 +122,7 @@ export default {
       }
       return percent
     },
-    countDown (status) {
+    countDown: function (status) {
       let circle = this.$refs.circle
       if (status === 5) {
         this.countdownStyle = `
@@ -180,6 +176,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
+    min-height: 500px;
     margin: 25px;
     background-color: #fff;
     border-radius: 24px;
@@ -188,7 +185,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 460px;
     &__viewing{
       position: absolute;
       top: 30px;
