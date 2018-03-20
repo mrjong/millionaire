@@ -10,7 +10,7 @@
         class="msg-container__inner"
         id="msgContainerInner"
         >
-        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
+        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -50,7 +50,8 @@ export default {
       chatRoomId: 'room10',
       myMessage: '',
       showInput: false,
-      pageHeight: null
+      pageHeight: null,
+      windowInnerheight: 0
     }
   },
   computed: {
@@ -64,11 +65,18 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
+    this.windowInnerheight = window.innerHeight
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
       // this.setMsgOuterHeight()
+      window.addEventListener('resize', () => {
+        if (this.windowInnerheight < window.innerHeight) {
+          this.showInput = false
+        }
+        this.windowInnerheight = window.innerHeight
+      })
     })
   },
   methods: {
@@ -206,9 +214,8 @@ export default {
       outline: none;
       box-shadow: none;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-size: 28px;
       color: #241262;
-      font-family: 'Roboto-Regular';
+      font: 400 28px 'Roboto', Arial, serif;
       padding: 0 23px;
     }
     &__input:focus {
@@ -219,8 +226,7 @@ export default {
     }
     &__btn {
       width: 100%;
-      font-size: 28px;
-      font-family: 'Roboto-Regular';
+      font: 400 28px 'Roboto', Arial, serif;
       color: #FFB227;
       flex: 1;
       text-align: center;
@@ -258,10 +264,12 @@ export default {
       text-overflow: ellipsis;
     }
     &__nickname {
-      font-family: "Roboto-Medium";
+      font-family: "Roboto";
+      font-weight: 500;
     }
     &__text {
-      font-family: 'Roboto-Light';
+      font-family: 'Roboto';
+      font-weight: 300;
     }
     &__wrap {
       background: rgba(255, 255, 255, .2);

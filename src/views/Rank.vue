@@ -104,7 +104,8 @@ export default {
     position: relative;
 
     header {
-      height: 51.5px;
+      width: 92.6%;
+      min-height: 51.5px;
       position: relative;
       margin: 3.7% 3.7% 10.8333%;
       .back {
@@ -125,7 +126,8 @@ export default {
       }
 
       section {
-        font: normal 28px "Roboto Light";
+        min-height: 36px;
+        font: 300 28px 'Roboto', Arial, serif;
         color: #a6a5b2;
         position: relative;
       }
@@ -139,7 +141,7 @@ export default {
       }
 
       .selected {
-        font: normal 35.64px "Roboto Medium";
+        font: 500 36px 'Roboto', Arial, serif;
         color: #fff;
       }
 
@@ -157,6 +159,8 @@ export default {
     }
 
     .topThree {
+      width: 92.6%;
+      min-height: 240px;
       margin: 0 3.7% 7%;
       align-items: flex-end;
       justify-content: space-between;
@@ -178,12 +182,12 @@ export default {
           top: 105px;
         }
         .name {
-          font: normal 24px "Roboto-Light";
+          font: 300 24px 'Roboto', Arial, serif;
           max-width: 180px;
           color: #fff;
         }
         .money {
-          font: bold 24px/2.1 "Myriad Pro Regular";
+          font: 400 24px/2.1 'Roboto Condensed', Arial, serif;
           color: #ffb227;
         }
       }

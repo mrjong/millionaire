@@ -152,8 +152,7 @@ export default {
     height: 54px;
     margin: 24px 0 79px 0;
     box-sizing: border-box;
-    font-size: 28px;
-    font-family: 'Roboto-Medium';
+    font: 500 28px 'Roboto', Arial, serif;
     color: #fff;
     display: flex;
     align-items: center;
@@ -195,23 +194,23 @@ export default {
         right: 55px;
       }
       &__symbol {
-        font-family: 'Roboto-BoldCondensed';
+        font-family: 'Roboto Condensed', Arial, serif;
+        font-weight: 700;
       }
       &__mytitle, &__totaltitle {
         font-size: 28px;
-        font-family: 'Roboto-Light';
+        font-family: 'Roboto', Arial, serif;
+        font-weight: 300;
       }
       &__mybalance, &__totalbalance {
-        font-size: 52px;
-        font-family: 'Roboto-BoldCondensed';
+        font: 700 52px 'Roboto Condensed', Arial, serif;
         margin: 20px 0 58px 0;
       }
       &__totalbalance {
         margin: 20px 0 0px 0;
       }
       &__tip {
-        font-size: 26px;
-        font-family: 'Roboto-Light';
+        font: 300 26px 'Roboto', Arial, serif;
         color: #7B7B7B;
         margin-left: 22px;
       }
@@ -239,8 +238,7 @@ export default {
       border: none;
       outline: none;
       color: #241262;
-      font-size: 36px;
-      font-family: 'Roboto-Light';
+      font: 300 36px 'Roboto', Arial, serif;
       margin-left: 35px;
     }
     &__input:focus {
@@ -264,9 +262,7 @@ export default {
     &__tip {
       width: 100%;
       color: #fff;
-      font-family: 'Roboto-Light';
-      font-size: 24px;
-      line-height: 30px;
+      font: 300 24px/30px 'Roboto', Arial, serif;
       margin: 27px 0 39px 0;
     }
     &__btn {
@@ -276,9 +272,7 @@ export default {
       color: #fff;
       background: rgba(250,167,23, 0.95);
       text-align: center;
-      line-height: 94px;
-      font-size: 36px;
-      font-family: 'Roboto-Light';
+      font: 300 36px/94px 'Roboto', Arial, serif;
     }
   }
 }
