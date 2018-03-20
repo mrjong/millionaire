@@ -77,13 +77,11 @@ export default {
         margin: 56px 0 218px 0px;
     }
     &__bonus {
-        font-size: 114px;
         margin-bottom: 32px;
-        font-family: 'RobotoCondensed-Bold';
+        font: 700 114px 'Roboto Condensed', Arial, serif;
     }
     &__tip {
-        font-size: 28px;
-        font-family: 'Roboto-Light';
+        font: 300 28px 'Roboto';
     }
 }
 .has-winner-result {
@@ -91,13 +89,11 @@ export default {
     width: 560px;
     height: 102.58px;
     margin: 56px 0 83px 0px;
-    font-size: 50px;
-    line-height: 94px;
     background: url('../assets/images/has-winners-title.png') no-repeat left top;
     background-size: contain;
     display: flex;
     justify-content: center;
-    font-family: 'RobotoCondensed-Regular';
+    font: 400 50px/94px 'Roboto Condensed', Arial, serif;
     position: relative;
     b {
       display: block;
@@ -145,7 +141,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto-Medium';
+  font-family: 'Roboto';
+  font-weight: 500;
   &__icon {
     width: 130px;
     border-radius: 50%;

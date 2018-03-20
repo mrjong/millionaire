@@ -81,7 +81,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            setTimeout(this.reconnect, 3000)
+            this.reconnect()
             break
         }
       }
