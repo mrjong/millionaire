@@ -71,7 +71,7 @@ const im = {
 
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
-        this.emitListener(status)
+        im.emitListener(status)
         switch (status) {
           case RongIMLib.ConnectionStatus.CONNECTED:
             console.log('链接成功')
@@ -81,7 +81,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
-            this.reconnect()
+            im.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -91,7 +91,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            this.reconnect()
+            im.reconnect()
             break
         }
       }
@@ -121,8 +121,11 @@ const im = {
           case type.MESSAGE_RESULT:
             this.emitListener(type.MESSAGE_RESULT, message)
             break
+          case type.MESSAGE_END:
+            this.emitListener(type.MESSAGE_END, message)
+            break
           default:
-            console.log('未知类型消息:' + message)
+            console.log('未知类型消息:', message)
         }
       }
     })

@@ -50,6 +50,7 @@ export default {
       this.$store.dispatch(type.QUESTION_INIT)
       this.$store.dispatch(type._UPDATE_AMOUNT)
       this.$store.dispatch(type._RECEIVE_RESULT)
+      this.$store.dispatch(type._END)
     }
   },
   components: {
