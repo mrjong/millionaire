@@ -22,6 +22,9 @@ const mutations = {
     if (+len > staticLen) {
       state.msgList = state.msgList.splice(len - staticLen, len)
     }
+  },
+  [type.CHAT_UPDATE] (state, obj) {
+    state = Object.assign(state, obj)
   }
 }
 const actions = {

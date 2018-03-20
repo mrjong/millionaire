@@ -79,6 +79,7 @@ export default {
     font: 500 40px/48px 'Roboto', Arial, serif;;
     margin: 0 10px 20px 0;
     position: relative;
+    overflow: hidden;
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

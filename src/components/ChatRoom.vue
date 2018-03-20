@@ -96,10 +96,17 @@ export default {
     focusEvent (e) {
       this.showInput = true
       this.reSetMsgBot()
+      setTimeout(() => {
+        window.addEventListener('resize', this.hideInput)
+      }, 200)
+    },
+    hideInput () {
+      this.showInput = false
     },
     blurEvent () {
       this.showInput = false
       this.reSetMsgBot()
+      window.removeEventListener('resize', this.hideInput)
     },
     reSetMsgBot () {
       const msgcontainer = document.getElementById('msgcontainer')

@@ -104,7 +104,8 @@ export default {
     position: relative;
 
     header {
-      height: 51.5px;
+      width: 92.6%;
+      min-height: 51.5px;
       position: relative;
       margin: 3.7% 3.7% 10.8333%;
       .back {
@@ -125,6 +126,7 @@ export default {
       }
 
       section {
+        min-height: 36px;
         font: 300 28px 'Roboto', Arial, serif;
         color: #a6a5b2;
         position: relative;
@@ -157,6 +159,8 @@ export default {
     }
 
     .topThree {
+      width: 92.6%;
+      min-height: 240px;
       margin: 0 3.7% 7%;
       align-items: flex-end;
       justify-content: space-between;
