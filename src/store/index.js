@@ -264,15 +264,29 @@ export default new Vuex.Store({
           commit(type._UPDATE, {
             result: {isFinish, bonusAmount, winners: winnersMap, winnerAmount}
           })
+
+          // 重置问题状态
+          commit(type.QUESTION_UPDATE, {
+            status: status.QUESTION_ANSWERING,
+            id: '',
+            contents: '',
+            options: [],
+            optionsMd5Map: {},
+            index: 0,
+            watchingMode: false,
+            isAnswered: false,
+            isCorrect: false,
+            correctAnswer: '',
+            userAnswer: '',
+            result: {},
+            restTime: 0,
+            isWon: false
+          })
+
           // 更新状态
           commit(type._UPDATE, {
             status: status._END
           })
-
-          // 5秒后 重新初始化
-          setTimeout(() => {
-            dispatch(type._INIT)
-          }, 60000)
         }
       })
     },
@@ -281,29 +295,12 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._END] ({dispatch, commit}) {
-      // 重置问题状态
-      commit(type.QUESTION_UPDATE, {
-        status: status.QUESTION_ANSWERING,
-        id: '',
-        contents: '',
-        options: [],
-        optionsMd5Map: {},
-        index: 0,
-        watchingMode: false,
-        isAnswered: false,
-        isCorrect: false,
-        correctAnswer: '',
-        userAnswer: '',
-        result: {},
-        restTime: 0,
-        isWon: false
-      })
-      // 清空聊天室
-      commit(type.CHAT_UPDATE, {
-        msgList: [],
-        compereMsg: ''
-      })
       im.addListener(MESSAGE_END, (message) => {
+        // 清空聊天室
+        commit(type.CHAT_UPDATE, {
+          msgList: [],
+          compereMsg: ''
+        })
         dispatch(type._INIT)
       })
     }

@@ -52,6 +52,14 @@ const im = {
       navi: 'navsg01-glb.ronghub.com'
     })
 
+    // emoji 初始化
+    const config = {
+      size: 36, // 大小, 默认 24, 建议18 - 58
+      url: '//f2e.cn.ronghub.com/sdk/emoji-48.png', // Emoji 背景图片
+      lang: 'en'
+    }
+    RongIMLib.RongIMEmoji.init(config)
+
     // 注册消息类型
     this.messageTypes.forEach((messageType) => {
       const messageName = messageType.messageName // 消息类型。
@@ -63,7 +71,7 @@ const im = {
 
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
-        this.emitListener(status)
+        im.emitListener(status)
         switch (status) {
           case RongIMLib.ConnectionStatus.CONNECTED:
             console.log('链接成功')
@@ -73,7 +81,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
-            this.reconnect()
+            im.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -83,7 +91,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            this.reconnect()
+            im.reconnect()
             break
         }
       }
@@ -95,6 +103,7 @@ const im = {
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
+            message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
             break
           case type.MESSAGE_AMOUNT:
@@ -112,8 +121,11 @@ const im = {
           case type.MESSAGE_RESULT:
             this.emitListener(type.MESSAGE_RESULT, message)
             break
+          case type.MESSAGE_END:
+            this.emitListener(type.MESSAGE_END, message)
+            break
           default:
-            console.log('未知类型消息:' + message)
+            console.log('未知类型消息:', message)
         }
       }
     })
@@ -217,11 +229,13 @@ const im = {
    * @param {any} name 用户名
    */
   sendMessage (content, avatar, name) {
+    content = RongIMLib.RongIMEmoji.emojiToSymbol(content)
     const msg = new RongIMLib.TextMessage({ content: content, user: {avatar, name} })
     const conversationtype = RongIMLib.ConversationType.CHATROOM
     const targetId = this.chatRoomId // 房间号
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
+        message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
         console.log('Send successfully')
         console.log(message)
         this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
