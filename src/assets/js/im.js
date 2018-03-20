@@ -48,7 +48,9 @@ const im = {
     for (let prop in type) {
       this.listeners[type[prop]] = null
     }
-    RongIMClient.init(appKey)
+    RongIMClient.init(appKey, null, {
+      navi: 'navsg01-glb.ronghub.com'
+    })
 
     // 注册消息类型
     this.messageTypes.forEach((messageType) => {
@@ -81,7 +83,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            setTimeout(this.reconnect, 3000)
+            this.reconnect()
             break
         }
       }

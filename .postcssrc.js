@@ -8,7 +8,7 @@ module.exports = {
     "autoprefixer": {
       "browsers": [
         "> 1%",
-        "last 8 versions"
+        "last 10 versions"
       ]
     },
     "postcss-pxtorem": {
@@ -19,6 +19,9 @@ module.exports = {
       "replace": true,
       "mediaQuery": false,
       "minPixelValue": 0
+    },
+    "cssnano": {
+      "preset": 'default'
     }
   }
 }

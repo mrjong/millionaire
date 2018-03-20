@@ -75,12 +75,11 @@ export default {
   &__text {
     width: 100%;
     height: 200px;
-    font-size: 40px;
     color: #fed331;
-    font-family: 'Roboto-Midum';
+    font: 500 40px/48px 'Roboto', Arial, serif;;
     margin: 0 10px 20px 0;
-    line-height: 48px;
     position: relative;
+    overflow: hidden;
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
