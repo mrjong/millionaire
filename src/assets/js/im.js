@@ -52,6 +52,14 @@ const im = {
       navi: 'navsg01-glb.ronghub.com'
     })
 
+    // emoji 初始化
+    const config = {
+      size: 36, // 大小, 默认 24, 建议18 - 58
+      url: '//f2e.cn.ronghub.com/sdk/emoji-48.png', // Emoji 背景图片
+      lang: 'en'
+    }
+    RongIMLib.RongIMEmoji.init(config)
+
     // 注册消息类型
     this.messageTypes.forEach((messageType) => {
       const messageName = messageType.messageName // 消息类型。
@@ -95,6 +103,7 @@ const im = {
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
+            message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
             break
           case type.MESSAGE_AMOUNT:
@@ -217,11 +226,13 @@ const im = {
    * @param {any} name 用户名
    */
   sendMessage (content, avatar, name) {
+    content = RongIMLib.RongIMEmoji.emojiToSymbol(content)
     const msg = new RongIMLib.TextMessage({ content: content, user: {avatar, name} })
     const conversationtype = RongIMLib.ConversationType.CHATROOM
     const targetId = this.chatRoomId // 房间号
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
+        message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
         console.log('Send successfully')
         console.log(message)
         this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
