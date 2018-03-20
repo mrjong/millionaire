@@ -82,24 +82,20 @@ export default {
       width: 100%;
       text-align: center;
       &__fb{
+        font: 300 36px/94px 'Roboto', Arial, serif;
         width: 658px;
         height: 94px;
-        line-height: 94px;
         color: #ffffff;
-        font-size: 36px;
         background-color: #faa717;
         opacity: 0.95;
         border-radius: 46px;
         margin: 28px auto 0;
-        font-family: 'Roboto-Light';
       }
       &__hint{
+        font: 400 24px/32px 'Roboto', Arial, serif;
         width: 100%;
-        font-size: 24px;
-        font-family: 'Roboto-Regular';
         color: #ffe033;
         text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
-        line-height: 32px;
       }
     }
   }

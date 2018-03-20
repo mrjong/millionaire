@@ -205,8 +205,7 @@ export default {
       color: #241262;
       margin: 40px auto;
       padding: 0 16px;
-      line-height: 40px;
-      font: 28px Roboto-Light;
+      font: 300 28px/40px 'Roboto';
       text-align: left;
       min-height: 28px;
     }
@@ -228,6 +227,6 @@ export default {
     font-weight: 600;
     text-anchor: middle;
     dominant-baseline: middle;
-    font: 56px Roboto-BoldCondensed;
+    font: 700 56px 'Roboto Condensed', Arial, serif;
   }
 </style>

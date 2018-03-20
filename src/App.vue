@@ -111,24 +111,4 @@ export default {
     background: url('./assets/images/main-bg.jpg') no-repeat top left;
     background-size: cover;
   }
-   @font-face {
-  font-family: 'RobotoCondensed-Bold';
-  src: url('./assets/font/RobotoCondensed-Bold.ttf')
-  }
-  @font-face {
-    font-family: 'RobotoCondensed-Regular';
-    src: url('./assets/font/RobotoCondensed-Regular.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-Light';
-    src: url('./assets/font/Roboto-Light.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-Medium';
-    src: url('./assets/font/Roboto-Medium.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-BoldCondensed';
-    src: url('./assets/font/RobotoCondensed-Bold.ttf');
-  }
 </style>

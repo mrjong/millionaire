@@ -206,9 +206,8 @@ export default {
       outline: none;
       box-shadow: none;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-size: 28px;
       color: #241262;
-      font-family: 'Roboto-Regular';
+      font: 400 28px 'Roboto', Arial, serif;
       padding: 0 23px;
     }
     &__input:focus {
@@ -219,8 +218,7 @@ export default {
     }
     &__btn {
       width: 100%;
-      font-size: 28px;
-      font-family: 'Roboto-Regular';
+      font: 400 28px 'Roboto', Arial, serif;
       color: #FFB227;
       flex: 1;
       text-align: center;
@@ -258,10 +256,12 @@ export default {
       text-overflow: ellipsis;
     }
     &__nickname {
-      font-family: "Roboto-Medium";
+      font-family: "Roboto";
+      font-weight: 500;
     }
     &__text {
-      font-family: 'Roboto-Light';
+      font-family: 'Roboto';
+      font-weight: 300;
     }
     &__wrap {
       background: rgba(255, 255, 255, .2);
