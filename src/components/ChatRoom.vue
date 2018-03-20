@@ -10,7 +10,7 @@
         class="msg-container__inner"
         id="msgContainerInner"
         >
-        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId">
+        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
           <span class="msg-container__item__wrap">
             <img class="msg-container__item__portrait" :src="col.img" alt="">
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -50,7 +50,8 @@ export default {
       chatRoomId: 'room10',
       myMessage: '',
       showInput: false,
-      pageHeight: null
+      pageHeight: null,
+      windowInnerheight: 0
     }
   },
   computed: {
@@ -64,11 +65,18 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
+    this.windowInnerheight = window.innerHeight
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
       // this.setMsgOuterHeight()
+      window.addEventListener('resize', () => {
+        if (this.windowInnerheight < window.innerHeight) {
+          this.showInput = false
+        }
+        this.windowInnerheight = window.innerHeight
+      })
     })
   },
   methods: {
@@ -96,17 +104,10 @@ export default {
     focusEvent (e) {
       this.showInput = true
       this.reSetMsgBot()
-      setTimeout(() => {
-        window.addEventListener('resize', this.hideInput)
-      }, 200)
-    },
-    hideInput () {
-      this.showInput = false
     },
     blurEvent () {
       this.showInput = false
       this.reSetMsgBot()
-      window.removeEventListener('resize', this.hideInput)
     },
     reSetMsgBot () {
       const msgcontainer = document.getElementById('msgcontainer')
