@@ -132,25 +132,27 @@ const actions = {
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
       submitAnswer(id, userAnswer, index).then(({data}) => {
-        if (data && +data.result !== 1) {
-          commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
+        if (+data.result === 0) {
           if (+data.code === 1005) {
             reject('Time is out, you can view only.')
           } else {
             reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
           }
+          commit(type.QUESTION_UPDATE, {
+            watchingMode: true
+          })
           console.log('答案提交失败:', id, data.msg)
-        } else if (data && +data.result === 1) {
+        } else {
           resolve()
         }
       }, (err) => {
+        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
         commit(type.QUESTION_UPDATE, {
           watchingMode: true
         })
         console.log('答案提交错误:', err)
-        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+      }).catch((err) => {
+        console.log('代码逻辑出错：' + err)
       })
     })
   },

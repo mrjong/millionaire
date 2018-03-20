@@ -44,6 +44,9 @@ const sounds = {
 
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
+
+console.log(clientParams)
+
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -125,7 +128,13 @@ export default {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
   share () {
-    window.njordInvite && window.njordInvite.share && window.njordInvite.share('')
+    window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
+      sharePackage: '',
+      shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
+      shareContent: 'Win real cash up to Rs. 1,000,000!',
+      shareLink: 'https://goo.gl/t6jWBU',
+      callbackMethod: 'shareSuccess()'
+    }))
   },
   /**
    * 时间格式化

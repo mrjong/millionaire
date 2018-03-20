@@ -51,8 +51,7 @@ export default {
       display: block;
       text-align: center;
       &__text{
-        font-family: 'Roboto-Light';
-        font-size: 28px;
+        font: 300 28px 'Roboto', Arial, serif;
         &__day{
           color: #ffb227;
         }
@@ -60,8 +59,7 @@ export default {
       &__hour,&__number{
         margin-top: 25px;
         color: #ffb227;
-        font-size: 56px;
-        font-family: 'Roboto-BoldCondensed';
+        font: 700 56px 'Roboto Condensed', Arial, serif;
       }
       &__hour{
         color: #fff;
