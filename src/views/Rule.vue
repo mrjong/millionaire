@@ -39,43 +39,43 @@ export default {
       ruleList: [
         {
           id: 1,
-          img: require(`../assets/images/rule1.png`),
+          img: `./static/images/rule1.png`,
           title: `Join our live Quiz Game on time`,
           describe: `Please don't be late or you'll miss the cash prize. A push notification will be sent to remind you.`
         },
         {
           id: 2,
-          img: require(`../assets/images/rule2.png`),
+          img: `./static/images/rule2.png`,
           title: `Answer each question in 10s`,
           describe: `There're 12 questions. Choose the answer in 10 seconds for each.`
         },
         {
           id: 3,
-          img: require(`../assets/images/rule3.png`),
+          img: `./static/images/rule3.png`,
           title: `Answer them all right to WIN Cash`,
           describe: `People who get them all right will split the cash prize.`
         },
         {
           id: 4,
-          img: require(`../assets/images/rule4.png`),
+          img: `./static/images/rule4.png`,
           title: `One who answer wrong will be out`,
           describe: `If you choose the wrong answer, or time is out, you'll be eliminated.`
         },
         {
           id: 5,
-          img: require(`../assets/images/rule5.png`),
+          img: `./static/images/rule5.png`,
           title: `No winners? Get next prize bigger`,
           describe: `The prize rolls over to the next day if no one get all questions right.`
         },
         {
           id: 6,
-          img: require(`../assets/images/rule6.png`),
+          img: `./static/images/rule6.png`,
           title: `Cash Out with Paytm`,
           describe: `You can cash out to your Paytm account if you win.`
         },
         {
           id: 7,
-          img: require(`../assets/images/rule7.png`),
+          img: `./static/images/rule7.png`,
           title: `Invite friends to win real cash together`,
           describe: ``
         }
@@ -146,10 +146,8 @@ export default {
   background: url('../assets/images/rule-title-bg.png') no-repeat left top;
   background-size: contain;
   color: #241262;
-  font-family: 'Roboto-Bold';
-  font-size: 36px;
+  font: 700 36px/56px 'Roboto', Arial, serif;
   text-align: center;
-  line-height: 56px;
 }
 .rule-item {
   width: 100%;
@@ -166,16 +164,14 @@ export default {
     }
   }
   &__title {
-    font-family: 'Roboto-Medium';
-    font-size: 28px;
+    font: 500 28px 'Roboto', Arial, serif;
     margin: 44px 0 28px 0;
     color: #241262;
     &__index {
       display: inline-block;
       width: 35px;
       height: 35px;
-      font-family: 'Roboto-Light';
-      font-size: 21px;
+      font: 300 21px 'Roboto', Arial, serif;
       background: url('../assets/images/index-bg.png') no-repeat top left;
       background-size: contain;
       text-align: center;
@@ -185,9 +181,7 @@ export default {
     }
   }
   &__text {
-    font-family: 'Roboto-Light';
-    line-height: 32px;
-    font-size: 28px;
+    font: 300 28px/32px 'Roboto', Arial, serif;
     color: #241262;
     text-align: center;
   }
@@ -212,9 +206,7 @@ export default {
   }
   &__describe {
     color: #241262;
-    font-family: 'Roboto-Medium';
-    font-size: 30px;
-    line-height: 35px;
+    font: 500 30px/35px 'Roboto', Arial, serif;
     margin: 28px 0 140px;
     text-align: center;
   }

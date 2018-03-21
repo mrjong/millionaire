@@ -50,6 +50,7 @@ export default {
       this.$store.dispatch(type.QUESTION_INIT)
       this.$store.dispatch(type._UPDATE_AMOUNT)
       this.$store.dispatch(type._RECEIVE_RESULT)
+      this.$store.dispatch(type._END)
     }
   },
   components: {
@@ -111,24 +112,38 @@ export default {
     background: url('./assets/images/main-bg.jpg') no-repeat top left;
     background-size: cover;
   }
-   @font-face {
-  font-family: 'RobotoCondensed-Bold';
-  src: url('./assets/font/RobotoCondensed-Bold.ttf')
-  }
-  @font-face {
-    font-family: 'RobotoCondensed-Regular';
-    src: url('./assets/font/RobotoCondensed-Regular.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-Light';
-    src: url('./assets/font/Roboto-Light.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-Medium';
-    src: url('./assets/font/Roboto-Medium.ttf')
-  }
-  @font-face {
-    font-family: 'Roboto-BoldCondensed';
-    src: url('./assets/font/RobotoCondensed-Bold.ttf');
-  }
+
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601364bf0e78d16.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601401014a81eaa.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+  /* latin-ext */
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/2018032016013762a8c1210f.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/201803201601353e1f01c5c2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
 </style>
