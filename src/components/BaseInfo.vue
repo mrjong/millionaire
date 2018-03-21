@@ -61,7 +61,7 @@ export default {
       }
       &__name{
         color: #241262;
-        font: 36px 'Roboto-Medium';
+        font: 500 36px 'Roboto', sans-serif;
         width: 60%;
         text-align: center;
         margin: 0.28px auto;
@@ -88,14 +88,15 @@ export default {
         color: #241262;
         &__text{
           text-align: center;
-          font-family: 'Roboto-Light';
+          font-family: 'Roboto';
+          font-weight: 300;
         }
         .num{
           font-size: 56px;
           margin-top: 26px;
           color: #241262;
           text-align: center;
-          font-family: 'Roboto-BoldCondensed';
+          font: 700 56px 'Roboto Condensed', Arial, sans-serif;
         }
       }
     }

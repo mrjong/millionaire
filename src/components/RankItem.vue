@@ -61,7 +61,7 @@ export default {
       height: 100%;
       text-align: center;
       color: #241262;
-      font: normal 28px/92px "RobotoCondensed Regular";
+      font: 400 28px/92px 'Roboto Condensed', Arial, serif;
     }
 
     &_info {
@@ -73,13 +73,13 @@ export default {
         border-radius: 60px;
       }
       .name {
-        font: normal 28px "Roboto-Light";
+        font: 300 28px 'Roboto', Arial, serif;
         color: #241262;
         margin-left: 31px;
         max-width: 330px;
       }
       .money, .notInList {
-        font: normal 24px/92px "RobotoCondensed Regular";
+        font: 400 24px/92px 'Roboto Condensed', Arial, serif;
         color: #ffb227;
         position: absolute;
         right: 2%;

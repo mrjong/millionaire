@@ -8,7 +8,7 @@
       <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
       <img class="count-down-container__animation__number"
            ref="animationNumber"
-           :src="require('../assets/images/' + startTime + '.png')"/>
+           :src="`./static/images/${startTime}.png`"/>
       <img class="count-down-container__animation__top" src="../assets/images/right.png"/>
     </div>
   </div>
@@ -69,10 +69,10 @@ export default {
       color: #ffffff;
       text-align: center;
       &__text{
-        font: 32px 'Roboto-Light';
+        font: 300 32px 'Roboto', Arial, serif;
       }
       &__time{
-        font:156px 'Roboto-Condensed';
+        font: 400 156px 'Roboto Condensed', Arial, serif;
       }
     }
     &__animation{

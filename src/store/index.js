@@ -215,9 +215,9 @@ export default new Vuex.Store({
      * @param {any} {commit}
      */
     [type._SYNC_TIME] ({commit, getters}) {
-      // 每隔5秒同步开始时间
+      // 每隔15秒同步开始时间
       const timer = setInterval(() => {
-        if (getters.startTimeOffset <= 0) {
+        if (getters.startTimeOffset <= 10) {
           clearInterval(timer)
         } else {
           syncTime().then(({data}) => {
@@ -264,15 +264,29 @@ export default new Vuex.Store({
           commit(type._UPDATE, {
             result: {isFinish, bonusAmount, winners: winnersMap, winnerAmount}
           })
+
+          // 重置问题状态
+          commit(type.QUESTION_UPDATE, {
+            status: status.QUESTION_ANSWERING,
+            id: '',
+            contents: '',
+            options: [],
+            optionsMd5Map: {},
+            index: 0,
+            watchingMode: false,
+            isAnswered: false,
+            isCorrect: false,
+            correctAnswer: '',
+            userAnswer: '',
+            result: {},
+            restTime: 0,
+            isWon: false
+          })
+
           // 更新状态
           commit(type._UPDATE, {
             status: status._END
           })
-
-          // 5秒后 重新初始化
-          setTimeout(() => {
-            dispatch(type._INIT)
-          }, 60000)
         }
       })
     },
@@ -280,8 +294,13 @@ export default new Vuex.Store({
      * 比赛结束
      * @param {any} {dispatch}
      */
-    [type._END] ({dispatch}) {
+    [type._END] ({dispatch, commit}) {
       im.addListener(MESSAGE_END, (message) => {
+        // 清空聊天室
+        commit(type.CHAT_UPDATE, {
+          msgList: [],
+          compereMsg: ''
+        })
         dispatch(type._INIT)
       })
     }
