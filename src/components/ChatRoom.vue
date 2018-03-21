@@ -66,6 +66,9 @@ export default {
   mounted () {
     this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
     this.windowInnerheight = window.innerHeight
+    this.$store.commit(type.CHAT_UPDATE, {
+      msgList: []
+    })
     this.$nextTick(() => {
       const bodys = document.getElementsByTagName('body')[0]
       const bodyHeight = bodys.clientHeight
