@@ -40,6 +40,8 @@ const im = {
     }
   ],
 
+  isSupportOnlineEvent: false, // 是否支持在线离线事件
+
   /**
    * 初始化
    */
@@ -69,6 +71,18 @@ const im = {
       RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
     })
 
+    window.addEventListener('offline', () => {
+      im.isSupportOnlineEvent = true
+      console.log('断开连接:')
+      RongIMClient.getInstance().disconnect()
+    })
+
+    window.addEventListener('online', () => {
+      im.isSupportOnlineEvent = true
+      console.log('重新连接:', im.token)
+      im.connect(im.token)
+    })
+
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
         im.emitListener(status)
@@ -81,7 +95,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
-            im.reconnect()
+            !im.isSupportOnlineEvent && im.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -91,7 +105,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            im.reconnect()
+            !im.isSupportOnlineEvent && im.reconnect()
             break
         }
       }
@@ -105,6 +119,7 @@ const im = {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -139,11 +154,11 @@ const im = {
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
-        console.log('Connect successfully.' + userId)
+        console.log('Connect successfully.' + userId, token)
         this.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {
-        console.log('token无效')
+        console.log('token无效', token)
         this.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {

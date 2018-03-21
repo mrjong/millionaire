@@ -47,9 +47,9 @@ export default {
       this.$store.dispatch(type._INIT).then(() => {
         this.loading = false
         if (this.status === 1) {
-          this.$router.push({path: '/'})
+          this.$router.replace({path: '/'})
         } else {
-          this.$router.push({path: '/main'})
+          this.$router.replace({path: '/main'})
         }
       }, () => {
         this.loading = false
