@@ -1,6 +1,7 @@
 <template>
+  <!-- 排行榜列表项组件 lixuan@apusapps.com -->
   <div class="rank-item flex-box" :class="['rank-item', 'flex-box', isSelf ? 'self' : '']">
-    <p class="rank-item_index">{{rank}}</p>
+    <p class="rank-item_index">{{rank > 0 ? rank : '-'}}</p>
     <section class="rank-item_info flex-box flex-align-center">
       <img class="avatar" :src="avatar" alt="">
       <span class="name ellipsis-1">{{name}}</span>
@@ -27,11 +28,11 @@ export default {
     },
     avatar: {
       type: String, // 头像
-      default: 'http://images.apusapps.com/src/icon-apus-user-system.png'
+      default: ''
     },
     name: {
       type: String, // 姓名
-      default: 'anonymous user'
+      default: ''
     },
     amount: {
       type: Number, // 金额
@@ -60,7 +61,7 @@ export default {
       height: 100%;
       text-align: center;
       color: #241262;
-      font: normal 28px/92px "RobotoCondensed Regular";
+      font: 400 28px/92px 'Roboto Condensed', Arial, serif;
     }
 
     &_info {
@@ -72,13 +73,13 @@ export default {
         border-radius: 60px;
       }
       .name {
-        font: normal 28px "Roboto-Light";
+        font: 300 28px 'Roboto', Arial, serif;
         color: #241262;
         margin-left: 31px;
         max-width: 330px;
       }
       .money, .notInList {
-        font: normal 24px/92px "RobotoCondensed Regular";
+        font: 400 24px/92px 'Roboto Condensed', Arial, serif;
         color: #ffb227;
         position: absolute;
         right: 2%;

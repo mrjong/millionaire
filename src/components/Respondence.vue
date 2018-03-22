@@ -1,5 +1,5 @@
 <template>
-  <div class="respondence-container">
+  <div class="respondence-container" ref="respondenceContainer">
     <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
@@ -11,18 +11,19 @@
       </svg>
     </div>
     <p class="respondence-container__question">
-      {{index}}.{{contents}}
+      {{index}}. {{contents}}
     </p>
     <div class="respondence-container__answer" ref="answerContainer">
       <answer v-for="(val, idx) in totalResult"
               :key=idx
               :content="idx"
+              :orderNumber="val && val.orderNumber"
               :result="+ (val && val.answerNum) || 0"
               :percent= "+(val && val.percent) || 0"
               :isRight="val && val.isRight"
-              @answer="answer(idx)"
+              @answer="answer(val.answerText)"
               :is-click="isClick"
-              :myChick="userAnswer === idx"
+              :myChick="userAnswer === val.answerText"
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
@@ -43,6 +44,12 @@ export default {
       isClick: false,
       fontSize: 28,
       countdownStyle: 'color: #fff;'
+      // game_answer: {
+      //   current_question_l: 0,
+      //   cost_time_l: 0,
+      //   question_id_l: 0,
+      //   resule_code_s: ''
+      // }
     }
   },
   computed: {
@@ -58,31 +65,32 @@ export default {
       time: 'time',
       restTime: 'restTime',
       options: 'options',
-      questionResult: 'question_result'
+      questionResult: 'question_result',
+      id: 'id'
     }),
     totalResult: function () {
       let result = {}
       let totalNum = 0
+      let optionsNumber = ['A', 'B', 'C']
       if (this.questionResult) {
         for (let i in this.questionResult) {
           totalNum += Number(this.questionResult[i]) || 0
         }
       }
-      Array.prototype.slice.call(this.options).forEach((val) => {
-        result[val] = {
+      Array.prototype.slice.call(this.options).forEach((val, idx) => {
+        result[optionsNumber[idx] + '. ' + val] = {
           answerNum: (this.questionResult && this.questionResult[val]),
           percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
-          isRight: this.correctAnswer && this.correctAnswer === val
+          isRight: this.correctAnswer && this.correctAnswer === val,
+          answerText: val
         }
       })
       return result
-    },
-    restTime1: function () {
-      return Math.round(this.restTime / 1000)
     }
   },
   mounted () {
     this.countDown(this.question_status)
+    utils.statistic('game_page', 0)
   },
   methods: {
     ...mapActions({}),
@@ -94,8 +102,13 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e})
-          this.$store.dispatch(type.QUESTION_SUBMIT)
+          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
+          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
+            this.$emit('error', err)
+          })
+          // this.game_answer.current_question_l = this.index
+          // this.game_answer.cost_time_l = this.restTime
+          // this.game_answer.question_id_l = this.id
         }
       } else {
         // 不可以点击
@@ -109,7 +122,7 @@ export default {
       }
       return percent
     },
-    countDown (status) {
+    countDown: function (status) {
       let circle = this.$refs.circle
       if (status === 5) {
         this.countdownStyle = `
@@ -143,6 +156,16 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+    //  if (status === 7 && !this.watchingMode) {
+    //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
+    //    utils.statistic('', 2, this.game_answer)
+    //  }
+    },
+    restTime: function (restTime) {
+      if (restTime === 4) {
+        // 答题倒计时
+        utils.playSound('countDown5')
+      }
     }
   },
   components: {
@@ -153,6 +176,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
+    min-height: 500px;
     margin: 25px;
     background-color: #fff;
     border-radius: 24px;
@@ -177,9 +201,9 @@ export default {
       color: #241262;
       margin: 40px auto;
       padding: 0 16px;
-      line-height: 40px;
-      font: 28px Roboto-Light;
+      font: 300 28px/40px 'Roboto';
       text-align: left;
+      min-height: 28px;
     }
     &__answer{
       font-size: 28px;
@@ -199,6 +223,6 @@ export default {
     font-weight: 600;
     text-anchor: middle;
     dominant-baseline: middle;
-    font: 56px Roboto-BoldCondensed;
+    font: 700 56px 'Roboto Condensed', Arial, serif;
   }
 </style>

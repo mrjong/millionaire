@@ -3,17 +3,22 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const name= process.env.npm_package_name || require('../package.json').name
+let pubPath = ''
+if(/publicPath/.test(process.argv[2])){
+    pubPath = process.argv[2].replace('publicPath=','').trim() + '/' + name + '/'
+}
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/preview/millionaire',
+    assetsPublicPath: '/',
     proxyTable: {},
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
+    // host: '192.168.220.50',
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
@@ -50,9 +55,9 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    // assetsPublicPath: '/', // 正式
+    assetsPublicPath: pubPath || `/`, // 正式
+    //assetsPublicPath: '/preview/millionaire/', // 测试
     // assetsPublicPath: '/act/millionaire/', // 测试
-    assetsPublicPath: '/act/millionaire/', // 测试
 
     /**
      * Source Maps

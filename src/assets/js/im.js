@@ -1,7 +1,6 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
-// const appKey = 'p5tvi9dsphpf4' // dev
-const appKey = 'pvxdm17jp3vvr' // test
+import {appKey} from './http'
 
 const im = {
 
@@ -33,8 +32,15 @@ const im = {
       messageName: 'HostMessage',
       propertys: ['content', 'user'],
       objectName: 'APUS:HostMsg'
+    },
+    {
+      messageName: 'GameEndMessage',
+      propertys: ['end'],
+      objectName: 'APUS:GameEndMsg'
     }
   ],
+
+  isSupportOnlineEvent: false, // 是否支持在线离线事件
 
   /**
    * 初始化
@@ -44,7 +50,17 @@ const im = {
     for (let prop in type) {
       this.listeners[type[prop]] = null
     }
-    RongIMClient.init(appKey)
+    RongIMClient.init(appKey, null, {
+      navi: 'navsg01-glb.ronghub.com'
+    })
+
+    // emoji 初始化
+    const config = {
+      size: 36, // 大小, 默认 24, 建议18 - 58
+      url: '//f2e.cn.ronghub.com/sdk/emoji-48.png', // Emoji 背景图片
+      lang: 'en'
+    }
+    RongIMLib.RongIMEmoji.init(config)
 
     // 注册消息类型
     this.messageTypes.forEach((messageType) => {
@@ -55,9 +71,21 @@ const im = {
       RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
     })
 
+    window.addEventListener('offline', () => {
+      im.isSupportOnlineEvent = true
+      console.log('断开连接:')
+      RongIMClient.getInstance().disconnect()
+    })
+
+    window.addEventListener('online', () => {
+      im.isSupportOnlineEvent = true
+      console.log('重新连接:', im.token)
+      im.connect(im.token)
+    })
+
     RongIMClient.setConnectionStatusListener({
       onChanged: (status) => {
-        this.emitListener(status)
+        im.emitListener(status)
         switch (status) {
           case RongIMLib.ConnectionStatus.CONNECTED:
             console.log('链接成功')
@@ -67,7 +95,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
-            this.reconnect()
+            !im.isSupportOnlineEvent && im.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -77,6 +105,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
+            !im.isSupportOnlineEvent && im.reconnect()
             break
         }
       }
@@ -88,7 +117,9 @@ const im = {
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
+            message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -105,8 +136,11 @@ const im = {
           case type.MESSAGE_RESULT:
             this.emitListener(type.MESSAGE_RESULT, message)
             break
+          case type.MESSAGE_END:
+            this.emitListener(type.MESSAGE_END, message)
+            break
           default:
-            console.log('未知类型消息:' + message)
+            console.log('未知类型消息:', message)
         }
       }
     })
@@ -120,12 +154,12 @@ const im = {
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
-        console.log('Connect successfully.' + userId)
+        console.log('Connect successfully.' + userId, token)
         this.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {
-        console.log('token无效')
-        this.emitListener(type.CONNECTED_ERROR, 'token无效')
+        console.log('token无效', token)
+        this.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         let info = ''
@@ -133,6 +167,7 @@ const im = {
           case RongIMLib.ErrorCode.TIMEOUT:
             info = '超时'
             this.emitListener(type.CONNECTED_TIMEOUT, info)
+            this.reconnect()
             break
           case RongIMLib.ErrorCode.UNKNOWN_ERROR:
             info = '未知错误'
@@ -164,21 +199,22 @@ const im = {
     const callback = {
       onSuccess: (userId) => {
         console.log('Reconnect successfully.' + userId)
-        this.emitListener(type.CONNECTED)
+        im.emitListener(type.CONNECT_SUCCESS)
       },
       onTokenIncorrect: function () {
         console.log('token无效')
-        this.emitListener(type.CONNECTED_ERROR, 'token无效')
+        im.emitListener(type.CONNECTED_ERROR, 'token无效')
+        im.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         console.log(`重新连接出错 错误码：${errorCode}`)
-        this.emitListener(type.CONNECTED_ERROR, `重新连接出错 错误码：${errorCode}`)
+        im.emitListener(type.CONNECTED_ERROR, `重新连接出错 错误码：${errorCode}`)
       }
     }
     const config = {
       auto: true,
-      url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
-      rate: [100, 1000, 2000, 3000, 30000]
+      url: 'cdn.ronghub.com/RongIMLib-2.3.0.min.js',
+      rate: [500, 1000, 2000, 3000, 5000, 8000, 10000, 20000]
     }
     RongIMClient.reconnect(callback, config)
   },
@@ -208,12 +244,15 @@ const im = {
    * @param {any} name 用户名
    */
   sendMessage (content, avatar, name) {
+    content = RongIMLib.RongIMEmoji.emojiToSymbol(content)
     const msg = new RongIMLib.TextMessage({ content: content, user: {avatar, name} })
     const conversationtype = RongIMLib.ConversationType.CHATROOM
     const targetId = this.chatRoomId // 房间号
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
+        message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
         console.log('Send successfully')
+        console.log(message)
         this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
@@ -265,6 +304,23 @@ const im = {
   emitListener (listenerType, ...args) {
     const listener = this.listeners[listenerType]
     listener && listener(...args)
+  },
+  /**
+   * 删除监听器
+   * @param {any} listenerType
+   */
+  removeLister (listenerType) {
+    if (listenerType) {
+      const listener = this.listeners[listenerType]
+      if (listener) {
+        this.listeners[listenerType] = null
+      }
+    } else {
+      const listeners = this.listeners
+      for (let prop in listeners) {
+        listeners[prop] = null
+      }
+    }
   }
 }
 

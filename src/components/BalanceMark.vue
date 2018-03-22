@@ -61,9 +61,7 @@ export default {
     &__title {
       width: 100%;
       height: 160px;
-      font-size: 28px;
-      line-height: 30px;
-      font-family: 'Roboto-Light';
+      font: 300 28px/30px 'Roboto', Arial, serif;
       color: #000;
     }
     &__btn {
@@ -77,8 +75,7 @@ export default {
         height: 100%;
         border-radius: 38px;
         color: #fff;
-        font-size: 24px;
-        font-family: 'Roboto-Light';
+        font: 300 24px 'Roboto', Arial, serif;
         text-align: center;
         line-height: 77px;
       }

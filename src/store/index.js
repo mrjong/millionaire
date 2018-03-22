@@ -7,10 +7,10 @@ import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
 import * as status from '../assets/js/status'
-import {init} from '../assets/js/api'
+import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -18,8 +18,11 @@ export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
     startTime: -1, // 开始时间 时间差
+    startTimeOffset: 0,
     readyTime: 600000, // 准备时间 默认10分钟
-    syncIntervalTime: 600000, // 同步结束时间间隔
+    syncIntervalTime: 60000, // 同步结束时间间隔
+    hostIntervalTime: 3000, // 规则轮播间隔
+    hostMsgList: [], // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -40,12 +43,16 @@ export default new Vuex.Store({
         //   bonusAmount: 1000,
         //   avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg'
         // }
-      ]
+      ],
+      winnerAmount: 0 // 获胜者数量
     } // 游戏结果
   },
   getters: {
     isOnline: (state) => state.isOnline,
     startTime: (state) => state.startTime,
+    startTimeOffset: (state) => state.startTimeOffset,
+    hostIntervalTime: (state) => state.hostIntervalTime,
+    hostMsgList: (state) => state.hostMsgList,
     status: (state) => state.status,
     result: (state) => state.result,
     onlineAmount: (status) => status.onlineAmount,
@@ -66,14 +73,15 @@ export default new Vuex.Store({
      * 初始化
      * @param {any} {commit, dispatch, state}
      */
-    [type._INIT] ({commit, dispatch, state}) {
+    [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
       return new Promise((resolve, reject) => {
-        init().then(({data}) => {
+        init(isRefreshToken).then(({data}) => {
           console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount, m: chatRoomInfo = {}, cr: currencyType = 'USD', j: question = {}, a: answer} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
+            const startTimeOffset = +info.ls || 0
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
@@ -81,89 +89,96 @@ export default new Vuex.Store({
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
               balance: +accountInfo.ub || 0,
+              balanceShow: accountInfo.sub || '',
               income: +accountInfo.ui || 0,
+              incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,
-              bonusAmount: +bonusAmount || 0,
+              bonusAmount,
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
-            console.log(currencyType, currency[currencyType])
             commit(type._UPDATE, {
-              startTime: +startTime,
+              startTime,
+              startTimeOffset,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || ''
+              imToken: chatRoomInfo.it || '',
+              hostIntervalTime
             })
             // 如果已经开始
             if (isPlaying) {
-              // 更新问题信息
-              commit(type.QUESTION_UPDATE, {
-                id: question.ji,
-                index: +question.js || 0,
-                contents: question.jc || '',
-                options: question.jo || ['', '', '']
-                // watchingMode: false
-              })
+              // 如果已经开始串词
+              if (hostMsgList && !question) {
+                im.emitListener(MESSAGE_HOST, {
+                  content: {
+                    content: JSON.stringify(hostMsgList)
+                  }
+                })
+              }
+              // 如果已经下发题目 开启观战模式
+              if (question) {
+                // 更新问题信息
+                const options = question.jo || ['', '', '']
+                const optionsMd5Map = utils.generateMd5Map(options)
+                commit(type.QUESTION_UPDATE, {
+                  id: question.ji || '',
+                  index: +question.js || 0,
+                  contents: question.jc || '',
+                  options,
+                  optionsMd5Map,
+                  watchingMode: true
+                })
+                // 更新当前状态
+                commit(type._UPDATE, {
+                  status: status._PLAYING
+                })
+              }
               // 如果有答案直接进入答案页面
               if (answer) {
+                const md5Map = getters.optionsMd5Map
                 commit(type.QUESTION_UPDATE, {
-                  correctAnswer: answer.ac || '',
-                  result: answer.as
+                  correctAnswer: md5Map[answer.ac] || '',
+                  result: utils.parseMd5(answer.as, md5Map) || {}
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
                 })
+                // 更新当前状态
+                commit(type._UPDATE, {
+                  status: status._PLAYING
+                })
               }
-              // 更新当前状态
-              commit(type._UPDATE, {
-                status: status._PLAYING
-              })
             } else {
               // 是否进入倒计时
               if (isInRoom) {
-                const timer = utils.Timer(1000, Date.now() + startTime * 1000)
-                timer.start()
-                timer.addCompleteListener(({offset}) => {
+                const timer = utils.Timer(1000, startTimeOffset * 1000)
+                timer.addCompleteListener(() => {
                   commit(type._UPDATE, {
-                    startTime: Math.round(offset / 1000)
+                    startTimeOffset: getters.startTimeOffset - 1
                   })
                 })
                 timer.addEndListener(() => {
                   commit(type._UPDATE, {
-                    startTime: 0
+                    startTimeOffset: 0
                   })
                 })
+                timer.start()
                 commit(type._UPDATE, {
                   status: status._READY
                 })
+                // 开始同步时间
+                dispatch(type._SYNC_TIME)
               } else {
                 // 切换至等待状态
                 commit(type._UPDATE, {
                   status: status._AWAIT
                 })
-                // 如果有下一场信息
-                if (startTime > 0) {
+                // 如果剩余剩余时间大于十分钟 或者 无下场信息
+                if (startTimeOffset * 1000 > getters.readyTime || getters.startTime < 0) {
                   // 每隔一段时间同步开始时间
-                  const {readyTime, syncIntervalTime} = state
-                  const timer = utils.Timer(syncIntervalTime, Date.now() + (+startTime * 1000) - readyTime)
-                  // timer.addCompleteListener(() => {
-                  //   syncTime().then(({data}) => {
-                  //     if (+data.result === 1 && +data.code === 0) {
-                  //       const startTime = +data.data
-                  //       commit(type._UPDATE, {
-                  //         startTime
-                  //       })
-                  //       timer.sync(Date.now() + startTime - readyTime)
-                  //     } else {
-                  //       console.log('同步时间出错:', data.msg)
-                  //     }
-                  //   }, (err) => {
-                  //     console.log('同步时间失败:', err)
-                  //   })
-                  // })
-                  timer.addEndListener(() => {
+                  const {syncIntervalTime} = state
+                  setTimeout(() => {
                     dispatch(type._INIT)
-                  })
-                  timer.start()
+                  }, syncIntervalTime)
                 }
               }
             }
@@ -174,6 +189,10 @@ export default new Vuex.Store({
                   imUserId
                 })
                 im.joinChatRoom(state.chatRoomId)
+              })
+              // 若token过期，重新初始化刷新token
+              im.addListener(INVALID_TOKEN, () => {
+                dispatch(type._INIT, true)
               })
               im.connect(state.imToken)
             }
@@ -190,10 +209,34 @@ export default new Vuex.Store({
         })
       })
     },
+    /**
+     * 同步开始时间
+     *
+     * @param {any} {commit}
+     */
+    [type._SYNC_TIME] ({commit, getters}) {
+      // 每隔15秒同步开始时间
+      const timer = setInterval(() => {
+        if (getters.startTimeOffset <= 10) {
+          clearInterval(timer)
+        } else {
+          syncTime().then(({data}) => {
+            commit(type._UPDATE, {
+              startTimeOffset: +data.data || 0
+            })
+          }, (err) => {
+            console.log('同步时间失败：' + err)
+          })
+        }
+      }, 15000)
+    },
+    /**
+     * 更新在线人数
+     * @param {any} {commit}
+     */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
         const count = +(message.content && message.content.count)
-        console.log('在线人数:' + count)
         commit(type._UPDATE, {
           onlineAmount: count
         })
@@ -206,10 +249,9 @@ export default new Vuex.Store({
     [type._RECEIVE_RESULT] ({commit, getters, dispatch}) {
       im.addListener(MESSAGE_RESULT, (message) => {
         const resultStr = message.content && message.content.summary
-        console.log('游戏结束：' + resultStr)
         if (resultStr) {
           const result = JSON.parse(resultStr)
-          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = []} = result
+          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
           let winnersMap = winners.map((winner) => {
             const obj = {}
             obj.userId = winner.i
@@ -220,18 +262,46 @@ export default new Vuex.Store({
           })
           // 更新结果
           commit(type._UPDATE, {
-            result: {isFinish, bonusAmount, winners: winnersMap}
+            result: {isFinish, bonusAmount, winners: winnersMap, winnerAmount}
           })
+
+          // 重置问题状态
+          commit(type.QUESTION_UPDATE, {
+            status: status.QUESTION_ANSWERING,
+            id: '',
+            contents: '',
+            options: [],
+            optionsMd5Map: {},
+            index: 0,
+            watchingMode: false,
+            isAnswered: false,
+            isCorrect: false,
+            correctAnswer: '',
+            userAnswer: '',
+            result: {},
+            restTime: 0,
+            isWon: false
+          })
+
           // 更新状态
           commit(type._UPDATE, {
             status: status._END
           })
-
-          // 5秒后 重新初始化
-          setTimeout(() => {
-            dispatch(type._INIT)
-          }, 60000)
         }
+      })
+    },
+    /**
+     * 比赛结束
+     * @param {any} {dispatch}
+     */
+    [type._END] ({dispatch, commit}) {
+      im.addListener(MESSAGE_END, (message) => {
+        // 清空聊天室
+        commit(type.CHAT_UPDATE, {
+          msgList: [],
+          compereMsg: ''
+        })
+        dispatch(type._INIT)
       })
     }
   },

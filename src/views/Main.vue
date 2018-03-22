@@ -9,11 +9,12 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
     </div>
-     <count-down v-if="status === 2"></count-down>
+    <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
-    <respondence v-if="status === 3 && questionStatus !== 8"></respondence>
+    <respondence @error="onError" v-if="status === 3 && questionStatus !== 8"></respondence>
     <compere v-if="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
   </div>
 </template>
 
@@ -24,11 +25,18 @@ import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
-import * as type from '../store/type'
+import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Main',
   data () {
     return {
+      showDialog: false,
+      dialogInfo: {
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
+      }
     }
   },
   computed: {
@@ -38,17 +46,23 @@ export default {
       questionStatus: 'question_status'
     })
   },
-  mounted () {
-    this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-  },
+  mounted () {},
   methods: {
+    sure () {
+      this.showDialog = false
+    },
+    onError (err) {
+      this.dialogInfo.htmlText = err
+      this.showDialog = true
+    }
   },
   components: {
     CountDown,
     ChatRoom,
     Respondence,
     WinnersResult,
-    Compere
+    Compere,
+    BalanceMark
   }
 }
 </script>
@@ -66,12 +80,15 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
+      min-height: 59px;
       &__online{
-        padding: 18px;
+        padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 26px;
         display: flex;
         align-items: center;
+        align-self: center;
+        height: 52px;
         &__icon{
           width: 24px;
           height: 24px;
@@ -87,24 +104,11 @@ export default {
         }
       }
       &__logo{
-        width: 168px;
         align-self: center;
         img{
-         width: 100%;
+          width: 135px;
         }
       }
     }
-  }
-  .respondence {
-    width: 100%;
-    height: 785px;
-  }
-  .chat-global-mark {
-    width: 100%;
-    height: 89%;
-    background: url('../assets/images/chat-mark.png') no-repeat top left;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 </style>

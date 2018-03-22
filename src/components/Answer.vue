@@ -43,6 +43,9 @@ export default {
     },
     myChick: {
       type: Boolean
+    },
+    orderNumber: {
+      type: String
     }
   },
   data () {
@@ -132,7 +135,8 @@ export default {
     border-radius: 46px;
     padding:0 23px;
     position: relative;
-    font-family: 'Roboto-Light',serif;
+    font-family: 'Roboto', Arial, serif;
+    font-weight: 300;
     &__state{
       width: 0;
       height:100%;

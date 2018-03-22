@@ -9,6 +9,7 @@ export const MESSAGE_AMOUNT = 'PeopleMessage' // 在线人数消息
 export const MESSAGE_QUESTION = 'QuestionMessage' // 推送题目
 export const MESSAGE_ANSWER = 'AnswerMessage' // 推送题目答案及汇总
 export const MESSAGE_RESULT = 'SummaryMessage' // 推送游戏结果
+export const MESSAGE_END = 'GameEndMessage' // 游戏结束
 export const MESSAGE_SEND_SUCCESS = 'MESSAGE_SEND_SUCCESS' // 消息发送成功
 export const MESSAGE_SEND_FAIL = 'MESSAGE_SEND_FAIL' // 消息发送失败
 
@@ -16,6 +17,7 @@ export const MESSAGE_SEND_FAIL = 'MESSAGE_SEND_FAIL' // 消息发送失败
 export const CONNECTED = RongIMLib.ConnectionStatus.CONNECTED
 export const CONNECT_SUCCESS = 'CONNECT_SUCCESS'
 export const CONNECTED_ERROR = 'CONNECTED_ERROR'
+export const INVALID_TOKEN = 'INVALID_TOKEN' // token 无效
 export const CONNECTING = RongIMLib.ConnectionStatus.CONNECTING
 export const CONNECTED_TIMEOUT = 'CONNECTED_TIMEOUT'
 export const DISCONNECTED = RongIMLib.ConnectionStatus.DISCONNECTED

@@ -6,20 +6,20 @@
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-        <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
-        <p class="balance-wrap__contain__wrap__mytitle">My balance</p>
+         <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
+        <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance}}</span><span class="balance-wrap__contain__wrap__tip">(over 20 yuan can be withdrawn)</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total revenue</p>
-        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.income}}</p>
+        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
+        <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
     </div>
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__wrap__input">
-        <input type="text" class="balance-wrap__operate__input" placeholder="PayTM Account" v-model="myPay">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
-      <p class="balance-wrap__operate__tip">Please enter your paytm account,we will be in the review,will be up to 15 working days to make money to you.</p>
+      <p class="balance-wrap__operate__tip">Please verify that your Paytm account is a valid account, and the payouts will be made in 15 days.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
@@ -32,8 +32,8 @@ import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
 import Loading from '../components/loading'
 import * as api from '../assets/js/api'
-// import axios from 'axios'
-// import utils from '../assets/js/utils'
+import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Balance',
   data () {
@@ -46,7 +46,7 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      withdraw: 20,
+      withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
     }
   },
@@ -55,37 +55,23 @@ export default {
       userInfo: 'userInfo'
     })
   },
+  mounted () {
+    utils.statistic('take_cash_page', 0)
+  },
   methods: {
     cashOut () {
-      // 接口调试
-      api.balanceApplication({
-        // amount: this.userInfo.balance,
-        // email: this.myPay,
-        // accountId: this.myPay
-        amount: 50,
-        email: 'liuweiwei@apuscn.com',
-        accountId: 'liuweiwei@apuscn.com'
-      })
-        .then((data) => {
-          console.log('后台返回结果如下')
-          console.log(data)
-        })
-        .catch((err) => {
-          console.log('发送错误如下')
-          console.log(err)
-        })
-      // -----------------
-      // if (+this.userInfo.balance < +this.withdraw) {
-      //   this.changeMarkInfo(true, false, 0, `Withdraw now failed!Your balance is less than ${this.userInfo.currencyType}${this.withdraw},please continue to work hard!`)
-      // } else {
-      //   const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-      //   const passRule = emailReg.test(this.myPay)
-      //   if (!passRule) {
-      //     this.changeMarkInfo(true, false, 0, `Please enter the correct PayTM account!`)
-      //   } else {
-      //     this.changeMarkInfo(true, true, 1, `Your collection account is:<p><b>${this.myPay}</b></p>please confirm the correctness of the account!`)
-      //   }
-      // }
+      if (+this.userInfo.balance < (+this.withdraw) * 100) {
+        this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
+      } else {
+        // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
+        const phone = /\+?\d[\d -]{8,12}\d/
+        const passRule = phone.test(this.myPay)
+        if (!passRule) {
+          this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+        } else {
+          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
+        }
+      }
     },
     okEvent (info) {
       this.markInfo.showMark = false
@@ -93,22 +79,36 @@ export default {
         // 提交表单
         this.showLoading = true
         api.balanceApplication({
-          amount: this.userInfo.balance,
-          email: this.myPay,
+          amount: +this.userInfo.balance,
+          email: '',
           accountId: this.myPay
         })
           .then(({data}) => {
-            console.log('后台返回结果如下')
+            console.log('提现申请后台返回结果如下')
             console.log(data)
+            let takeCash = ''
             this.showLoading = false
-            if (+data.code !== 0) {
-              this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
-            } else {
-              this.changeMarkInfo(true, false, 0, `提交成功，奖金将在审核通过后到账。`)
+            if (+data.result === 1) { // 请求成功 code必为0
+              if (+data.code === 0) {
+                this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+                this.$store.dispatch(type._INIT)
+                takeCash = 'success'
+              }
+            } else { // 请求失败，判断code
+              if (+data.code === 3106) { // 账户记录不存在
+                this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                takeCash = 'bad_account'
+              } else if (+data.code === 3116) { // 可用金额不足
+                this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                takeCash = 'no_enough_money'
+              } else {
+                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                takeCash = 'network_error'
+              }
             }
-          })
-          .catch((err) => {
-            err && this.changeMarkInfo(true, false, 1, `请求失败，请确保网络畅通后重试。`, '重试')
+            utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
           })
       }
     },
@@ -123,7 +123,7 @@ export default {
       this.markInfo = {
         showMark: showMark,
         shouldSub: shouldSub,
-        markType: markType,
+        markType: markType, // 是否有cancel按钮
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
@@ -152,8 +152,7 @@ export default {
     height: 54px;
     margin: 24px 0 79px 0;
     box-sizing: border-box;
-    font-size: 28px;
-    font-family: 'Roboto-Medium';
+    font: 500 28px 'Roboto', Arial, serif;
     color: #fff;
     display: flex;
     align-items: center;
@@ -168,9 +167,9 @@ export default {
       line-height: 54px;
     }
     &__nickname {
-      width: 100%;
       text-align: center;
       flex: 1;
+      padding-right: 54px;
     }
   }
   &__contain {
@@ -190,29 +189,28 @@ export default {
       &__img {
         position: absolute;
         width: 103px;
-        height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;
       }
       &__symbol {
-        font-family: 'Roboto-BoldCondensed';
+        font-family: 'Roboto Condensed', Arial, serif;
+        font-weight: 700;
       }
       &__mytitle, &__totaltitle {
         font-size: 28px;
-        font-family: 'Roboto-Light';
+        font-family: 'Roboto', Arial, serif;
+        font-weight: 300;
       }
       &__mybalance, &__totalbalance {
-        font-size: 52px;
-        font-family: 'Roboto-BoldCondensed';
+        font: 700 52px 'Roboto Condensed', Arial, serif;
         margin: 20px 0 58px 0;
       }
       &__totalbalance {
         margin: 20px 0 0px 0;
       }
       &__tip {
-        font-size: 26px;
-        font-family: 'Roboto-Light';
+        font: 300 26px 'Roboto', Arial, serif;
         color: #7B7B7B;
         margin-left: 22px;
       }
@@ -240,8 +238,7 @@ export default {
       border: none;
       outline: none;
       color: #241262;
-      font-size: 36px;
-      font-family: 'Roboto-Light';
+      font: 300 36px 'Roboto', Arial, serif;
       margin-left: 35px;
     }
     &__input:focus {
@@ -265,9 +262,7 @@ export default {
     &__tip {
       width: 100%;
       color: #fff;
-      font-family: 'Roboto-Light';
-      font-size: 24px;
-      line-height: 30px;
+      font: 300 24px/30px 'Roboto', Arial, serif;
       margin: 27px 0 39px 0;
     }
     &__btn {
@@ -277,9 +272,7 @@ export default {
       color: #fff;
       background: rgba(250,167,23, 0.95);
       text-align: center;
-      line-height: 94px;
-      font-size: 36px;
-      font-family: 'Roboto-Light';
+      font: 300 36px/94px 'Roboto', Arial, serif;
     }
   }
 }

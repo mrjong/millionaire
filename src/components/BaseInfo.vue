@@ -6,17 +6,17 @@
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
-      <router-link to="/balance" class="balance-router">
-        <div class="base-info__other__balance">
+      <router-link to="/balance" class="balance-router" >
+        <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
           <p class="base-info__other__balance__text">Balance</p>
-          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balance}}</p>
+          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balanceShow}}</p>
         </div>
       </router-link>
       <div class="base-info__other__line"></div>
       <router-link to="/rank" class="balance-rank">
-        <div class="base-info__other__rank">
+        <div class="base-info__other__rank"  @click="routerStatistic('rank_page')">
           <p class="base-info__other__rank__text">Weekly Rank</p>
-          <p class="base-info__other__rank__num num">{{baseInfo.rank}}</p>
+          <p class="base-info__other__rank__num num">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
         </div>
       </router-link>
     </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import utils from '../assets/js/utils'
 export default {
   name: 'BaseInfo',
   props: {
@@ -31,6 +32,11 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    routerStatistic (destination) {
+      utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    }
   }
 }
 </script>
@@ -39,9 +45,9 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:113px auto 25px;
+    margin:100px auto 25px;
     padding: 0.5px;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
     &__user{
       text-align: center;
       transform: translate(0, -70px);
@@ -54,14 +60,16 @@ export default {
         margin: 0 auto;
       }
       &__name{
-        margin-top: 28px;
         color: #241262;
-        font: 36px 'Roboto-Medium';
+        font: 500 36px 'Roboto', sans-serif;
+        width: 60%;
+        text-align: center;
+        margin: 0.28px auto;
       }
     }
     &__other{
       display: flex;
-      margin-top: 45px;
+      margin-top: 20px;
       justify-content: center;
       .balance-router, .balance-rank{
         width: 50%;
@@ -69,9 +77,10 @@ export default {
       }
       &__line{
         align-self: center;
+        width: 2px;
         height: 76px;
-        border: 1px solid #e0ddea;
         opacity: 0.5;
+        background-color: #e0ddea;
       }
       &__balance, &__rank {
         margin: 0 auto;
@@ -79,24 +88,25 @@ export default {
         color: #241262;
         &__text{
           text-align: center;
-          font-family: 'Roboto-Light';
+          font-family: 'Roboto';
+          font-weight: 300;
         }
         .num{
           font-size: 56px;
           margin-top: 26px;
           color: #241262;
           text-align: center;
-          font-family: 'Roboto-BoldCondensed';
+          font: 700 56px 'Roboto Condensed', Arial, sans-serif;
         }
       }
     }
   }
   @media screen and (max-width: 321px){
    .base-info{
-     margin:100px auto 25px;
+     margin:80px auto 25px;
      padding-bottom: 80px;
       &__other{
-        margin-top: 25px;
+        margin-top: 20px;
         &__line{
           border:5px solid #e0ddea;
           opacity: 0.5;
