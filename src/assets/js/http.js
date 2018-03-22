@@ -1,5 +1,7 @@
+/* global BUILD_ENV */
+// BUILD_ENV webpack define
 import axios from 'axios'
-const env = 'test'
+const env = BUILD_ENV || 'prod'
 const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
   dev: 'http://dev-millionaire-api.apuscn.com',
@@ -15,6 +17,6 @@ const imAppKey = {
 export const appKey = imAppKey[env]
 export default axios.create({
   baseURL: host[env],
-  withCredentials: true,
+  withCredentials: env !== 'local',
   timeout: 10000
 })

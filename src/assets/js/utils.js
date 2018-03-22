@@ -1,7 +1,7 @@
-/* global */
+/* global IS_LOGIN */
+// IS_LOGIN webpack define
 import md5 from 'md5'
 const njordGame = window.top.njordGame
-
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
@@ -47,6 +47,8 @@ const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njord
 
 console.log(clientParams)
 
+console.log(window.TercelEventJS.getInfo())
+
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -80,7 +82,7 @@ export default {
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : true,
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
   /**
    * 打点
@@ -127,13 +129,14 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share () {
+  share (callback) {
+    window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
       sharePackage: '',
       shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
       shareContent: 'Win real cash up to Rs. 1,000,000!',
       shareLink: 'https://goo.gl/t6jWBU',
-      callbackMethod: 'shareSuccess()'
+      callbackMethod: 'shareSuccess'
     }))
   },
   /**

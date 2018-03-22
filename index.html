@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>millionaire</title>
-    <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script>
+    <!-- <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script> -->
     <script>
       (function (doc, win) {
         var docEl = doc.documentElement
@@ -37,6 +37,7 @@
     var playAudioCallback = null
     var resumeCallback = null
     var pauseCallback = null
+    var shareSuccessCallback = null
     var njordCallback = {}
     function loginSuccess () {
       console.log('login Success')
@@ -58,7 +59,9 @@
       }
     }
 
-    function shareSuccess() {
+    function shareSuccess(isSucceed, packageName) {
+      console.log('分享参数:', isSucceed, packageName)
+      shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
       console.log('分享成功')
     }
   </script>
