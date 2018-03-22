@@ -145,7 +145,8 @@ export default {
   font-weight: 500;
   &__icon {
     width: 130px;
-    border-radius: 50%;
+    height: 130px;
+    border-radius: 130px;
   }
   &__nickname {
     width: 100%;

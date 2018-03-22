@@ -150,18 +150,18 @@ export default new Vuex.Store({
             } else {
               // 是否进入倒计时
               if (isInRoom) {
-                const timer = utils.Timer(1000, startTimeOffset * 1000)
-                timer.addCompleteListener(() => {
-                  commit(type._UPDATE, {
-                    startTimeOffset: getters.startTimeOffset - 1
-                  })
-                })
-                timer.addEndListener(() => {
-                  commit(type._UPDATE, {
-                    startTimeOffset: 0
-                  })
-                })
-                timer.start()
+                const timer = setInterval(() => {
+                  if (getters.startTimeOffset <= 0) {
+                    clearInterval(timer)
+                    commit(type._UPDATE, {
+                      startTimeOffset: 0
+                    })
+                  } else {
+                    commit(type._UPDATE, {
+                      startTimeOffset: getters.startTimeOffset - 1
+                    })
+                  }
+                }, 1000)
                 commit(type._UPDATE, {
                   status: status._READY
                 })
@@ -296,12 +296,12 @@ export default new Vuex.Store({
      */
     [type._END] ({dispatch, commit}) {
       im.addListener(MESSAGE_END, (message) => {
+        dispatch(type._INIT)
         // 清空聊天室
         commit(type.CHAT_UPDATE, {
           msgList: [],
           compereMsg: ''
         })
-        dispatch(type._INIT)
       })
     }
   },

@@ -47,6 +47,8 @@ const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njord
 
 console.log(clientParams)
 
+console.log(window.TercelEventJS.getInfo())
+
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -127,13 +129,14 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share () {
+  share (callback) {
+    window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
       sharePackage: '',
       shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
       shareContent: 'Win real cash up to Rs. 1,000,000!',
       shareLink: 'https://goo.gl/t6jWBU',
-      callbackMethod: 'shareSuccess()'
+      callbackMethod: 'shareSuccess'
     }))
   },
   /**
