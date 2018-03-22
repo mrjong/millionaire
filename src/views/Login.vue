@@ -4,7 +4,10 @@
     <div class="login-container__info">
       <p class="login-container__info__hint">Log in to join Go! Millionaire</p>
       <p class="login-container__info__hint">Win real cash up to Rs. 1,000,000 every 20:00</p>
-      <p class="login-container__info__fb" @click="Login">Log in</p>
+      <div class="login-container__info__login">
+        <p class="login-container__info__login__btn" @click="Login"></p>
+        <span  class="login-container__info__login__text">Log in</span>
+      </div>
     </div>
     <loading v-if="loading"></loading>
   </div>
@@ -81,17 +84,35 @@ export default {
       bottom: 100px;
       width: 100%;
       text-align: center;
-      &__fb{
+      &__login{
         width: 658px;
         height: 94px;
         line-height: 94px;
-        color: #ffffff;
-        font-size: 36px;
-        background-color: #faa717;
-        opacity: 0.95;
-        border-radius: 46px;
         margin: 28px auto 0;
-        font-family: 'Roboto-Light';
+        position: relative;
+        &__text{
+          display: block;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top:50%;
+          left: 50%;
+          font-size: 36px;
+          transform: translate(-50%,-50%);
+          color: #fff;
+          font-family: 'Roboto Regular';
+        }
+        &__btn{
+          width: 100%;
+          height: 100%;
+          color: #ffffff;
+          background-color: #faa717;
+          opacity: 0.95;
+          border-radius: 46px;
+          box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.5);
+          transform-origin: center center;
+          animation: breath 2.5s ease-out 0s infinite;
+        }
       }
       &__hint{
         width: 100%;
@@ -101,6 +122,21 @@ export default {
         text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
         line-height: 32px;
       }
+    }
+  }
+  @keyframes breath{
+    0%{
+      box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.7);
+      transform: scale(1);
+    }
+
+    50%{
+      box-shadow: 0px 0px 30px 5px rgba(239, 160, 24, 0.3);
+      transform: scale(0.95);
+    }
+    100%{
+    box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.7);
+    transform: scale(1);
     }
   }
 </style>
