@@ -1,7 +1,7 @@
-/* global */
+/* global IS_LOGIN */
+// IS_LOGIN webpack define
 import md5 from 'md5'
 const njordGame = window.top.njordGame
-
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
@@ -63,7 +63,7 @@ export default {
   app_id: clientParams ? clientParams.appId : '',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : false,
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
   /**
    * 打点
@@ -110,8 +110,15 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share () {
-    window.njordInvite && window.njordInvite.share && window.njordInvite.share('')
+  share (callback) {
+    window.shareSuccessCallback = callback
+    window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
+      sharePackage: '',
+      shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
+      shareContent: 'Win real cash up to Rs. 1,000,000!',
+      shareLink: 'https://goo.gl/t6jWBU',
+      callbackMethod: 'shareSuccess'
+    }))
   },
   /**
    * 时间格式化

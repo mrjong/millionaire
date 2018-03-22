@@ -12,7 +12,12 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
-
+let buildEnv
+for(let arg of process.argv){
+  if(/env=/.test(arg)){
+    buildEnv = arg.match(/env=(.*)/)[1]
+  }
+}
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -30,7 +35,9 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': env,
+      'IS_LOGIN': false,
+      'BUILD_ENV': JSON.stringify(buildEnv || process.env.BUILD_ENV || 'prod')
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
