@@ -46,9 +46,6 @@ const sounds = {
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
 console.log(clientParams)
-
-console.log(window.TercelEventJS.getInfo())
-
 const getQuery =
 /**
 * 获取浏览器公共参数

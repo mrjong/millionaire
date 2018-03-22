@@ -146,12 +146,13 @@ export default {
   &__icon {
     width: 130px;
     height: 130px;
-    border-radius: 130px;
+    border-radius: 100%;
   }
   &__nickname {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 30px;
     color: #fff;
     margin: 10px 0;
