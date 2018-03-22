@@ -71,6 +71,7 @@ const im = {
       RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
     })
 
+    // 监听离线在线状态
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
@@ -95,7 +96,6 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
-            !im.isSupportOnlineEvent && im.reconnect()
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -105,7 +105,6 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
-            !im.isSupportOnlineEvent && im.reconnect()
             break
         }
       }
@@ -154,19 +153,19 @@ const im = {
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId, token)
-        this.emitListener(type.CONNECT_SUCCESS, userId)
+        im.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {
         console.log('token无效', token)
-        this.emitListener(type.INVALID_TOKEN)
+        im.emitListener(type.INVALID_TOKEN)
       },
       onError: (errorCode) => {
         let info = ''
         switch (errorCode) {
           case RongIMLib.ErrorCode.TIMEOUT:
             info = '超时'
-            this.emitListener(type.CONNECTED_TIMEOUT, info)
-            this.reconnect()
+            im.emitListener(type.CONNECTED_TIMEOUT, info)
+            im.reconnect()
             break
           case RongIMLib.ErrorCode.UNKNOWN_ERROR:
             info = '未知错误'
@@ -174,19 +173,19 @@ const im = {
             break
           case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
             info = '不可接受的协议版本'
-            this.emitListener(type.CONNECTED_ERROR, info)
+            im.emitListener(type.CONNECTED_ERROR, info)
             break
           case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
             info = 'appkey不正确'
-            this.emitListener(type.CONNECTED_ERROR, info)
+            im.emitListener(type.CONNECTED_ERROR, info)
             break
           case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
             info = '服务器不可用'
-            this.emitListener(type.CONNECTED_ERROR, info)
+            im.emitListener(type.CONNECTED_ERROR, info)
             break
         }
         console.log(info)
-        this.reconnect()
+        im.reconnect()
       }
     })
   },
@@ -227,11 +226,11 @@ const im = {
     RongIMClient.getInstance().joinChatRoom(chatRoomId, count, {
       onSuccess: () => {
         console.log('加入聊天室成功')
-        this.emitListener(type.CHATROOM_JOIN_SUCCESS)
+        im.emitListener(type.CHATROOM_JOIN_SUCCESS)
       },
       onError: (error) => {
         console.log('加入聊天室失败')
-        this.emitListener(type.CHATROOM_JOIN_FAIL, error)
+        im.emitListener(type.CHATROOM_JOIN_FAIL, error)
       }
     })
   },
@@ -251,7 +250,7 @@ const im = {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
         console.log('Send successfully')
-        this.emitListener(type.MESSAGE_SEND_SUCCESS, message)
+        im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
         let info = ''
@@ -279,7 +278,7 @@ const im = {
             break
         }
         console.log('发送失败:' + info)
-        this.emitListener(type.MESSAGE_SEND_FAIL, info)
+        im.emitListener(type.MESSAGE_SEND_FAIL, info)
       }
     }
     )
