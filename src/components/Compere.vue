@@ -10,64 +10,60 @@
   </div>
 </template>
 <script>
-  import {mapGetters} from 'vuex'
-  export default {
-    name: 'Compere',
-    data () {
-      return {
-        supaTimer: null,
-        supaOrder: 1,
-        compereMsg: '',
-        supaStyle: `background-position: 0% 0%;`
-      }
-    },
-    computed: {
-      ...mapGetters(['hostIntervalTime', 'hostMsgList'])
-    },
-    mounted () {
-      this.changeSupa()
-      this.swiperMsg()
-    },
-    methods: {
-      changeSupa () {
-        this.supaTimer && clearInterval(this.supaTimer)
-        this.supaTimer = setInterval(() => {
-          if (this.supaOrder >= 5) {
-            this.supaOrder = 0
-          }
-          this.supaStyle = 'background-position: 0%' + (this.supaOrder * 24.95) + '%'
-          this.supaOrder++
-        }, 800)
-      },
-      // 轮播消息
-      swiperMsg () {
-        const list = this.hostMsgList
-        if (list && list.length) {
-          let count = 0
-          const interval = this.hostIntervalTime
-          let timer = setInterval(() => {
-            if (++count < list.length) {
-              this.compereMsg = list[count]
-            } else {
-              clearInterval(timer)
-            }
-          }, interval)
-          this.compereMsg = list[count]
+import {mapGetters} from 'vuex'
+export default {
+  name: 'Compere',
+  data () {
+    return {
+      supaTimer: null,
+      supaOrder: 1,
+      compereMsg: '',
+      supaStyle: `background-position: 0% 0%;`
+    }
+  },
+  computed: {
+    ...mapGetters(['hostIntervalTime', 'hostMsgList'])
+  },
+  mounted () {
+    this.changeSupa()
+    this.swiperMsg()
+  },
+  methods: {
+    changeSupa () {
+      this.supaTimer && clearInterval(this.supaTimer)
+      this.supaTimer = setInterval(() => {
+        if (this.supaOrder >= 5) {
+          this.supaOrder = 0
         }
-      }
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 24.95) + '%'
+        this.supaOrder++
+      }, 800)
     },
-    watch: {
-      hostMsgList (val) {
-        this.swiperMsg()
+    // 轮播消息
+    swiperMsg () {
+      const list = this.hostMsgList
+      if (list && list.length) {
+        let count = 0
+        const interval = this.hostIntervalTime
+        let timer = setInterval(() => {
+          if (++count < list.length) {
+            this.compereMsg = list[count]
+          } else {
+            clearInterval(timer)
+          }
+        }, interval)
+        this.compereMsg = list[count]
       }
     }
+  },
+  watch: {
+    hostMsgList (val) {
+      this.swiperMsg()
+    }
   }
+}
 </script>
 <style scoped lang="less" type="text/less">
-  .compere-container {
-    min-height: 500px;
-    box-sizing: border-box;
-    padding: 150px 29px 0px 44px;
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
@@ -125,4 +121,5 @@
       }
     }
   }
+}
 </style>
