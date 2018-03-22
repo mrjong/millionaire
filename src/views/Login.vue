@@ -33,6 +33,7 @@ export default {
   methods: {
     // 登录方法
     Login: function () {
+      console.log('login')
       if (utils.isOnline) {
         this.init()
       } else {
@@ -84,31 +85,31 @@ export default {
       bottom: 100px;
       width: 100%;
       text-align: center;
-      &__hint {
-        font: 400 24px/32px 'Roboto', Arial, serif;
+      &__hint{
+        font: 400 26px/32px 'Roboto', Arial, serif;
         width: 100%;
         color: #ffe033;
         text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
       }
-      &__login {
+      &__login{
         width: 658px;
         height: 94px;
         line-height: 94px;
         margin: 28px auto 0;
         position: relative;
-        &__text {
+        &__text{
           display: block;
           width: 100%;
           height: 100%;
           position: absolute;
-          top: 50%;
+          top:50%;
           left: 50%;
           font-size: 36px;
-          transform: translate(-50%, -50%);
+          transform: translate(-50%,-50%);
           color: #fff;
           font-family: 'Roboto Regular';
         }
-        &__btn {
+        &__btn{
           width: 100%;
           height: 100%;
           color: #ffffff;
@@ -117,7 +118,7 @@ export default {
           border-radius: 46px;
           box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.5);
           transform-origin: center center;
-          animation: breath 2.5s ease-out 0s infinite;
+          animation: breath 2s ease-out 0s infinite;
         }
       }
     }

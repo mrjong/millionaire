@@ -1,11 +1,11 @@
 <template>
   <div class="compere-container">
     <p class="compere-container__text">
-      {{compereMsg}}
+       {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-      <p class="supa" :style="supaStyle"></p>
-      <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
+       <p class="supa" :style="supaStyle"></p>
+       <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
   </div>
 </template>
@@ -88,37 +88,17 @@ export default {
     width: 211px;
     height: 355px;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    &__text {
-      width: 100%;
-      height: 200px;
-      color: #fed331;
-      font: 500 40px/48px 'Roboto', Arial, serif;;
-      margin: 0 10px 20px 0;
-      position: relative;
-      overflow: hidden;
-      font-smoothing: antialiased;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    .supa {
+      width: 186px;
+      height: 256px;
+      background: url(../assets/images/supaes.png) no-repeat;
+      background-size: cover;
     }
-    &__supa {
-      width: 211px;
-      height: 355px;
-      position: relative;
-      .supa {
-        width: 186px;
-        height: 256px;
-        background: url(../assets/images/supaes.png) no-repeat;
-        background-size: cover;
-      }
-      .supa-desk {
-        width: 100%;
-        position: absolute;
-        top: 175px;
-        left: -16px;
-      }
+    .supa-desk {
+      width: 100%;
+      position: absolute;
+      top: 175px;
+      left: -16px;
     }
   }
 }
