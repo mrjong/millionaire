@@ -26,6 +26,9 @@
             <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
           </a>
         </div>
+        <a href="http://static.subcdn.com/20180321220447b3b994f975.html" class="terms">
+          Terms of Service
+        </a>
       </div>
     </div>
   </div>
@@ -210,5 +213,18 @@ export default {
     margin: 28px 0 140px;
     text-align: center;
   }
+}
+
+.terms {
+  font: 500 30px/35px 'Roboto', Arial, serif;
+  margin-bottom: 20px;
+}
+
+.terms::active {
+  color: #241262;
+}
+
+.terms::visited {
+  color: #241262;
 }
 </style>
