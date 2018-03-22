@@ -1,7 +1,7 @@
-/* global */
+/* global IS_LOGIN */
+// IS_LOGIN webpack define
 import md5 from 'md5'
 const njordGame = window.top.njordGame
-
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
@@ -80,7 +80,7 @@ export default {
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : true,
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
   /**
    * 打点
