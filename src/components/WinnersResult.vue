@@ -152,6 +152,7 @@ export default {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 30px;
     color: #fff;
     margin: 10px 0;
