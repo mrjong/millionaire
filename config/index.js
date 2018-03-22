@@ -3,7 +3,11 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const name= process.env.npm_package_name || require('../package.json').name
+let pubPath = ''
+if(/publicPath/.test(process.argv[2])){
+    pubPath = process.argv[2].replace('publicPath=','').trim() + '/' + name + '/'
+}
 module.exports = {
   dev: {
 
@@ -51,8 +55,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    // assetsPublicPath: '/', // 正式
-    assetsPublicPath: '/preview/millionaire/', // 测试
+    assetsPublicPath: pubPath || `/`, // 正式
+    //assetsPublicPath: '/preview/millionaire/', // 测试
     // assetsPublicPath: '/act/millionaire/', // 测试
 
     /**
