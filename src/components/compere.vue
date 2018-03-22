@@ -68,6 +68,29 @@
     min-height: 500px;
     box-sizing: border-box;
     padding: 150px 29px 0px 44px;
+.compere-container {
+  min-height: 500px;
+  box-sizing: border-box;
+  padding: 150px 29px 0px 44px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  &__text {
+    width: 100%;
+    height: 200px;
+    color: #fed331;
+    font: 500 40px/48px 'Roboto', Arial, serif;;
+    margin: 0 10px 20px 0;
+    position: relative;
+    overflow: hidden;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  &__supa {
+    width: 211px;
+    height: 355px;
     position: relative;
     display: flex;
     flex-direction: column;

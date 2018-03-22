@@ -50,9 +50,9 @@ export default {
       this.$store.dispatch(type._INIT).then(() => {
         this.loading = false
         if (this.status === 1) {
-          this.$router.push({path: '/'})
+          this.$router.replace({path: '/'})
         } else {
-          this.$router.push({path: '/main'})
+          this.$router.replace({path: '/main'})
         }
       }, () => {
         this.loading = false
@@ -113,14 +113,11 @@ export default {
           transform-origin: center center;
           animation: breath 2.5s ease-out 0s infinite;
         }
-      }
-      &__hint{
+        &__hint{
+        font: 400 24px/32px 'Roboto', Arial, serif;
         width: 100%;
-        font-size: 24px;
-        font-family: 'Roboto-Regular';
         color: #ffe033;
         text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
-        line-height: 32px;
       }
     }
   }

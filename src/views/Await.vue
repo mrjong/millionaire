@@ -167,7 +167,8 @@ export default {
       &__apus{
         width: 134px;
         margin: 0 auto;
-        font-family: 'Roboto-Regular,serif';
+        font-family: 'Roboto', Arial, serif;
+        font-weight: 400;
       }
     }
   }
