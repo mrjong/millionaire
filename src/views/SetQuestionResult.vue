@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     submitOther () {
-      this.$router.replace('/set-question')
+      this.$router.push({path: '/set-question', query: {'close': true}})
     },
     joinGroup () {
       location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
