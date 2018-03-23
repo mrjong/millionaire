@@ -161,6 +161,8 @@ export default {
       }
     }
     &__title{
+      height: 54px;
+      line-height: 54px;
       font: 36px "Roboto-Medium";
       color: #241262;
       text-align: center;
