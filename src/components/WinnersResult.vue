@@ -146,7 +146,7 @@ export default {
   &__icon {
     width: 130px;
     height: 130px;
-    border-radius: 130px;
+    border-radius: 100%;
   }
   &__nickname {
     width: 100%;
