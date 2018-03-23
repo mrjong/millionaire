@@ -8,11 +8,11 @@
       <div class="form">
         <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)">
         <div class="form__question">
-          <p class="form__question__hint">
+          <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="100"></textarea>
+          <textarea class="" maxlength="100" v-on:focus="isShowHint = false" v-on:blur="isShowHint = true"></textarea>
         </div>
         <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25">
         <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25">
@@ -23,22 +23,10 @@
             <p class="form__correct__title__text">Correct answer</p>
           </div>
           <div class="form__correct__options">
-            <p class="option-a">
-              <span>A</span>
-              <label for="optionA"  class=" base-option iconfont">
-              <input type="radio" id="optionA">
-            </label>
-            </p>
-            <p class="option-b">
-              <span>B</span>
-              <label for="optionB"  class=" base-option iconfont">
-              <input type="radio" id="optionB">
-            </label>
-            </p>
-            <p class="option-c">
-              <span>C</span>
-              <label for="optionC"  class=" base-option iconfont">
-              <input type="radio" id="optionC">
+            <p class="option" v-for="(val, index) in options" :key="index">
+              <span>{{val}}</span>
+              <label for="'option' + val"  class=" base-option iconfont">
+              <input type="radio" :id="'option' + val" :value="val" ref="correntAnswer">
             </label>
             </p>
           </div>
@@ -55,7 +43,7 @@
           <p class="bomb__content__note">Note:</p>
           <p class="bomb__content__text" v-for="(value) in note" :key="value">{{value}}</p>
         </div>
-        <div class="bomb__btn" @click="closeBomb">
+        <div class="bomb__btn" @click="isPop = false">
           <p class="bomb__btn__text">OK, I agree</p>
         </div>
       </div>
@@ -80,16 +68,14 @@ export default {
         'Submit as more questions as you can to be "Golden QUIZ ',
         'MASTER" every week, awards await you.'
       ],
-      isPop: true
+      isPop: true,
+      isShowHint: true,
+      options: ['A', 'B', 'C']
     }
   },
   mounted () {
-    this.isPop = true
   },
   methods: {
-    closeBomb () {
-      this.isPop = false
-    }
   }
 }
 </script>
@@ -205,7 +191,7 @@ export default {
           justify-content: center;
           width: 80%;
           margin: 36px auto 0;
-          .option-a,.option-b,.option-c{
+          .option{
             flex: 1;
             display: flex;
             justify-content: center;
