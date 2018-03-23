@@ -1,7 +1,7 @@
 <template>
   <div class="set-question">
     <div class="set-question__wrap" v-if="!isPop">
-      <div class="back">
+      <div class="back"  @click="$router.replace('/')">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
@@ -26,7 +26,7 @@
             <p class="option" v-for="(val, index) in options"  :key="index">
               <span>{{val}}</span>
               <label :for="'option' + val"  class=" base-option iconfont green" :class="{'icon-duigou': val==questionInfo.correct}"></label>
-              <input type="radio" :id="'option' + val" :value="val" v-model="questionInfo.correct" ref="correctAnswer" name="option" @click="clicked" >
+              <input type="radio" :id="'option' + val" :value="val" v-model="questionInfo.correct" ref="correctAnswer" name="option">
             </p>
           </div>
         </div>
@@ -47,11 +47,13 @@
         </div>
       </div>
     </div>
+    <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
   </div>
 </template>
 
 <script>
 import * as api from '../assets/js/api'
+import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Rule',
   data () {
@@ -78,6 +80,13 @@ export default {
         'option2': '',
         'option3': '',
         'correct': ''
+      },
+      showDialog: false,
+      dialogInfo: {
+        htmlText: 'Please complete the question',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
       }
     }
   },
@@ -88,28 +97,39 @@ export default {
       this.isShowHint = false
     },
     blurText () {
-      if (this.questionInfo.title.length){
+      if (this.questionInfo.title.length) {
         this.isShowHint = false
         return
       }
       this.isShowHint = true
     },
-    clicked () {
-      let correctAnswer = this.$refs.correctAnswer
-      correctAnswer.forEach((val, idx) => {
-        if (val.checked === true) {
-          this.questionInfo.correct = this.questionInfo['option' + idx]
-          this.checked = true
-        }
-      })
-    },
+    // clicked () {
+    //   let correctAnswer = this.$refs.correctAnswer
+    //   correctAnswer.forEach((val, idx) => {
+    //     if (val.checked === true) {
+    //       this.questionInfo.correct = this.questionInfo['option' + idx]
+    //       this.checked = true
+    //     }
+    //   })
+    // },
     submit () {
       console.log(this.questionInfo)
-      this.clicked()
+      // this.clicked()
+      if (this.questionInfo.title === '' || this.questionInfo.option1 === ' ' || this.questionInfo.option2 === ' ' || this.questionInfo.option3 === ' ' || this.questionInfo.correct === ' ') {
+        this.showDialog = true
+        return
+      }
       api.setQuestions(this.questionInfo).then((data) => {
         console.log(data)
       })
+      this.$router.replace('/set-question-result')
+    },
+    sure () {
+      this.showDialog = false
     }
+  },
+  components: {
+    BalanceMark
   }
 }
 </script>

@@ -44,7 +44,7 @@ export default {
       this.$router.replace('/set-question')
     },
     joinGroup () {
-      location.href = 'https://chat.whatsapp.com/invite/0dyepjd4szvjwtp7qct2zm'
+      location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
     },
     back () {
       this.$router.replace('/')

@@ -69,5 +69,8 @@ export const ifSelfWon = () => {
 
 // 用户出题
 export const setQuestions = (questionInfo) => {
-  return axios.post(`${api.setQuestion}`, questionInfo)
+  return axios.post(`${api.setQuestion}`, {
+    ...questionInfo,
+    app_id: utils.app_id
+  })
 }
