@@ -1,6 +1,6 @@
 <template>
   <div class="set-question">
-    <div class="set-question__wrap" v-if="!isPop">
+    <div class="set-question__wrap" v-if="isPop">
       <div class="back"  @click="$router.replace('/')">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
@@ -33,7 +33,7 @@
         <div class="form__submit" @click="submit">Submit</div>
         </div>
     </div>
-    <div class="set-question__mark" v-if="isPop">
+    <div class="set-question__mark" v-else>
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
@@ -42,7 +42,7 @@
           <p class="bomb__content__note">Note:</p>
           <p class="bomb__content__text" v-for="(value) in note" :key="value">{{value}}</p>
         </div>
-        <div class="bomb__btn" @click="isPop = false">
+        <div class="bomb__btn" @click="isPop = true">
           <p class="bomb__btn__text">OK, I agree</p>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default {
         'Submit as more questions as you can to be "Golden QUIZ ',
         'MASTER" every week, awards await you.'
       ],
-      isPop: true,
+      isPop: false,
       isShowHint: true,
       options: ['A', 'B', 'C'],
       questionInfo: {
@@ -91,6 +91,7 @@ export default {
     }
   },
   mounted () {
+    this.isPop = this.$route.query.close
   },
   methods: {
     focusText () {
@@ -103,15 +104,6 @@ export default {
       }
       this.isShowHint = true
     },
-    // clicked () {
-    //   let correctAnswer = this.$refs.correctAnswer
-    //   correctAnswer.forEach((val, idx) => {
-    //     if (val.checked === true) {
-    //       this.questionInfo.correct = this.questionInfo['option' + idx]
-    //       this.checked = true
-    //     }
-    //   })
-    // },
     submit () {
       console.log(this.questionInfo)
       // this.clicked()
