@@ -296,7 +296,7 @@ export default {
     .bomb{
       width: 620px;
       min-height: 1000px ;
-      background: url("../assets/images/bomb-bg.jpg") no-repeat top left;
+      background: url("../assets/images/bomb-bg.jpg") no-repeat top center;
       background-size: cover;
       align-self: center;
       border-radius: 26px;
