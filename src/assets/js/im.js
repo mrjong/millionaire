@@ -118,7 +118,6 @@ const im = {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -251,7 +250,6 @@ const im = {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
         console.log('Send successfully')
-        console.log(message)
         im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
