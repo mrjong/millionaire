@@ -45,9 +45,9 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:100px auto 25px;
+    margin:70px auto 25px;
     padding: 0.5px;
-    padding-bottom: 80px;
+    padding-bottom: 70px;
     &__user{
       text-align: center;
       transform: translate(0, -70px);
@@ -69,7 +69,6 @@ export default {
     }
     &__other{
       display: flex;
-      margin-top: 20px;
       justify-content: center;
       .balance-router, .balance-rank{
         width: 50%;
