@@ -6,32 +6,31 @@
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
       <div class="form">
-        <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)">
+        <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="100" v-on:focus="isShowHint = false" v-on:blur="isShowHint = true"></textarea>
+          <textarea class="" maxlength="100" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
         </div>
-        <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25">
-        <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25">
-        <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25">
+        <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25" v-model="questionInfo.option1">
+        <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25" v-model="questionInfo.option2">
+        <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25" v-model="questionInfo.option3">
         <div class="form__correct">
           <div class="form__correct__title">
             <p class="form__correct__title__icon iconfont icon-duigou"></p>
             <p class="form__correct__title__text">Correct answer</p>
           </div>
           <div class="form__correct__options">
-            <p class="option" v-for="(val, index) in options" :key="index">
+            <p class="option" v-for="(val, index) in options"  :key="index">
               <span>{{val}}</span>
-              <label for="'option' + val"  class=" base-option iconfont">
-              <input type="radio" :id="'option' + val" :value="val" ref="correntAnswer">
-            </label>
+              <label :for="'option' + val"  class=" base-option iconfont green" :class="{'icon-duigou': val==questionInfo.correct}"></label>
+              <input type="radio" :id="'option' + val" :value="val" v-model="questionInfo.correct" ref="correctAnswer" name="option" @click="clicked" >
             </p>
           </div>
         </div>
-        <div class="form__submit">Submit</div>
+        <div class="form__submit" @click="submit">Submit</div>
         </div>
     </div>
     <div class="set-question__mark" v-if="isPop">
@@ -52,6 +51,7 @@
 </template>
 
 <script>
+import * as api from '../assets/js/api'
 export default {
   name: 'Rule',
   data () {
@@ -70,12 +70,46 @@ export default {
       ],
       isPop: true,
       isShowHint: true,
-      options: ['A', 'B', 'C']
+      options: ['A', 'B', 'C'],
+      questionInfo: {
+        'author': '',
+        'title': '',
+        'option1': '',
+        'option2': '',
+        'option3': '',
+        'correct': ''
+      }
     }
   },
   mounted () {
   },
   methods: {
+    focusText () {
+      this.isShowHint = false
+    },
+    blurText () {
+      if (this.questionInfo.title.length){
+        this.isShowHint = false
+        return
+      }
+      this.isShowHint = true
+    },
+    clicked () {
+      let correctAnswer = this.$refs.correctAnswer
+      correctAnswer.forEach((val, idx) => {
+        if (val.checked === true) {
+          this.questionInfo.correct = this.questionInfo['option' + idx]
+          this.checked = true
+        }
+      })
+    },
+    submit () {
+      console.log(this.questionInfo)
+      this.clicked()
+      api.setQuestions(this.questionInfo).then((data) => {
+        console.log(data)
+      })
+    }
   }
 }
 </script>
@@ -129,6 +163,7 @@ export default {
         font-size: 36px;
         position: relative;
         &__hint{
+          pointer-events:none;
           width: 100%;
           height: 54px;
           line-height: 54px;
@@ -311,6 +346,10 @@ export default {
     opacity: 0.6;
     text-align: center;
     font-size: 32px;
+  }
+  .green{
+    color: #8ad53a !important;
+    text-shadow: 0 0 5px 1px #8ad53a !important;
   }
 }
 </style>
