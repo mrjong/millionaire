@@ -91,7 +91,9 @@ export default {
     }
   },
   mounted () {
-    this.isPop = this.$route.query.close
+    if (this.$route.query.close) {
+      this.isPop = this.$route.query.close
+    }
   },
   methods: {
     focusText () {
