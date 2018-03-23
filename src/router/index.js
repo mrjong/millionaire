@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
-import SetQuestion from '@/views/SetQuestion.vue'
+const SetQuestion = () => import('@/views/SetQuestion.vue')
+const SetQuestionResult = () => import('@/views/SetQuestionResult.vue')
 const Rule = () => import('@/views/Rule.vue')
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
@@ -46,6 +47,11 @@ const router = new Router({
       path: '/set-question',
       name: 'set-question',
       component: SetQuestion
+    },
+    {
+      path: '/set-question-result',
+      name: 'set-question-result',
+      component: SetQuestionResult
     }
   ]
 })
