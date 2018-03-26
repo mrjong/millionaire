@@ -17,11 +17,17 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
-        <router-link to="/rank">
-          <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
-        </router-link>
+      <router-link to="/rank">
+        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
+      </router-link>
       <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>
+    <router-link to="/set-question">
+      <div class="await__set">
+        <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
+        <p class="await__set__text">Set Questions Myself</p>
+      </div>
+    </router-link>
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
@@ -159,6 +165,27 @@ export default {
       display: flex;
       padding:0 25px;
       justify-content: space-between;
+    }
+    &__set{
+      width: 656px;
+      height: 90px;
+      background-color: #dc427a;
+      font:32px 'Roboto Regular';
+      border-radius: 46px;
+      color: #fff;
+      margin: 30px auto 0;
+      text-align: center;
+      &__text{
+        display: inline-block;
+        line-height: 90px;
+      }
+      &__icon{
+        display: inline-block;
+        width: 50px;
+        height: 90px;
+        line-height: 90px;
+        font-size: 32px;
+      }
     }
     &__bottom{
       width: 100%;
