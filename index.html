@@ -4,6 +4,94 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>millionaire</title>
+    <script>
+      var startTime = Date.now();
+    </script>
+     <script>
+      var njordGame = window.top.njordGame
+      var playAudioCallback = null
+      var resumeCallback = null
+      var pauseCallback = null
+      var shareSuccessCallback = null
+      var njordCallback = {}
+      var loginCallback = null
+
+      window.onload = function () {
+        var loadTime = Date.now() - startTime
+        statistic({
+          event_name: 'first_page_loading_time_cost',
+          extra: {
+            event: '67240565'
+          }
+        })
+        console.log('加载时间：', loadTime)
+      }
+      function isLogin () {
+        var clientParams = (window.top.njordGame && window.top.njordGame.getClientParams) ? JSON.parse(window.top.njordGame.getClientParams()) : null
+        return clientParams ? clientParams.isLogin : false
+      }
+
+      function loginSuccess () {
+        console.log('login Success')
+        setTimeout(function () {
+          loginCallback && loginCallback()
+        }, 0)
+      }
+
+      function statistic (args) {
+        njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
+      }
+
+      function playAudio () {
+        playAudioCallback && playAudioCallback()
+      }
+
+      njordCallback.onResume = function () {
+          var sounds = document.getElementsByTagName('audio')
+          for (var i = 0; i < sounds.length; i++) {
+            sounds[i].muted = false
+          }
+        }
+        njordCallback.onPause = function () {
+          var sounds = document.getElementsByTagName('audio')
+          for (var i = 0; i < sounds.length; i++) {
+            sounds[i].muted = true
+          }
+        }
+
+      function shareSuccess(isSucceed, packageName) {
+        console.log('分享参数:', isSucceed, packageName)
+        shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
+        console.log('分享成功')
+      }
+
+      if (!isLogin()) {
+        if (njordGame) {
+          window.top.loginCallback = function () {
+            statistic({
+              event_name: 'login_page',
+              from: 'login_page_client',
+              extra: {
+                event: '67262581',
+                result_code_s: '1'
+              }
+            })
+            window.location.reload()
+          }
+          var loginArgs = JSON.stringify({
+            callbackMethod: 'loginSuccess()'
+          })
+          statistic({
+            event_name: 'login_page',
+            from: 'login_page_client',
+            extra: {
+              event: '67240565'
+            }
+          })
+          njordGame.login && njordGame.login(loginArgs)
+        }
+      }
+    </script>
     <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script>
     <script>
       (function (doc, win) {
@@ -32,37 +120,4 @@
     <script src="http://static.subcdn.com/20180321132919bde55bdb2d.js"></script>
     <!-- <link href='http://fonts.font.im/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'> -->
   </body>
-  <script>
-    var loginCallback = null
-    var playAudioCallback = null
-    var resumeCallback = null
-    var pauseCallback = null
-    var shareSuccessCallback = null
-    var njordCallback = {}
-    function loginSuccess () {
-      console.log('login Success')
-      loginCallback && loginCallback()
-    }
-    function playAudio () {
-      playAudioCallback && playAudioCallback()
-    }
-    njordCallback.onResume = function () {
-      var sounds = document.getElementsByTagName('audio')
-      for (var i = 0; i < sounds.length; i++) {
-        sounds[i].muted = false
-      }
-    }
-    njordCallback.onPause = function () {
-      var sounds = document.getElementsByTagName('audio')
-      for (var i = 0; i < sounds.length; i++) {
-        sounds[i].muted = true
-      }
-    }
-
-    function shareSuccess(isSucceed, packageName) {
-      console.log('分享参数:', isSucceed, packageName)
-      shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
-      console.log('分享成功')
-    }
-  </script>
 </html>

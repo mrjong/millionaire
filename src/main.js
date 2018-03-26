@@ -19,6 +19,8 @@ Vue.prototype.$http = http
 router.beforeEach((to, from, next) => {
   if (!utils.isOnline && to.name !== 'login') {
     next({path: '/login', replace: true})
+  } else if (utils.isOnline && to.name === 'login') {
+    next({path: '/', replace: true})
   } else {
     next()
   }
