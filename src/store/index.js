@@ -134,6 +134,9 @@ export default new Vuex.Store({
                   optionsMd5Map,
                   watchingMode: true
                 })
+                commit(type.QUESTION_UPDATE, {
+                  status: status.QUESTION_ANSWERING
+                })
                 // 更新当前状态
                 commit(type._UPDATE, {
                   status: status._PLAYING
