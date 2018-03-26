@@ -106,8 +106,10 @@ export default {
       isSetQuestion: false
     }
   },
-  mounted () {
+  created () {
     this.submitFlag()
+  },
+  mounted () {
     this.isPop = localStorage.getItem('isPop')
     if (this.$route.query.close) {
       this.isPop = this.$route.query.close
@@ -126,6 +128,8 @@ export default {
     },
     submitFlag () {
       api.isSetQuestion().then((data) => {
+        console.log('isSetQuestion')
+        console.log(data)
         if (data.data) {
           this.isSetQuestion = true
         }
@@ -133,7 +137,6 @@ export default {
     },
     submit () {
       console.log(this.questionInfo)
-      // this.clicked()
       if (this.questionInfo.title === '') {
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
@@ -143,6 +146,7 @@ export default {
         return false
       }
       api.setQuestions(this.questionInfo).then((data) => {
+        console.log('setquestion-' + data)
         if (data.result === 1) {
           this.$router.replace('/set-question-result')
         } else {
@@ -177,6 +181,7 @@ export default {
   background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
   background-size: cover;
   color: #fff;
+  background-color: #fff;
   &__wrap{
     height: 100%;
     position: relative;
