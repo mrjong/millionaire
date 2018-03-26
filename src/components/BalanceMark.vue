@@ -1,7 +1,9 @@
 <template>
   <div class="balance-mark">
     <div class="balance-mark__wrap">
-      <p class="balance-mark__wrap__title" id="balanceMarkText"></p>
+      <img :src="dataInfo.hintImg" v-if="dataInfo.hintImg" class="hint-icon">
+      <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
+      <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText">{{dataInfo.htmlText}}</p>
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
@@ -23,10 +25,7 @@ export default {
     return {
     }
   },
-  mounted () {
-    const markText = document.getElementById('balanceMarkText')
-    markText.innerHTML = this.dataInfo.htmlText
-  },
+  mounted () {},
   methods: {
     okEvent () {
       this.$emit('okEvent', this.dataInfo.shouldSub)
@@ -53,22 +52,34 @@ export default {
     height: 402px;
     background: #fff;
     border-radius: 16px;
-    padding: 99px 45px 0 45px;
+    padding: 20px 45px 0 45px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
+    .hint-icon{
+      width: 88px;
+      margin:15px auto 26px;
+    }
     &__title {
       width: 100%;
-      height: 160px;
+      font: 32px/30px 'Roboto', Arial, serif;
+      color: #000;
+      min-height: 40px;
+      margin: 10px auto;
+    }
+    &__description {
+      width: 100%;
       font: 300 28px/30px 'Roboto', Arial, serif;
       color: #000;
+      min-height: 40px;
     }
     &__btn {
       width: 100%;
       height: 77px;
       display: flex;
       justify-content: space-around;
+      margin-top: 40px;
       span {
         display: inline-block;
         width: 240px;

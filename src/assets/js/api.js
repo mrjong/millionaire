@@ -10,7 +10,8 @@ export const api = {
   syncStartTime: '/cmp/rst/', // 同步开始时间
   balanceApplication: '/cmp/apply', // 提现申请
   isWon: '/cmp/k/', // 用户是否获得奖金
-  setQuestion: '/cmp/submit_question/' // 用户出题
+  setQuestion: '/cmp/submit_question/', // 用户出题
+  isSetQuestion: '/cmp/submit_flag/' // 是否出过题
 }
 
 export const init = function (isRefreshToken) {
@@ -73,4 +74,9 @@ export const setQuestions = (questionInfo) => {
     ...questionInfo,
     app_id: utils.app_id
   })
+}
+
+// 是否出过题
+export const isSetQuestion = function () {
+  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}`)
 }

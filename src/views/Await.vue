@@ -16,18 +16,18 @@
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <div class="await__btn">
-      <router-link to="/rank">
-        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
-      </router-link>
-      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
-    </div>
     <router-link to="/set-question">
       <div class="await__set">
         <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
         <p class="await__set__text">Set Questions Myself</p>
       </div>
     </router-link>
+    <div class="await__btn">
+      <router-link to="/rank">
+        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
+      </router-link>
+      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
+    </div>
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
@@ -47,7 +47,7 @@ export default {
     return {
       baseStyle1: {
         text: 'Share with friends',
-        bgColor: '#faa717'
+        bgColor: '#dc427a'
       },
       baseStyle2: {
         text: 'Leaderboard',
@@ -169,15 +169,16 @@ export default {
     &__set{
       width: 656px;
       height: 90px;
-      background-color: #dc427a;
+      background-color: #faa717 ;
       font:32px 'Roboto Regular';
       border-radius: 46px;
       color: #fff;
-      margin: 30px auto 0;
+      margin:0 auto 30px ;
       text-align: center;
       &__text{
         display: inline-block;
         line-height: 90px;
+        font: 300 .32rem/.93rem Roboto;
       }
       &__icon{
         display: inline-block;
