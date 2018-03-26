@@ -8,7 +8,7 @@ import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
 import { submitAnswer } from '../../assets/js/api'
 
 const state = {
-  status: status.QUESTION_ANSWERING, // 状态
+  status: status.QUESTION_AWAIT, // 状态
   id: '', // ID
   contents: '', // 内容
   options: [], // 选项
