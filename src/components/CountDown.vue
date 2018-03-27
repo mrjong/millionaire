@@ -4,11 +4,11 @@
       <p class="count-down-container__module__text">Starting in</p>
       <p class="count-down-container__module__time">{{countDown}}</p>
     </div>
-    <div class="count-down-container__animation" v-else-if = 'startTime <= 10 && startTime !== 0'>
+    <div class="count-down-container__animation" v-show = 'startTime <= 10 && startTime !== 0'>
       <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
-      <img class="count-down-container__animation__number"
+      <img v-for="i in 10" :key="i" class="count-down-container__animation__number"
            ref="animationNumber"
-           :src="`./static/images/${startTime}.png`"/>
+           :src="`./static/images/${i}.png`" v-show="startTime === i"/>
       <img class="count-down-container__animation__top" src="../assets/images/right.png"/>
     </div>
   </div>

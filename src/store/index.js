@@ -14,6 +14,8 @@ import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TO
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
+let syncTimer = null
+let countDownTimer = null
 export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
@@ -45,7 +47,8 @@ export default new Vuex.Store({
         // }
       ],
       winnerAmount: 0 // 获胜者数量
-    } // 游戏结果
+    }, // 游戏结果
+    isRefreshedToken: false // 是否已经刷新过token
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -55,8 +58,9 @@ export default new Vuex.Store({
     hostMsgList: (state) => state.hostMsgList,
     status: (state) => state.status,
     result: (state) => state.result,
-    onlineAmount: (status) => status.onlineAmount,
-    readyTime: (status) => status.readyTime
+    onlineAmount: (state) => state.onlineAmount,
+    readyTime: (state) => state.readyTime,
+    isRefreshedToken: (state) => state.isRefreshedToken
   },
   mutations: {
     /**
@@ -74,6 +78,9 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
+      commit(type._UPDATE, {
+        isRefreshedToken: isRefreshToken
+      })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           console.log(data)
@@ -127,6 +134,9 @@ export default new Vuex.Store({
                   optionsMd5Map,
                   watchingMode: true
                 })
+                commit(type.QUESTION_UPDATE, {
+                  status: status.QUESTION_ANSWERING
+                })
                 // 更新当前状态
                 commit(type._UPDATE, {
                   status: status._PLAYING
@@ -150,9 +160,10 @@ export default new Vuex.Store({
             } else {
               // 是否进入倒计时
               if (isInRoom) {
-                const timer = setInterval(() => {
+                clearInterval(countDownTimer)
+                countDownTimer = setInterval(() => {
                   if (getters.startTimeOffset <= 0) {
-                    clearInterval(timer)
+                    clearInterval(countDownTimer)
                     commit(type._UPDATE, {
                       startTimeOffset: 0
                     })
@@ -190,10 +201,13 @@ export default new Vuex.Store({
                 })
                 im.joinChatRoom(state.chatRoomId)
               })
-              // 若token过期，重新初始化刷新token
-              im.addListener(INVALID_TOKEN, () => {
-                dispatch(type._INIT, true)
-              })
+              // 若token过期，且没有刷新过token 重新初始化刷新token
+              if (!getters.isRefreshedToken) {
+                im.addListener(INVALID_TOKEN, () => {
+                  dispatch(type._INIT, true)
+                  im.removeLister(INVALID_TOKEN)
+                })
+              }
               im.connect(state.imToken)
             }
             resolve()
@@ -216,19 +230,21 @@ export default new Vuex.Store({
      */
     [type._SYNC_TIME] ({commit, getters}) {
       // 每隔15秒同步开始时间
-      const timer = setInterval(() => {
-        if (getters.startTimeOffset <= 10) {
-          clearInterval(timer)
-        } else {
-          syncTime().then(({data}) => {
-            commit(type._UPDATE, {
-              startTimeOffset: +data.data || 0
+      if (!syncTimer) {
+        syncTimer = setInterval(() => {
+          if (getters.startTimeOffset <= 10) {
+            clearInterval(syncTimer)
+          } else {
+            syncTime().then(({data}) => {
+              commit(type._UPDATE, {
+                startTimeOffset: +data.data || 0
+              })
+            }, (err) => {
+              console.log('同步时间失败：' + err)
             })
-          }, (err) => {
-            console.log('同步时间失败：' + err)
-          })
-        }
-      }, 15000)
+          }
+        }, 15000)
+      }
     },
     /**
      * 更新在线人数

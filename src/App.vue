@@ -37,6 +37,7 @@ export default {
         setTimeout(() => {
           this.loading = false
         }, 500)
+        this.$statisticEntry()
       }, (err) => {
         this.$router.replace({path: '/login'})
         this.loading = false
@@ -64,12 +65,6 @@ export default {
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
-        utils.statistic('millionaire', 0, {style_s: 'waiting'})
-      }
-      if (status === 2) {
-        utils.statistic('millionaire', 0, {style_s: 'countdown'})
-      } else if (status === 3) {
-        utils.statistic('millionaire', 0, {style_s: 'playing'})
       }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {

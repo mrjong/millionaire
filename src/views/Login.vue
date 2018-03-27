@@ -55,6 +55,7 @@ export default {
         } else {
           this.$router.replace({path: '/main'})
         }
+        this.$statisticEntry()
       }, () => {
         this.loading = false
       })
