@@ -17,7 +17,7 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
-import loading from '../components/loading.vue'
+import loading from '../components/Loading.vue'
 export default {
   name: 'Login',
   data () {

@@ -32,10 +32,12 @@ export default {
     return {
       showDialog: false,
       dialogInfo: {
+        htmlTitle: 'Failed to Submit',
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK'
+        okBtnText: 'OK',
+        hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
       }
     }
   },
