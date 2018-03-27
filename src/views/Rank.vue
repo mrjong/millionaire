@@ -48,7 +48,7 @@
 import rankItem from '../components/RankItem'
 import {mapGetters} from 'vuex'
 import { RANK_UPDATE } from '../store/type'
-import loading from '../components/loading'
+import loading from '../components/Loading'
 import utils from '../assets/js/utils'
 export default {
   name: 'RankList',
