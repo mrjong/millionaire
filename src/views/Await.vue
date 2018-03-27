@@ -17,7 +17,7 @@
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
     <router-link to="/set-question">
-      <div class="await__set">
+      <div class="await__set" @click="btnStatistic('issue_page')">
         <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
         <p class="await__set__text">Set Questions Myself</p>
       </div>

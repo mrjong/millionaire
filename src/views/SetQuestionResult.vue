@@ -31,6 +31,7 @@ We'll reeview all submissions and announce the seleted questions and its QUIZ MA
 </template>
 
 <script>
+import utils from '../assets/js/utils'
 export default {
   name: 'SetQuestionResult',
   data () {
@@ -38,15 +39,19 @@ export default {
     }
   },
   mounted () {
+    utils.statistic('issue_page', 0, {}, 'issue_success_page')
   },
   methods: {
     submitOther () {
+      utils.statistic('issue_success_page', 1, {'to_destination_s': 'issue_page'}, 'issue_page')
       this.$router.push({path: '/set-question', query: {'close': true}})
     },
     joinGroup () {
+      utils.statistic('issue_success_page', 1, {'to_destination_s': 'join_group'}, 'issue_page')
       location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
     },
     back () {
+      utils.statistic('issue_success_page', 1, {'to_destination_s': 'back'}, 'issue_page')
       this.$router.replace('/')
     }
   }

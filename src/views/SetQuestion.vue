@@ -1,11 +1,11 @@
 <template>
   <div class="set-question">
     <div class="set-question__wrap" v-if="isPop">
-      <div class="back"  @click="$router.replace('/')">
+      <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
-      <div class="set-question__wrap__join" v-if="isSetQuestion">Join Group</div>
+      <div class="set-question__wrap__join" v-if="isSetQuestion" @click="join">Join Group</div>
       <div class="form">
         <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
         <div class="form__question">
@@ -60,6 +60,7 @@
       </div>
     </div>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <loading v-if="isLoading"></loading>
   </div>
 </template>
 
@@ -67,6 +68,8 @@
 import * as api from '../assets/js/api'
 import BalanceMark from '../components/BalanceMark'
 import checkStrLength from '../components/CheckStrLength'
+import loading from '../components/Loading'
+import utils from '../assets/js/utils'
 export default {
   name: 'Rule',
   data () {
@@ -103,17 +106,19 @@ export default {
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
       },
-      isSetQuestion: false
+      isSetQuestion: false,
+      isLoading: false
     }
-  },
-  created () {
-    this.submitFlag()
   },
   mounted () {
     this.isPop = localStorage.getItem('isPop')
     if (this.$route.query.close) {
       this.isPop = this.$route.query.close
+      utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'issue_success_page')
+    } else {
+      utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'wait_page')
     }
+    this.submitFlag()
   },
   methods: {
     focusText () {
@@ -128,8 +133,6 @@ export default {
     },
     submitFlag () {
       api.isSetQuestion().then((data) => {
-        console.log('isSetQuestion')
-        console.log(data)
         if (data.data) {
           this.isSetQuestion = true
         }
@@ -137,17 +140,23 @@ export default {
     },
     submit () {
       console.log(this.questionInfo)
+      this.isLoading = true
       if (this.questionInfo.title === '') {
+        this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
+        this.setQuestionBtnStatics('submit', 'no_answer')
         this.dialogInfo.htmlText = 'Please complete the answer'
         this.showDialog = true
         return false
       }
-      api.setQuestions(this.questionInfo).then((data) => {
-        console.log('setquestion-' + data)
+      api.setQuestions(this.questionInfo).then(({data}) => {
+        this.isLoading = false
+        console.log('setquestion---')
+        console.log(data)
         if (data.result === 1) {
+          this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
           this.showDialog = true
@@ -155,8 +164,8 @@ export default {
           return false
         }
       }).catch(() => {
+        this.setQuestionBtnStatics('submit', 'other_anomaly')
         this.showDialog = true
-        this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
         return false
       })
     },
@@ -166,18 +175,36 @@ export default {
     isShowBomb () {
       this.isPop = true
       localStorage.setItem('isPop', true)
+    },
+    join () {
+      this.setQuestionBtnStatics('join_group')
+      location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
+    },
+    back () {
+      this.setQuestionBtnStatics('back')
+      this.$router.replace('/')
+    },
+    setQuestionBtnStatics (destination, result) {
+      let staticsObj = {}
+      if (result) {
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code': result}
+      } else {
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
+      }
+      utils.statistic('submit', 1, staticsObj, 'issue_page')
     }
   },
   components: {
     BalanceMark,
-    checkStrLength
+    checkStrLength,
+    loading
   }
 }
 </script>
 <style scoped lang="less" type="text/less">
 .set-question{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
   background-size: cover;
   color: #fff;
@@ -265,7 +292,7 @@ export default {
           width:100% ;
           height: 100%;
           border: 0;
-          padding:10px 0 10px 30px;
+          padding:15px 20px 15px 30px;
           background-color: transparent;
         }
         textarea:focus {
@@ -333,7 +360,7 @@ export default {
               font-size: 15px;
               color: #241262;
               line-height: 38px;
-              box-shadow: 0 0 0 1px #241262;
+              box-shadow: 0 0 0 2px #241262;
               border-radius: 5px;
               align-self: center;
             }
@@ -359,6 +386,7 @@ export default {
     opacity: 0.8;
     display: flex;
     justify-content: center;
+    position: absolute;
     .bomb{
       width: 620px;
       min-height: 1000px ;
