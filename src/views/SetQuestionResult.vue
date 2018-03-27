@@ -60,6 +60,7 @@ export default {
 <style scoped lang="less" type="text/less">
 .set-question{
   width: 100%;
+  min-height: 100%;
   background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
   background-size: cover;
   color: #fff;
@@ -72,18 +73,20 @@ export default {
       height: 54px;
       background-color: #241262;
       border-radius: 50%;
-      position: absolute;
+      position: fixed;
       top: 24px;
       left: 30px;
       display: flex;
       justify-content: center;
       &__icon{
-        font-size: 22px;
+        font-size: 28px;
         align-self: center;
         color:#fff ;
+        margin-left: -2px;
       }
     }
     &__title{
+      padding-top: 5px;
       font: 36px "Roboto-Medium";
       color: #241262;
       text-align: center;
@@ -93,22 +96,21 @@ export default {
 .result-box{
   width: 100%;
   text-align: center;
-  margin-top: 58px;
+  margin-top: 42px;
   color: #241262;
   img{
     display: inline-block;
-    width: 350px;
+    width: 250px;
   }
   p.result-title{
-
-    font-size: 58px;
+    font-size: 48px;
     font-weight: bold;
-    margin-top: 60px;
-    margin-bottom: 50px;
+    margin-top: 40px;
+    margin-bottom: 30px;
   }
   p.result-content{
     padding: 0 20px;
-    font-size: 32px;
+    font-size: 28px;
     line-height: 1.31;
     color: rgba(36, 18, 98, 0.8);
   }
@@ -118,11 +120,11 @@ export default {
     border-radius: 46px;
     background-color:#f4f3f7 ;
     border: 0;
-    padding: 50px;
+    padding: 30px;
     color:#241262 ;
     font-size: 36px;
-    margin-bottom: 100px;
-    margin-top: 50px;
+    margin-bottom: 78px;
+    margin-top: 40px;
   }
   .join-btn{
     background: #dd4b80;
@@ -131,7 +133,7 @@ export default {
     padding: 30px 0;
     border-radius: 80px;
     box-shadow: 0px 6px 10px rgba(221, 75, 128, 0.54);
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
   .require-box{
     color: #241262;
@@ -147,15 +149,16 @@ export default {
   }
   .submit-box{
     text-align: center;
-    padding-bottom: 100px;
+    padding-bottom: 76px;
     .prue-btn{
       display: inline-block;
-      padding: 30px 0;
-      width: 70%;
-      font-size: 35px;
+      height: 92px;
+      line-height: 90px;
+      width: 342px;
+      font-size: 28px;
       color: #241262;
-      border-radius: 80px;
-      border: 5px solid rgba(36, 18, 98, 0.48);
+      border-radius: 46px;
+      border: 4px solid rgba(36, 18, 98, 0.4);
     }
   }
 </style>

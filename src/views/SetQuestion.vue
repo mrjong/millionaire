@@ -1,5 +1,5 @@
 <template>
-  <div class="set-question">
+  <div class="set-question" ref="setQestion">
     <div class="set-question__wrap" v-if="isPop">
       <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
@@ -59,8 +59,8 @@
         </div>
       </div>
     </div>
-    <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <loading v-if="isLoading"></loading>
+    <balance-mark :height="clientHeight" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <loading v-if="isLoading" :height="clientHeight"></loading>
   </div>
 </template>
 
@@ -107,7 +107,8 @@ export default {
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
       },
       isSetQuestion: false,
-      isLoading: false
+      isLoading: false,
+      clientHeight: 0
     }
   },
   mounted () {
@@ -121,6 +122,12 @@ export default {
     this.submitFlag()
   },
   methods: {
+    getClientHeight () {
+      this.$nextTick(() => {
+        this.clientHeight = this.$refs.setQestion.offsetHeight
+        console.log('this.clientHeight=' + this.clientHeight)
+      })
+    },
     focusText () {
       this.isShowHint = false
     },
@@ -136,16 +143,19 @@ export default {
         if (data.data) {
           this.isSetQuestion = true
         }
+        this.getClientHeight()
       })
     },
     submit () {
       console.log(this.questionInfo)
       this.isLoading = true
       if (this.questionInfo.title === '') {
+        this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
+        this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_answer')
         this.dialogInfo.htmlText = 'Please complete the answer'
         this.showDialog = true
@@ -159,6 +169,7 @@ export default {
           this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
+          this.isLoading = false
           this.showDialog = true
           this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
           return false
@@ -224,7 +235,7 @@ export default {
       display: flex;
       justify-content: center;
       &__icon{
-        font-size: 32px;
+        font-size: 28px;
         align-self: center;
         color: #fff;
         margin-left: -2px;
@@ -233,6 +244,7 @@ export default {
     &__title{
       height: 54px;
       line-height: 56px;
+      padding-top: 5px;
       font: 36px "Roboto-Medium";
       color: #241262;
       text-align: center;

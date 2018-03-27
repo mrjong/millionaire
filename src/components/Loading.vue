@@ -1,5 +1,5 @@
 <template>
-  <div class="loading">
+  <div class="loading" :style="{height: actualHeight}">
     <img src="../assets/images/loading.png" class="loading__img">
   </div>
 </template>
@@ -7,8 +7,22 @@
 <script>
 export default {
   name: 'loading',
+  props: {
+    height: {
+      type: Number
+    }
+  },
   data () {
     return {
+    }
+  },
+  computed: {
+    actualHeight: function () {
+      if (this.height) {
+        return this.height + 'px'
+      } else {
+        return '100%'
+      }
     }
   }
 }
