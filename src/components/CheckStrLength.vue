@@ -21,7 +21,11 @@ export default {
   },
   computed: {
     residualLength: function () {
-      return this.originalLength - this.currentLength
+      if (this.originalLength - this.currentLength <= 0) {
+        return 0
+      } else {
+        return this.originalLength - this.currentLength
+      }
     }
   }
 }

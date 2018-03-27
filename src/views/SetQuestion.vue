@@ -48,8 +48,8 @@
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
-          <p class="bomb__content__title">QUIZ MASTER Required!</p>
-          <p class="bomb__content__title">Set it, Question it, Win it!!</p>
+          <p class="bomb__content__title1">QUIZ MASTER Required!</p>
+          <p class="bomb__content__title2">Set it, Question it, Win it!!</p>
           <p class="bomb__content__clause" v-for="(item, index) in instruction" :key="index">{{item}}</p>
           <p class="bomb__content__note">Note:</p>
           <p class="bomb__content__text" v-for="(value) in note" :key="value">{{value}}</p>
@@ -125,7 +125,6 @@ export default {
     getClientHeight () {
       this.$nextTick(() => {
         this.clientHeight = this.$refs.setQestion.offsetHeight
-        console.log('this.clientHeight=' + this.clientHeight)
       })
     },
     focusText () {
@@ -418,11 +417,16 @@ export default {
       }
       &__content{
         margin-top: 85px;
-        &__title{
-          margin: 0 auto 40px;
+        &__title1{
+          margin: 0 auto 10px;
           text-align: center;
           font: 38px "Roboto Regular";
-          font-weight: bold;
+          line-height: 38px;
+        }
+        &__title2{
+          margin: 0 auto 40px;
+          text-align: center;
+          font: 32px "Roboto Regular";
           line-height: 38px;
         }
         &__clause{
