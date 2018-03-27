@@ -175,6 +175,7 @@ export default {
           return false
         }
       }).catch(() => {
+        this.isLoading = false
         this.setQuestionBtnStatics('submit', 'other_anomaly')
         this.showDialog = true
         return false
