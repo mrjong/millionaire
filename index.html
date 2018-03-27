@@ -18,13 +18,13 @@
 
       window.onload = function () {
         var loadTime = Date.now() - startTime
-        statistic({
-          event_name: 'first_page_loading_time_cost',
-          extra: {
-            event: '67240565',
-            duration_l: loadTime
-          }
-        })
+        // statistic({
+        //   event_name: 'first_page_loading_time_cost',
+        //   extra: {
+        //     event: '67240565',
+        //     duration_l: loadTime
+        //   }
+        // })
         console.log('加载时间：', loadTime)
       }
       function isLogin () {
