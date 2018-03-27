@@ -170,7 +170,7 @@ export default {
         } else {
           this.isLoading = false
           this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
+          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
           return false
         }
       }).catch(() => {
