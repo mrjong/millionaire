@@ -1,10 +1,11 @@
 <template>
-  <div class="set-question">
-    <div class="set-question__wrap" v-if="!isPop">
-      <div class="back"  @click="$router.replace('/')">
+  <div class="set-question" ref="setQestion">
+    <div class="set-question__wrap" v-if="isPop">
+      <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
+      <div class="set-question__wrap__join" v-if="isSetQuestion" @click="join">Join Group</div>
       <div class="form">
         <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
         <div class="form__question">
@@ -13,13 +14,23 @@
             Tap to set your question now
           </p>
           <textarea class="" maxlength="100" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
-        <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25" v-model="questionInfo.option1">
-        <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25" v-model="questionInfo.option2">
-        <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25" v-model="questionInfo.option3">
+        <div class="frame">
+          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25" v-model="questionInfo.option1">
+          <check-str-length :originalLength=25 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
+        </div>
+        <div class="frame">
+          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25" v-model="questionInfo.option2">
+          <check-str-length :originalLength=25 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
+        </div>
+        <div class="frame">
+          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25" v-model="questionInfo.option3">
+          <check-str-length :originalLength=25 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
+        </div>
         <div class="form__correct">
           <div class="form__correct__title">
-            <p class="form__correct__title__icon iconfont icon-duigou"></p>
+            <p class="form__correct__title__icon iconfont icon-juxing"></p>
             <p class="form__correct__title__text">Correct answer</p>
           </div>
           <div class="form__correct__options">
@@ -33,27 +44,32 @@
         <div class="form__submit" @click="submit">Submit</div>
         </div>
     </div>
-    <div class="set-question__mark" v-if="isPop">
+    <div class="set-question__mark" v-else>
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
-          <p class="bomb__content__title">QUIZ MASTER Required!<br>Set it, Question it, Win it!!</p>
+          <p class="bomb__content__title1">QUIZ MASTER Required!</p>
+          <p class="bomb__content__title2">Set it, Question it, Win it!!</p>
           <p class="bomb__content__clause" v-for="(item, index) in instruction" :key="index">{{item}}</p>
           <p class="bomb__content__note">Note:</p>
           <p class="bomb__content__text" v-for="(value) in note" :key="value">{{value}}</p>
         </div>
-        <div class="bomb__btn" @click="isPop = false">
+        <div class="bomb__btn" @click="isShowBomb">
           <p class="bomb__btn__text">OK, I agree</p>
         </div>
       </div>
     </div>
-    <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <balance-mark :height="clientHeight" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <loading v-if="isLoading" :height="clientHeight"></loading>
   </div>
 </template>
 
 <script>
 import * as api from '../assets/js/api'
 import BalanceMark from '../components/BalanceMark'
+import checkStrLength from '../components/CheckStrLength'
+import loading from '../components/Loading'
+import utils from '../assets/js/utils'
 export default {
   name: 'Rule',
   data () {
@@ -70,7 +86,7 @@ export default {
         'Submit as more questions as you can to be "Golden QUIZ ',
         'MASTER" every week, awards await you.'
       ],
-      isPop: true,
+      isPop: false,
       isShowHint: true,
       options: ['A', 'B', 'C'],
       questionInfo: {
@@ -83,16 +99,34 @@ export default {
       },
       showDialog: false,
       dialogInfo: {
-        htmlText: 'Please complete the question',
+        htmlTitle: 'Failed to Submit',
+        htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK'
-      }
+        okBtnText: 'OK',
+        hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+      },
+      isSetQuestion: false,
+      isLoading: false,
+      clientHeight: 0
     }
   },
   mounted () {
+    this.isPop = localStorage.getItem('isPop')
+    if (this.$route.query.close) {
+      this.isPop = this.$route.query.close
+      utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'issue_success_page')
+    } else {
+      utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'wait_page')
+    }
+    this.submitFlag()
   },
   methods: {
+    getClientHeight () {
+      this.$nextTick(() => {
+        this.clientHeight = this.$refs.setQestion.offsetHeight
+      })
+    },
     focusText () {
       this.isShowHint = false
     },
@@ -103,43 +137,89 @@ export default {
       }
       this.isShowHint = true
     },
-    // clicked () {
-    //   let correctAnswer = this.$refs.correctAnswer
-    //   correctAnswer.forEach((val, idx) => {
-    //     if (val.checked === true) {
-    //       this.questionInfo.correct = this.questionInfo['option' + idx]
-    //       this.checked = true
-    //     }
-    //   })
-    // },
+    submitFlag () {
+      api.isSetQuestion().then((data) => {
+        if (data.data) {
+          this.isSetQuestion = true
+        }
+        this.getClientHeight()
+      })
+    },
     submit () {
       console.log(this.questionInfo)
-      // this.clicked()
-      if (this.questionInfo.title === '' || this.questionInfo.option1 === ' ' || this.questionInfo.option2 === ' ' || this.questionInfo.option3 === ' ' || this.questionInfo.correct === ' ') {
+      this.isLoading = true
+      if (this.questionInfo.title === '') {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_question')
+        this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
-        return
+      } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_answer')
+        this.dialogInfo.htmlText = 'Please complete the answer'
+        this.showDialog = true
+        return false
       }
-      api.setQuestions(this.questionInfo).then((data) => {
+      api.setQuestions(this.questionInfo).then(({data}) => {
+        this.isLoading = false
+        console.log('setquestion---')
         console.log(data)
+        if (data.result === 1) {
+          this.setQuestionBtnStatics('submit', 'success')
+          this.$router.replace('/set-question-result')
+        } else {
+          this.isLoading = false
+          this.showDialog = true
+          this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
+          return false
+        }
+      }).catch(() => {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'other_anomaly')
+        this.showDialog = true
+        return false
       })
-      this.$router.replace('/set-question-result')
     },
     sure () {
       this.showDialog = false
+    },
+    isShowBomb () {
+      this.isPop = true
+      localStorage.setItem('isPop', true)
+    },
+    join () {
+      this.setQuestionBtnStatics('join_group')
+      location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
+    },
+    back () {
+      this.setQuestionBtnStatics('back')
+      this.$router.replace('/')
+    },
+    setQuestionBtnStatics (destination, result) {
+      let staticsObj = {}
+      if (result) {
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code': result}
+      } else {
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
+      }
+      utils.statistic('submit', 1, staticsObj, 'issue_page')
     }
   },
   components: {
-    BalanceMark
+    BalanceMark,
+    checkStrLength,
+    loading
   }
 }
 </script>
 <style scoped lang="less" type="text/less">
 .set-question{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
   background-size: cover;
   color: #fff;
+  background-color: #fff;
   &__wrap{
     height: 100%;
     position: relative;
@@ -147,27 +227,44 @@ export default {
     .back{
       width: 54px;
       height: 54px;
-      background-color: rgba(36, 18, 98, 0.2);
+      background-color: rgb(36, 18, 98);
       border-radius: 50%;
-      position: absolute;
+      position: fixed;
       top: 24px;
       left: 30px;
       display: flex;
       justify-content: center;
       &__icon{
-        font-size: 32px;
+        font-size: 28px;
         align-self: center;
-        color:#241262 ;
+        color: #fff;
+        margin-left: -2px;
       }
     }
     &__title{
+      height: 54px;
+      line-height: 56px;
+      padding-top: 5px;
       font: 36px "Roboto-Medium";
       color: #241262;
       text-align: center;
     }
+    &__join{
+      width: 654px;
+      height: 91px;
+      line-height: 91px;
+      text-align: center;
+      margin: 0 auto;
+      background-color: #dc427a;
+      border-radius: 46px;
+      box-shadow: 2px 2px 5px 2px rgba(220, 66, 122, 0.3);
+      font-size: 36px;
+      margin-top: 35px;
+    }
     .form{
       padding: 24px 0;
       input.answer-text {
+        padding-right: 70px;
       }
       input.answer-text::-webkit-input-placeholder{
         text-align: left;
@@ -194,24 +291,37 @@ export default {
           color: #241262;
           opacity: 0.6;
           text-align: center;
-          font-size: 32px;
+          font-size: 36px;
           &__icon{
             display: inline-block;
             height: 54px;
             line-height: 54px;
             color: #241262;
-            font-size: 32px;
+            font-size: 36px;
           }
         }
         textarea {
           width:100% ;
           height: 100%;
           border: 0;
-          padding:10px 0 10px 30px;
+          padding:15px 20px 15px 30px;
           background-color: transparent;
         }
         textarea:focus {
           outline: 0;
+        }
+        .check-str-length-title{
+          position: absolute;
+          right: 40px;
+          bottom: 40px;
+        }
+      }
+      .frame{
+        position: relative;
+        .check-str-length-option{
+          position: absolute;
+          top: 30px;
+          right: 40px;
         }
       }
       &__correct{
@@ -224,13 +334,10 @@ export default {
           padding:24px 0 0;
           justify-content: center;
           &__icon{
-            width: 34px;
-            height: 32px;
             text-align: center;
-            font-size: 15px;
+            font:100 32px "Roboto";
             color: #241262;
             line-height: 34px;
-            box-shadow: 0 0 0 1px #241262;
             border-radius: 5px;
             align-self: center;
             margin-right: 20px;
@@ -238,7 +345,7 @@ export default {
           &__text{
             color: #241262;
             line-height: 54px;
-            font: 36px "Roboto-Regular";
+            font: 36px "Roboto";
           }
         }
         &__options{
@@ -259,13 +366,13 @@ export default {
               display: none;
             }
             .base-option {
-              width: 34px;
-              height: 32px;
+              width: 40px;
+              height: 38px;
               text-align: center;
               font-size: 15px;
               color: #241262;
-              line-height: 34px;
-              box-shadow: 0 0 0 1px #241262;
+              line-height: 38px;
+              box-shadow: 0 0 0 2px #241262;
               border-radius: 5px;
               align-self: center;
             }
@@ -291,15 +398,16 @@ export default {
     opacity: 0.8;
     display: flex;
     justify-content: center;
+    position: absolute;
     .bomb{
       width: 620px;
       min-height: 1000px ;
-      background: url("../assets/images/bomb-bg.jpg") no-repeat top left;
+      background: url("../assets/images/bomb-bg.jpg") no-repeat top center;
       background-size: cover;
       align-self: center;
       border-radius: 26px;
       position: relative;
-      padding: 0 35px 70px 50px;
+      padding: 0 35px 80px 50px;
       &__logo{
         width: 323px;
         position: absolute;
@@ -309,26 +417,32 @@ export default {
       }
       &__content{
         margin-top: 85px;
-        &__title{
-          margin: 0 auto 40px;
+        &__title1{
+          margin: 0 auto 10px;
           text-align: center;
           font: 38px "Roboto Regular";
-          font-weight: bold;
+          line-height: 38px;
+        }
+        &__title2{
+          margin: 0 auto 40px;
+          text-align: center;
+          font: 32px "Roboto Regular";
           line-height: 38px;
         }
         &__clause{
-          font: 24px "Roboto-Regular";
+          line-height: 80px;
+          font: 100 .24rem Roboto;
           font-style: italic;
           font-weight: lighter;
-          margin-bottom: 20px;
+          margin-bottom: 16px;
         }
         &__note{
           font-size: 24px;
           font-weight: bold;
-          margin-bottom: 16px;
+          margin: 24px 0 10px;
         }
         &__text{
-          font: 20px "Roboto-Regular" ;
+          font: 100 20px "Roboto" ;
           font-style: italic;
           opacity: 0.8;
         }
@@ -339,8 +453,8 @@ export default {
         height: 76px;
         background-color: #faa717;
         border-radius: 46px;
-        box-shadow: 2px 5px 20px 3px rgba(250, 167, 23, 0.71);
-        margin-top: 36px;
+        box-shadow: 2px 3px 10px 2px rgba(250, 167, 23, 0.4);
+        margin: 36px auto 0;
         justify-content: center;
         &__text{
          align-self: center;
@@ -358,7 +472,7 @@ export default {
     margin-bottom: 20px;
     padding-left: 30px;
     color:#241262 ;
-    font-size: 36px;
+    font-size: 28px;
   }
   input::-webkit-input-placeholder{
     width: 100%;

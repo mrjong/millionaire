@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'iconfont';  /* project id 575514 */
-  src: url('//at.alicdn.com/t/font_575514_sqtyefjq4ytu766r.eot');
-  src: url('//at.alicdn.com/t/font_575514_sqtyefjq4ytu766r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_575514_sqtyefjq4ytu766r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_575514_sqtyefjq4ytu766r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_575514_sqtyefjq4ytu766r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_575514_e7s0h7dknsotuik9.eot');
+  src: url('//at.alicdn.com/t/font_575514_e7s0h7dknsotuik9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_575514_e7s0h7dknsotuik9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_575514_e7s0h7dknsotuik9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_575514_e7s0h7dknsotuik9.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -30,3 +30,4 @@
 .icon-cuowu:before { content: "\e617"; }
 .icon-yonghuchuti_qianzise:before {content: "\e618";}
 .icon-duigou:before {content: "\e61a";}
+.icon-juxing:before {content: "\e602";}

@@ -9,7 +9,7 @@
 import {mapGetters} from 'vuex'
 import './assets/css/public.css'
 import * as type from './store/type'
-import loading from './components/loading.vue'
+import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
 import {_AWAIT} from './assets/js/status'
