@@ -154,6 +154,7 @@ export default {
         this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
+        return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_answer')
@@ -171,7 +172,7 @@ export default {
         } else {
           this.isLoading = false
           this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
+          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
           return false
         }
       }).catch(() => {
