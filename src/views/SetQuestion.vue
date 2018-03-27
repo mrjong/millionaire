@@ -153,6 +153,7 @@ export default {
         this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
+        return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_answer')
