@@ -138,7 +138,7 @@ export default {
       this.isShowHint = true
     },
     submitFlag () {
-      api.isSetQuestion().then((data) => {
+      api.isSetQuestion().then(({data}) => {
         if (data.data) {
           this.isSetQuestion = true
         }
