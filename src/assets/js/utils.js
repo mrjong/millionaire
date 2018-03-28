@@ -273,6 +273,13 @@ export default {
    */
   setGameState (isPlaying = false) {
     window.ma_js_i && window.ma_js_i.refreshStatus && window.ma_js_i.refreshStatus(isPlaying)
+  },
+  /**
+   * 跳转到浏览器的facebook主页
+   */
+  toFbBrowser () {
+    const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
   }
 }
 

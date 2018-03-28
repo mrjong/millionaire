@@ -3,7 +3,7 @@
     <div class="await__top">
       <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"
-         @click="btnStatistic('like_page')"></a>
+         @click="likeToFb('like_page')"></a>
       <div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
@@ -92,7 +92,6 @@ export default {
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
     })
-    this.toFb()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -100,17 +99,12 @@ export default {
       utils.share()
       utils.statistic('millionaire', 3, {}, 'wait_page')
     },
-    toFb () {
-      let toFbBrowser = this.$refs.toFbBrowser
-      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-      if (isFbApp) {
-        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
-      } else {
-        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
-      }
-    },
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    },
+    likeToFb (val) {
+      this.btnStatistic(val)
+      utils.toFbBrowser()
     }
   },
   components: {
