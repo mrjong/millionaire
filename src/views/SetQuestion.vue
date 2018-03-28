@@ -5,7 +5,9 @@
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
-      <div class="set-question__wrap__join" v-if="isSetQuestion" @click="join">Join Group</div>
+      <a class="set-question__wrap__join" @click="join" ref="toFbGroup">
+        <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
+        Join Group</a>
       <div class="form">
         <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
         <div class="form__question">
@@ -146,13 +148,13 @@ export default {
       })
     },
     submit () {
-      console.log(this.questionInfo)
       this.isLoading = true
       if (this.questionInfo.title === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
         this.showDialog = true
+        return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_answer')
@@ -162,7 +164,6 @@ export default {
       }
       api.setQuestions(this.questionInfo).then(({data}) => {
         this.isLoading = false
-        console.log('setquestion---')
         console.log(data)
         if (data.result === 1) {
           this.setQuestionBtnStatics('submit', 'success')
@@ -170,7 +171,7 @@ export default {
         } else {
           this.isLoading = false
           this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet unstable, please try it again.'
+          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
           return false
         }
       }).catch(() => {
@@ -189,7 +190,7 @@ export default {
     },
     join () {
       this.setQuestionBtnStatics('join_group')
-      location.href = 'https://chat.whatsapp.com/0DyePJd4szvJwTP7qct2ZM'
+      utils.toFbBrowser()
     },
     back () {
       this.setQuestionBtnStatics('back')
@@ -250,6 +251,7 @@ export default {
       text-align: center;
     }
     &__join{
+      display: block;
       width: 654px;
       height: 91px;
       line-height: 91px;
@@ -260,6 +262,15 @@ export default {
       box-shadow: 2px 2px 5px 2px rgba(220, 66, 122, 0.3);
       font-size: 36px;
       margin-top: 35px;
+      position: relative;
+      color: #fff;
+      &__icon{
+        font-size: 34px;
+        position: absolute;
+        top: 50%;
+        left: 80px;
+        transform: translate(0, -50%);
+      }
     }
     .form{
       padding: 24px 0;
