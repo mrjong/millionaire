@@ -318,6 +318,7 @@ export default new Vuex.Store({
           msgList: [],
           compereMsg: ''
         })
+        im.removeLister()
       })
     }
   },
