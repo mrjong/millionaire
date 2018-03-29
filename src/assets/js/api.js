@@ -34,7 +34,8 @@ export const getRankInfo = function (type) {
   const url = type === 'week' ? api.weekRank : api.totalRank
   return axios.get(url, {
     params: {
-      app_id: utils.app_id
+      app_id: utils.app_id,
+      client_id: utils.clientId
     }
   })
 }
@@ -73,19 +74,22 @@ export const ifSelfWon = () => {
 export const setQuestions = (questionInfo) => {
   return axios.post(`${api.setQuestion}`, {
     ...questionInfo,
-    app_id: utils.app_id
+    app_id: utils.app_id,
+    client_id: utils.clientId
   })
 }
 
 // 是否出过题
 export const isSetQuestion = function () {
-  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}`)
+  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
 }
 
 // 同步用户信息
 export const syncInfo = function () {
-  return axios.post(api.syncInfo, {
-    app_id: utils.app_id,
-    client_id: utils.clientId
+  return axios.get(api.syncInfo, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
   })
 }

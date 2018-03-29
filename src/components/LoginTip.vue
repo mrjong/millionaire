@@ -1,6 +1,10 @@
 <template>
   <div class="login-tip">
-    <balance-mark v-if="showLogin" style="text-align:center;" :data-info="dialogInfo" @okEvent='login'></balance-mark>
+    <balance-mark style="text-align:center;" :data-info="dialogInfo" @okEvent='login'>
+      <section class="timer-con" @click="close">
+        <span class="iconfont icon-cuowu" style="font-size:14px;color:#504181;"></span>
+      </section>
+    </balance-mark>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -8,13 +12,12 @@
 import BalanceMark from './BalanceMark'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
-import { api } from '../assets/js/api'
+import { syncInfo } from '../assets/js/api'
 import loading from '../components/Loading.vue'
 export default {
   name: 'login-tip',
   data () {
     return {
-      showLogin: true,
       loading: false,
       dialogInfo: {
         htmlTitle: 'Important hint',
@@ -42,10 +45,13 @@ export default {
         utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
       })
     },
+    close () {
+      this.$emit('loginTipClose')
+    },
     // 同步用户信息
     sync () {
       this.loading = true
-      api.syncInfo().then(({data}) => {
+      syncInfo().then(({data}) => {
         console.log('同步返回数据：', data)
         this.loading = false
         if (+data.result === 1 && +data.code === 0) {
@@ -76,4 +82,15 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+  .login-tip {
+    .timer-con {
+      width: 45px;
+      height: 45px;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      line-height: 45px;
+      text-align: center;
+    }
+  }
 </style>

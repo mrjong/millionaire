@@ -73,6 +73,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     .hint-icon{
       width: 88px;
       min-height: 88px;

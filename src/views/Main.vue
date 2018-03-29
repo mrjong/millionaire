@@ -15,7 +15,7 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <login-tip v-if="showLogin" desp="Landing Answer Win Bonus"></login-tip>
+    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" @syncInfoSuccess="showLogin = false" desp="Landing Answer Win Bonus"></login-tip>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ export default {
   name: 'Main',
   data () {
     return {
+      showLogin: false,
       showDialog: false,
       dialogInfo: {
         htmlTitle: 'Failed to Submit',
@@ -51,9 +52,11 @@ export default {
       status: 'status',
       questionStatus: 'question_status',
       isWon: 'isWon'
-    }),
-    showLogin () {
-      return this.isWon && !utils.isOnline && utils.clientId
+    })
+  },
+  watch: {
+    isWon (val) {
+      this.showLogin = val && !utils.isOnline
     }
   },
   mounted () {},

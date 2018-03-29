@@ -97,6 +97,8 @@ export default new Vuex.Store({
               userName: userInfo.un || '',
               balance: +accountInfo.ub || 0,
               balanceShow: accountInfo.sub || '',
+              clientBalance: +accountInfo.cb || 0,
+              clientBalanceShow: accountInfo.scb || '',
               income: +accountInfo.ui || 0,
               incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,

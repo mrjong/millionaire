@@ -235,6 +235,7 @@ export default {
       left: 30px;
       display: flex;
       justify-content: center;
+      z-index: 111;
       &__icon{
         font-size: 28px;
         align-self: center;

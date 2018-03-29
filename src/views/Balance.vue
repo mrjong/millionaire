@@ -9,7 +9,7 @@
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
@@ -23,7 +23,7 @@
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
-    <login-tip v-if="showLogin" desp="Landing Answer Win Bonus"></login-tip>
+    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" @syncInfoSuccess="showLogin = false" desp="Landing Answer Win Bonus"></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
 </template>
@@ -40,6 +40,8 @@ export default {
   name: 'Balance',
   data () {
     return {
+      // showLogin: true,
+      showLogin: +this.$store.getters.userInfo.clientBalance > 0,
       myPay: '',
       markInfo: {
         showMark: false,
@@ -55,17 +57,17 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo'
-    }),
-    showLogin () {
-      return !utils.isOnline && utils.clientId && +this.userInfo.balance > 0
-    }
+    })
   },
   mounted () {
     utils.statistic('take_cash_page', 0)
+    console.log(this.showLogin)
   },
   methods: {
     cashOut () {
-      if (+this.userInfo.balance < (+this.withdraw) * 100) {
+      if (!utils.isOnline && +this.userInfo.clientBalance > 0) {
+        this.showLogin = true
+      } else if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/

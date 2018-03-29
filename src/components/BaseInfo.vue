@@ -9,7 +9,7 @@
       <router-link to="/balance" class="balance-router" >
         <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
           <p class="base-info__other__balance__text">Balance</p>
-          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balanceShow}}</p>
+          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{ baseInfo.balance ? baseInfo.balanceShow : baseInfo.clientBalanceShow}}</p>
         </div>
       </router-link>
       <div class="base-info__other__line"></div>
