@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import utils from "../assets/js/utils";
+import utils from '../assets/js/utils'
 
 export default {
   name: 'Rule',
