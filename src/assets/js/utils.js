@@ -107,6 +107,9 @@ export default {
       case 5: // GAME_OVER
         eventType = '67278965'
         break
+      case 6: // ALEX_DEBUG
+        eventType = '67247477'
+        break
     }
     const args = {
       event_name: name,
