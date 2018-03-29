@@ -107,6 +107,9 @@ export default {
       case 5: // GAME_OVER
         eventType = '67278965'
         break
+      case 6: // ALEX_DEBUG
+        eventType = '67247477'
+        break
     }
     const args = {
       event_name: name,
@@ -273,6 +276,13 @@ export default {
    */
   setGameState (isPlaying = false) {
     window.ma_js_i && window.ma_js_i.refreshStatus && window.ma_js_i.refreshStatus(isPlaying)
+  },
+  /**
+   * 跳转到浏览器的facebook主页
+   */
+  toFbBrowser () {
+    const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
   }
 }
 

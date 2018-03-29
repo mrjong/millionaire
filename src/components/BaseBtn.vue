@@ -32,6 +32,6 @@ export default {
     width: 313px;
     height:93px;
     text-align: center;
-    font: 300 28px/93px 'Roboto';
+    font: 300 32px/93px 'Roboto';
   }
 </style>
