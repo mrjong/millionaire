@@ -15,6 +15,7 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <login-tip v-if="showLogin" desp="Landing Answer Win Bonus"></login-tip>
   </div>
 </template>
 
@@ -26,7 +27,9 @@ import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
+import LoginTip from '../components/LoginTip'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Main',
   data () {
@@ -46,8 +49,12 @@ export default {
     ...mapGetters({
       onlineAmount: 'onlineAmount',
       status: 'status',
-      questionStatus: 'question_status'
-    })
+      questionStatus: 'question_status',
+      isWon: 'isWon'
+    }),
+    showLogin () {
+      return this.isWon && !utils.isOnline && utils.clientId
+    }
   },
   mounted () {},
   methods: {
@@ -57,6 +64,9 @@ export default {
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
+      setTimeout(() => {
+        this.showDialog = false
+      }, 1000)
     },
     init () {
       this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
@@ -75,7 +85,8 @@ export default {
     Respondence,
     WinnersResult,
     Compere,
-    BalanceMark
+    BalanceMark,
+    LoginTip
   }
 }
 </script>

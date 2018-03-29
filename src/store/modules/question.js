@@ -67,12 +67,17 @@ const actions = {
    * 获取题目
    * @param {any} {commit, dispatch}
    */
-  [type.QUESTION_GET] ({commit, dispatch}) {
+  [type.QUESTION_GET] ({commit, dispatch, rootGetters}) {
     im.addListener(MESSAGE_QUESTION, (message) => {
       const content = (message.content && message.content.content) || ''
       if (content) {
         const question = JSON.parse(content)
         const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        utils.statistic('QUESTION', 6, {
+          flag_s: `${id}`,
+          text_s: `${index}`,
+          action_s: `${rootGetters.userInfo.userName}`
+        })
         options.sort(() => {
           return Math.random() > 0.5 ? 1 : -1
         })
@@ -161,7 +166,7 @@ const actions = {
    * @param {any} {commit, getters}
    * @param {any} answer
    */
-  [type.QUESTION_RECEIVE_ANSWER] ({commit, getters}, answer) {
+  [type.QUESTION_RECEIVE_ANSWER] ({commit, getters, rootGetters}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
       const md5Map = getters.optionsMd5Map
       const answerStr = (message.content && message.content.answer) || ''
@@ -170,6 +175,11 @@ const actions = {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
+
+        utils.statistic('ANSWER', 6, {
+          flag_s: `${id}`,
+          action_s: `${rootGetters.userInfo.userName}`
+        })
         // 判断答案是否正确
         const isCorrect = md5Map[correctAnswer] === getters.userAnswer
 

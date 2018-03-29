@@ -23,6 +23,7 @@
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
+    <login-tip v-if="showLogin" desp="Landing Answer Win Bonus"></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
 </template>
@@ -34,6 +35,7 @@ import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import LoginTip from '../components/LoginTip'
 export default {
   name: 'Balance',
   data () {
@@ -53,7 +55,10 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo'
-    })
+    }),
+    showLogin () {
+      return !utils.isOnline && utils.clientId && +this.userInfo.balance > 0
+    }
   },
   mounted () {
     utils.statistic('take_cash_page', 0)
@@ -131,7 +136,8 @@ export default {
   },
   components: {
     BalanceMark,
-    Loading
+    Loading,
+    LoginTip
   }
 }
 </script>

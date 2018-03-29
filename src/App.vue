@@ -29,7 +29,7 @@ export default {
     })
   },
   created () {
-    if (this.isOnline) {
+    if (this.isOnline || utils.clientId) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
@@ -70,8 +70,9 @@ export default {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
+              const isWon = !!data.data
               this.$store.dispatch(type.QUESTION_YOU_WON, {
-                isWon: data.data
+                isWon
               })
             }
           })
