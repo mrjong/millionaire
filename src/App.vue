@@ -9,11 +9,10 @@
 import {mapGetters} from 'vuex'
 import './assets/css/public.css'
 import * as type from './store/type'
-import loading from './components/loading.vue'
+import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
 import {_AWAIT} from './assets/js/status'
-import im from './assets/js/im'
 export default {
   name: 'App',
   data () {
@@ -30,27 +29,18 @@ export default {
     })
   },
   created () {
-    this.init()
     if (this.isOnline) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
           this.loading = false
         }, 500)
+        this.$statisticEntry()
       }, (err) => {
         this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
-    }
-  },
-  methods: {
-    init () {
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
     }
   },
   components: {
@@ -64,12 +54,10 @@ export default {
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
-        utils.statistic('millionaire', 0, {style_s: 'waiting'})
       }
-      if (status === 2) {
-        utils.statistic('millionaire', 0, {style_s: 'countdown'})
-      } else if (status === 3) {
-        utils.statistic('millionaire', 0, {style_s: 'playing'})
+
+      if (status === 3) {
+        utils.statistic('playing_page', 0)
       }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
@@ -95,9 +83,6 @@ export default {
         this.$store.commit(type._UPDATE, {
           status: _AWAIT
         })
-        im.removeLister()
-      } else {
-        this.init()
       }
     }
   }

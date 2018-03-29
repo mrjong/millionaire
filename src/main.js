@@ -11,14 +11,21 @@ import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 im.init()
 
+function statisticEntry () {
+  utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
+}
+
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.prototype.$http = http
+Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {
   if (!utils.isOnline && to.name !== 'login') {
     next({path: '/login', replace: true})
+  } else if (utils.isOnline && to.name === 'login') {
+    next({path: '/', replace: true})
   } else {
     next()
   }

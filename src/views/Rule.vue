@@ -1,6 +1,6 @@
 <template>
   <div class="rule">
-    <p class="header" @click="goback">
+    <p class="header" @click="goBack">
          <span class="iconfont icon-fanhui"></span>
       </p>
     <div class="rule-container">
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import utils from '../assets/js/utils'
+
 export default {
   name: 'Rule',
   data () {
@@ -87,15 +89,9 @@ export default {
   },
   methods: {
     toFb () {
-      let toFbBrowser = this.$refs.toFbBrowser
-      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-      if (isFbApp) {
-        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
-      } else {
-        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
-      }
+      utils.toFbBrowser()
     },
-    goback () {
+    goBack () {
       this.$router.go(-1)
     }
   }

@@ -30,7 +30,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import BalanceMark from '../components/BalanceMark'
-import Loading from '../components/loading'
+import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
