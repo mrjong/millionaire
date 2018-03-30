@@ -4,20 +4,13 @@
   :class="{'chat-msg-wrap-haswrap': showInput}">
   <div class="chat-msg-wrap" id='chatmsgwrap'>
       <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-         <transition-group
-        name='fade'
-        tag="div"
-        class="msg-container__inner"
-        id="msgContainerInner"
-        >
         <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
           <span class="msg-container__item__wrap">
-            <img class="msg-container__item__portrait" :src="col.img" alt="">
+            <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
             <span class="msg-container__item__nickname">{{col.nickname}}</span>
             <span class="msg-container__item__text">{{col.msg}}</span>
           </span>
          </p>
-       </transition-group>
       </div>
   </div>
     <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
@@ -135,14 +128,6 @@ export default {
         const scrollContainer = document.getElementById('scrollContainer')
         scrollContainer.scrollTop = 100000
       })
-    }
-  },
-  updated () {
-    let msgContainerInner = document.getElementById('msgContainerInner')
-    let scrollContainer = this.$refs.scrollContainer.offsetHeight.offsetHeight
-    let scrollTop = scrollContainer - msgContainerInner.offsetHeight
-    if (scrollTop < 0) {
-      msgContainerInner.scrollTop = scrollTop
     }
   }
 

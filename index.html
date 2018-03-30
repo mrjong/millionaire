@@ -58,33 +58,6 @@
         shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
         console.log('分享成功')
       }
-
-      if (!isLogin()) {
-        if (njordGame) {
-          window.top.loginCallback = function () {
-            statistic({
-              event_name: 'login_page',
-              from: 'login_page_client',
-              extra: {
-                event: '67262581',
-                result_code_s: '1'
-              }
-            })
-            window.location.reload()
-          }
-          var loginArgs = JSON.stringify({
-            callbackMethod: 'loginSuccess()'
-          })
-          statistic({
-            event_name: 'login_page',
-            from: 'login_page_client',
-            extra: {
-              event: '67240565'
-            }
-          })
-          njordGame.login && njordGame.login(loginArgs)
-        }
-      }
     </script>
     <script>
       (function (doc, win) {
