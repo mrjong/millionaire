@@ -29,6 +29,7 @@ export default {
     })
   },
   created () {
+    this.init()
     if (this.isOnline) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
@@ -41,6 +42,15 @@ export default {
         this.loading = false
         console.log(err)
       })
+    }
+  },
+  methods: {
+    init () {
+      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+      this.$store.dispatch(type.QUESTION_INIT)
+      this.$store.dispatch(type._UPDATE_AMOUNT)
+      this.$store.dispatch(type._RECEIVE_RESULT)
+      this.$store.dispatch(type._END)
     }
   },
   components: {
