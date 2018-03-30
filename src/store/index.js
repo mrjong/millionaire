@@ -22,7 +22,7 @@ export default new Vuex.Store({
     startTime: -1, // 开始时间 时间差
     startTimeOffset: 0,
     readyTime: 600000, // 准备时间 默认10分钟
-    syncIntervalTime: 60000, // 同步结束时间间隔
+    syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
     hostMsgList: [], // 主持人消息列表
     status: status._AWAIT, // 当前状态
