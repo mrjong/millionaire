@@ -21,9 +21,9 @@ Vue.config.productionTip = false
 Vue.prototype.$http = http
 Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {
-  if (!utils.isOnline && to.name !== 'login') {
+  if (!utils.isOnline && !utils.clientId && to.name !== 'login') {
     next({path: '/login', replace: true})
-  } else if (utils.isOnline && to.name === 'login') {
+  } else if ((utils.isOnline || utils.clientId) && to.name === 'login') {
     next({path: '/', replace: true})
   } else {
     next()

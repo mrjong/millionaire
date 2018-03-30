@@ -11,7 +11,9 @@ export const api = {
   balanceApplication: '/cmp/apply', // 提现申请
   isWon: '/cmp/k/', // 用户是否获得奖金
   setQuestion: '/cmp/submit_question/', // 用户出题
-  isSetQuestion: '/cmp/submit_flag/' // 是否出过题
+  isSetQuestion: '/cmp/submit_flag/', // 是否出过题
+  syncInfo: '/cmp/sc/', // 同步用户信息
+  log: '/cmp/l/' // 日志
 }
 
 export const init = function (isRefreshToken) {
@@ -33,7 +35,8 @@ export const getRankInfo = function (type) {
   const url = type === 'week' ? api.weekRank : api.totalRank
   return axios.get(url, {
     params: {
-      app_id: utils.app_id
+      app_id: utils.app_id,
+      client_id: utils.clientId
     }
   })
 }
@@ -72,11 +75,31 @@ export const ifSelfWon = () => {
 export const setQuestions = (questionInfo) => {
   return axios.post(`${api.setQuestion}`, {
     ...questionInfo,
-    app_id: utils.app_id
+    app_id: utils.app_id,
+    client_id: utils.clientId
   })
 }
 
 // 是否出过题
 export const isSetQuestion = function () {
-  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}`)
+  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
+}
+
+// 同步用户信息
+export const syncInfo = function () {
+  return axios.get(api.syncInfo, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 日志
+export const log = function (content) {
+  return axios.post(api.log, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    content: JSON.stringify(content)
+  })
 }
