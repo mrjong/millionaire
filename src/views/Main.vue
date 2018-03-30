@@ -26,7 +26,6 @@ import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
-import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -57,17 +56,7 @@ export default {
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
-    },
-    init () {
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
     }
-  },
-  created () {
-    this.init()
   },
   components: {
     CountDown,
