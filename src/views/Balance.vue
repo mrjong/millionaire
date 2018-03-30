@@ -9,7 +9,7 @@
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
         <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{userInfo.balance ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
+          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
@@ -23,7 +23,7 @@
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
-    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" @syncInfoSuccess="showLogin = false" desp="Landing Answer Win Bonus"></login-tip>
+    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       // showLogin: true,
-      showLogin: +this.$store.getters.userInfo.clientBalance > 0,
+      showLogin: !this.$store.getters.isOnline && (+this.$store.getters.userInfo.clientBalance > 0),
       myPay: '',
       markInfo: {
         showMark: false,
@@ -56,12 +56,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      isOnline: 'isOnline'
     })
   },
   mounted () {
     utils.statistic('take_cash_page', 0)
-    console.log(this.showLogin)
   },
   methods: {
     cashOut () {

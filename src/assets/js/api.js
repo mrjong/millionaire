@@ -12,7 +12,8 @@ export const api = {
   isWon: '/cmp/k/', // 用户是否获得奖金
   setQuestion: '/cmp/submit_question/', // 用户出题
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
-  syncInfo: '/cmp/sc/'
+  syncInfo: '/cmp/sc/', // 同步用户信息
+  log: '/cmp/l/' // 日志
 }
 
 export const init = function (isRefreshToken) {
@@ -91,5 +92,14 @@ export const syncInfo = function () {
       app_id: utils.app_id,
       client_id: utils.clientId
     }
+  })
+}
+
+// 日志
+export const log = function (content) {
+  return axios.post(api.log, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    content: JSON.stringify(content)
   })
 }

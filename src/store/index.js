@@ -22,7 +22,7 @@ export default new Vuex.Store({
     startTime: -1, // 开始时间 时间差
     startTimeOffset: 0,
     readyTime: 600000, // 准备时间 默认10分钟
-    syncIntervalTime: 60000, // 同步结束时间间隔
+    syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
     hostMsgList: [], // 主持人消息列表
     status: status._AWAIT, // 当前状态
@@ -83,7 +83,6 @@ export default new Vuex.Store({
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
-          console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
@@ -320,7 +319,6 @@ export default new Vuex.Store({
           msgList: [],
           compereMsg: ''
         })
-        im.removeLister()
       })
     }
   },

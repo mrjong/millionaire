@@ -20,7 +20,7 @@ const mutations = {
     const len = state.msgList.length
     const staticLen = 14 // 固定展示几条
     if (+len > staticLen) {
-      state.msgList = state.msgList.splice(len - staticLen, len)
+      state.msgList.shift()
     }
   },
   [type.CHAT_UPDATE] (state, obj) {

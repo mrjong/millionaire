@@ -15,7 +15,6 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" @syncInfoSuccess="showLogin = false" desp="Landing Answer Win Bonus"></login-tip>
   </div>
 </template>
 
@@ -27,9 +26,6 @@ import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
-import LoginTip from '../components/LoginTip'
-import * as type from '../store/type'
-import utils from '../assets/js/utils'
 export default {
   name: 'Main',
   data () {
@@ -54,11 +50,6 @@ export default {
       isWon: 'isWon'
     })
   },
-  watch: {
-    isWon (val) {
-      this.showLogin = val && !utils.isOnline
-    }
-  },
   mounted () {},
   methods: {
     sure () {
@@ -70,17 +61,7 @@ export default {
       setTimeout(() => {
         this.showDialog = false
       }, 1000)
-    },
-    init () {
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
     }
-  },
-  created () {
-    this.init()
   },
   components: {
     CountDown,
@@ -88,8 +69,7 @@ export default {
     Respondence,
     WinnersResult,
     Compere,
-    BalanceMark,
-    LoginTip
+    BalanceMark
   }
 }
 </script>
