@@ -9,7 +9,9 @@ export const api = {
   totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/rst/', // 同步开始时间
   balanceApplication: '/cmp/apply', // 提现申请
-  isWon: '/cmp/k/' // 用户是否获得奖金
+  isWon: '/cmp/k/', // 用户是否获得奖金
+  setQuestion: '/cmp/submit_question/', // 用户出题
+  isSetQuestion: '/cmp/submit_flag/' // 是否出过题
 }
 
 export const init = function (isRefreshToken) {
@@ -64,4 +66,17 @@ export const balanceApplication = (valOption) => {
 }
 export const ifSelfWon = () => {
   return axios.get(`${api.isWon}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
+}
+
+// 用户出题
+export const setQuestions = (questionInfo) => {
+  return axios.post(`${api.setQuestion}`, {
+    ...questionInfo,
+    app_id: utils.app_id
+  })
+}
+
+// 是否出过题
+export const isSetQuestion = function () {
+  return axios.get(`${api.isSetQuestion}?app_id=${utils.app_id}`)
 }

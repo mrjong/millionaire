@@ -1,6 +1,6 @@
 <template>
   <div class="rule">
-    <p class="header" @click="goback">
+    <p class="header" @click="goBack">
          <span class="iconfont icon-fanhui"></span>
       </p>
     <div class="rule-container">
@@ -26,12 +26,17 @@
             <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
           </a>
         </div>
+        <a href="http://static.subcdn.com/20180321220447b3b994f975.html" class="terms">
+          Terms of Service
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import utils from '../assets/js/utils'
+
 export default {
   name: 'Rule',
   data () {
@@ -84,15 +89,9 @@ export default {
   },
   methods: {
     toFb () {
-      let toFbBrowser = this.$refs.toFbBrowser
-      const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-      if (isFbApp) {
-        toFbBrowser.setAttribute('href', 'fb://page/1532330666785144')
-      } else {
-        toFbBrowser.setAttribute('href', 'https://m.facebook.com/APUS-Browser-1532330666785144')
-      }
+      utils.toFbBrowser()
     },
-    goback () {
+    goBack () {
       this.$router.go(-1)
     }
   }
@@ -210,5 +209,18 @@ export default {
     margin: 28px 0 140px;
     text-align: center;
   }
+}
+
+.terms {
+  font: 500 30px/35px 'Roboto', Arial, serif;
+  margin-bottom: 20px;
+}
+
+.terms::active {
+  color: #241262;
+}
+
+.terms::visited {
+  color: #241262;
 }
 </style>

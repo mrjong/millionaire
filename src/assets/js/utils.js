@@ -46,7 +46,6 @@ const sounds = {
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
 console.log(clientParams)
-
 const getQuery =
 /**
 * 获取浏览器公共参数
@@ -108,6 +107,9 @@ export default {
       case 5: // GAME_OVER
         eventType = '67278965'
         break
+      case 6: // ALEX_DEBUG
+        eventType = '67247477'
+        break
     }
     const args = {
       event_name: name,
@@ -127,13 +129,14 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share () {
+  share (callback) {
+    window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
       sharePackage: '',
       shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
       shareContent: 'Win real cash up to Rs. 1,000,000!',
       shareLink: 'https://goo.gl/t6jWBU',
-      callbackMethod: 'shareSuccess()'
+      callbackMethod: 'shareSuccess'
     }))
   },
   /**
@@ -273,6 +276,13 @@ export default {
    */
   setGameState (isPlaying = false) {
     window.ma_js_i && window.ma_js_i.refreshStatus && window.ma_js_i.refreshStatus(isPlaying)
+  },
+  /**
+   * 跳转到浏览器的facebook主页
+   */
+  toFbBrowser () {
+    const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
+    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
   }
 }
 
