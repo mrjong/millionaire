@@ -7,7 +7,7 @@
       <p class="set-question__wrap__title">Set Questions Myself</p>
       <a class="set-question__wrap__join" @click="join" ref="toFbGroup">
         <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
-        Join Group</a>
+        Follow Us</a>
       <div class="form">
         <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
         <div class="form__question">
