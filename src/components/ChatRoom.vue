@@ -1,91 +1,118 @@
 <template>
-<div class="chat-container"
-  id="msgContainer"
-  :class="{'chat-msg-wrap-haswrap': showInput}">
-  <div class="chat-msg-wrap" id='chatmsgwrap'>
-      <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
-          <span class="msg-container__item__wrap">
-            <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
-            <span class="msg-container__item__nickname">{{col.nickname}}</span>
-            <span class="msg-container__item__text">{{col.msg}}</span>
-          </span>
-         </p>
+  <!-- 聊天室  -->
+  <div class="chat-container"
+    id="msgContainer"
+    :class="{'chat-msg-wrap-haswrap': showInput}">
+    <div class="chat-msg-wrap" id='chatMsgWrap'>
+        <div class="msg-container" id="scrollContainer" ref="scrollContainer">
+          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
+            <span class="msg-container__item__wrap">
+              <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
+              <span class="msg-container__item__nickname">{{col.nickname}}</span>
+              <span class="msg-container__item__text">{{col.msg}}</span>
+            </span>
+           </p>
+        </div>
+    </div>
+      <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+         <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+          <input
+            class="msg-send-container__wrap__input"
+            id="sendmessage"
+            type="text"
+            @focus="focusEvent"
+            @blur="blurEvent"
+            v-model.trim="myMessage">
+          <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
+        </div>
+        <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
+          <span class="iconfont icon-pinglun"></span>
+        </label>
       </div>
   </div>
-    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
-       <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
-        <input
-          class="msg-send-container__wrap__input"
-          id="sendmessage"
-          type="text"
-          @focus="focusEvent"
-          @blur="blurEvent"
-          v-model.trim="myMessage">
-        <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
-      </div>
-      <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
-        <span class="iconfont icon-pinglun"></span>
-      </label>
-    </div>
-</div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import * as type from '../store/type'
+// import * as type from '../store/type' // 【hack】 未用到 注释掉
+import * as listenerType from '../assets/js/listener-type' // 【hack】
+import im from '../assets/js/im' // 【hack】
 import utils from '../assets/js/utils'
 export default {
   name: 'ChatRoom',
   data () {
     return {
-      msgLen: 10,
-      chatRoomId: 'room10',
-      myMessage: '',
-      showInput: false,
-      pageHeight: null,
-      windowInnerheight: 0
+      // msgLen: 10, 【hack】 未用到 注释掉
+      // chatRoomId: 'room10', 【hack】 未用到 注释掉
+      // pageHeight: null, 【hack】 未用到 注释掉
+      msgList: [], // 显示的消息列表
+      myMessage: '', // 我发送的消息
+      showInput: false, // 是否显示输入框
+      windowInnerHeight: 0 // 窗口高度
     }
   },
   computed: {
     ...mapGetters({
-      chatRoomState: 'chatRoomState',
-      msgList: 'msgList',
+      // chatRoomState: 'chatRoomState', // 【hack】 未用到 注释掉
+      // msgList: 'msgList', // 【hack】 未用到 注释掉
       userInfo: 'userInfo',
       status: 'status',
       questionStatus: 'question_status'
     })
   },
   mounted () {
-    this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION)
-    this.windowInnerheight = window.innerHeight
-    this.$store.commit(type.CHAT_UPDATE, {
-      msgList: []
-    })
+    // this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION) // 【hack】
+    // this.$store.commit(type.CHAT_UPDATE, {msgList: []}) // 【hack】
+    this.msgList = [] // 【hack】
+    this.fetchChatList() // 【hack】
+    this.windowInnerHeight = window.innerHeight
     this.$nextTick(() => {
-      const bodys = document.getElementsByTagName('body')[0]
-      const bodyHeight = bodys.clientHeight
-      bodys.style.height = bodyHeight + 'px'
+      const body = document.getElementsByTagName('body')[0]
+      const bodyHeight = body.clientHeight
+      body.style.height = bodyHeight + 'px'
       // this.setMsgOuterHeight()
+      // 横屏切换为竖屏是 隐藏输入框 【hack】 什么鬼 maybe 用不上呢！！！
       window.addEventListener('resize', () => {
-        if (this.windowInnerheight < window.innerHeight) {
+        if (this.windowInnerHeight < window.innerHeight) {
           this.showInput = false
         }
-        this.windowInnerheight = window.innerHeight
+        this.windowInnerHeight = window.innerHeight
       })
     })
   },
   methods: {
+    // 1. 获取聊天列表 【hack】
+    fetchChatList () {
+      const handler = (message) => {
+        const obj = {
+          img: message.content.user.avatar,
+          nickname: message.content.user.name,
+          msg: message.content.content,
+          msgId: message.messageId
+        }
+        let msgList = this.msgList || []
+        msgList.push(obj)
+        const len = msgList.length
+        if (len >= 50) {
+          msgList.splice(0, 36)
+        }
+        this.msgList = msgList
+        this.$nextTick(() => {
+          const scrollContainer = document.getElementById('scrollContainer')
+          if (scrollContainer) {
+            scrollContainer.scrollTop = 100000
+          }
+        })
+        // commit(type.CHAT_LIST_FETCH, obj)
+      }
+      im.addListener(listenerType.MESSAGE_NORMAL, handler)
+      im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
+    },
+    // 2. 发送消息 【hack】
     sendMessage () {
       if (this.myMessage) {
         this.showInput = false
-        this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
-          msgObj: {
-            img: this.userInfo.avatar,
-            msg: this.myMessage,
-            nickname: this.userInfo.userName
-          }
-        })
+        im.sendMessage(this.myMessage, this.userInfo.avatar, this.userInfo.userName)
         this.myMessage = ''
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
@@ -97,38 +124,68 @@ export default {
         utils.statistic('speaking', 3, {}, fromSource)
       }
     },
+    // 2. 发送消息 删掉 去store 里面发消息【hack】
+    // sendMessage1 () {
+    //   if (this.myMessage) {
+    //     this.showInput = false
+    //     this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
+    //       msgObj: {
+    //         img: this.userInfo.avatar,
+    //         msg: this.myMessage,
+    //         nickname: this.userInfo.userName
+    //       }
+    //     })
+    //     this.myMessage = ''
+    //     let fromSource = ''
+    //     if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
+    //       fromSource = 'game_page'
+    //     }
+    //     if (+this.status === 2) { // 倒计时页
+    //       fromSource = 'countdown_page'
+    //     }
+    //     utils.statistic('speaking', 3, {}, fromSource)
+    //   }
+    // },
+    // 3. 输入框 获得焦点时 【hack】 增加注释
     focusEvent (e) {
       this.showInput = true
       this.reSetMsgBot()
     },
+    // 4. 输入框 失去焦点时 【hack】 增加注释
     blurEvent () {
       this.showInput = false
-      this.reSetMsgBot()
+      this.reSetMsgBot(1)
     },
-    reSetMsgBot () {
-      const msgcontainer = document.getElementById('msgcontainer')
-      const bodys = document.getElementsByTagName('body')[0]
-      const innerHeight = window.innerHeight
-      const bodyHeight = bodys.clientHeight
-      const msgBot = bodyHeight - innerHeight
-      msgcontainer && (msgcontainer.style.bottom = `${msgBot / 100}rem`)
-    },
-    setMsgOuterHeight () {
-      setTimeout(() => {
-        const chatmsgwrap = document.getElementById('msgContainer')
-        const scrollContainer = document.getElementById('chatmsgwrap')
-        const _H = chatmsgwrap.offsetHeight
-        scrollContainer.style.height = _H + 'px'
-      }, 0)
-    }
-  },
-  watch: {
-    msgList: function () {
+    // 5. 输入框弹起或收起时 修改消息区域高度 【hack】 增加注释
+    reSetMsgBot (isBlur) {
       this.$nextTick(() => {
-        const scrollContainer = document.getElementById('scrollContainer')
-        scrollContainer.scrollTop = 100000
+        const msgContainer = document.getElementById('msgContainer') // 【hack】 msgcontainer -> msgContainer
+        const body = document.getElementsByTagName('body')[0]
+        const innerHeight = window.innerHeight
+        const bodyHeight = body.clientHeight
+        const msgBot = bodyHeight - innerHeight
+        const bottomPosition = isBlur ? 0 : ((msgBot / 100) + 'rem')
+        msgContainer && (msgContainer.style.bottom = bottomPosition)
       })
     }
+    // 没用到 注释掉吧 【hack】
+    // setMsgOuterHeight () {
+    //   setTimeout(() => {
+    //     const chatMsgWrap = document.getElementById('msgContainer')
+    //     const scrollContainer = document.getElementById('chatMsgWrap')
+    //     const _H = chatMsgWrap.offsetHeight
+    //     scrollContainer.style.height = _H + 'px'
+    //   }, 0)
+    // }
+  },
+  watch: {
+    // 【hack】 移入 fetchChatList () 中
+    // msgList: function () {
+    //   this.$nextTick(() => {
+    //     const scrollContainer = document.getElementById('scrollContainer')
+    //     scrollContainer.scrollTop = 100000
+    //   })
+    // }
   }
 
 }

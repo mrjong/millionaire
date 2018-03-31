@@ -98,8 +98,6 @@ export const syncInfo = function () {
 // 日志
 export const log = function (content) {
   return axios.post(api.log, {
-    app_id: utils.app_id,
-    client_id: utils.clientId,
     content: JSON.stringify(content)
   })
 }

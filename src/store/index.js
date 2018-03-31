@@ -1,3 +1,4 @@
+/* global RongIMClient */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import chatRoom from './modules/chatRoom'
@@ -48,7 +49,16 @@ export default new Vuex.Store({
       ],
       winnerAmount: 0 // 获胜者数量
     }, // 游戏结果
-    isRefreshedToken: false // 是否已经刷新过token
+    isRefreshedToken: false, // 是否已经刷新过token,
+    showDialog: false,
+    dialogInfo: {
+      htmlTitle: '',
+      htmlText: '',
+      shouldSub: false,
+      markType: 0,
+      okBtnText: 'OK',
+      hintImg: './static/images/tip-fail.png'
+    }
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -60,7 +70,9 @@ export default new Vuex.Store({
     result: (state) => state.result,
     onlineAmount: (state) => state.onlineAmount,
     readyTime: (state) => state.readyTime,
-    isRefreshedToken: (state) => state.isRefreshedToken
+    isRefreshedToken: (state) => state.isRefreshedToken,
+    showDialog: (state) => state.showDialog,
+    dialogInfo: (state) => state.dialogInfo
   },
   mutations: {
     /**
@@ -121,6 +133,7 @@ export default new Vuex.Store({
                     content: JSON.stringify(hostMsgList)
                   }
                 })
+                utils.statistic('introduction_stage', 0)
               }
               // 如果已经下发题目 开启观战模式
               if (question) {
@@ -156,6 +169,16 @@ export default new Vuex.Store({
                 // 更新当前状态
                 commit(type._UPDATE, {
                   status: status._PLAYING
+                })
+              }
+
+              if (question || answer) {
+                dispatch(type._OPEN_DIALOG, {
+                  htmlTitle: 'You are late.',
+                  htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
+                  shouldSub: false,
+                  markType: 0,
+                  okBtnText: 'Continue'
                 })
               }
             } else {
@@ -319,6 +342,13 @@ export default new Vuex.Store({
           msgList: [],
           compereMsg: ''
         })
+        RongIMClient.getInstance().disconnect()
+      })
+    },
+    [type._OPEN_DIALOG] ({commit, getters}, dialogInfo) {
+      commit(type._UPDATE, {
+        dialogInfo: Object.assign(getters.dialogInfo, dialogInfo),
+        showDialog: true
       })
     }
   },
