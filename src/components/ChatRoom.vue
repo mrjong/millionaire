@@ -1,34 +1,35 @@
 <template>
-<div class="chat-container"
-  id="msgContainer"
-  :class="{'chat-msg-wrap-haswrap': showInput}">
-  <div class="chat-msg-wrap" id='chatMsgWrap'>
-      <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-        <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
-          <span class="msg-container__item__wrap">
-            <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
-            <span class="msg-container__item__nickname">{{col.nickname}}</span>
-            <span class="msg-container__item__text">{{col.msg}}</span>
-          </span>
-         </p>
+  <!-- 聊天室  -->
+  <div class="chat-container"
+    id="msgContainer"
+    :class="{'chat-msg-wrap-haswrap': showInput}">
+    <div class="chat-msg-wrap" id='chatMsgWrap'>
+        <div class="msg-container" id="scrollContainer" ref="scrollContainer">
+          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
+            <span class="msg-container__item__wrap">
+              <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
+              <span class="msg-container__item__nickname">{{col.nickname}}</span>
+              <span class="msg-container__item__text">{{col.msg}}</span>
+            </span>
+           </p>
+        </div>
+    </div>
+      <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
+         <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
+          <input
+            class="msg-send-container__wrap__input"
+            id="sendmessage"
+            type="text"
+            @focus="focusEvent"
+            @blur="blurEvent"
+            v-model.trim="myMessage">
+          <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
+        </div>
+        <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
+          <span class="iconfont icon-pinglun"></span>
+        </label>
       </div>
   </div>
-    <div class="msg-send-container" :class="{'msg-send-container-showinput': showInput}">
-       <div id="inputwrap" class="msg-send-container__wrap" :class="{'msg-send-container__show': showInput, 'msg-send-container__hide': !showInput}">
-        <input
-          class="msg-send-container__wrap__input"
-          id="sendmessage"
-          type="text"
-          @focus="focusEvent"
-          @blur="blurEvent"
-          v-model.trim="myMessage">
-        <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
-      </div>
-      <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
-        <span class="iconfont icon-pinglun"></span>
-      </label>
-    </div>
-</div>
 </template>
 
 <script>
