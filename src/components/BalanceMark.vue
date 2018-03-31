@@ -5,7 +5,7 @@
         <img :src="dataInfo.hintImg" v-if="dataInfo.hintImg" class="hint-icon__img">
       </p>
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
-      <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText">{{dataInfo.htmlText}}</p>
+      <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>

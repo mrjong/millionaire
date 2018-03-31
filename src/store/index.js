@@ -82,6 +82,15 @@ export default new Vuex.Store({
      */
     [type._UPDATE] (state, obj) {
       state = Object.assign(state, obj)
+    },
+    /**
+     * 打开弹窗
+     * @param {any} state
+     * @param {any} dialogInfo 弹窗信息
+     */
+    [type._OPEN_DIALOG] (state, dialogInfo) {
+      state.dialogInfo = Object.assign(state.dialogInfo, dialogInfo)
+      state.showDialog = true
     }
   },
   actions: {
@@ -190,6 +199,12 @@ export default new Vuex.Store({
                     clearInterval(countDownTimer)
                     commit(type._UPDATE, {
                       startTimeOffset: 0
+                    })
+                    // 倒计时到了后直接开始展示串词
+                    im.emitListener(MESSAGE_HOST, {
+                      content: {
+                        content: JSON.stringify(hostMsgList)
+                      }
                     })
                   } else {
                     commit(type._UPDATE, {
@@ -345,11 +360,13 @@ export default new Vuex.Store({
         RongIMClient.getInstance().disconnect()
       })
     },
-    [type._OPEN_DIALOG] ({commit, getters}, dialogInfo) {
-      commit(type._UPDATE, {
-        dialogInfo: Object.assign(getters.dialogInfo, dialogInfo),
-        showDialog: true
-      })
+    /**
+     * 打开全局弹窗
+     * @param {any} {commit, getters, state}
+     * @param {any} dialogInfo 弹窗信息
+     */
+    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo) {
+      commit(type._OPEN_DIALOG, dialogInfo)
     }
   },
   modules: {
