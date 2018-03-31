@@ -26,11 +26,11 @@ import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
-import * as type from '../store/type'
 export default {
   name: 'Main',
   data () {
     return {
+      showLogin: false,
       showDialog: false,
       dialogInfo: {
         htmlTitle: 'Failed to Submit',
@@ -46,7 +46,8 @@ export default {
     ...mapGetters({
       onlineAmount: 'onlineAmount',
       status: 'status',
-      questionStatus: 'question_status'
+      questionStatus: 'question_status',
+      isWon: 'isWon'
     })
   },
   mounted () {},
@@ -57,17 +58,10 @@ export default {
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
-    },
-    init () {
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
+      setTimeout(() => {
+        this.showDialog = false
+      }, 1000)
     }
-  },
-  created () {
-    this.init()
   },
   components: {
     CountDown,
