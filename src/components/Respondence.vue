@@ -96,6 +96,13 @@ export default {
     ...mapActions({}),
     answer (e) {
       if (this.watchingMode || this.isClick) {
+        this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'You\'ve been eliminated. ',
+          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'Continue'
+        })
         return false
       }
       if (this.question_status === 5) {

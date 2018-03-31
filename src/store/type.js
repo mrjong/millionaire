@@ -16,6 +16,7 @@ export const _SYNC_TIME = '_SYNC_TIME'
 export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
 export const _INIT = '_INIT'
 export const _END = '_END'
+export const _OPEN_DIALOG = '_OPEN_DIALOG'
 
 export const HOME_UPDATE = 'HOME_UPDATE'
 

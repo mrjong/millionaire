@@ -75,7 +75,8 @@ const im = {
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
-      RongIMClient.getInstance().disconnect()
+      im.emitListener(type.NETWORK_UNAVAILABLE)
+      RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
     })
 
     window.addEventListener('online', () => {
@@ -105,6 +106,11 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('网络不可用')
+            im.emitListener(type.NETWORK_UNAVAILABLE)
+            setTimeout(() => {
+              RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+              im.connect(im.token)
+            }, 500)
             break
         }
       }
@@ -117,7 +123,9 @@ const im = {
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-            this.emitListener(type.MESSAGE_NORMAL, message)
+            if (Math.random() > 0.5) {
+              this.emitListener(type.MESSAGE_NORMAL, message)
+            }
             // console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
@@ -125,12 +133,15 @@ const im = {
             break
           case type.MESSAGE_ANSWER:
             this.emitListener(type.MESSAGE_ANSWER, message)
+            console.log(message.messageType, message.content)
             break
           case type.MESSAGE_HOST:
             this.emitListener(type.MESSAGE_HOST, message)
+            console.log(message.messageType, message.content)
             break
           case type.MESSAGE_QUESTION:
             this.emitListener(type.MESSAGE_QUESTION, message)
+            console.log(message.messageType, message.content)
             break
           case type.MESSAGE_RESULT:
             this.emitListener(type.MESSAGE_RESULT, message)
@@ -187,6 +198,7 @@ const im = {
         }
         console.log(info)
         im.reconnect()
+        im.emitListener(type.NETWORK_UNAVAILABLE)
       }
     })
   },
