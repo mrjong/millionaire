@@ -92,8 +92,8 @@ export default {
         let msgList = this.msgList || []
         msgList.push(obj)
         const len = msgList.length
-        if (len >= 30) {
-          msgList.splice(0, 20)
+        if (len >= 50) {
+          msgList.splice(0, 36)
         }
         this.msgList = msgList
         this.$nextTick(() => {
@@ -153,16 +153,19 @@ export default {
     // 4. 输入框 失去焦点时 【hack】 增加注释
     blurEvent () {
       this.showInput = false
-      this.reSetMsgBot()
+      this.reSetMsgBot(1)
     },
     // 5. 输入框弹起或收起时 修改消息区域高度 【hack】 增加注释
-    reSetMsgBot () {
-      const msgContainer = document.getElementById('msgContainer') // 【hack】 msgcontainer -> msgContainer
-      const body = document.getElementsByTagName('body')[0]
-      const innerHeight = window.innerHeight
-      const bodyHeight = body.clientHeight
-      const msgBot = bodyHeight - innerHeight
-      msgContainer && (msgContainer.style.bottom = msgBot / 100 + 'rem')
+    reSetMsgBot (isBlur) {
+      this.$nextTick(() => {
+        const msgContainer = document.getElementById('msgContainer') // 【hack】 msgcontainer -> msgContainer
+        const body = document.getElementsByTagName('body')[0]
+        const innerHeight = window.innerHeight
+        const bodyHeight = body.clientHeight
+        const msgBot = bodyHeight - innerHeight
+        const bottomPosition = isBlur ? 0 : ((msgBot / 100) + 'rem')
+        msgContainer && (msgContainer.style.bottom = bottomPosition)
+      })
     }
     // 没用到 注释掉吧 【hack】
     // setMsgOuterHeight () {
