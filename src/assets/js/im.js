@@ -123,9 +123,7 @@ const im = {
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-            if (Math.random() > 0.5) {
-              this.emitListener(type.MESSAGE_NORMAL, message)
-            }
+            this.emitListener(type.MESSAGE_NORMAL, message)
             // console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
