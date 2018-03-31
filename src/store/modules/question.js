@@ -123,8 +123,8 @@ const actions = {
           watchingMode: true
         })
         utils.statistic('NOT_ANSWER', 6, {
-          action_s: rootGetters.userInfo.userName,
-          text_s: getters.index
+          action_s: `${rootGetters.userInfo.userName}`,
+          text_s: `${getters.index}`
         })
       }
     })
