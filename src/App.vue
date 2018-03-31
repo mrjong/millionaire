@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -13,11 +14,13 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import * as api from './assets/js/api'
 import {_AWAIT} from './assets/js/status'
+import LoginTip from './components/LoginTip'
 export default {
   name: 'App',
   data () {
     return {
-      loading: false
+      loading: false,
+      showLogin: false
     }
   },
   computed: {
@@ -29,7 +32,8 @@ export default {
     })
   },
   created () {
-    if (this.isOnline) {
+    this.init()
+    if (this.isOnline || utils.clientId) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
@@ -43,8 +47,18 @@ export default {
       })
     }
   },
+  methods: {
+    init () {
+      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+      this.$store.dispatch(type.QUESTION_INIT)
+      this.$store.dispatch(type._UPDATE_AMOUNT)
+      this.$store.dispatch(type._RECEIVE_RESULT)
+      this.$store.dispatch(type._END)
+    }
+  },
   components: {
-    loading
+    loading,
+    LoginTip
   },
   watch: {
     status: function (status) {
@@ -70,8 +84,10 @@ export default {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
+              const isWon = !!data.data
+              this.showLogin = isWon && !this.isOnline
               this.$store.dispatch(type.QUESTION_YOU_WON, {
-                isWon: data.data
+                isWon
               })
             }
           })

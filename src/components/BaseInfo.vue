@@ -9,7 +9,7 @@
       <router-link to="/balance" class="balance-router" >
         <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
           <p class="base-info__other__balance__text">Balance</p>
-          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{baseInfo.balanceShow}}</p>
+          <p class="base-info__other__balance__num num">{{baseInfo.currencyType }}{{ isOnline ? baseInfo.balanceShow : baseInfo.clientBalanceShow}}</p>
         </div>
       </router-link>
       <div class="base-info__other__line"></div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 export default {
   name: 'BaseInfo',
@@ -32,6 +33,9 @@ export default {
   },
   data () {
     return {}
+  },
+  computed: {
+    ...mapGetters(['isOnline'])
   },
   methods: {
     routerStatistic (destination) {

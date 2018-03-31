@@ -112,13 +112,13 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
-        console.log(message.messageType, message.content)
+        // console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            console.warn(message.messageUId, message.sentTime, message.content.content)
+            // console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
