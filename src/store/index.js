@@ -83,7 +83,6 @@ export default new Vuex.Store({
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
-          console.log(data)
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
@@ -97,6 +96,8 @@ export default new Vuex.Store({
               userName: userInfo.un || '',
               balance: +accountInfo.ub || 0,
               balanceShow: accountInfo.sub || '',
+              clientBalance: +accountInfo.cb || 0,
+              clientBalanceShow: accountInfo.scb || '',
               income: +accountInfo.ui || 0,
               incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,
@@ -318,7 +319,6 @@ export default new Vuex.Store({
           msgList: [],
           compereMsg: ''
         })
-        im.removeLister()
       })
     }
   },

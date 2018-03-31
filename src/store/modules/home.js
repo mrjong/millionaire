@@ -10,6 +10,8 @@ const state = {
   userName: '', // 用户名
   balance: 0, // 用户余额
   balanceShow: '', // 用户余额-展示
+  clientBalance: 0, // 用户clientId下的余额，
+  clientBalanceShow: '', // 用户clientId下的余额-展示
   rank: 0, // 用户排名
   currencyType: '₹', // 货币类型
   bonusAmount: 0, // 奖金数量

@@ -30,6 +30,7 @@ export default {
   name: 'Main',
   data () {
     return {
+      showLogin: false,
       showDialog: false,
       dialogInfo: {
         htmlTitle: 'Failed to Submit',
@@ -45,7 +46,8 @@ export default {
     ...mapGetters({
       onlineAmount: 'onlineAmount',
       status: 'status',
-      questionStatus: 'question_status'
+      questionStatus: 'question_status',
+      isWon: 'isWon'
     })
   },
   mounted () {},
@@ -56,6 +58,9 @@ export default {
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
+      setTimeout(() => {
+        this.showDialog = false
+      }, 1000)
     }
   },
   components: {
