@@ -122,6 +122,9 @@ const im = {
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
+            if (message.content.content === '$MsG^') {
+              return false
+            }
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
             // console.warn(message.messageUId, message.sentTime, message.content.content)
@@ -260,9 +263,11 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-        console.log('Send successfully')
-        console.log(message)
-        im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
+        if (message.content.content !== '$MsG^') {
+          console.log('Send successfully')
+          console.log(message)
+          im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
+        }
       },
       onError: (errorCode, message) => {
         let info = ''

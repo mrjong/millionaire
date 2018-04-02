@@ -48,7 +48,8 @@ export default {
       msgList: [], // 显示的消息列表
       myMessage: '', // 我发送的消息
       showInput: false, // 是否显示输入框
-      windowInnerHeight: 0 // 窗口高度
+      windowInnerHeight: 0, // 窗口高度,
+      messageTimer: null
     }
   },
   computed: {
@@ -79,6 +80,12 @@ export default {
         this.windowInnerHeight = window.innerHeight
       })
     })
+    this.messageTimer = setInterval(() => {
+      im.sendMessage('$MsG^', '', '')
+    }, 1500)
+  },
+  beforeDestroy () {
+    clearInterval(this.messageTimer)
   },
   methods: {
     // 1. 获取聊天列表 【hack】
@@ -340,7 +347,6 @@ export default {
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
-      margin-left: 36px;
     }
     &__text {
       color: #fff;
