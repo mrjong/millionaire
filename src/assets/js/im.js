@@ -309,13 +309,14 @@ const im = {
   },
 
   sendAliveMessage () {
-    const msg = new RongIMClient.RegisterMessage.KeepLiveMessage({content: ''})
+    const msg = new RongIMClient.RegisterMessage.KeepLiveMessage({content: 'alive'})
     const conversationtype = RongIMLib.ConversationType.PRIVATE
     const targetId = `p-${parseInt(Math.random() * 10000)}`
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
       },
       onError: (errorCode, message) => {
+        console.log('保活消息发送失败')
       }
     }
     )
