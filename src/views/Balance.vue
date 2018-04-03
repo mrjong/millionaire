@@ -71,7 +71,7 @@ export default {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const phone = /\+?\d[\d -]{8,12}\d/
+        const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
