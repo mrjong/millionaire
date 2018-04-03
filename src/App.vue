@@ -52,18 +52,6 @@ export default {
         console.log(err)
       })
     }
-
-    this.$store.dispatch(type._OPEN_DIALOG, {
-      htmlTitle: 'Maintenance Notice',
-      htmlText: `<section style="text-align:left;line-height:1.4;">'Go! Millionaire' live quiz is currently undergoing system maintenance. <p></p>We will back soon, if you have any question, please contact us on Facebook <a href="https://www.facebook.com/APUS-Browser-1532330666785144/ ">APUS Browser</a>! 
-\n We hope you continue to support 'Go! Millionaire' live quiz.
-<p>Thank you!</p>
-<p>April 1, 2018</p>
-</section>`,
-      shouldSub: false,
-      markType: 0,
-      okBtnText: 'OK'
-    })
   },
   methods: {
     init () {

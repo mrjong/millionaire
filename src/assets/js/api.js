@@ -99,5 +99,7 @@ export const syncInfo = function () {
 export const log = function (content) {
   return axios.post(api.log, {
     content: JSON.stringify(content)
+  }).then(() => {}).catch((err) => {
+    console.log('日志上报出错：', err)
   })
 }

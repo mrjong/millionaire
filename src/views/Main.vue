@@ -60,7 +60,7 @@ export default {
       this.showDialog = true
       setTimeout(() => {
         this.showDialog = false
-      }, 1000)
+      }, 10000)
     }
   },
   components: {

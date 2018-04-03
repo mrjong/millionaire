@@ -84,7 +84,8 @@ const actions = {
           id,
           index,
           userName: rootGetters.userInfo.userName,
-          watchingMode: getters.watchingMode
+          watchingMode: getters.watchingMode,
+          ua: window.navigator.userAgent
         })
         options.sort(() => {
           return Math.random() > 0.5 ? 1 : -1
