@@ -19,11 +19,7 @@
       window.onload = function () {
         var loadTime = Date.now() - startTime
         statistic({
-          event_name: 'first_page_loading_time_cost',
-          extra: {
-            event: '67240565',
-            duration_l: loadTime
-          }
+          event_name: 'first_page_loading_time_cost'
         })
         console.log('加载时间：', loadTime)
       }
@@ -65,34 +61,9 @@
         shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
         console.log('分享成功')
       }
-
-      if (!isLogin()) {
-        if (njordGame) {
-          window.top.loginCallback = function () {
-            statistic({
-              event_name: 'login_page',
-              from: 'login_page_client',
-              extra: {
-                event: '67262581',
-                result_code_s: '1'
-              }
-            })
-            window.location.reload()
-          }
-          var loginArgs = JSON.stringify({
-            callbackMethod: 'loginSuccess()'
-          })
-          statistic({
-            event_name: 'login_page',
-            from: 'login_page_client',
-            extra: {
-              event: '67240565'
-            }
-          })
-          njordGame.login && njordGame.login(loginArgs)
-        }
-      }
     </script>
+    <script src="//cdn.bootcss.com/eruda/1.4.3/eruda.min.js"></script>
+    <script>eruda.init();</script>
     <script>
       (function (doc, win) {
         var docEl = doc.documentElement
@@ -115,9 +86,10 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script src="http://static.subcdn.com/201803211329228c2a27e02a.js"></script>
-    <script src="http://static.subcdn.com/201803211329214b9e1b491d.js"></script>
+    <script src="http://static.subcdn.com/2018032610330803481a4e48.js"></script>
+    <script src="http://static.subcdn.com/20180401191027e257b10a47.js"></script>
     <script src="http://static.subcdn.com/20180321132919bde55bdb2d.js"></script>
     <!-- <link href='http://fonts.font.im/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'> -->
+    <script>console.log('优化sdk')</script>
   </body>
 </html>

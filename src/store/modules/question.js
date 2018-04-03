@@ -5,7 +5,7 @@ import * as status from '../../assets/js/status'
 import utils from '../../assets/js/utils'
 import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
-import { submitAnswer } from '../../assets/js/api'
+import { submitAnswer, log } from '../../assets/js/api'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -67,7 +67,7 @@ const actions = {
    * 获取题目
    * @param {any} {commit, dispatch}
    */
-  [type.QUESTION_GET] ({commit, dispatch, rootGetters}) {
+  [type.QUESTION_GET] ({commit, dispatch, rootGetters, getters}) {
     im.addListener(MESSAGE_QUESTION, (message) => {
       const content = (message.content && message.content.content) || ''
       if (content) {
@@ -76,7 +76,15 @@ const actions = {
         utils.statistic('QUESTION', 6, {
           flag_s: `${id}`,
           text_s: `${index}`,
-          action_s: `${rootGetters.userInfo.userName}`
+          action_s: `${rootGetters.userInfo.userName}`,
+          type_s: `${getters.watchingMode ? 1 : 0}`
+        })
+        log({
+          name: 'question',
+          id,
+          index,
+          userName: rootGetters.userInfo.userName,
+          watchingMode: getters.watchingMode
         })
         options.sort(() => {
           return Math.random() > 0.5 ? 1 : -1
@@ -93,7 +101,7 @@ const actions = {
    * 开始答题
    * @param {any} {commit, getters}
    */
-  [type.QUESTION_START] ({commit, getters}) {
+  [type.QUESTION_START] ({commit, getters, rootGetters}) {
     const {time} = getters
     commit(type.QUESTION_UPDATE, {
       restTime: time
@@ -113,6 +121,10 @@ const actions = {
       if (!getters.isAnswered) {
         commit(type.QUESTION_UPDATE, {
           watchingMode: true
+        })
+        utils.statistic('NOT_ANSWER', 6, {
+          action_s: `${rootGetters.userInfo.userName}`,
+          text_s: `${getters.index}`
         })
       }
     })
@@ -166,7 +178,7 @@ const actions = {
    * @param {any} {commit, getters}
    * @param {any} answer
    */
-  [type.QUESTION_RECEIVE_ANSWER] ({commit, getters, rootGetters}, answer) {
+  [type.QUESTION_RECEIVE_ANSWER] ({commit, getters, rootGetters, dispatch}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
       const md5Map = getters.optionsMd5Map
       const answerStr = (message.content && message.content.answer) || ''
@@ -176,18 +188,38 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
 
-        utils.statistic('ANSWER', 6, {
-          flag_s: `${id}`,
-          action_s: `${rootGetters.userInfo.userName}`
-        })
         // 判断答案是否正确
         const isCorrect = md5Map[correctAnswer] === getters.userAnswer
+
+        utils.statistic('ANSWER', 6, {
+          flag_s: `${id}`,
+          action_s: `${rootGetters.userInfo.userName}`,
+          type_s: `${isCorrect ? 1 : 0}`
+        })
 
         // 根据答案是否正确播放提示音
         if (isCorrect && !getters.watchingMode) {
           utils.playSound('succeed')
         } else if (!isCorrect && !getters.watchingMode) {
           utils.playSound('failed')
+          dispatch(type._OPEN_DIALOG, {
+            htmlTitle: 'You\'ve been eliminated. ',
+            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+            shouldSub: false,
+            markType: 0,
+            okBtnText: 'Continue'
+          })
+        }
+
+        // 若没有答题，弹窗提示
+        if (!getters.watchingMode && !getters.isAnswered) {
+          dispatch(type._OPEN_DIALOG, {
+            htmlTitle: 'You\'ve been eliminated. ',
+            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+            shouldSub: false,
+            markType: 0,
+            okBtnText: 'Continue'
+          })
         }
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
@@ -196,6 +228,13 @@ const actions = {
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
+        })
+        // 服务端上报日志
+        log({
+          name: 'answer',
+          id,
+          isCorrect,
+          userName: rootGetters.userInfo.userName
         })
       }
     })

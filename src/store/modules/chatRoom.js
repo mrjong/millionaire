@@ -9,42 +9,46 @@ const state = {
   compereMsg: ''
 }
 const getters = {
-  chatRoomState: state => state,
+  // chatRoomState: state => state, 【hack】已移到组件内 暂时删除
   msgList: (state) => state.msgList,
   compereMsg: (state) => state.compereMsg
 }
 const mutations = {
-  [type.CHAT_LIST_FETCH] (state, item) {
-    const listItem = item || {}
-    state.msgList.push(listItem)
-    const len = state.msgList.length
-    const staticLen = 14 // 固定展示几条
-    if (+len > staticLen) {
-      state.msgList = state.msgList.splice(len - staticLen, len)
-    }
-  },
-  [type.CHAT_UPDATE] (state, obj) {
-    state = Object.assign(state, obj)
-  }
+  // 设置获取到的消息列表 【hack】已移到组件内完成
+  // [type.CHAT_LIST_FETCH] (state, item) {
+  //   const listItem = item || {}
+  //   state.msgList.push(listItem)
+  //   const len = state.msgList.length
+  //   const staticLen = 14 // 固定展示几条
+  //   if (+len > staticLen) {
+  //     state.msgList.shift()
+  //   }
+  // },
+  // 更新消息列表 【hack】已移到组件内完成
+  // [type.CHAT_UPDATE] (state, obj) {
+  //   state = Object.assign(state, obj)
+  // }
 }
 const actions = {
-  [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
-    const handler = (message) => {
-      const obj = {
-        img: message.content.user.avatar,
-        nickname: message.content.user.name,
-        msg: message.content.content,
-        msgId: message.messageId
-      }
-      commit(type.CHAT_LIST_FETCH, obj)
-    }
-    im.addListener(listenerType.MESSAGE_NORMAL, handler)
-    im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
-  },
-  [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {
-    im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
-  },
-  [type.GET_COMPERE_MESSAGE_ACTION] ({commit, getters}) {
+  // 获取消息列表 【hack】已移到组件内完成
+  // [type.CHAT_LIST_FETCH_ACTION] ({commit}) {
+  //   const handler = (message) => {
+  //     const obj = {
+  //       img: message.content.user.avatar,
+  //       nickname: message.content.user.name,
+  //       msg: message.content.content,
+  //       msgId: message.messageId
+  //     }
+  //     commit(type.CHAT_LIST_FETCH, obj)
+  //   }
+  //   im.addListener(listenerType.MESSAGE_NORMAL, handler)
+  //   im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
+  // },
+  // 发送消息 【hack】已移到组件内完成
+  // [type.CHAT_SEND_MSG_ACTION] ({commit}, {msgObj}) {
+  //   im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
+  // },
+  [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
     im.addListener(listenerType.MESSAGE_HOST, (message) => {
       const msgList = (message.content && message.content.content) || ''
       if (msgList) {

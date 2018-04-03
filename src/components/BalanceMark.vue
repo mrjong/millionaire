@@ -5,11 +5,12 @@
         <img :src="dataInfo.hintImg" v-if="dataInfo.hintImg" class="hint-icon__img">
       </p>
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
-      <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText">{{dataInfo.htmlText}}</p>
+      <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
       </p>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -64,14 +65,15 @@ export default {
   text-align: center;
   &__wrap {
     width: 602px;
-    height: 402px;
+    min-height: 402px;
     background: #fff;
     border-radius: 16px;
-    padding: 20px 45px 0 45px;
+    padding: 20px 45px 40px 45px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     .hint-icon{
       width: 88px;
       min-height: 88px;
