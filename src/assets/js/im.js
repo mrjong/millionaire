@@ -2,6 +2,8 @@
 import * as type from './listener-type'
 import {appKey} from './http'
 
+let keepLiveMessageTimer = null
+
 const im = {
 
   chatRoomId: '', // 聊天室ID
@@ -37,6 +39,11 @@ const im = {
       messageName: 'GameEndMessage',
       propertys: ['end'],
       objectName: 'APUS:GameEndMsg'
+    },
+    {
+      messageName: 'KeepLiveMessage',
+      propertys: ['content'],
+      objectName: 'APUS:KeepLiveMSg'
     }
   ],
 
@@ -66,7 +73,7 @@ const im = {
     this.messageTypes.forEach((messageType) => {
       const messageName = messageType.messageName // 消息类型。
       const objectName = messageType.objectName // 消息内置名称，请按照此格式命名。
-      const mesasgeTag = new RongIMLib.MessageTag(true, true) // 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
+      const mesasgeTag = new RongIMLib.MessageTag(messageName !== 'KeepLiveMessage', messageName !== 'KeepLiveMessage') // 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
       const propertys = messageType.propertys// 消息类中的属性名。
       RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
     })
@@ -75,6 +82,7 @@ const im = {
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
+      clearInterval(keepLiveMessageTimer)
       im.emitListener(type.NETWORK_UNAVAILABLE)
       RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
     })
@@ -97,6 +105,7 @@ const im = {
             break
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('断开连接')
+            clearInterval(keepLiveMessageTimer)
             break
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('其他设备登录')
@@ -108,6 +117,7 @@ const im = {
             console.log('网络不可用')
             im.emitListener(type.NETWORK_UNAVAILABLE)
             setTimeout(() => {
+              clearInterval(keepLiveMessageTimer)
               RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
               im.connect(im.token)
             }, 500)
@@ -162,6 +172,9 @@ const im = {
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId, token)
+        keepLiveMessageTimer = setInterval(() => {
+          im.sendAliveMessage()
+        }, 1500)
         im.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {
@@ -174,7 +187,6 @@ const im = {
           case RongIMLib.ErrorCode.TIMEOUT:
             info = '超时'
             im.emitListener(type.CONNECTED_TIMEOUT, info)
-            im.reconnect()
             break
           case RongIMLib.ErrorCode.UNKNOWN_ERROR:
             info = '未知错误'
@@ -194,7 +206,9 @@ const im = {
             break
         }
         console.log(info)
-        im.reconnect()
+        setTimeout(() => {
+          im.connect(im.token)
+        }, 500)
         im.emitListener(type.NETWORK_UNAVAILABLE)
       }
     })
@@ -259,7 +273,6 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-        console.log('Send successfully')
         im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
@@ -289,6 +302,20 @@ const im = {
         }
         console.log('发送失败:' + info)
         im.emitListener(type.MESSAGE_SEND_FAIL, info)
+      }
+    }
+    )
+  },
+
+  sendAliveMessage () {
+    const msg = new RongIMClient.RegisterMessage.KeepLiveMessage({content: 'alive'})
+    const conversationtype = RongIMLib.ConversationType.PRIVATE
+    const targetId = `p-${parseInt(Math.random() * 10000)}`
+    RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+      onSuccess: (message) => {
+      },
+      onError: (errorCode, message) => {
+        console.log('保活消息发送失败')
       }
     }
     )

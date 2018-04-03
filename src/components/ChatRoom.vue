@@ -340,7 +340,6 @@ export default {
     &__nickname {
       color: #ffb227;
       padding: 0 14px;
-      margin-left: 36px;
     }
     &__text {
       color: #fff;
