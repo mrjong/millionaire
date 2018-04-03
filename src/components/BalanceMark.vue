@@ -44,7 +44,6 @@ export default {
   mounted () {
     const btnFb = document.getElementById('btn-fb-maintent')
     btnFb.addEventListener('click', () => {
-      console.log('弹窗页面打点')
       utils.statistic('millionaire', 3, null, 'maintenance_dialog')
     })
   },
