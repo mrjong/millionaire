@@ -1,4 +1,5 @@
 <template>
+  <!-- 串词 -->
   <div class="compere-container">
     <p class="compere-container__text">
        {{compereMsg}}
@@ -26,9 +27,10 @@ export default {
   },
   mounted () {
     this.changeSupa()
-    this.swiperMsg()
+    this.rollingMsg()
   },
   methods: {
+    // 1. 改变 supa(主持人) 位置
     changeSupa () {
       this.supaTimer && clearInterval(this.supaTimer)
       this.supaTimer = setInterval(() => {
@@ -39,8 +41,8 @@ export default {
         this.supaOrder++
       }, 800)
     },
-    // 轮播消息
-    swiperMsg () {
+    // 2. 轮播消息
+    rollingMsg () {
       const list = this.hostMsgList
       if (list && list.length) {
         let count = 0
@@ -58,7 +60,7 @@ export default {
   },
   watch: {
     hostMsgList (val) {
-      this.swiperMsg()
+      this.rollingMsg()
     }
   }
 }

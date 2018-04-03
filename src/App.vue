@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <router-view/>
+    <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
+    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -11,13 +13,18 @@ import './assets/css/public.css'
 import * as type from './store/type'
 import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
+import im from './assets/js/im'
 import * as api from './assets/js/api'
 import {_AWAIT} from './assets/js/status'
+import LoginTip from './components/LoginTip'
+import BalanceMark from './components/BalanceMark'
+import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
 export default {
   name: 'App',
   data () {
     return {
-      loading: false
+      loading: false,
+      showLogin: false
     }
   },
   computed: {
@@ -25,12 +32,14 @@ export default {
       isOnline: 'isOnline',
       status: 'status',
       watchingMode: 'watchingMode',
-      questionStatus: 'question_status'
+      questionStatus: 'question_status',
+      showDialog: 'showDialog',
+      dialogInfo: 'dialogInfo'
     })
   },
   created () {
     this.init()
-    if (this.isOnline) {
+    if (this.isOnline || utils.clientId) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
         setTimeout(() => {
@@ -46,18 +55,43 @@ export default {
   },
   methods: {
     init () {
+      im.addListener(NETWORK_UNAVAILABLE, () => {
+        this.$store.dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'Please check your internet connection.',
+          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'OK'
+        })
+        utils.statistic('NETWORK_UNAVAILABLE', 6)
+      })
       this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
       this.$store.dispatch(type.QUESTION_INIT)
       this.$store.dispatch(type._UPDATE_AMOUNT)
       this.$store.dispatch(type._RECEIVE_RESULT)
       this.$store.dispatch(type._END)
+    },
+    closeDialog () {
+      this.$store.commit(type._UPDATE, {
+        showDialog: false,
+        dialogInfo: {
+          htmlTitle: '',
+          htmlText: '',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'OK',
+          hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+        }
+      })
     }
   },
   components: {
-    loading
+    loading,
+    LoginTip,
+    BalanceMark
   },
   watch: {
-    status: function (status) {
+    status: function (status, oldStatus) {
       if (status !== 1) {
         this.$router.replace({path: '/main'})
         utils.setGameState(true)
@@ -68,6 +102,9 @@ export default {
 
       if (status === 3) {
         utils.statistic('playing_page', 0)
+        if (oldStatus === 2) {
+          utils.statistic('introduction_stage', 0)
+        }
       }
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
@@ -80,8 +117,10 @@ export default {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
+              const isWon = !!data.data
+              this.showLogin = isWon && !this.isOnline
               this.$store.dispatch(type.QUESTION_YOU_WON, {
-                isWon: data.data
+                isWon
               })
             }
           })
@@ -100,7 +139,7 @@ export default {
 </script>
 
 <style>
-  @import "assets/css/iconfont.css";
+  @import "assets/css/iconfont/iconfont.css";
   html,body,#app{
     width:100%;
     height:100%;
