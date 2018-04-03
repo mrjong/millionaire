@@ -80,9 +80,6 @@ export default {
         this.windowInnerHeight = window.innerHeight
       })
     })
-    this.messageTimer = setInterval(() => {
-      im.sendMessage('$MsG^', '', '')
-    }, 1500)
   },
   beforeDestroy () {
     clearInterval(this.messageTimer)
