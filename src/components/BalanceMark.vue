@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import utils from '../assets/js/utils'
 export default {
   name: 'BalanceMark',
   props: {
@@ -40,12 +39,6 @@ export default {
         return '100%'
       }
     }
-  },
-  mounted () {
-    const btnFb = document.getElementById('btn-fb-maintent')
-    btnFb.addEventListener('click', () => {
-      utils.statistic('millionaire', 3, null, 'maintenance_dialog')
-    })
   },
   methods: {
     okEvent () {
