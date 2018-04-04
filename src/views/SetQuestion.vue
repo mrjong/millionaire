@@ -199,7 +199,7 @@ export default {
     setQuestionBtnStatics (destination, result) {
       let staticsObj = {}
       if (result) {
-        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code': result}
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code_s': `${result}`}
       } else {
         staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
       }
