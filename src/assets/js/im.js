@@ -1,6 +1,7 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
 import {appKey} from './http'
+import {log} from './api'
 
 let keepLiveMessageTimer = null
 
@@ -76,6 +77,14 @@ const im = {
       const mesasgeTag = new RongIMLib.MessageTag(messageName !== 'KeepLiveMessage', messageName !== 'KeepLiveMessage') // 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
       const propertys = messageType.propertys// 消息类中的属性名。
       RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys)
+    })
+
+    // 设置融云日志回调
+    RongIMClient.setLogListener((logContent) => {
+      log({
+        name: 'RongIMLib',
+        log: logContent
+      })
     })
 
     // 监听离线在线状态
