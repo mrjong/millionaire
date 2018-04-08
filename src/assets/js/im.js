@@ -1,12 +1,16 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
 import {appKey} from './http'
-import {log} from './api'
+import {log, pollMsg} from './api'
+import utils from './utils'
 
 let keepLiveMessageTimer = null
 
 const im = {
-
+  pullMsgId: '', // 消息ID
+  pullMsgTimer: null, // 拉取消息定时器
+  pullMsgState: 'complete', // 拉去消息状态 complete pending
+  pullMsgInterval: 1000, // 拉取消息间隔
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
   listeners: {}, // 监听器,
@@ -83,7 +87,8 @@ const im = {
     RongIMClient.setLogListener((logContent) => {
       log({
         name: 'RongIMLib',
-        log: logContent
+        log: logContent,
+        id: utils.clientId
       })
     })
 
@@ -250,6 +255,7 @@ const im = {
     }
     RongIMClient.reconnect(callback, config)
   },
+
   /**
    * 加入聊天室
    * @param {any} chatRoomId 聊天室ID
@@ -265,6 +271,20 @@ const im = {
       onError: (error) => {
         console.log('加入聊天室失败')
         im.emitListener(type.CHATROOM_JOIN_FAIL, error)
+      }
+    })
+  },
+
+  /**
+   * 开始轮询消息
+   */
+  startPullMsg () {
+    clearInterval(im.pullMsgTimer)
+    im.pullMsgTimer = setInterval(() => {
+      if (im.pullMsgState === 'complete') {
+        pollMsg().then(({data}) => {}, (err) => {
+          console.log('拉取消息出错', err)
+        })
       }
     })
   },
