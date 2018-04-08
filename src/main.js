@@ -6,6 +6,7 @@ import router from './router'
 import utils from './assets/js/utils'
 // import axios from 'axios'
 import http from './assets/js/http'
+import {submitTime} from './assets/js/api'
 import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
@@ -14,6 +15,8 @@ im.init()
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
 }
+
+setInterval(submitTime, 3000)
 
 // 读取声音
 utils.loadSounds()
