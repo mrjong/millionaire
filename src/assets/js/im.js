@@ -2,6 +2,7 @@
 import * as type from './listener-type'
 import {appKey} from './http'
 import {log} from './api'
+import utils from './utils'
 
 let keepLiveMessageTimer = null
 
@@ -83,7 +84,8 @@ const im = {
     RongIMClient.setLogListener((logContent) => {
       log({
         name: 'RongIMLib',
-        log: logContent
+        log: logContent,
+        id: utils.clientId
       })
     })
 
