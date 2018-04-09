@@ -160,10 +160,6 @@ export default new Vuex.Store({
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_ANSWERING
                 })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
-                })
               }
               // 如果有答案直接进入答案页面
               if (answer) {
@@ -174,10 +170,6 @@ export default new Vuex.Store({
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
-                })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
                 })
               }
 
@@ -190,6 +182,11 @@ export default new Vuex.Store({
                   okBtnText: 'Continue'
                 })
               }
+
+              // 更新当前状态
+              commit(type._UPDATE, {
+                status: status._PLAYING
+              })
             } else {
               // 是否进入倒计时
               if (isInRoom) {
@@ -234,6 +231,7 @@ export default new Vuex.Store({
             }
             // 如果聊天室开启，进入聊天室
             if (isInRoom) {
+              im.startPullMsg()
               im.addListener(CONNECT_SUCCESS, (imUserId) => {
                 commit(type.HOME_UPDATE, {
                   imUserId

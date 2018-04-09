@@ -181,9 +181,20 @@ const actions = {
    */
   [type.QUESTION_RECEIVE_ANSWER] ({commit, getters, rootGetters, dispatch}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
-      const md5Map = getters.optionsMd5Map
       const answerStr = (message.content && message.content.answer) || ''
       const resultStr = (message.content && message.content.summary) || ''
+      const questionStr = (message.content && message.content.question) || ''
+
+      // 如果有题目信息，更新题目信息
+      if (questionStr) {
+        const question = JSON.parse(questionStr)
+        commit(type.QUESTION_UPDATE, {
+          ...question, optionsMd5Map: utils.generateMd5Map(question.options)
+        })
+      }
+
+      const md5Map = getters.optionsMd5Map
+
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)

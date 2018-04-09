@@ -8,8 +8,6 @@ export const api = {
   weekRank: '/cmp/wboard/', // 周排行榜
   totalRank: '/cmp/tboard/', // 总排行榜
   syncStartTime: '/cmp/rst/', // 同步开始时间
-  getServerTime: '/cmp/st/', // 获取服务器时间
-  submitTime: '/cmp/ps/', // 提交请求时间
   balanceApplication: '/cmp/apply', // 提现申请
   isWon: '/cmp/k/', // 用户是否获得奖金
   setQuestion: '/cmp/submit_question/', // 用户出题
@@ -60,28 +58,6 @@ export const submitAnswer = function (id, answer, index) {
 // 同步开始时间
 export const syncTime = function () {
   return axios.get(api.syncStartTime)
-}
-
-// 获取服务器时间
-export const getServerTime = function () {
-  return axios.get(api.getServerTime)
-}
-
-// 提交请求时间
-export const submitTime = function () {
-  getServerTime().then(({data}) => {
-    if (+data.result === 1 && +data.code === 0) {
-      axios.post(api.submitTime, {
-        st: +data.data || 0,
-        cid: utils.clientId,
-        ua: window.navigator.userAgent
-      })
-    } else {
-      console.log('获取服务器时间失败')
-    }
-  }).catch((err) => {
-    console.log('获取服务器时间错误', err)
-  })
 }
 
 export const balanceApplication = (valOption) => {
