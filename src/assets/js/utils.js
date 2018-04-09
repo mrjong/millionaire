@@ -45,6 +45,8 @@ const sounds = {
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
+const defaultClientId = md5(`${parseInt(Math.random() * 10000)}`)
+
 console.log(clientParams)
 const getQuery =
 /**
@@ -77,8 +79,8 @@ export default {
     }
   },
 
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : defaultClientId,
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
