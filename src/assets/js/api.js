@@ -13,7 +13,8 @@ export const api = {
   setQuestion: '/cmp/submit_question/', // 用户出题
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
-  log: '/cmp/l/' // 日志
+  log: '/cmp/l/', // 日志
+  generateCode: '/cmp/gc'// 生成邀请码
 }
 
 export const init = function (isRefreshToken) {
@@ -102,4 +103,9 @@ export const log = function (content) {
   }).then(() => {}).catch((err) => {
     console.log('日志上报出错：', err)
   })
+}
+
+// 生成邀请码
+export const generateCode = function () {
+  return axios.post(api.generateCode)
 }

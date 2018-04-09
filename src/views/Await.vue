@@ -19,7 +19,7 @@
     <div class="await__btn">
       <div class="invitation-code">
         <div class="extra-lives">
-          <span class="extra-lives__icon iconfont icon-fuhuoqia"></span>
+          <span class="extra-lives__icon"></span>
           <span class="extra-lives__text">Extra Lives:</span>
           <span class="extra-lives__num">0</span>
         </div>
@@ -30,7 +30,10 @@
       </div>
       <div class="share-success" v-else>
         <div class="share-success__text">Share success</div>
-        <div class="share-success__num">+1</div>
+        <div class="share-success__base">
+          <span class="share-success__base__icon"></span>
+          <span class="share-success__base__num">+1</span>
+        </div>
       </div>
     </div>
     <router-link to="/set-question">
@@ -47,7 +50,7 @@
         <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
         <p class="invitation-bomb__info">
           Your invitation code：
-          <span>78519669</span>
+          <span>{{invitationCode}}</span>
         </p>
         <p class="invitation-bomb__hint">Reward a Resurrection Card once a day</p>
         <div class="invitation-bomb__channel">
@@ -73,6 +76,7 @@ import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
 export default {
   name: 'Await',
   data () {
@@ -87,7 +91,8 @@ export default {
         okBtnText: 'OK'
       },
       showDialog: false,
-      isSucceed: false
+      isSucceed: false,
+      invitationCode: ''
     }
   },
   computed: {
@@ -142,6 +147,10 @@ export default {
       utils.toFbBrowser()
     },
     getLives () {
+      api.generateCode().then(({data}) => {
+        this.invitationCode = data.data
+        console.log(data)
+      })
       this.isInvitation = true
     },
     inputInvitation () {
@@ -243,12 +252,15 @@ export default {
             display: block;
             height: 36px;
             line-height: 36px;
-
           }
           &__icon{
+            width: 40px;
+            height: 36px;
             color: #f4387c;
             font-size: 40px;
             align-self: center;
+            background: url("../assets/images/lives-icon.png") no-repeat center;
+            background-size: cover;
           }
           &__text{
             font-size: 28px;
@@ -280,12 +292,24 @@ export default {
         background-size: cover;
         color: #fff;
         font-size: 28px;
-        &__num{
-          width: 80%;
-          height: 100px;
-          line-height: 100px;
-          text-align: right;
-          font-size: 54px;
+        &__base{
+          display: flex;
+          justify-content: center;
+          margin-top: 12px;
+          &__icon{
+            display: block;
+            width: 86px;
+            height: 80px;
+            background: url("../assets/images/lives-icon.png") no-repeat center;
+            background-size: cover;
+          }
+          &__num{
+            height: 82px;
+            line-height: 82px;
+            text-align: right;
+            font-size: 54px;
+            margin-left: 30px;
+          }
         }
       }
     }
@@ -350,12 +374,13 @@ export default {
           font-size: 20px;
         }
         &__info{
-          font-size: 28px;
+          font-size: 32px;
           margin-bottom: 16px;
         }
         &__hint{
           font-weight: 300;
           margin-bottom: 54px;
+          font-size: 28px;
         }
         &__channel{
           display: flex;
