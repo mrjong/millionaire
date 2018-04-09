@@ -1,11 +1,15 @@
 <template>
   <div class="balance-mark" :style="{height: actualHeight}">
     <div class="balance-mark__wrap">
-      <p class="hint-icon">
-        <img :src="dataInfo.hintImg" v-if="dataInfo.hintImg" class="hint-icon__img">
+      <p class="hint-icon" v-if="dataInfo.hintImg">
+        <img :src="dataInfo.hintImg" class="hint-icon__img">
       </p>
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
       <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
+      <input type="text"
+             placeholder="Fill in the invitation code"
+             class="balance-mark__wrap__invitation"
+             v-if="isInvitation" v-model="invitationCode">
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
@@ -25,10 +29,15 @@ export default {
     },
     height: {
       type: Number
+    },
+    isInvitation: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
+      invitationCode: ''
     }
   },
   computed: {
@@ -43,6 +52,9 @@ export default {
   mounted () {},
   methods: {
     okEvent () {
+      if (this.invitationCode !== '') {
+        this.$emit('okEvent', this.dataInfo.shouldSub, this.invitationCode)
+      }
       this.$emit('okEvent', this.dataInfo.shouldSub)
     },
     cancelEvent () {
@@ -65,10 +77,9 @@ export default {
   text-align: center;
   &__wrap {
     width: 602px;
-    min-height: 402px;
     background: #fff;
     border-radius: 16px;
-    padding: 20px 45px 40px 45px;
+    padding: 40px 45px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -95,12 +106,31 @@ export default {
       color: #000;
       min-height: 40px;
     }
+    &__invitation{
+      width: 100%;
+      height: 77px;
+      line-height: 77px;
+      border-radius: 46px;
+      background-color:#f4f3f7 ;
+      border: 0;
+      padding-left: 30px;
+      color:#241262 ;
+      font-size: 28px;
+      margin-top: 30px;
+    }
+    input::-webkit-input-placeholder{
+      width: 100%;
+      color: #241262;
+      opacity: 0.6;
+      text-align: center;
+      font-size: 24px;
+    }
     &__btn {
       width: 100%;
       height: 77px;
       display: flex;
       justify-content: space-around;
-      margin-top: 40px;
+      margin-top: 25px;
       span {
         display: inline-block;
         width: 240px;
