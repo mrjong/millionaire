@@ -282,6 +282,9 @@ export default {
         input.answer-text {
           padding-right: 70px;
         }
+        .form__name{
+          padding-right: 70px;
+        }
         .check-str-length-name{
           position: absolute;
           top: .3rem;
@@ -326,7 +329,7 @@ export default {
           width:100% ;
           height: 100%;
           border: 0;
-          padding:15px 20px 15px 30px;
+          padding:15px 40px 40px 30px;
           background-color: transparent;
         }
         textarea:focus {
@@ -334,8 +337,8 @@ export default {
         }
         .check-str-length-title{
           position: absolute;
-          right: 40px;
-          bottom: 40px;
+          right: 20px;
+          bottom: 30px;
         }
       }
       .frame{

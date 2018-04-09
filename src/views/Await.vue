@@ -16,12 +16,10 @@
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <router-link to="/set-question">
-      <div class="await__set" @click="btnStatistic('issue_page')">
-        <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-        <p class="await__set__text">Set Questions Myself</p>
-      </div>
-    </router-link>
+    <div class="await__set" @click="getSetQuestin">
+      <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
+      <p class="await__set__text">Set Questions Myself</p>
+    </div>
     <div class="await__btn">
       <router-link to="/rank">
         <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
@@ -31,6 +29,7 @@
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
+    <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
   </div>
 </template>
 
@@ -41,6 +40,7 @@ import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Await',
   data () {
@@ -52,7 +52,16 @@ export default {
       baseStyle2: {
         text: 'Leaderboard',
         bgColor: '#4c08f3'
-      }
+      },
+      dialogInfo: {
+        htmlTitle: '',
+        htmlText: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK',
+        hintImg: ''
+      },
+      showDialog: false
     }
   },
   computed: {
@@ -105,12 +114,30 @@ export default {
     likeToFb (val) {
       this.btnStatistic(val)
       utils.toFbBrowser()
+    },
+    getSetQuestin () {
+      if (utils.isOnline) {
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      } else {
+        this.showDialog = true
+      }
+    },
+    sure () {
+      this.showDialog = false
+      utils.login(() => {
+        this.$store.commit(type._UPDATE, {isOnline: true})
+        utils.isOnline = true
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      })
     }
   },
   components: {
     BaseBtn,
     NextTime,
-    BaseInfo
+    BaseInfo,
+    BalanceMark
   }
 }
 </script>
