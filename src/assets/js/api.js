@@ -127,7 +127,7 @@ export const pollMsg = function () {
       app_id: utils.app_id,
       client_id: utils.clientId
     },
-    timeout: 3000
+    timeout: 5000
   })
 }
 

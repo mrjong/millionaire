@@ -95,9 +95,11 @@ export default {
       if (status !== 1) {
         this.$router.replace({path: '/main'})
         utils.setGameState(true)
+        im.startPullMsg()
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
+        im.stopPullMsg()
       }
 
       if (status === 3) {

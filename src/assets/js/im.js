@@ -9,7 +9,6 @@ let keepLiveMessageTimer = null
 const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
-  pullMsgState: 'complete', // 拉去消息状态 complete pending
   pullMsgInterval: 1000, // 拉取消息间隔
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
@@ -154,22 +153,19 @@ const im = {
             this.emitListener(type.MESSAGE_AMOUNT, message)
             break
           case type.MESSAGE_ANSWER:
-            this.emitListener(type.MESSAGE_ANSWER, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_HOST:
-            this.emitListener(type.MESSAGE_HOST, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_QUESTION:
-            this.emitListener(type.MESSAGE_QUESTION, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_RESULT:
-            this.emitListener(type.MESSAGE_RESULT, message)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_END:
-            this.emitListener(type.MESSAGE_END, message)
+            // 暂时使用轮询方案代替接收
             break
           default:
             console.log('未知类型消息:', message)
@@ -281,12 +277,85 @@ const im = {
   startPullMsg () {
     clearInterval(im.pullMsgTimer)
     im.pullMsgTimer = setInterval(() => {
-      if (im.pullMsgState === 'complete') {
-        pollMsg().then(({data}) => {}, (err) => {
-          console.log('拉取消息出错', err)
-        })
+      pollMsg().then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          im.pollMsgHandler(data.data)
+        } else {
+          console.log('拉去消息失败', data.msg)
+        }
+      }, (err) => {
+        console.log('拉取消息出错', err)
+      })
+    }, 1000)
+  },
+
+  /**
+   * 停止轮询消息
+   */
+  stopPullMsg () {
+    clearInterval(im.pullMsgTimer)
+  },
+
+  /**
+   * 轮询消息处理
+   */
+  pollMsgHandler (data = {}) {
+    const {i: msgId, t: msgType, d: msg = {}} = data
+    if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
+      switch (msgType) {
+        case 1: { // 串词消息
+          const {rs: hostMsgList, si: intervalTime} = msg
+          im.emitListener(type.MESSAGE_HOST, {
+            content: {
+              content: JSON.stringify(hostMsgList)
+            }
+          }, intervalTime)
+          break
+        }
+        case 2: { // 题目消息
+          im.emitListener(type.MESSAGE_QUESTION, {
+            content: {
+              content: JSON.stringify(msg)
+            }
+          })
+          break
+        }
+        case 3: { // 答案汇总消息
+          const question = {
+            id: msg.ji || '',
+            index: msg.js || 1,
+            contents: msg.jc || '',
+            options: msg.jo || ['', '', '']
+          }
+          const answer = {
+            i: msg.ji || '',
+            a: msg.ac || ''
+          }
+          const summary = msg.as || {}
+          im.emitListener(type.MESSAGE_ANSWER, {
+            content: {
+              answer: JSON.stringify(answer),
+              summary: JSON.stringify(summary),
+              question: JSON.stringify(question)
+            }
+          })
+          break
+        }
+        case 4: { // 比赛结果消息
+          im.emitListener(type.MESSAGE_RESULT, {
+            content: {
+              summary: JSON.stringify(msg)
+            }
+          })
+          break
+        }
+        case 5: { // 比赛结束消息
+          im.emitListener(type.MESSAGE_END, msg.t || 0)
+          break
+        }
       }
-    })
+    }
+    im.pullMsgId = msgId
   },
 
   /**
