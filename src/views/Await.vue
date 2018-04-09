@@ -61,6 +61,7 @@ export default {
         okBtnText: 'OK',
         hintImg: ''
       },
+      showDialog: false
     }
   },
   computed: {
@@ -116,7 +117,7 @@ export default {
     },
     getSetQuestin () {
       if (utils.isOnline) {
-        btnStatistic('issue_page')
+        this.btnStatistic('issue_page')
         this.$router.push({path: '/set-question'})
       } else {
         this.showDialog = true
@@ -127,7 +128,7 @@ export default {
       utils.login(() => {
         this.$store.commit(type._UPDATE, {isOnline: true})
         utils.isOnline = true
-        btnStatistic('issue_page')
+        this.btnStatistic('issue_page')
         this.$router.push({path: '/set-question'})
       })
     }
