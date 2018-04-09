@@ -5,30 +5,33 @@
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
-      <a class="set-question__wrap__join" @click="join" ref="toFbGroup">
+      <a class="set-question__wrap__join" @click="join" ref="toFbGroup" v-if="isSetQuestion">
         <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
         Follow Us</a>
       <div class="form">
-        <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+        <div class="frame">
+          <input type="text" class="form__name base" maxlength="30" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <check-str-length :originalLength=30 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+        </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="100" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
-          <check-str-length :originalLength=100 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
+          <textarea class="" maxlength="300" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
+          <check-str-length :originalLength=300 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25" v-model="questionInfo.option1">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="150" v-model="questionInfo.option1">
+          <check-str-length :originalLength=150 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25" v-model="questionInfo.option2">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="150" v-model="questionInfo.option2">
+          <check-str-length :originalLength=150 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25" v-model="questionInfo.option3">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="150" v-model="questionInfo.option3">
+          <check-str-length :originalLength=150 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="form__correct">
           <div class="form__correct__title">
@@ -275,11 +278,18 @@ export default {
     }
     .form{
       padding: 24px 0;
-      input.answer-text {
-        padding-right: 70px;
-      }
-      input.answer-text::-webkit-input-placeholder{
-        text-align: left;
+      .frame{
+        input.answer-text {
+          padding-right: 70px;
+        }
+        .check-str-length-name{
+          position: absolute;
+          top: .3rem;
+          right: .4rem;
+        }
+        input.answer-text::-webkit-input-placeholder{
+          text-align: left;
+        }
       }
       &__question {
         width:656px ;
