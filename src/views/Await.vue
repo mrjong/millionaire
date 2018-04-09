@@ -127,8 +127,8 @@ export default {
       utils.login(() => {
         this.$store.commit(type._UPDATE, {isOnline: true})
         utils.isOnline = true
-        this.init()
         btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
       })
     }
   },
