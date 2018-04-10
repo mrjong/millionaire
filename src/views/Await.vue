@@ -26,12 +26,14 @@
         <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
       </div>
       <div class="get-lives" @click="getLives" v-if="!isSucceed">
-        <div class="get-lives__text">Get Lives</div>
+        <div class="get-lives__text">Get More</div>
       </div>
       <div class="share-success" v-else>
         <div class="share-success__text">Share success</div>
         <div class="share-success__base">
-          <span class="share-success__base__icon"></span>
+          <div class="share-success__base__icon">
+            <img src="../assets/images/lives-icon.png" />
+          </div>
           <span class="share-success__base__num">+1</span>
         </div>
       </div>
@@ -55,7 +57,7 @@
         <p class="invitation-bomb__hint">Reward a Resurrection Card once a day</p>
         <div class="invitation-bomb__channel">
           <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
-          <div class="message" @click="shareInvitationCode('com.facebook.katana')"></div>
+          <div class="message" @click="shareInvitationCode('com.facebook.orca')"></div>
         </div>
       </div>
     </div>
@@ -160,21 +162,29 @@ export default {
     },
     okEvent (a, b) {
       this.showDialog = false
-      console.log(b)
+      let codeInfo = {
+        code: b
+      }
+      api.VerificationCode(codeInfo).then(({data}) => {
+        console.log(data)
+      })
     },
     cancelEvent () {
       this.showDialog = false
     },
     shareInvitationCode (value) {
       // 分享
-      utils.share(this.callbackFn(), value)
+      utils.share(this.callbackFn, value)
     },
     // 分享后的回调
     callbackFn (isSucceed, packageName) {
-      this.showDialog = false
+      this.isInvitation = false
       if (isSucceed) {
         // 成功回调
         this.isSucceed = true
+        setTimeout(() => {
+          this.isSucceed = false
+        }, 1000)
       } else {
         // 失败回调
         this.isSucceed = false
@@ -299,9 +309,9 @@ export default {
           &__icon{
             display: block;
             width: 86px;
-            height: 80px;
-            background: url("../assets/images/lives-icon.png") no-repeat center;
-            background-size: cover;
+            img{
+              width: 100%;
+            }
           }
           &__num{
             height: 82px;

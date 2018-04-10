@@ -14,7 +14,8 @@ export const api = {
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
   log: '/cmp/l/', // 日志
-  generateCode: '/cmp/gc'// 生成邀请码
+  generateCode: '/cmp/gc', // 生成邀请码,
+  VerificationCode: '/cmp/vc' // 相关码验证
 }
 
 export const init = function (isRefreshToken) {
@@ -107,5 +108,14 @@ export const log = function (content) {
 
 // 生成邀请码
 export const generateCode = function () {
-  return axios.post(api.generateCode)
+  return axios.post(api.generateCode, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 相关码验证
+
+export const VerificationCode = function (codeInfo) {
+  return axios.post(api.VerificationCode, codeInfo)
 }
