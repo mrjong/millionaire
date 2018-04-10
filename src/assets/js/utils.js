@@ -70,7 +70,8 @@ export default {
     if (njordGame) {
       window.top.loginCallback = callback
       const loginArgs = JSON.stringify({
-        callbackMethod: 'loginSuccess()'
+        callbackMethod: 'loginSuccess()',
+        from_source: 'million_aire'
       })
       njordGame.login && njordGame.login(loginArgs)
     }

@@ -16,55 +16,22 @@
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <div class="await__btn">
-      <div class="invitation-code">
-        <div class="extra-lives">
-          <span class="extra-lives__icon iconfont icon-fuhuoqia"></span>
-          <span class="extra-lives__text">Extra Lives:</span>
-          <span class="extra-lives__num">0</span>
-        </div>
-        <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
-      </div>
-      <div class="get-lives" @click="getLives" v-if="!isSucceed">
-        <div class="get-lives__text">Get Lives</div>
-      </div>
-      <div class="share-success" v-else>
-        <div class="share-success__text">Share success</div>
-        <div class="share-success__num">+1</div>
-      </div>
+    <div class="await__set" @click="getSetQuestin">
+      <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
+      <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <router-link to="/set-question">
-      <div class="await__set" @click="btnStatistic('issue_page')">
-        <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-        <p class="await__set__text">Set Questions Myself</p>
-      </div>
-    </router-link>
+    <div class="await__btn">
+      <router-link to="/rank">
+        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
+      </router-link>
+      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
+    </div>
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
-    <div class="invitation-mark" v-if="isInvitation">
-      <div class="invitation-bomb">
-        <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
-        <p class="invitation-bomb__info">
-          Your invitation code：
-          <span>78519669</span>
-        </p>
-        <p class="invitation-bomb__hint">Reward a Resurrection Card once a day</p>
-        <div class="invitation-bomb__channel">
-          <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
-          <div class="message" @click="shareInvitationCode('com.facebook.katana')"></div>
-        </div>
-      </div>
-    </div>
-    <balance-mark v-if="showDialog"
-                  :data-info="dialogInfo"
-                  :isInvitation = isInputInvitation
-                  @okEvent='okEvent'
-                  @cancelEvent = 'cancelEvent'>
-    </balance-mark>
+    <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
@@ -77,17 +44,23 @@ export default {
   name: 'Await',
   data () {
     return {
-      isInvitation: false,
-      isInputInvitation: false,
-      dialogInfo: {
-        htmlTitle: 'Invitation code',
-        htmlText: 'Fill in the friend\'s invitation code and you and he will both add an extra lives',
-        shouldSub: false,
-        markType: true,
-        okBtnText: 'OK'
+      baseStyle1: {
+        text: 'Share with friends',
+        bgColor: '#dc427a'
       },
-      showDialog: false,
-      isSucceed: false
+      baseStyle2: {
+        text: 'Leaderboard',
+        bgColor: '#4c08f3'
+      },
+      dialogInfo: {
+        htmlTitle: '',
+        htmlText: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK',
+        hintImg: ''
+      },
+      showDialog: false
     }
   },
   computed: {
@@ -141,35 +114,22 @@ export default {
       this.btnStatistic(val)
       utils.toFbBrowser()
     },
-    getLives () {
-      this.isInvitation = true
-    },
-    inputInvitation () {
-      // 调起输入邀请码弹框
-      this.isInputInvitation = true
-      this.showDialog = true
-    },
-    okEvent (a, b) {
-      this.showDialog = false
-      console.log(b)
-    },
-    cancelEvent () {
-      this.showDialog = false
-    },
-    shareInvitationCode (value) {
-      // 分享
-      utils.share(this.callbackFn(), value)
-    },
-    // 分享后的回调
-    callbackFn (isSucceed, packageName) {
-      this.showDialog = false
-      if (isSucceed) {
-        // 成功回调
-        this.isSucceed = true
+    getSetQuestin () {
+      if (utils.isOnline) {
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
       } else {
-        // 失败回调
-        this.isSucceed = false
+        this.showDialog = true
       }
+    },
+    sure () {
+      this.showDialog = false
+      utils.login(() => {
+        this.$store.commit(type._UPDATE, {isOnline: true})
+        utils.isOnline = true
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      })
     }
   },
   components: {
@@ -223,71 +183,8 @@ export default {
     }
     &__btn{
       display: flex;
-      padding:0 25px 25px;
+      padding:0 25px;
       justify-content: space-between;
-      .invitation-code, .get-lives, .share-success{
-        width: 322px;
-        height: 160px;
-        border-radius: 26px;
-        background-color:#fff;
-        padding: 25px 30px;
-        font-family: "Roboto";
-        .extra-lives{
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          color: #241262;
-          height: 36px;
-          margin-bottom:18px;
-          span{
-            display: block;
-            height: 36px;
-            line-height: 36px;
-
-          }
-          &__icon{
-            color: #f4387c;
-            font-size: 40px;
-            align-self: center;
-          }
-          &__text{
-            font-size: 28px;
-            margin: 0 24px 0 12px;
-          }
-          &__num{
-            font-size:40px ;
-          }
-        }
-        &__btn{
-          width: 100%;
-          height: 62px;
-          line-height: 62px;
-          color: #fff;
-          font-size: 24px;
-          text-align: center;
-          background-color: #f4387c;
-          border-radius: 46px;
-        }
-      }
-      .get-lives{
-        background: url("../assets/images/revive-card-before.png") no-repeat center;
-        background-size: cover;
-        color: #fff;
-        font-size: 28px;
-      }
-      .share-success{
-        background: url("../assets/images/revive-card-after.png") no-repeat center;
-        background-size: cover;
-        color: #fff;
-        font-size: 28px;
-        &__num{
-          width: 80%;
-          height: 100px;
-          line-height: 100px;
-          text-align: right;
-          font-size: 54px;
-        }
-      }
     }
     &__set{
       width: 656px;
@@ -320,58 +217,6 @@ export default {
         margin: 0 auto;
         font-family: 'Roboto', Arial, serif;
         font-weight: 400;
-      }
-    }
-    .invitation-mark {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 111;
-      padding: 0 25px;
-      background-color: rgba(68, 68, 68, 0.8);
-      .invitation-bomb {
-        width: 670px;
-        height: 320px;
-        background-color: #fff;
-        border-radius: 26px;
-        position: absolute;
-        bottom: 25px;
-        padding: 50px 0 40px;
-        color: #241262;
-        text-align: center;
-        font-family: "Roboto";
-        &__close{
-          position:absolute;
-          top: 24px;
-          right: 24px;
-          color: #241262;
-          font-size: 20px;
-        }
-        &__info{
-          font-size: 28px;
-          margin-bottom: 16px;
-        }
-        &__hint{
-          font-weight: 300;
-          margin-bottom: 54px;
-        }
-        &__channel{
-          display: flex;
-          margin: 0 148px;
-          justify-content: space-between;
-          .facebook, .message{
-            width: 96px;
-            height: 96px;
-            background: url("../assets/images/facebook.png") no-repeat center;
-            background-size: cover;
-          }
-          .message{
-            background: url("../assets/images/messenger.png") no-repeat center;
-            background-size: cover;
-          }
-        }
       }
     }
   }

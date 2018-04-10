@@ -64,90 +64,90 @@ export default {
 }
 </script>
 <style scoped lang="less" type="text/less">
-.balance-mark {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  &__wrap {
-    width: 602px;
-    background: #fff;
-    border-radius: 16px;
-    padding: 40px 45px;
-    box-sizing: border-box;
+  .balance-mark {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    position: relative;
-    .hint-icon{
-      width: 88px;
-      min-height: 88px;
-      margin:15px auto 26px;
-      &__img{
-        width: 100%;
-      }
-    }
-    &__title {
-      width: 100%;
-      font: 32px/30px 'Roboto', Arial, serif;
-      color: #000;
-      min-height: 40px;
-      margin: 10px auto;
-    }
-    &__description {
-      width: 100%;
-      font: 300 28px/30px 'Roboto', Arial, serif;
-      color: #000;
-      min-height: 40px;
-    }
-    &__invitation{
-      width: 100%;
-      height: 77px;
-      line-height: 77px;
-      border-radius: 46px;
-      background-color:#f4f3f7 ;
-      border: 0;
-      padding-left: 30px;
-      color:#241262 ;
-      font-size: 28px;
-      margin-top: 30px;
-    }
-    input::-webkit-input-placeholder{
-      width: 100%;
-      color: #241262;
-      opacity: 0.6;
-      text-align: center;
-      font-size: 24px;
-    }
-    &__btn {
-      width: 100%;
-      height: 77px;
+    text-align: center;
+    &__wrap {
+      width: 602px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 45px;
+      box-sizing: border-box;
       display: flex;
-      justify-content: space-around;
-      margin-top: 25px;
-      span {
-        display: inline-block;
-        width: 240px;
-        height: 100%;
-        border-radius: 38px;
-        color: #fff;
-        font: 300 24px 'Roboto', Arial, serif;
-        text-align: center;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      .hint-icon{
+        width: 88px;
+        min-height: 88px;
+        margin:15px auto 26px;
+        &__img{
+          width: 100%;
+        }
+      }
+      &__title {
+        width: 100%;
+        font: 32px/30px 'Roboto', Arial, serif;
+        color: #000;
+        min-height: 40px;
+        margin: 10px auto;
+      }
+      &__description {
+        width: 100%;
+        font: 300 28px/30px 'Roboto', Arial, serif;
+        color: #000;
+        min-height: 40px;
+      }
+      &__invitation{
+        width: 100%;
+        height: 77px;
         line-height: 77px;
+        border-radius: 46px;
+        background-color:#f4f3f7 ;
+        border: 0;
+        padding-left: 30px;
+        color:#241262 ;
+        font-size: 28px;
+        margin-top: 30px;
       }
-      &__ok {
-        background: rgba(250, 167, 23, 0.95);
+      input::-webkit-input-placeholder{
+        width: 100%;
+        color: #241262;
+        opacity: 0.6;
+        text-align: center;
+        font-size: 24px;
       }
-      &__cancel {
-        background: #fa5b23;
+      &__btn {
+        width: 100%;
+        height: 77px;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 25px;
+        span {
+          display: inline-block;
+          width: 240px;
+          height: 100%;
+          border-radius: 38px;
+          color: #fff;
+          font: 300 24px 'Roboto', Arial, serif;
+          text-align: center;
+          line-height: 77px;
+        }
+        &__ok {
+          background: rgba(250, 167, 23, 0.95);
+        }
+        &__cancel {
+          background: #fa5b23;
+        }
       }
     }
   }
-}
 </style>
