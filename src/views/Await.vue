@@ -21,7 +21,7 @@
         <div class="extra-lives">
           <span class="extra-lives__icon"></span>
           <span class="extra-lives__text">Extra Lives:</span>
-          <span class="extra-lives__num">0</span>
+          <span class="extra-lives__num">{{lives}}</span>
         </div>
         <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
       </div>
@@ -33,6 +33,7 @@
         <div class="share-success__base">
           <div class="share-success__base__icon">
             <img src="../assets/images/lives-icon.png" />
+            <img src="../assets/images/lives-icon.png"  class="top"/>
           </div>
           <span class="share-success__base__num">+1</span>
         </div>
@@ -54,7 +55,7 @@
           Your invitation code：
           <span>{{invitationCode}}</span>
         </p>
-        <p class="invitation-bomb__hint">Reward a Resurrection Card once a day</p>
+        <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
         <div class="invitation-bomb__channel">
           <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
           <div class="message" @click="shareInvitationCode('com.facebook.orca')"></div>
@@ -86,22 +87,25 @@ export default {
       isInvitation: false,
       isInputInvitation: false,
       dialogInfo: {
-        htmlTitle: 'Invitation code',
-        htmlText: 'Fill in the friend\'s invitation code and you and he will both add an extra lives',
+        htmlTitle: '',
+        htmlText: '',
         shouldSub: false,
-        markType: true,
+        markType: false,
         okBtnText: 'OK'
       },
       showDialog: false,
       isSucceed: false,
-      invitationCode: ''
+      invitationCode: '',
+      invitationBombHint: 'Reward a Resurrection Card once a day'
     }
   },
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
       startTime: 'startTime',
-      status: 'status'
+      status: 'status',
+      lives: 'lives',
+      code: 'code'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -135,6 +139,8 @@ export default {
       bodys.style.height = bodyHeight + 'px'
     })
     utils.statistic('wait_page', 0)
+    console.log('初始化' + utils.isOnline)
+    console.log(document.cookie)
   },
   methods: {
     inviteFriends () {
@@ -144,50 +150,147 @@ export default {
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
+    // facebook 点赞
     likeToFb (val) {
       this.btnStatistic(val)
       utils.toFbBrowser()
     },
+    // 获取邀请码分享到社交app
     getLives () {
-      api.generateCode().then(({data}) => {
-        this.invitationCode = data.data
-        console.log(data)
-      })
-      this.isInvitation = true
+      if (utils.isOnline) {
+        // 判断是否是第一次分享
+        if (localStorage.getItem('isFirstShare') && localStorage.getItem('firstTime')) {
+          let isFirst = localStorage.getItem('isFirstShare')
+          let duration = new Date().getTime() - localStorage.getItem('firstTime')
+          console.log(duration)
+          console.log(isFirst)
+          // 86400000 => 24h
+          if (duration > 100000) {
+            localStorage.setItem('isFirstShare', 'true')
+            this.invitationBombHint = 'Reward a Resurrection Card once a day'
+          } else {
+            if (isFirst === 'false') {
+              this.invitationBombHint = 'Invite friends to fill in the invitation code to get a resurrection card'
+            }
+          }
+        }
+        if (this.code) {
+          this.invitationCode = this.code
+          this.isInvitation = true
+        } else {
+          api.generateCode().then(({data}) => {
+            console.log('获取邀请码分享到社交app')
+            console.log(data)
+            if (data.result === 1) {
+              this.invitationCode = data.data
+              this.isInvitation = true
+            } else {
+              // 生成失败
+              this.dialogInfo.htmlTitle = data.msg + '生成失败'
+              this.dialogInfo.htmlText = ''
+              this.showDialog = true
+            }
+          }).catch((e) => {
+            // 生成失败
+            this.dialogInfo.htmlTitle = '生成失败'
+            this.dialogInfo.htmlText = ''
+            this.showDialog = true
+          })
+        }
+      } else {
+        utils.login(() => {
+          // 更新登陆状态
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.init()
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+        })
+      }
     },
+    // 调起输入邀请码弹框
     inputInvitation () {
-      // 调起输入邀请码弹框
-      this.isInputInvitation = true
-      this.showDialog = true
+      if (utils.isOnline) {
+        this.isInputInvitation = true
+        this.dialogInfo.markType = true
+        this.dialogInfo.htmlTitle = 'Invitation code'
+        this.dialogInfo.htmlText = 'Fill in the friend\'s invitation code and you and he will both add an extra lives'
+        this.showDialog = true
+      } else {
+        utils.login(() => {
+          // 更新登陆状态
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.init()
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+        })
+      }
     },
+    // 弹框ok
     okEvent (a, b) {
       this.showDialog = false
-      let codeInfo = {
-        code: b
+      if (this.isInputInvitation) {
+        if (!b) {
+          this.dialogInfo.htmlTitle = '请输入验证码'
+          this.dialogInfo.htmlText = ''
+          this.showDialog = true
+          return false
+        }
+        api.VerificationCode(b).then(({data}) => {
+          console.log(data)
+          if (data.result !== 1) {
+            this.dialogInfo.htmlTitle = data.msg + '验证失败'
+            this.dialogInfo.htmlText = ''
+            this.dialogInfo.markType = false
+            this.showDialog = true
+          }
+        }).catch((e) => {
+          this.dialogInfo.htmlTitle = '验证失败'
+          this.dialogInfo.htmlText = ''
+          this.dialogInfo.markType = false
+          this.showDialog = true
+        })
+        this.isInputInvitation = false
       }
-      api.VerificationCode(codeInfo).then(({data}) => {
-        console.log(data)
-      })
     },
+    // 弹框cancel
     cancelEvent () {
       this.showDialog = false
+      this.dialogInfo.markType = false
+      this.isInputInvitation = false
     },
+    // 分享邀请码
     shareInvitationCode (value) {
       // 分享
       utils.share(this.callbackFn, value)
     },
     // 分享后的回调
-    callbackFn (isSucceed, packageName) {
+    callbackFn (isSucceed) {
       this.isInvitation = false
       if (isSucceed) {
         // 成功回调
         this.isSucceed = true
         setTimeout(() => {
           this.isSucceed = false
-        }, 1000)
+        }, 3000)
+        localStorage.setItem('isFirstShare', 'false')
+        localStorage.setItem('firstTime', new Date().getTime())
+        api.DailyShare().then(({data}) => {
+          // 加生命失败
+          if (data.result !== 1) {
+            this.dialogInfo.htmlTitle = data.msg + '加生命失败'
+            this.showDialog = true
+          }
+        }).catch((e) => {
+          this.dialogInfo.htmlTitle = '加生命失败'
+          this.showDialog = true
+        })
       } else {
         // 失败回调
         this.isSucceed = false
+        this.isInputInvitation = false
+        this.dialogInfo.htmlText = ''
+        this.dialogInfo.htmlTitle = '分享失败'
+        this.showDialog = true
       }
     }
   },
@@ -309,8 +412,14 @@ export default {
           &__icon{
             display: block;
             width: 86px;
+            position: relative;
             img{
               width: 100%;
+            }
+            .top{
+              position: absolute;
+              top:0;
+              animation: lives 1.5s ease-in-out 0s infinite;
             }
           }
           &__num{
@@ -408,6 +517,22 @@ export default {
           }
         }
       }
+    }
+  }
+  @keyframes lives {
+    0%{
+      transform: scale(1);
+    }
+    15%{
+      transform: scale(1.2);
+    }
+    25%{
+      transform: scale(1);
+      opacity: 1;
+    }
+    90%{
+      transform: scale(2);
+      opacity: 0;
     }
   }
 </style>
