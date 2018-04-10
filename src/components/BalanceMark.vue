@@ -54,8 +54,9 @@ export default {
     okEvent () {
       if (this.invitationCode !== '') {
         this.$emit('okEvent', this.dataInfo.shouldSub, this.invitationCode)
+      } else {
+        this.$emit('okEvent', this.dataInfo.shouldSub)
       }
-      this.$emit('okEvent', this.dataInfo.shouldSub)
     },
     cancelEvent () {
       this.$emit('cancelEvent', this.dataInfo.shouldSub)
