@@ -93,7 +93,8 @@ export default {
       showDialog: false,
       isSucceed: false,
       invitationCode: '',
-      invitationBombHint: ''
+      invitationBombHint: '',
+      logout: false
     }
   },
   computed: {
@@ -102,8 +103,7 @@ export default {
       startTime: 'startTime',
       status: 'status',
       lives: 'lives',
-      code: 'code',
-      logout: true
+      code: 'code'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -215,6 +215,7 @@ export default {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
+          this.logout = false
           this.btnStatistic('issue_page')
           this.$router.push({path: '/set-question'})
         })
