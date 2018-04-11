@@ -25,10 +25,10 @@
         </div>
         <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
       </div>
-      <div class="get-lives" @click="getLives" v-if="!isSucceed">
+      <div class="get-lives" @click="getLives" ref="getLivesCard" v-show="!isSucceed">
         <div class="get-lives__text">Get More</div>
       </div>
-      <div class="share-success" v-else>
+      <div class="share-success" ref="shareSuccessCard" v-show="isSucceed">
         <div class="share-success__text">Share success</div>
         <div class="share-success__base">
           <div class="share-success__base__icon">
@@ -96,7 +96,7 @@ export default {
       showDialog: false,
       isSucceed: false,
       invitationCode: '',
-      invitationBombHint: 'Reward a Resurrection Card once a day'
+      invitationBombHint: ''
     }
   },
   computed: {
@@ -162,8 +162,7 @@ export default {
         if (localStorage.getItem('isFirstShare') && localStorage.getItem('firstTime')) {
           let isFirst = localStorage.getItem('isFirstShare')
           let duration = new Date().getTime() - localStorage.getItem('firstTime')
-          console.log(duration)
-          console.log(isFirst)
+          console.log('第一次分享localStorage' + duration + '----' + isFirst)
           // 86400000 => 24h
           if (duration > 100000) {
             localStorage.setItem('isFirstShare', 'true')
@@ -174,36 +173,30 @@ export default {
             }
           }
         }
+        console.log('初始化code' + this.code)
         if (this.code) {
           this.invitationCode = this.code
           this.isInvitation = true
         } else {
           api.generateCode().then(({data}) => {
-            console.log('获取邀请码分享到社交app')
-            console.log(data)
+            console.log('获取邀请码分享到社交app' + data.msg + '--' + data.data)
             if (data.result === 1) {
               this.invitationCode = data.data
               this.isInvitation = true
             } else {
               // 生成失败
-              this.dialogInfo.htmlTitle = data.msg + '生成失败'
-              this.dialogInfo.htmlText = ''
-              this.showDialog = true
+              this.BobmParamesConfig(data.msg + '生成失败', '', false, true)
             }
           }).catch((e) => {
-            // 生成失败
-            this.dialogInfo.htmlTitle = '生成失败'
-            this.dialogInfo.htmlText = ''
-            this.showDialog = true
+            this.BobmParamesConfig('生成失败', '', false, true)
           })
         }
       } else {
         utils.login(() => {
-          // 更新登陆状态
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
-          this.init()
           utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+          this.$store.dispatch(type._INIT)
         })
       }
     },
@@ -211,17 +204,14 @@ export default {
     inputInvitation () {
       if (utils.isOnline) {
         this.isInputInvitation = true
-        this.dialogInfo.markType = true
-        this.dialogInfo.htmlTitle = 'Invitation code'
-        this.dialogInfo.htmlText = 'Fill in the friend\'s invitation code and you and he will both add an extra lives'
-        this.showDialog = true
+        this.BobmParamesConfig('Invitation code',
+          'Fill in the friend\'s invitation code and you and he will both add an extra lives', true, true)
       } else {
         utils.login(() => {
-          // 更新登陆状态
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
-          this.init()
           utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+          this.$store.dispatch(type._INIT)
         })
       }
     },
@@ -230,68 +220,71 @@ export default {
       this.showDialog = false
       if (this.isInputInvitation) {
         if (!b) {
-          this.dialogInfo.htmlTitle = '请输入验证码'
-          this.dialogInfo.htmlText = ''
-          this.showDialog = true
+          this.BobmParamesConfig('请输入验证码', '', false, true)
           return false
         }
         api.VerificationCode(b).then(({data}) => {
+          console.log('验证码校验' + data.result)
           console.log(data)
           if (data.result !== 1) {
-            this.dialogInfo.htmlTitle = data.msg + '验证失败'
-            this.dialogInfo.htmlText = ''
-            this.dialogInfo.markType = false
-            this.showDialog = true
+            this.BobmParamesConfig(data.msg + '验证失败', '', false, true)
           }
-        }).catch((e) => {
-          this.dialogInfo.htmlTitle = '验证失败'
-          this.dialogInfo.htmlText = ''
-          this.dialogInfo.markType = false
-          this.showDialog = true
+        }).catch(() => {
+          this.BobmParamesConfig('验证失败', '', false, true)
         })
         this.isInputInvitation = false
       }
     },
     // 弹框cancel
     cancelEvent () {
-      this.showDialog = false
-      this.dialogInfo.markType = false
+      this.BobmParamesConfig('', '', false, false)
       this.isInputInvitation = false
     },
     // 分享邀请码
     shareInvitationCode (value) {
-      // 分享
       utils.share(this.callbackFn, value)
     },
     // 分享后的回调
     callbackFn (isSucceed) {
+      console.log('分享的回调' + isSucceed)
       this.isInvitation = false
       if (isSucceed) {
+        console.log('分享成功 - ' + this.isSucceed)
         // 成功回调
         this.isSucceed = true
+        console.log(this.$refs.shareSuccess)
+        // setTimeout(() => {
+        //   this.$refs.shareSuccess.style.opacity = 0
+        // }, 2000)
         setTimeout(() => {
           this.isSucceed = false
         }, 3000)
         localStorage.setItem('isFirstShare', 'false')
         localStorage.setItem('firstTime', new Date().getTime())
         api.DailyShare().then(({data}) => {
+          console.log('分享成功请求api结果' + data.result)
+          console.log(data)
           // 加生命失败
           if (data.result !== 1) {
-            this.dialogInfo.htmlTitle = data.msg + '加生命失败'
-            this.showDialog = true
+            this.BobmParamesConfig(data.msg + '加生命失败', '', false, true)
           }
-        }).catch((e) => {
-          this.dialogInfo.htmlTitle = '加生命失败'
-          this.showDialog = true
+        }).catch(() => {
+          this.BobmParamesConfig('加生命失败', '', false, true)
         })
       } else {
         // 失败回调
+        console.log('分享失败')
         this.isSucceed = false
         this.isInputInvitation = false
-        this.dialogInfo.htmlText = ''
-        this.dialogInfo.htmlTitle = '分享失败'
-        this.showDialog = true
+        this.BobmParamesConfig('分享失败', '', false, true)
       }
+    },
+    // 调起弹框参数配置
+    BobmParamesConfig (title, text, markType, isShow) {
+      this.dialogInfo.htmlTitle = title
+      this.dialogInfo.htmlText = text
+      this.dialogInfo.markType = markType
+      this.showDialog = isShow
     }
   },
   components: {
@@ -399,12 +392,15 @@ export default {
         background-size: cover;
         color: #fff;
         font-size: 28px;
+        transition:opacity 300ms linear 2s;
       }
       .share-success{
         background: url("../assets/images/revive-card-after.png") no-repeat center;
         background-size: cover;
         color: #fff;
         font-size: 28px;
+        opacity: 1;
+        transition:opacity 500ms linear 2s;
         &__base{
           display: flex;
           justify-content: center;

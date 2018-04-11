@@ -128,9 +128,7 @@ export default new Vuex.Store({
               incomeShow: accountInfo.sui || '',
               rank: +accountInfo.ur || 0,
               bonusAmount,
-              currencyType: currency[currencyType] ? currency[currencyType].symbol : '$',
-              lives,
-              code
+              currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
             commit(type._UPDATE, {
               startTime,
@@ -138,7 +136,9 @@ export default new Vuex.Store({
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
-              hostIntervalTime
+              hostIntervalTime,
+              lives,
+              code
             })
             // 如果已经开始
             if (isPlaying) {
