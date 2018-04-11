@@ -68,7 +68,6 @@
     </balance-mark>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
@@ -303,8 +302,15 @@ export default {
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
-    }
   },
+    getSetQuestin () {
+      if (utils.isOnline) {
+        btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      } else {
+        this.showDialog = true
+      }
+    },
   components: {
     BaseBtn,
     NextTime,
