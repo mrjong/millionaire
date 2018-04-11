@@ -302,15 +302,8 @@ export default {
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
+    }
   },
-    getSetQuestin () {
-      if (utils.isOnline) {
-        btnStatistic('issue_page')
-        this.$router.push({path: '/set-question'})
-      } else {
-        this.showDialog = true
-      }
-    },
   components: {
     BaseBtn,
     NextTime,
