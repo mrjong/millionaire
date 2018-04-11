@@ -216,6 +216,7 @@ export default {
     // 弹框ok
     okEvent (a, b) {
       this.showDialog = false
+      console.log('logout' + this.logout)
       if (this.logout) {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
