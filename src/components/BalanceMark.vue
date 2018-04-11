@@ -6,6 +6,10 @@
       </p>
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
       <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
+      <input type="text"
+             placeholder="Fill in the invitation code"
+             class="balance-mark__wrap__invitation"
+             v-if="isInvitation" v-model="invitationCode">
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
         <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
@@ -25,10 +29,15 @@ export default {
     },
     height: {
       type: Number
+    },
+    isInvitation: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
+      invitationCode: ''
     }
   },
   computed: {
@@ -43,7 +52,11 @@ export default {
   mounted () {},
   methods: {
     okEvent () {
-      this.$emit('okEvent', this.dataInfo.shouldSub)
+      if (this.invitationCode !== '') {
+        this.$emit('okEvent', this.dataInfo.shouldSub, this.invitationCode)
+      } else {
+        this.$emit('okEvent', this.dataInfo.shouldSub)
+      }
     },
     cancelEvent () {
       this.$emit('cancelEvent', this.dataInfo.shouldSub)

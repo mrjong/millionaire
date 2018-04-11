@@ -58,7 +58,9 @@ export default new Vuex.Store({
       markType: 0,
       okBtnText: 'OK',
       hintImg: './static/images/tip-fail.png'
-    }
+    },
+    lives: 0,
+    code: ''
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -72,7 +74,9 @@ export default new Vuex.Store({
     readyTime: (state) => state.readyTime,
     isRefreshedToken: (state) => state.isRefreshedToken,
     showDialog: (state) => state.showDialog,
-    dialogInfo: (state) => state.dialogInfo
+    dialogInfo: (state) => state.dialogInfo,
+    lives: (state) => state.lives,
+    code: (state) => state.code
   },
   mutations: {
     /**
@@ -105,8 +109,9 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           if (data.result === 1 && +data.code === 0) {
+            console.log(data.data)
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, v: watchingMode, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
             // 更新首页信息
@@ -131,7 +136,9 @@ export default new Vuex.Store({
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
-              hostIntervalTime
+              hostIntervalTime,
+              lives,
+              code
             })
             commit(type.QUESTION_UPDATE, {
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
