@@ -39,12 +39,10 @@
         </div>
       </div>
     </div>
-    <router-link to="/set-question">
-      <div class="await__set" @click="btnStatistic('issue_page')">
-        <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-        <p class="await__set__text">Set Questions Myself</p>
-      </div>
-    </router-link>
+    <div class="await__set" @click="getSetQuestion">
+      <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
+      <p class="await__set__text">Set Questions Myself</p>
+    </div>
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
@@ -105,7 +103,8 @@ export default {
       startTime: 'startTime',
       status: 'status',
       lives: 'lives',
-      code: 'code'
+      code: 'code',
+      logout: true
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -218,6 +217,14 @@ export default {
     // 弹框ok
     okEvent (a, b) {
       this.showDialog = false
+      if (this.logout) {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.btnStatistic('issue_page')
+          this.$router.push({path: '/set-question'})
+        })
+      }
       if (this.isInputInvitation) {
         if (!b) {
           this.BobmParamesConfig('请输入验证码', '', false, true)
@@ -277,6 +284,17 @@ export default {
         this.isSucceed = false
         this.isInputInvitation = false
         this.BobmParamesConfig('分享失败', '', false, true)
+      }
+    },
+    // 设置问题
+    getSetQuestion () {
+      if (utils.isOnline) {
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      } else {
+        this.logout = true
+        this.BobmParamesConfig('',
+          'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
       }
     },
     // 调起弹框参数配置
