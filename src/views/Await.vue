@@ -137,14 +137,9 @@ export default {
       bodys.style.height = bodyHeight + 'px'
     })
     utils.statistic('wait_page', 0)
-    console.log('初始化' + utils.isOnline)
-    console.log(document.cookie)
   },
   methods: {
-    inviteFriends () {
-      utils.share()
-      utils.statistic('millionaire', 3, {}, 'wait_page')
-    },
+    // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
@@ -162,7 +157,7 @@ export default {
           let duration = new Date().getTime() - localStorage.getItem('firstTime')
           console.log('第一次分享localStorage' + duration + '----' + isFirst)
           // 86400000 => 24h
-          if (duration > 100000) {
+          if (duration > 86400000) {
             localStorage.setItem('isFirstShare', 'true')
             this.invitationBombHint = 'Reward a Resurrection Card once a day'
           } else {
@@ -182,18 +177,17 @@ export default {
               this.invitationCode = data.data
               this.isInvitation = true
             } else {
-              // 生成失败
-              this.BobmParamesConfig(data.msg + '生成失败', '', false, true)
+              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
             }
           }).catch((e) => {
-            this.BobmParamesConfig('生成失败', '', false, true)
+            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
           })
         }
       } else {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
-          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+          utils.statistic('await_page', 1, {'result_code_s': '1'}, 'login_page')
           this.$store.dispatch(type._INIT)
         })
       }
@@ -227,17 +221,27 @@ export default {
       }
       if (this.isInputInvitation) {
         if (!b) {
-          this.BobmParamesConfig('请输入验证码', '', false, true)
+          this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
           return false
         }
         api.VerificationCode(b).then(({data}) => {
-          console.log('验证码校验' + data.result)
+          console.log('验证码校验')
           console.log(data)
-          if (data.result !== 1) {
-            this.BobmParamesConfig(data.msg + '验证失败', '', false, true)
+          if (data.result === 1) {
+            this.$store.dispatch(type._INIT)
+          } else {
+            if (data.code === 404) {
+              this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
+            } else if (data.code === 30100) {
+              this.BobmParamesConfig('', 'You\'ve already applied a referral code. You may only do this once.', false, true)
+            } else if (data.code === 30101) {
+              this.BobmParamesConfig('', 'This referral code expired.', false, true)
+            } else if (data.code === 30102) {
+              this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
+            }
           }
         }).catch(() => {
-          this.BobmParamesConfig('验证失败', '', false, true)
+          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
         })
         this.isInputInvitation = false
       }
@@ -256,10 +260,7 @@ export default {
       console.log('分享的回调' + isSucceed)
       this.isInvitation = false
       if (isSucceed) {
-        console.log('分享成功 - ' + this.isSucceed)
-        // 成功回调
         this.isSucceed = true
-        console.log(this.$refs.shareSuccess)
         // setTimeout(() => {
         //   this.$refs.shareSuccess.style.opacity = 0
         // }, 2000)
@@ -269,24 +270,22 @@ export default {
         localStorage.setItem('isFirstShare', 'false')
         localStorage.setItem('firstTime', new Date().getTime())
         api.DailyShare().then(({data}) => {
-          console.log('分享成功请求api结果' + data.result)
+          console.log('分享成功请求api结果')
           console.log(data)
           if (data.result === 1) {
             this.$store.dispatch(type._INIT)
-          }
-          // 加生命失败
-          if (data.result !== 1) {
-            this.BobmParamesConfig(data.msg + '加生命失败', '', false, true)
+          } else {
+            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
           }
         }).catch(() => {
-          this.BobmParamesConfig('加生命失败', '', false, true)
+          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
         })
       } else {
         // 失败回调
         console.log('分享失败')
         this.isSucceed = false
         this.isInputInvitation = false
-        this.BobmParamesConfig('分享失败', '', false, true)
+        this.BobmParamesConfig('', 'Failed to share, please try again later.', false, true)
       }
     },
     // 设置问题
