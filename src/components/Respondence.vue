@@ -90,6 +90,7 @@ export default {
   },
   mounted () {
     this.countDown(this.question_status)
+    this.isClick = this.isAnswered
     utils.statistic('game_page', 0)
   },
   methods: {
@@ -109,7 +110,10 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
+          const userAnswerInfo = {userAnswer: e, isAnswered: true}
+          this.$store.commit(type.QUESTION_UPDATE, userAnswerInfo)
+          // 作答情况存储在本地
+          localStorage.setItem('millionaire_user_answer', JSON.stringify({...userAnswerInfo, id: this.id, index: this.index, expire: Date.now() + 180000}))
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
             this.$emit('error', err)
           })
@@ -173,6 +177,9 @@ export default {
         // 答题倒计时
         utils.playSound('countDown5')
       }
+    },
+    isAnswered: function (val) {
+      this.isClick = val
     }
   },
   components: {

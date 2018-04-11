@@ -14,6 +14,7 @@ export const api = {
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
   log: '/cmp/l/', // 日志
+  pollMsg: '/cmp/q/', // 轮询消息
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
   DailyShare: '/cmp/ds' // 每日分享
@@ -95,6 +96,17 @@ export const syncInfo = function () {
       app_id: utils.app_id,
       client_id: utils.clientId
     }
+  })
+}
+
+// 轮询消息
+export const pollMsg = function () {
+  return axios.get(api.pollMsg, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    },
+    timeout: 5000
   })
 }
 

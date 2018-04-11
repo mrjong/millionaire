@@ -111,7 +111,7 @@ export default new Vuex.Store({
           if (data.result === 1 && +data.code === 0) {
             console.log(data.data)
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
             // 更新首页信息
@@ -140,6 +140,9 @@ export default new Vuex.Store({
               lives,
               code
             })
+            commit(type.QUESTION_UPDATE, {
+              watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
+            })
             // 如果已经开始
             if (isPlaying) {
               // 如果已经开始串词
@@ -161,15 +164,10 @@ export default new Vuex.Store({
                   index: +question.js || 0,
                   contents: question.jc || '',
                   options,
-                  optionsMd5Map,
-                  watchingMode: true
+                  optionsMd5Map
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_ANSWERING
-                })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
                 })
               }
               // 如果有答案直接进入答案页面
@@ -182,13 +180,9 @@ export default new Vuex.Store({
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
                 })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
-                })
               }
 
-              if (question || answer) {
+              if (getters.watchingMode) {
                 dispatch(type._OPEN_DIALOG, {
                   htmlTitle: 'You are late.',
                   htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
@@ -197,6 +191,11 @@ export default new Vuex.Store({
                   okBtnText: 'Continue'
                 })
               }
+
+              // 更新当前状态
+              commit(type._UPDATE, {
+                status: status._PLAYING
+              })
             } else {
               // 是否进入倒计时
               if (isInRoom) {
@@ -241,6 +240,7 @@ export default new Vuex.Store({
             }
             // 如果聊天室开启，进入聊天室
             if (isInRoom) {
+              im.startPullMsg()
               im.addListener(CONNECT_SUCCESS, (imUserId) => {
                 commit(type.HOME_UPDATE, {
                   imUserId
