@@ -270,6 +270,9 @@ export default {
         api.DailyShare().then(({data}) => {
           console.log('分享成功请求api结果' + data.result)
           console.log(data)
+          if (data.result === 1) {
+            this.$store.dispatch(type._INIT)
+          }
           // 加生命失败
           if (data.result !== 1) {
             this.BobmParamesConfig(data.msg + '加生命失败', '', false, true)
@@ -302,15 +305,8 @@ export default {
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
+    }
   },
-    getSetQuestin () {
-      if (utils.isOnline) {
-        btnStatistic('issue_page')
-        this.$router.push({path: '/set-question'})
-      } else {
-        this.showDialog = true
-      }
-    },
   components: {
     BaseBtn,
     NextTime,
