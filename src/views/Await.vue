@@ -68,7 +68,6 @@
     </balance-mark>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
