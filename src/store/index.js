@@ -106,7 +106,7 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, v: watchingMode, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
             // 更新首页信息
@@ -133,6 +133,9 @@ export default new Vuex.Store({
               imToken: chatRoomInfo.it || '',
               hostIntervalTime
             })
+            commit(type.QUESTION_UPDATE, {
+              watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
+            })
             // 如果已经开始
             if (isPlaying) {
               // 如果已经开始串词
@@ -154,8 +157,7 @@ export default new Vuex.Store({
                   index: +question.js || 0,
                   contents: question.jc || '',
                   options,
-                  optionsMd5Map,
-                  watchingMode: true
+                  optionsMd5Map
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_ANSWERING
@@ -173,7 +175,7 @@ export default new Vuex.Store({
                 })
               }
 
-              if (question || answer) {
+              if (getters.watchingMode) {
                 dispatch(type._OPEN_DIALOG, {
                   htmlTitle: 'You are late.',
                   htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',

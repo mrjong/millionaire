@@ -266,17 +266,22 @@ const im = {
    */
   startPullMsg () {
     clearInterval(im.pullMsgTimer)
-    im.pullMsgTimer = setInterval(() => {
-      pollMsg().then(({data}) => {
-        if (+data.result === 1 && +data.code === 0) {
-          im.pollMsgHandler(data.data)
-        } else {
-          console.log('拉去消息失败', data.msg)
-        }
-      }, (err) => {
-        console.log('拉取消息出错', err)
-      })
-    }, 1000)
+    im.pullMsgTimer = setInterval(im.pullMsg, 1000)
+  },
+
+  /**
+   * 拉取消息
+   */
+  pullMsg () {
+    pollMsg().then(({data}) => {
+      if (+data.result === 1 && +data.code === 0) {
+        im.pollMsgHandler(data.data)
+      } else {
+        console.log('拉去消息失败', data.msg)
+      }
+    }, (err) => {
+      console.log('拉取消息出错', err)
+    })
   },
 
   /**
@@ -290,7 +295,7 @@ const im = {
    * 轮询消息处理
    */
   pollMsgHandler (data = {}) {
-    const {i: msgId, t: msgType, d: msg = {}} = data
+    const {i: msgId, t: msgType, d: msg = {}, l: validTime} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
       switch (msgType) {
         case 1: { // 串词消息
@@ -303,9 +308,13 @@ const im = {
           break
         }
         case 2: { // 题目消息
+          const restTime = parseInt(validTime / 1000)
           im.emitListener(type.MESSAGE_QUESTION, {
             content: {
-              content: JSON.stringify(msg)
+              content: JSON.stringify({
+                ...msg,
+                restTime: restTime >= 10 ? 10 : restTime
+              })
             }
           })
           break

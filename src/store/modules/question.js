@@ -72,7 +72,7 @@ const actions = {
       const content = (message.content && message.content.content) || ''
       if (content) {
         const question = JSON.parse(content)
-        const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        const {ji: id = '', js: index = 1, jc: contents = '', jo: options = [], restTime} = question
         utils.statistic('QUESTION', 6, {
           flag_s: `${id}`,
           text_s: `${index}`,
@@ -91,8 +91,9 @@ const actions = {
           return Math.random() > 0.5 ? 1 : -1
         })
         commit(type.QUESTION_UPDATE, {
-          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options)
+          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
         })
+        dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
         dispatch(type.QUESTION_START)
       }
     })
@@ -103,11 +104,7 @@ const actions = {
    * @param {any} {commit, getters}
    */
   [type.QUESTION_START] ({commit, getters, rootGetters}) {
-    const {time} = getters
-    commit(type.QUESTION_UPDATE, {
-      restTime: time
-    })
-    const timer = utils.Timer(1000, time * 1000)
+    const timer = utils.Timer(1000, getters.restTime * 1000)
     timer.addCompleteListener(() => {
       if (getters.restTime > 0) {
         commit(type.QUESTION_UPDATE, {
@@ -191,6 +188,7 @@ const actions = {
         commit(type.QUESTION_UPDATE, {
           ...question, optionsMd5Map: utils.generateMd5Map(question.options)
         })
+        dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
       }
 
       const md5Map = getters.optionsMd5Map
@@ -236,7 +234,7 @@ const actions = {
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0
+          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -250,6 +248,27 @@ const actions = {
         })
       }
     })
+  },
+  /**
+   * 同步本地答案信息
+   * @param {any} {commit, getters}
+   */
+  [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
+    // 从本地获取用户作答情况
+    const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
+    if (userAnswerInfoStr) {
+      const userAnswerInfo = JSON.parse(userAnswerInfoStr)
+      const {expire, id, index, isAnswered, userAnswer} = userAnswerInfo
+      // 若本地存储的答案信息与当前题目一致，则同步答案信息
+      if (expire > Date.now() && id === getters.id && index === getters.index) {
+        commit(type.QUESTION_UPDATE, {
+          id,
+          index,
+          isAnswered,
+          userAnswer
+        })
+      }
+    }
   },
   [type.QUESTION_YOU_WON] ({commit}, question) {
     commit(type.QUESTION_UPDATE, question)
