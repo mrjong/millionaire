@@ -70,14 +70,15 @@ export default {
     if (njordGame) {
       window.top.loginCallback = callback
       const loginArgs = JSON.stringify({
-        callbackMethod: 'loginSuccess()'
+        callbackMethod: 'loginSuccess()',
+        from_source: 'million_aire'
       })
       njordGame.login && njordGame.login(loginArgs)
     }
   },
 
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100010000'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '8a97020c66d888510110666fe2adf037',
+  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : 'da8b8fdef4913be60044726055514db0',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
@@ -127,10 +128,10 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share (callback) {
+  share (callback, packageName) {
     window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-      sharePackage: '',
+      sharePackage: packageName,
       shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
       shareContent: 'Win real cash up to Rs. 1,000,000!',
       shareLink: 'https://goo.gl/t6jWBU',

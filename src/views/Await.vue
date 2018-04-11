@@ -16,23 +16,58 @@
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <div class="await__set" @click="getSetQuestin">
+    <div class="await__btn">
+      <div class="invitation-code">
+        <div class="extra-lives">
+          <span class="extra-lives__icon"></span>
+          <span class="extra-lives__text">Extra Lives:</span>
+          <span class="extra-lives__num">{{lives}}</span>
+        </div>
+        <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
+      </div>
+      <div class="get-lives" @click="getLives" ref="getLivesCard" v-show="!isSucceed">
+        <div class="get-lives__text">Get More</div>
+      </div>
+      <div class="share-success" ref="shareSuccessCard" v-show="isSucceed">
+        <div class="share-success__text">Share success</div>
+        <div class="share-success__base">
+          <div class="share-success__base__icon">
+            <img src="../assets/images/lives-icon.png" />
+            <img src="../assets/images/lives-icon.png"  class="top"/>
+          </div>
+          <span class="share-success__base__num">+1</span>
+        </div>
+      </div>
+    </div>
+    <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
-    </div>
-    <div class="await__btn">
-      <router-link to="/rank">
-        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
-      </router-link>
-      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
     </div>
     <div class="await__bottom">
       <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
     </div>
-    <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <div class="invitation-mark" v-if="isInvitation">
+      <div class="invitation-bomb">
+        <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
+        <p class="invitation-bomb__info">
+          Your invitation code：
+          <span>{{invitationCode}}</span>
+        </p>
+        <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
+        <div class="invitation-bomb__channel">
+          <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
+          <div class="message" @click="shareInvitationCode('com.facebook.orca')"></div>
+        </div>
+      </div>
+    </div>
+    <balance-mark v-if="showDialog"
+                  :data-info="dialogInfo"
+                  :isInvitation = isInputInvitation
+                  @okEvent='okEvent'
+                  @cancelEvent = 'cancelEvent'>
+    </balance-mark>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
@@ -41,33 +76,34 @@ import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
 export default {
   name: 'Await',
   data () {
     return {
-      baseStyle1: {
-        text: 'Share with friends',
-        bgColor: '#dc427a'
-      },
-      baseStyle2: {
-        text: 'Leaderboard',
-        bgColor: '#4c08f3'
-      },
+      isInvitation: false,
+      isInputInvitation: false,
       dialogInfo: {
         htmlTitle: '',
-        htmlText: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!',
+        htmlText: '',
         shouldSub: false,
-        markType: 0,
-        okBtnText: 'OK',
-        hintImg: ''
+        markType: false,
+        okBtnText: 'OK'
       },
+      showDialog: false,
+      isSucceed: false,
+      invitationCode: '',
+      invitationBombHint: ''
     }
   },
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
       startTime: 'startTime',
-      status: 'status'
+      status: 'status',
+      lives: 'lives',
+      code: 'code',
+      logout: true
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -101,6 +137,8 @@ export default {
       bodys.style.height = bodyHeight + 'px'
     })
     utils.statistic('wait_page', 0)
+    console.log('初始化' + utils.isOnline)
+    console.log(document.cookie)
   },
   methods: {
     inviteFriends () {
@@ -110,10 +148,161 @@ export default {
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
+    // facebook 点赞
     likeToFb (val) {
       this.btnStatistic(val)
       utils.toFbBrowser()
     },
+    // 获取邀请码分享到社交app
+    getLives () {
+      if (utils.isOnline) {
+        // 判断是否是第一次分享
+        if (localStorage.getItem('isFirstShare') && localStorage.getItem('firstTime')) {
+          let isFirst = localStorage.getItem('isFirstShare')
+          let duration = new Date().getTime() - localStorage.getItem('firstTime')
+          console.log('第一次分享localStorage' + duration + '----' + isFirst)
+          // 86400000 => 24h
+          if (duration > 100000) {
+            localStorage.setItem('isFirstShare', 'true')
+            this.invitationBombHint = 'Reward a Resurrection Card once a day'
+          } else {
+            if (isFirst === 'false') {
+              this.invitationBombHint = 'Invite friends to fill in the invitation code to get a resurrection card'
+            }
+          }
+        }
+        console.log('初始化code' + this.code)
+        if (this.code) {
+          this.invitationCode = this.code
+          this.isInvitation = true
+        } else {
+          api.generateCode().then(({data}) => {
+            console.log('获取邀请码分享到社交app' + data.msg + '--' + data.data)
+            if (data.result === 1) {
+              this.invitationCode = data.data
+              this.isInvitation = true
+            } else {
+              // 生成失败
+              this.BobmParamesConfig(data.msg + '生成失败', '', false, true)
+            }
+          }).catch((e) => {
+            this.BobmParamesConfig('生成失败', '', false, true)
+          })
+        }
+      } else {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+          this.$store.dispatch(type._INIT)
+        })
+      }
+    },
+    // 调起输入邀请码弹框
+    inputInvitation () {
+      if (utils.isOnline) {
+        this.isInputInvitation = true
+        this.BobmParamesConfig('Invitation code',
+          'Fill in the friend\'s invitation code and you and he will both add an extra lives', true, true)
+      } else {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+          this.$store.dispatch(type._INIT)
+        })
+      }
+    },
+    // 弹框ok
+    okEvent (a, b) {
+      this.showDialog = false
+      if (this.logout) {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.btnStatistic('issue_page')
+          this.$router.push({path: '/set-question'})
+        })
+      }
+      if (this.isInputInvitation) {
+        if (!b) {
+          this.BobmParamesConfig('请输入验证码', '', false, true)
+          return false
+        }
+        api.VerificationCode(b).then(({data}) => {
+          console.log('验证码校验' + data.result)
+          console.log(data)
+          if (data.result !== 1) {
+            this.BobmParamesConfig(data.msg + '验证失败', '', false, true)
+          }
+        }).catch(() => {
+          this.BobmParamesConfig('验证失败', '', false, true)
+        })
+        this.isInputInvitation = false
+      }
+    },
+    // 弹框cancel
+    cancelEvent () {
+      this.BobmParamesConfig('', '', false, false)
+      this.isInputInvitation = false
+    },
+    // 分享邀请码
+    shareInvitationCode (value) {
+      utils.share(this.callbackFn, value)
+    },
+    // 分享后的回调
+    callbackFn (isSucceed) {
+      console.log('分享的回调' + isSucceed)
+      this.isInvitation = false
+      if (isSucceed) {
+        console.log('分享成功 - ' + this.isSucceed)
+        // 成功回调
+        this.isSucceed = true
+        console.log(this.$refs.shareSuccess)
+        // setTimeout(() => {
+        //   this.$refs.shareSuccess.style.opacity = 0
+        // }, 2000)
+        setTimeout(() => {
+          this.isSucceed = false
+        }, 3000)
+        localStorage.setItem('isFirstShare', 'false')
+        localStorage.setItem('firstTime', new Date().getTime())
+        api.DailyShare().then(({data}) => {
+          console.log('分享成功请求api结果' + data.result)
+          console.log(data)
+          // 加生命失败
+          if (data.result !== 1) {
+            this.BobmParamesConfig(data.msg + '加生命失败', '', false, true)
+          }
+        }).catch(() => {
+          this.BobmParamesConfig('加生命失败', '', false, true)
+        })
+      } else {
+        // 失败回调
+        console.log('分享失败')
+        this.isSucceed = false
+        this.isInputInvitation = false
+        this.BobmParamesConfig('分享失败', '', false, true)
+      }
+    },
+    // 设置问题
+    getSetQuestion () {
+      if (utils.isOnline) {
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      } else {
+        this.logout = true
+        this.BobmParamesConfig('',
+          'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
+      }
+    },
+    // 调起弹框参数配置
+    BobmParamesConfig (title, text, markType, isShow) {
+      this.dialogInfo.htmlTitle = title
+      this.dialogInfo.htmlText = text
+      this.dialogInfo.markType = markType
+      this.showDialog = isShow
+  },
     getSetQuestin () {
       if (utils.isOnline) {
         btnStatistic('issue_page')
@@ -122,16 +311,6 @@ export default {
         this.showDialog = true
       }
     },
-    sure () {
-      this.showDialog = false
-      utils.login(() => {
-        this.$store.commit(type._UPDATE, {isOnline: true})
-        utils.isOnline = true
-        btnStatistic('issue_page')
-        this.$router.push({path: '/set-question'})
-      })
-    }
-  },
   components: {
     BaseBtn,
     NextTime,
@@ -183,8 +362,95 @@ export default {
     }
     &__btn{
       display: flex;
-      padding:0 25px;
+      padding:0 25px 25px;
       justify-content: space-between;
+      .invitation-code, .get-lives, .share-success{
+        width: 322px;
+        height: 160px;
+        border-radius: 26px;
+        background-color:#fff;
+        padding: 25px 30px;
+        font-family: "Roboto";
+        .extra-lives{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          color: #241262;
+          height: 36px;
+          margin-bottom:18px;
+          span{
+            display: block;
+            height: 36px;
+            line-height: 36px;
+          }
+          &__icon{
+            width: 40px;
+            height: 36px;
+            color: #f4387c;
+            font-size: 40px;
+            align-self: center;
+            background: url("../assets/images/lives-icon.png") no-repeat center;
+            background-size: cover;
+          }
+          &__text{
+            font-size: 28px;
+            margin: 0 24px 0 12px;
+          }
+          &__num{
+            font-size:40px ;
+          }
+        }
+        &__btn{
+          width: 100%;
+          height: 62px;
+          line-height: 62px;
+          color: #fff;
+          font-size: 24px;
+          text-align: center;
+          background-color: #f4387c;
+          border-radius: 46px;
+        }
+      }
+      .get-lives{
+        background: url("../assets/images/revive-card-before.png") no-repeat center;
+        background-size: cover;
+        color: #fff;
+        font-size: 28px;
+        transition:opacity 300ms linear 2s;
+      }
+      .share-success{
+        background: url("../assets/images/revive-card-after.png") no-repeat center;
+        background-size: cover;
+        color: #fff;
+        font-size: 28px;
+        opacity: 1;
+        transition:opacity 500ms linear 2s;
+        &__base{
+          display: flex;
+          justify-content: center;
+          margin-top: 12px;
+          &__icon{
+            display: block;
+            width: 86px;
+            position: relative;
+            img{
+              width: 100%;
+            }
+            .top{
+              position: absolute;
+              top:0;
+              animation: lives 1.5s ease-in-out 0s infinite;
+            }
+          }
+          &__num{
+            height: 82px;
+            line-height: 82px;
+            text-align: right;
+            font-size: 54px;
+            margin-left: 30px;
+          }
+        }
+      }
     }
     &__set{
       width: 656px;
@@ -218,6 +484,75 @@ export default {
         font-family: 'Roboto', Arial, serif;
         font-weight: 400;
       }
+    }
+    .invitation-mark {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 111;
+      padding: 0 25px;
+      background-color: rgba(68, 68, 68, 0.8);
+      .invitation-bomb {
+        width: 670px;
+        height: 320px;
+        background-color: #fff;
+        border-radius: 26px;
+        position: absolute;
+        bottom: 25px;
+        padding: 50px 0 40px;
+        color: #241262;
+        text-align: center;
+        font-family: "Roboto";
+        &__close{
+          position:absolute;
+          top: 24px;
+          right: 24px;
+          color: #241262;
+          font-size: 20px;
+        }
+        &__info{
+          font-size: 32px;
+          margin-bottom: 16px;
+        }
+        &__hint{
+          font-weight: 300;
+          margin-bottom: 54px;
+          font-size: 28px;
+        }
+        &__channel{
+          display: flex;
+          margin: 0 148px;
+          justify-content: space-between;
+          .facebook, .message{
+            width: 96px;
+            height: 96px;
+            background: url("../assets/images/facebook.png") no-repeat center;
+            background-size: cover;
+          }
+          .message{
+            background: url("../assets/images/messenger.png") no-repeat center;
+            background-size: cover;
+          }
+        }
+      }
+    }
+  }
+  @keyframes lives {
+    0%{
+      transform: scale(1);
+    }
+    15%{
+      transform: scale(1.2);
+    }
+    25%{
+      transform: scale(1);
+      opacity: 1;
+    }
+    90%{
+      transform: scale(2);
+      opacity: 0;
     }
   }
 </style>
