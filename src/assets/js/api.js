@@ -13,7 +13,8 @@ export const api = {
   setQuestion: '/cmp/submit_question/', // 用户出题
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
-  log: '/cmp/l/' // 日志
+  log: '/cmp/l/', // 日志
+  pollMsg: '/cmp/q/' // 轮询消息
 }
 
 export const init = function (isRefreshToken) {
@@ -92,6 +93,17 @@ export const syncInfo = function () {
       app_id: utils.app_id,
       client_id: utils.clientId
     }
+  })
+}
+
+// 轮询消息
+export const pollMsg = function () {
+  return axios.get(api.pollMsg, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    },
+    timeout: 5000
   })
 }
 
