@@ -182,10 +182,11 @@ export default {
 
       // 复活成功显示复活动画
       if (status === 7 && this.isUsedRecoveryCard) {
+        console.log('复活成功')
         this.isLiving = true
         setTimeout(() => {
           this.isLiving = false
-        }, 1500)
+        }, 3000)
         this.$store.commit(type.QUESTION_UPDATE, {
           isUsedRecoveryCard: false
         })

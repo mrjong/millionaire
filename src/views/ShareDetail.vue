@@ -45,7 +45,7 @@ export default {
   },
   mounted () {
     if (this.$route.query.code) {
-      this.code = this.$route.query.close
+      this.code = this.$route.query.code
     }
   },
   methods: {
@@ -108,11 +108,11 @@ export default {
     }
   }
   .share-detail-content{
-    padding: 50px;
+    padding: 0 50px 0;
     .share-lives{
       width: 260px;
       min-height: 200px;
-      margin: 40px auto;
+      margin: 30px auto 20px;
     }
     .text{
       font-family: "Roboto";
@@ -125,7 +125,7 @@ export default {
       font-family: "Roboto";
       font-weight: 300;
       text-align: center;
-      margin-top: 120px;
+      margin-top: 100px;
       span{
         font-weight: 400;
       }

@@ -39,9 +39,9 @@
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <div class="await__bottom">
-      <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
-    </div>
+    <!--<div class="await__bottom">-->
+      <!--<img src="../assets/images/apus-logo.png" class="await__bottom__apus">-->
+    <!--</div>-->
     <div class="invitation-mark" v-if="isInvitation">
       <div class="invitation-bomb">
         <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
@@ -256,6 +256,8 @@ export default {
               this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
             } else if (data.code === 30103) {
               this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+            } else if (data.code === 30104) {
+              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
             } else {
               this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
             }
@@ -287,9 +289,6 @@ export default {
       this.isInvitation = false
       if (isSucceed) {
         this.isSucceed = true
-        // setTimeout(() => {
-        //   this.$refs.shareSuccess.style.opacity = 0
-        // }, 2000)
         setTimeout(() => {
           this.isSucceed = false
         }, 3000)
@@ -523,7 +522,7 @@ export default {
       background-color: rgba(68, 68, 68, 0.8);
       .invitation-bomb {
         width: 670px;
-        height: 320px;
+        height: 350px;
         background-color: #fff;
         border-radius: 26px;
         position: absolute;
@@ -541,7 +540,7 @@ export default {
         }
         &__info{
           font-size: 32px;
-          margin-bottom: 16px;
+          margin-bottom: 20px;
           .share-detail-entry{
             font-size: 32px;
             color: #241262;
@@ -551,10 +550,11 @@ export default {
           font-weight: 300;
           margin-bottom: 54px;
           font-size: 28px;
+          padding: 0 30px;
         }
         &__channel{
           display: flex;
-          margin: 0 148px;
+          margin: 0 148px 10px;
           justify-content: space-between;
           .facebook, .message{
             width: 96px;
