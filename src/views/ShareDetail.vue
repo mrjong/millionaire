@@ -1,0 +1,144 @@
+<template>
+  <div class="share-detail">
+    <div class="top">
+      <p class="header" @click="goBack">
+        <span class="iconfont icon-fanhui"></span>
+      </p>
+      <p class="title">Extra Lives</p>
+    </div>
+    <div class="share-detail-content">
+      <img src="../assets/images/share-live.png" class="share-lives">
+      <p class="text">Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
+        SHARE for this game can also help you get one per day.</p>
+      <p class="code">
+        My Referral Code:
+        <span>{{code}}</span>
+      </p>
+      <div class="btn">
+        <p class="btn__share" @click="shareAndInvite('share')">
+          <span class="btn__share__icon iconfont"></span>
+          <span class="btn__share__text">Share</span>
+        </p>
+        <p class="btn__invite" @click="shareAndInvite('invite')">
+          <span class="btn__invite__icon"></span>
+          <span class="btn__invite__text">Invite</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'ShareDetail',
+  data () {
+    return {
+      code: ''
+    }
+  },
+  mounted () {
+    if (this.$route.query.code) {
+      this.code = this.$route.query.close
+    }
+  },
+  methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
+    shareAndInvite (tpye) {
+      // 点击分享
+      console.log(type)
+    }
+  }
+}
+</script>
+<style scoped lang="less" type="text/less">
+.share-detail {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: url("../assets/images/set-question-bg.jpg") no-repeat top;
+  background-size: cover;
+  color: #241262;
+  .top{
+    display: flex;
+    margin: 24px 0;
+    width: 100%;
+    height: 54px;
+    align-items: center;
+    .header {
+      width: 54px;
+      height: 54px;
+      background: #241262;
+      border-radius: 50%;
+      align-self: flex-start;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      left: 38px;
+      span {
+        font-size: 28px;
+        transform: translate(-2px, 0px);
+      }
+    }
+    .title{
+      width: 100%;
+      text-align: center;
+      font-size: 36px;
+      color: #241262;
+      font-family: "Roboto";
+    }
+  }
+  .share-detail-content{
+    padding: 30px;
+    .share-lives{
+      width: 260px;
+      min-height: 200px;
+      margin: 40px auto;
+    }
+    .text{
+      font-family: "Roboto";
+      font-size: 36px;
+      text-align: center;
+    }
+    .code{
+      font-size: 32px;
+      font-family: "Roboto";
+      font-weight: 300;
+      text-align: center;
+      margin-top: 120px;
+      span{
+        font-weight: 400;
+      }
+    }
+  }
+  .btn{
+    width: 100%;
+    padding: 0 30px;
+    &__share, &__invite{
+      width: 100%;
+      height: 94px;
+      line-height: 94px;
+      display: flex;
+      justify-content: center;
+      color: #fff;
+      border-radius: 46px;
+      font-size: 32px;
+      font-family: "Roboto-Regular";
+    }
+    &__share{
+      background-color: #e03c79;
+      margin:40px 0 25px;
+    }
+    &__invite{
+      background-color: #fda800;
+    }
+  }
+}
+
+</style>

@@ -20,10 +20,9 @@
       <div class="invitation-code">
         <div class="extra-lives">
           <span class="extra-lives__icon"></span>
-          <span class="extra-lives__text">Extra Lives:</span>
-          <span class="extra-lives__num">{{lives}}</span>
+          <span class="extra-lives__text">Extra Lives: {{lives}}</span>
         </div>
-        <div class="invitation-code__btn" @click="inputInvitation">Invitation code</div>
+        <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
       </div>
       <div class="get-lives" @click="getLives" ref="getLivesCard" v-show="!isSucceed">
         <div class="get-lives__text">Get More</div>
@@ -52,6 +51,7 @@
         <p class="invitation-bomb__info">
           Your invitation code：
           <span>{{invitationCode}}</span>
+          <span class="share-detail-entry iconfont icon-yonghu" @click="shareDetailEntry(invitationCode)"></span>
         </p>
         <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
         <div class="invitation-bomb__channel">
@@ -300,6 +300,10 @@ export default {
           'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
       }
     },
+    // 进入分享详情页
+    shareDetailEntry (code) {
+      this.$router.push({path: '/share-detail', query: {'code': code}})
+    },
     // 调起弹框参数配置
     BobmParamesConfig (title, text, markType, isShow) {
       this.dialogInfo.htmlTitle = title
@@ -366,7 +370,7 @@ export default {
         height: 160px;
         border-radius: 26px;
         background-color:#fff;
-        padding: 25px 30px;
+        padding: 25px 0;
         font-family: "Roboto";
         .extra-lives{
           width: 100%;
@@ -391,21 +395,19 @@ export default {
           }
           &__text{
             font-size: 28px;
-            margin: 0 24px 0 12px;
-          }
-          &__num{
-            font-size:40px ;
+            margin: 0 0 0 12px;
           }
         }
         &__btn{
-          width: 100%;
+          width: 260px;
           height: 62px;
           line-height: 62px;
           color: #fff;
-          font-size: 24px;
+          font-size: 20px;
           text-align: center;
           background-color: #f4387c;
           border-radius: 46px;
+          margin: 0 auto;
         }
       }
       .get-lives{
@@ -414,6 +416,7 @@ export default {
         color: #fff;
         font-size: 28px;
         transition:opacity 300ms linear 2s;
+        padding: 25px 30px;
       }
       .share-success{
         background: url("../assets/images/revive-card-after.png") no-repeat center;
@@ -422,6 +425,7 @@ export default {
         font-size: 28px;
         opacity: 1;
         transition:opacity 500ms linear 2s;
+        padding: 25px 30px;
         &__base{
           display: flex;
           justify-content: center;
@@ -512,6 +516,10 @@ export default {
         &__info{
           font-size: 32px;
           margin-bottom: 16px;
+          .share-detail-entry{
+            font-size: 32px;
+            color: #241262;
+          }
         }
         &__hint{
           font-weight: 300;
