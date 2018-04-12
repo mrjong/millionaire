@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'ShareDetail',
   data () {
@@ -46,9 +45,16 @@ export default {
     goBack () {
       this.$router.go(-1)
     },
-    shareAndInvite (tpye) {
-      // 点击分享
+    shareAndInvite (type) {
+      // 点击分享,跳回首页调起社交app
       console.log(type)
+      if (type === 'share') {
+        // 调首次分享
+        this.$router.push({path: '/', query: {'shareType': 'share'}})
+      } else {
+        // 多次邀请
+        this.$router.push({path: '/', query: {'shareType': 'invite'}})
+      }
     }
   }
 }

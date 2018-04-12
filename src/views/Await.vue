@@ -136,6 +136,16 @@ export default {
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
     })
+    if (this.$route.query.shareType) {
+      let shareType = this.$route.query.shareType
+      if (shareType === 'share') {
+        localStorage.setItem('isFirstShare', 'true')
+        this.invitationBombHint = 'Reward a Resurrection Card once a day'
+      } else {
+        this.invitationBombHint = 'Invite friends to fill in the invitation code to get a resurrection card'
+      }
+      this.isInvitation = true
+    }
     utils.statistic('wait_page', 0)
   },
   methods: {
