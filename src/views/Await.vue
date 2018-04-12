@@ -24,16 +24,13 @@
         </div>
         <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
       </div>
-      <div class="get-lives" @click="getLives" ref="getLivesCard" v-show="!isSucceed">
+      <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
         <div class="get-lives__text">Get More</div>
       </div>
-      <div class="share-success" ref="shareSuccessCard" v-show="isSucceed">
+      <div class="share-success" ref="shareSuccessCard" v-else>
         <div class="share-success__text">Share success</div>
         <div class="share-success__base">
-          <div class="share-success__base__icon">
-            <img src="../assets/images/lives-icon.png" />
-            <img src="../assets/images/lives-icon.png"  class="top"/>
-          </div>
+          <living></living>
           <span class="share-success__base__num">+1</span>
         </div>
       </div>
@@ -77,6 +74,7 @@ import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
+import Living from '../components/Living'
 export default {
   name: 'Await',
   data () {
@@ -326,7 +324,8 @@ export default {
     BaseBtn,
     NextTime,
     BaseInfo,
-    BalanceMark
+    BalanceMark,
+    Living
   }
 }
 </script>
