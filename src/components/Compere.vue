@@ -18,7 +18,7 @@ export default {
     return {
       supaTimer: null,
       supaOrder: 1,
-      compereMsg: '',
+      compereMsg: `Welcome to 'Go! Millionaire'!`,
       supaStyle: `background-position: 0% 0%;`
     }
   },
