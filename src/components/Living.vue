@@ -25,7 +25,7 @@ export default {
       position: absolute;
       top:0;
       transform-origin: center;
-      animation: lives 1.5s ease-in-out 1s infinite;
+      animation: lives 1.5s ease-in-out infinite;
     }
   }
   @keyframes lives {

@@ -8,8 +8,15 @@
     </div>
     <div class="share-detail-content">
       <img src="../assets/images/share-live.png" class="share-lives">
-      <p class="text">Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
-        SHARE for this game can also help you get one per day.</p>
+      <p class="text">
+        Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.
+      </p>
+      <p class="text">
+        You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
+      </p>
+      <p class="text">
+        SHARE for this game can also help you get one per day.
+      </p>
       <p class="code">
         My Referral Code:
         <span>{{code}}</span>
@@ -38,7 +45,7 @@ export default {
   },
   mounted () {
     if (this.$route.query.code) {
-      this.code = this.$route.query.close
+      this.code = this.$route.query.code
     }
   },
   methods: {
@@ -101,23 +108,24 @@ export default {
     }
   }
   .share-detail-content{
-    padding: 30px;
+    padding: 0 50px 0;
     .share-lives{
       width: 260px;
       min-height: 200px;
-      margin: 40px auto;
+      margin: 30px auto 20px;
     }
     .text{
       font-family: "Roboto";
       font-size: 36px;
-      text-align: center;
+      text-align: left;
+      margin-bottom: 20px;
     }
     .code{
       font-size: 32px;
       font-family: "Roboto";
       font-weight: 300;
       text-align: center;
-      margin-top: 120px;
+      margin-top: 100px;
       span{
         font-weight: 400;
       }

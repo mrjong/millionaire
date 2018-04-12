@@ -31,9 +31,9 @@
       <div class="living-bg">
         <living class="living-animation"></living>
       </div>
-      <p class="revive-title">Resurrection succeeded</p>
+      <p class="revive-title">You get revived.</p>
       <p class="revive-text">
-        *A revived card can be used up to 2 times per game. The last question cannot use a resurrection card.
+        Note: Extra Lives could be used twice per game, except on the last question.
       </p>
     </div>
   </div>
@@ -182,10 +182,11 @@ export default {
 
       // 复活成功显示复活动画
       if (status === 7 && this.isUsedRecoveryCard) {
+        console.log('复活成功')
         this.isLiving = true
         setTimeout(() => {
           this.isLiving = false
-        }, 1500)
+        }, 3000)
         this.$store.commit(type.QUESTION_UPDATE, {
           isUsedRecoveryCard: false
         })
