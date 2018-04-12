@@ -27,6 +27,15 @@
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
+    <div class="living" v-if="isLiving">
+      <div class="living-bg">
+        <living class="living-animation"></living>
+      </div>
+      <p class="revive-title">You get revived.</p>
+      <p class="revive-text">
+        Note: Extra Lives could be used twice per game, except on the last question.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -36,6 +45,7 @@ import Answer from '../components/Answer.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import Living from '../components/Living'
 export default {
   name: 'Respondence',
   data () {
@@ -43,7 +53,8 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;'
+      countdownStyle: 'color: #fff;',
+      isLiving: false
       // game_answer: {
       //   current_question_l: 0,
       //   cost_time_l: 0,
@@ -172,6 +183,10 @@ export default {
       // 复活成功显示复活动画
       if (status === 7 && this.isUsedRecoveryCard) {
         console.log('复活成功')
+        this.isLiving = true
+        setTimeout(() => {
+          this.isLiving = false
+        }, 3000)
         this.$store.commit(type.QUESTION_UPDATE, {
           isUsedRecoveryCard: false
         })
@@ -193,7 +208,8 @@ export default {
   },
   components: {
     Answer,
-    Viewing
+    Viewing,
+    Living
   }
 }
 </script>
@@ -230,6 +246,46 @@ export default {
     }
     &__answer{
       font-size: 28px;
+    }
+    .living{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(68, 68, 68, 0.6);
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      .living-bg{
+        width: 500px;
+        height: 500px;
+        background: url("../assets/images/light.png") no-repeat top;
+        background-size: cover;
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        .living-animation{
+          align-self: center;
+          width: 180px;
+          height: 180px;
+        }
+      }
+      .revive-title{
+        width: 80%;
+        color: #fff;
+        font-size: 48px;
+        font-family: "Roboto";
+        text-align: left;
+        margin: 0 auto 30px;
+      }
+      .revive-text{
+        width: 80%;
+        color: #ff70a5;
+        font-size: 28px;
+        text-align: left;
+        margin: 0 auto;
+      }
     }
   }
   #circleProcess {
