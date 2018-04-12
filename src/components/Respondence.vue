@@ -28,7 +28,13 @@
       </answer>
     </div>
     <div class="living" v-if="isLiving">
-      <living></living>
+      <div class="living-bg">
+        <living class="living-animation"></living>
+      </div>
+      <p class="revive-title">Resurrection succeeded</p>
+      <p class="revive-text">
+        *A revived card can be used up to 2 times per game. The last question cannot use a resurrection card.
+      </p>
     </div>
   </div>
 </template>
@@ -241,10 +247,44 @@ export default {
       font-size: 28px;
     }
     .living{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(68, 68, 68, 0.6);
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      .living-bg{
+        width: 500px;
+        height: 500px;
+        background: url("../assets/images/light.png") no-repeat top;
+        background-size: cover;
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        .living-animation{
+          align-self: center;
+          width: 180px;
+          height: 180px;
+        }
+      }
+      .revive-title{
+        width: 80%;
+        color: #fff;
+        font-size: 48px;
+        font-family: "Roboto";
+        text-align: left;
+        margin: 0 auto 30px;
+      }
+      .revive-text{
+        width: 80%;
+        color: #ff70a5;
+        font-size: 28px;
+        text-align: left;
+        margin: 0 auto;
+      }
     }
   }
   #circleProcess {
