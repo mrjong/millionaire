@@ -22,7 +22,8 @@ const state = {
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
   restTime: 0, // 剩余时间
-  isWon: false // 是否展示you won
+  isWon: false, // 是否展示you wonThe resurrection of card
+  isUsedRecoveryCard: false // 是否使用过复活卡
 }
 
 const getters = {
@@ -40,7 +41,8 @@ const getters = {
   question_result: (state) => state.result,
   time: (state) => state.time,
   restTime: (state) => state.restTime,
-  isWon: (state) => state.isWon
+  isWon: (state) => state.isWon,
+  isUsedRecoveryCard: (state) => state.isUsedRecoveryCard
 }
 
 const mutations = {
@@ -147,18 +149,30 @@ const actions = {
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
       submitAnswer(id, userAnswer, index).then(({data}) => {
-        if (+data.result === 0) {
-          if (+data.code === 1005) {
-            reject('Time is out, you can view only.')
-          } else {
-            reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+        if (+data.result === 1) {
+          switch (+data.code) {
+            case 1007: {
+              commit(type.QUESTION_UPDATE, {
+                isUsedRecoveryCard: true
+              })
+              break
+            }
+          }
+          resolve()
+        } else {
+          switch (+data.code) {
+            case 1005: {
+              reject('Time is out, you can view only.')
+              break
+            }
+            default: {
+              reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+            }
           }
           commit(type.QUESTION_UPDATE, {
             watchingMode: true
           })
           console.log('答案提交失败:', id, data.msg)
-        } else {
-          resolve()
         }
       }, (err) => {
         reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
@@ -199,7 +213,7 @@ const actions = {
         const {i: id, a: correctAnswer} = answer
 
         // 判断答案是否正确
-        const isCorrect = md5Map[correctAnswer] === getters.userAnswer
+        let isCorrect = md5Map[correctAnswer] === getters.userAnswer
 
         utils.statistic('ANSWER', 6, {
           flag_s: `${id}`,
@@ -211,14 +225,19 @@ const actions = {
         if (isCorrect && !getters.watchingMode) {
           utils.playSound('succeed')
         } else if (!isCorrect && !getters.watchingMode) {
-          utils.playSound('failed')
-          dispatch(type._OPEN_DIALOG, {
-            htmlTitle: 'You\'ve been eliminated. ',
-            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-            shouldSub: false,
-            markType: 0,
-            okBtnText: 'Continue'
-          })
+          // 如果使用了复活卡
+          if (getters.isUsedRecoveryCard) {
+            isCorrect = true
+          } else {
+            utils.playSound('failed')
+            dispatch(type._OPEN_DIALOG, {
+              htmlTitle: 'You\'ve been eliminated. ',
+              htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+              shouldSub: false,
+              markType: 0,
+              okBtnText: 'Continue'
+            })
+          }
         }
 
         // 若没有答题，弹窗提示

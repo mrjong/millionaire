@@ -66,7 +66,8 @@ export default {
       restTime: 'restTime',
       options: 'options',
       questionResult: 'question_result',
-      id: 'id'
+      id: 'id',
+      isUsedRecoveryCard: 'isUsedRecoveryCard'
     }),
     totalResult: function () {
       let result = {}
@@ -167,6 +168,14 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+
+      // 复活成功显示复活动画
+      if (status === 7 && this.isUsedRecoveryCard) {
+        console.log('复活成功')
+        this.$store.commit(type.QUESTION_UPDATE, {
+          isUsedRecoveryCard: false
+        })
+      }
     //  if (status === 7 && !this.watchingMode) {
     //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
     //    utils.statistic('', 2, this.game_answer)
