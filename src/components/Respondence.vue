@@ -27,6 +27,9 @@
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
+    <div class="living" v-if="isLiving">
+      <living></living>
+    </div>
   </div>
 </template>
 
@@ -36,6 +39,7 @@ import Answer from '../components/Answer.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import Living from '../components/Living'
 export default {
   name: 'Respondence',
   data () {
@@ -43,7 +47,8 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;'
+      countdownStyle: 'color: #fff;',
+      isLiving: false
       // game_answer: {
       //   current_question_l: 0,
       //   cost_time_l: 0,
@@ -66,7 +71,8 @@ export default {
       restTime: 'restTime',
       options: 'options',
       questionResult: 'question_result',
-      id: 'id'
+      id: 'id',
+      isUsedRecoveryCard: 'isUsedRecoveryCard'
     }),
     totalResult: function () {
       let result = {}
@@ -167,6 +173,17 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+
+      // 复活成功显示复活动画
+      if (status === 7 && this.isUsedRecoveryCard) {
+        this.isLiving = true
+        setTimeout(() => {
+          this.isLiving = false
+        }, 1500)
+        this.$store.commit(type.QUESTION_UPDATE, {
+          isUsedRecoveryCard: false
+        })
+      }
     //  if (status === 7 && !this.watchingMode) {
     //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
     //    utils.statistic('', 2, this.game_answer)
@@ -184,7 +201,8 @@ export default {
   },
   components: {
     Answer,
-    Viewing
+    Viewing,
+    Living
   }
 }
 </script>
@@ -221,6 +239,12 @@ export default {
     }
     &__answer{
       font-size: 28px;
+    }
+    .living{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
     }
   }
   #circleProcess {
