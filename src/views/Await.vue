@@ -158,6 +158,7 @@ export default {
     },
     // 获取邀请码分享到社交app
     getLives () {
+      console.log(utils.isOnline)
       if (utils.isOnline) {
         // 判断是否是第一次分享
         if (localStorage.getItem('isFirstShare') && localStorage.getItem('firstTime')) {
@@ -230,7 +231,7 @@ export default {
       }
       if (this.isInputInvitation) {
         if (!b) {
-          this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
+          this.BobmParamesConfig('', 'Invalid referral code, please check it now.', true, true)
           return false
         }
         api.VerificationCode(b).then(({data}) => {
