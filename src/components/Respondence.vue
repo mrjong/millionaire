@@ -31,9 +31,9 @@
       <div class="living-bg">
         <living class="living-animation"></living>
       </div>
-      <p class="revive-title">Resurrection succeeded</p>
+      <p class="revive-title">You get revived.</p>
       <p class="revive-text">
-        *A revived card can be used up to 2 times per game. The last question cannot use a resurrection card.
+        Note: Extra Lives could be used twice per game, except on the last question.
       </p>
     </div>
   </div>

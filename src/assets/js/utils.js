@@ -128,13 +128,13 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share (callback, packageName) {
+  share (callback, packageName, content, link) {
     window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
       sharePackage: packageName,
-      shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
-      shareContent: 'Win real cash up to Rs. 1,000,000!',
-      shareLink: 'https://goo.gl/t6jWBU',
+      shareTitle: 'Play Go! Millionaire’, answer questions every day, win up to ₹1,000,000!',
+      shareContent: content,
+      shareLink: link,
       callbackMethod: 'shareSuccess'
     }))
   },

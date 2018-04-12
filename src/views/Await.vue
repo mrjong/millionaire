@@ -46,7 +46,7 @@
       <div class="invitation-bomb">
         <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
         <p class="invitation-bomb__info">
-          Your invitation code：
+          My Referral Code:
           <span>{{invitationCode}}</span>
           <span class="share-detail-entry iconfont icon-yonghu" @click="shareDetailEntry(invitationCode)"></span>
         </p>
@@ -92,7 +92,9 @@ export default {
       isSucceed: false,
       invitationCode: '',
       invitationBombHint: '',
-      logout: false
+      logout: false,
+      isFirstShare: false,
+      shareContent: ''
     }
   },
   computed: {
@@ -137,10 +139,12 @@ export default {
     if (this.$route.query.shareType) {
       let shareType = this.$route.query.shareType
       if (shareType === 'share') {
+        this.isFirstShare = true
         localStorage.setItem('isFirstShare', 'true')
-        this.invitationBombHint = 'Reward a Resurrection Card once a day'
+        this.invitationBombHint = 'Inviting friends to get it now!'
       } else {
-        this.invitationBombHint = 'Invite friends to fill in the invitation code to get a resurrection card'
+        this.isFirstShare = false
+        this.invitationBombHint = 'The first SHARE of this game will help you get one per day.'
       }
       this.isInvitation = true
     }
@@ -167,11 +171,13 @@ export default {
           console.log('第一次分享localStorage' + duration + '----' + isFirst)
           // 86400000 => 24h
           if (duration > 86400000) {
+            this.isFirstShare = true
             localStorage.setItem('isFirstShare', 'true')
-            this.invitationBombHint = 'Reward a Resurrection Card once a day'
+            this.invitationBombHint = 'Inviting friends to get it now!'
           } else {
             if (isFirst === 'false') {
-              this.invitationBombHint = 'Invite friends to fill in the invitation code to get a resurrection card'
+              this.isFirstShare = false
+              this.invitationBombHint = 'The first SHARE of this game will help you get one per day.'
             }
           }
         }
@@ -205,8 +211,8 @@ export default {
     inputInvitation () {
       if (utils.isOnline) {
         this.isInputInvitation = true
-        this.BobmParamesConfig('Invitation code',
-          'Fill in the friend\'s invitation code and you and he will both add an extra lives', true, true)
+        this.BobmParamesConfig('APPLY REFERRAL CODE',
+          'Enter a friend\'s Referral Code to get an extra life.', true, true)
       } else {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
@@ -248,6 +254,10 @@ export default {
               this.BobmParamesConfig('', 'This referral code expired.', false, true)
             } else if (data.code === 30102) {
               this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
+            } else if (data.code === 30103) {
+              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+            } else {
+              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
             }
           }
         }).catch(() => {
@@ -263,7 +273,13 @@ export default {
     },
     // 分享邀请码
     shareInvitationCode (value) {
-      utils.share(this.callbackFn, value)
+      // 获取link
+      if (this.isFirstShare) {
+        this.shareContent = 'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!'
+      } else {
+        this.shareContent = 'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life! '
+      }
+      utils.share(this.callbackFn, value, this.shareContent, 'link')
     },
     // 分享后的回调
     callbackFn (isSucceed) {

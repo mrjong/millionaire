@@ -8,8 +8,15 @@
     </div>
     <div class="share-detail-content">
       <img src="../assets/images/share-live.png" class="share-lives">
-      <p class="text">Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
-        SHARE for this game can also help you get one per day.</p>
+      <p class="text">
+        Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.
+      </p>
+      <p class="text">
+        You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
+      </p>
+      <p class="text">
+        SHARE for this game can also help you get one per day.
+      </p>
       <p class="code">
         My Referral Code:
         <span>{{code}}</span>
@@ -101,7 +108,7 @@ export default {
     }
   }
   .share-detail-content{
-    padding: 30px;
+    padding: 50px;
     .share-lives{
       width: 260px;
       min-height: 200px;
@@ -110,7 +117,8 @@ export default {
     .text{
       font-family: "Roboto";
       font-size: 36px;
-      text-align: center;
+      text-align: left;
+      margin-bottom: 20px;
     }
     .code{
       font-size: 32px;
