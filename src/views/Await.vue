@@ -141,6 +141,15 @@ export default {
     if (this.$route.query.shareType) {
       let shareType = this.$route.query.shareType
       if (shareType === 'share') {
+        let isFirst = localStorage.getItem('isFirstShare')
+        let duration = new Date().getTime() - localStorage.getItem('firstTime')
+        if (duration > 86400000) {
+          this.isFirstShare = true
+        } else {
+          if (isFirst === 'false') {
+            this.isFirstShare = false
+          }
+        }
         this.invitationCode = ''
         localStorage.setItem('isFirstShare', 'true')
         this.invitationBombTitle = 'Extra Life can be gained by SHARING'
