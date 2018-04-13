@@ -278,7 +278,7 @@ const im = {
     pollMsg().then(({data}) => {
       im.pullMsgTimeoutCount = 0
       if (+data.result === 1 && +data.code === 0) {
-        im.isHandledMsg && im.pollMsgHandler()
+        im.isHandledMsg && im.pollMsgHandler(data.data)
       } else {
         console.log('拉去消息失败', data)
       }
