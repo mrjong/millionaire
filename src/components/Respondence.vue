@@ -253,10 +253,10 @@ export default {
       height: 100%;
       top: 0;
       left: 0;
-      background-color: rgba(68, 68, 68, 0.6);
+      background-color: rgba(68, 68, 68, 0.8);
       display: flex;
-      justify-content: center;
       flex-direction: column;
+      justify-content: center;
       .living-bg{
         width: 500px;
         height: 500px;
@@ -265,6 +265,7 @@ export default {
         align-self: center;
         display: flex;
         justify-content: center;
+        margin-top: -100px;
         .living-animation{
           align-self: center;
           width: 180px;
@@ -276,14 +277,14 @@ export default {
         color: #fff;
         font-size: 48px;
         font-family: "Roboto";
-        text-align: left;
+        text-align: center;
         margin: 0 auto 30px;
       }
       .revive-text{
         width: 80%;
         color: #ff70a5;
         font-size: 28px;
-        text-align: left;
+        text-align: center;
         margin: 0 auto;
       }
     }

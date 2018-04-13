@@ -146,7 +146,7 @@ export default {
           background: rgba(250, 167, 23, 0.95);
         }
         &__cancel {
-          background: #fa5b23;
+          background: #d7d7d7;
         }
       }
     }
