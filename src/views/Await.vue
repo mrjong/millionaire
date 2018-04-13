@@ -26,7 +26,7 @@
       </div>
       <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
         <div class="get-lives__text">Get More</div>
-        <router-link to="/share-detail">
+        <router-link :to="'/share-detail?code=' + code">
           <span class="revive-rule">Extra Lives Rules</span>
         </router-link>
       </div>
