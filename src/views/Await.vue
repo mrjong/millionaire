@@ -96,7 +96,7 @@ export default {
       invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
       invitationBombTitle: 'Extra Life can be gained by SHARING',
       logout: false,
-      isFirstShare: false
+      isFirstShare: true
     }
   },
   computed: {
@@ -189,6 +189,7 @@ export default {
           }
         } else {
           this.invitationCode = ''
+          this.isFirstShare = true
           this.invitationBombTitle = 'Extra Life can be gained by SHARING'
           this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
         }
@@ -304,6 +305,7 @@ export default {
       console.log('分享的回调' + isSucceed)
       this.isInvitation = false
       if (isSucceed) {
+        console.log('是否是第一次分享' + this.isFirstShare)
         if (this.isFirstShare) {
           this.isSucceed = true
           setTimeout(() => {
