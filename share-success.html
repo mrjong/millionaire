@@ -205,13 +205,16 @@
   }
   console.log(window.location.search)
   function toGp () {
-    window.location.href = 'https://goo.gl/t6jWBU'
+    setTimeout(function () {
+      window.location.href = 'https://play.google.com/store/apps/details?id=com.apusapps.browser&referrer=id%3D300021'
+    },5)
+    window.location.href = 'market://details?id=com.apusapps.browser&referrer=id%3D300021'
   }
   function toFb () {
     setTimeout(function () {
       window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144'
     },5)
-    window.location.href = 'fb://page/1532330666785144\''
+    window.location.href = 'fb://page/1532330666785144'
   }
   var type = getUrlParameter('type')
   var share = document.getElementsByClassName('share')[0]

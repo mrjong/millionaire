@@ -57,12 +57,12 @@ export default {
       console.log(type)
       if (type === 'share') {
         // 调首次分享
-        this.$router.push({path: '/', query: {'shareType': 'share'}})
+        this.$router.replace({path: '/', query: {'shareType': 'share'}})
       } else if (type === 'invite') {
         // 多次邀请
-        this.$router.push({path: '/', query: {'shareType': 'invite'}})
+        this.$router.replace({path: '/', query: {'shareType': 'invite'}})
       } else {
-        this.$router.push({path: '/'})
+        this.$router.replace({path: '/'})
       }
     }
   }
