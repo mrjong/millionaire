@@ -184,6 +184,7 @@ export default {
       if (status === 7 && this.isUsedRecoveryCard) {
         console.log('复活成功')
         this.isLiving = true
+        utils.playSound('succeed')
         setTimeout(() => {
           this.isLiving = false
         }, 3000)
