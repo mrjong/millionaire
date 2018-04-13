@@ -1,8 +1,8 @@
 /* global BUILD_ENV */
 // BUILD_ENV webpack define
 import axios from 'axios'
-const env = BUILD_ENV || 'prod'
-const host = {
+export const env = BUILD_ENV || 'prod'
+export const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
   dev: 'http://dev-millionaire-api.apuscn.com',
   test: 'http://test-millionaire-api.apuscn.com',
