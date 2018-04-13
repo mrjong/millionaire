@@ -16,6 +16,9 @@
       height: 100%;
       width: 100%;
     }
+    img{
+      width: 100%;
+    }
     .container{
       width: 100%;
       height: 100%;
@@ -38,14 +41,12 @@
       max-width: 300px;
       margin: 0 auto;
     }
-    img{
-      width: 100%;
-    }
     .text{
       font-size: 15px;
       text-align: center;
       line-height: 24px;
       margin: 18px 0;
+      padding: 0 20px;
     }
     .code{
       width: 180px;
@@ -83,16 +84,92 @@
     .invite-text{
       margin: 80px auto 25px;
     }
+    @media screen and (max-width: 321px) {
+      .logo{
+        max-width: 190px;
+      }
+      .title{
+        max-width: 270px;
+      }
+      .text{
+        font-size: 14px;
+        line-height: 22px;
+        margin: 15px 0;
+      }
+      .code{
+        width: 170px;
+        height: 65px;
+        margin: 0 auto 35px;
+      }
+      .num{
+        font-size: 16px;
+      }
+      .btn{
+        width: 280px;
+        height: 46px;
+        font-size: 15px;
+        line-height: 46px;
+      }
+      .gp{
+        margin-top: 15px;
+      }
+      .invite-text{
+        margin: 70px auto 25px;
+      }
+    }
+    @media screen and (min-width: 361px) and (max-width: 415px) {
+      .logo{
+        max-width: 260px;
+      }
+      .title{
+        max-width: 330px;
+      }
+      .text{
+        font-size: 18px;
+        line-height: 24px;
+      }
+      .code{
+        width: 180px;
+        height: 70px;
+      }
+      .btn{
+        width: 340px;
+        height: 55px;
+        font-size: 17px;
+        line-height: 55px;
+      }
+      .invite-text{
+        margin: 80px auto 25px;
+      }
+    }
+    @media screen and (min-width: 416px){
+      .logo{
+        max-width: 350px;
+      }
+      .title{
+        max-width: 450px;
+      }
+      .code{
+        width: 180px;
+        height: 70px;
+      }
+      .btn{
+        width: 350px;
+        height: 60px;
+        font-size: 16px;
+        line-height: 60px;
+      }
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <img src="src/assets/images/await-bg.jpg" class="container-bg">
+  <img src="http://static.subcdn.com/20180413105525346c9bcc71.jpg" class="container-bg">
   <div class="logo">
-    <img src="src/assets/images/logo.png">
+    <img src="http://static.subcdn.com/20180413105609ac7ba71e41.png">
   </div>
   <div class="title">
-    <img src="src/assets/images/share-success-title.png" >
+    <img src="http://static.subcdn.com/201804131055425f7355837b.png" >
   </div>
   <div class="share">
     <p class="text">
@@ -126,6 +203,7 @@
     if (r != null) return unescape(r[2])
     return null
   }
+  console.log(window.location.search)
   function toGp () {
     window.location.href = 'https://goo.gl/t6jWBU'
   }
@@ -142,13 +220,12 @@
     document.getElementById('invitationCode').innerHTML = getUrlParameter('code')
   }
   if (type === 'share') {
-    share.style.display = 'block'
-    invite.style.display = 'none'
-  } else {
-    share.style.display = 'none'
     invite.style.display = 'block'
+    share.style.display = 'none'
+  } else {
+    invite.style.display = 'none'
+    share.style.display = 'block'
   }
-  console.log(type)
 </script>
 </body>
 </html>

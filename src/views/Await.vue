@@ -26,6 +26,9 @@
       </div>
       <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
         <div class="get-lives__text">Get More</div>
+        <router-link to="/share-detail">
+          <span class="revive-rule">Extra Lives Rules</span>
+        </router-link>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-else>
         <div class="share-success__text">Share success</div>
@@ -39,16 +42,15 @@
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <!--<div class="await__bottom">-->
-      <!--<img src="../assets/images/apus-logo.png" class="await__bottom__apus">-->
-    <!--</div>-->
     <div class="invitation-mark" v-if="isInvitation">
       <div class="invitation-bomb">
         <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
         <p class="invitation-bomb__info">
-          My Referral Code:
+          {{invitationBombTitle}}
           <span>{{invitationCode}}</span>
-          <span class="share-detail-entry iconfont icon-yonghu" @click="shareDetailEntry(invitationCode)"></span>
+          <span class="share-detail-entry iconfont icon-shuoming"
+                v-if="!invitationCode"
+                @click="shareDetailEntry(invitationCode)"></span>
         </p>
         <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
         <div class="invitation-bomb__channel">
@@ -91,10 +93,9 @@ export default {
       showDialog: false,
       isSucceed: false,
       invitationCode: '',
-      invitationBombHint: '',
-      logout: false,
-      isFirstShare: false,
-      shareContent: ''
+      invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
+      invitationBombTitle: 'Extra Life can be gained by SHARING',
+      logout: false
     }
   },
   computed: {
@@ -139,12 +140,14 @@ export default {
     if (this.$route.query.shareType) {
       let shareType = this.$route.query.shareType
       if (shareType === 'share') {
-        this.isFirstShare = true
+        this.invitationCode = ''
         localStorage.setItem('isFirstShare', 'true')
-        this.invitationBombHint = 'Inviting friends to get it now!'
+        this.invitationBombTitle = 'Extra Life can be gained by SHARING'
+        this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
       } else {
-        this.isFirstShare = false
-        this.invitationBombHint = 'The first SHARE of this game will help you get one per day.'
+        this.invitationCode = this.code
+        this.invitationBombTitle = 'My Referral Code:'
+        this.invitationBombHint = 'Inviting friends to get it now!'
       }
       this.isInvitation = true
     }
@@ -162,39 +165,41 @@ export default {
     },
     // 获取邀请码分享到社交app
     getLives () {
-      console.log(utils.isOnline)
       if (utils.isOnline) {
         // 判断是否是第一次分享
-        if (localStorage.getItem('isFirstShare') && localStorage.getItem('firstTime')) {
+        if (localStorage.getItem('isFirstShare')) {
           let isFirst = localStorage.getItem('isFirstShare')
           let duration = new Date().getTime() - localStorage.getItem('firstTime')
           console.log('第一次分享localStorage' + duration + '----' + isFirst)
-          // 86400000 => 24h
+          // 86400000 = 24h
           if (duration > 86400000) {
-            this.isFirstShare = true
+            this.invitationCode = ''
             localStorage.setItem('isFirstShare', 'true')
-            this.invitationBombHint = 'Inviting friends to get it now!'
+            this.invitationBombTitle = 'Extra Life can be gained by SHARING'
+            this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
           } else {
             if (isFirst === 'false') {
-              this.isFirstShare = false
-              this.invitationBombHint = 'The first SHARE of this game will help you get one per day.'
+              this.invitationCode = this.code
+              this.invitationBombTitle = 'My Referral Code:'
+              this.invitationBombHint = 'Inviting friends to get it now!'
             }
           }
+        } else {
+          this.invitationCode = ''
+          this.invitationBombTitle = 'Extra Life can be gained by SHARING'
+          this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
         }
-        console.log('初始化code' + this.code)
         if (this.code) {
-          this.invitationCode = this.code
           this.isInvitation = true
         } else {
           api.generateCode().then(({data}) => {
-            console.log('获取邀请码分享到社交app' + data.msg + '--' + data.data)
             if (data.result === 1) {
               this.invitationCode = data.data
               this.isInvitation = true
             } else {
               this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
             }
-          }).catch((e) => {
+          }).catch(() => {
             this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
           })
         }
@@ -211,8 +216,10 @@ export default {
     inputInvitation () {
       if (utils.isOnline) {
         this.isInputInvitation = true
-        this.BobmParamesConfig('APPLY REFERRAL CODE',
-          'Enter a friend\'s Referral Code to get an extra life.', true, true)
+        this.BobmParamesConfig(
+          'APPLY REFERRAL CODE',
+          'Enter a friend\'s Referral Code to get an extra life.',
+          true, true)
       } else {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
@@ -225,7 +232,6 @@ export default {
     // 弹框ok
     okEvent (a, b) {
       this.showDialog = false
-      console.log('logout' + this.logout)
       if (this.logout) {
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
@@ -275,13 +281,20 @@ export default {
     },
     // 分享邀请码
     shareInvitationCode (value) {
-      // 获取link
-      if (this.isFirstShare) {
-        this.shareContent = 'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!'
+      // http://static.subcdn.com/share-success-test.html
+      if (this.invitationCode) {
+        utils.share(
+          this.callbackFn,
+          value,
+          'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite')
       } else {
-        this.shareContent = 'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life! '
+        utils.share(
+          this.callbackFn,
+          value,
+          'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share')
       }
-      utils.share(this.callbackFn, value, this.shareContent, 'link')
     },
     // 分享后的回调
     callbackFn (isSucceed) {
@@ -442,6 +455,13 @@ export default {
         font-size: 28px;
         transition:opacity 300ms linear 2s;
         padding: 25px 30px;
+        .revive-rule{
+          display: block;
+          font-weight: 300;
+          margin-top: 20px;
+          font-size: 22px;
+          color: #fff;
+        }
       }
       .share-success{
         background: url("../assets/images/revive-card-after.png") no-repeat center;
@@ -498,17 +518,6 @@ export default {
         height: 90px;
         line-height: 90px;
         font-size: 32px;
-      }
-    }
-    &__bottom{
-      width: 100%;
-      position: absolute;
-      bottom: 10px;
-      &__apus{
-        width: 134px;
-        margin: 0 auto;
-        font-family: 'Roboto', Arial, serif;
-        font-weight: 400;
       }
     }
     .invitation-mark {
