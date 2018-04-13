@@ -23,7 +23,7 @@
       </p>
       <div class="btn">
         <p class="btn__share" @click="shareAndInvite('share')">
-          <span class="btn__share__icon iconfont"></span>
+          <span class="btn__share__icon iconfont icon-share"></span>
           <span class="btn__share__text">Share</span>
         </p>
         <p class="btn__invite" @click="shareAndInvite('invite')">
@@ -146,6 +146,14 @@ export default {
       border-radius: 46px;
       font-size: 32px;
       font-family: "Roboto-Regular";
+      position: relative;
+      &__icon{
+        position: absolute;
+        font-size: 32px;
+        top: 50%;
+        left: 170px;
+        transform: translate(0,-50%);
+      }
     }
     &__share{
       background-color: #e03c79;
@@ -153,6 +161,12 @@ export default {
     }
     &__invite{
       background-color: #fda800;
+      &__icon{
+        width: 40px;
+        height:43px;
+        background: url("../assets/images/invite-icon.png") no-repeat center;
+        background-size: cover;
+      }
     }
   }
 }
