@@ -256,6 +256,7 @@ export default {
     }
     &__join{
       display: block;
+      max-width: 100%;
       width: 654px;
       height: 91px;
       line-height: 91px;
@@ -295,6 +296,7 @@ export default {
         }
       }
       &__question {
+        max-width: 100%;
         width:656px ;
         height: 334px;
         background: url("../assets/images/question-area-bg.png") no-repeat top left;
@@ -350,6 +352,7 @@ export default {
         }
       }
       &__correct{
+        max-width: 100% !important;
         width: 656px;
         height: 192px;
         background-color: #f4f3f7;
@@ -405,6 +408,7 @@ export default {
         }
       }
       &__submit{
+        max-width: 100%;
         width: 656px;
         height: 93px;
         line-height: 93px;
@@ -489,6 +493,7 @@ export default {
     }
   }
   .base {
+    max-width: 100% !important;
     width:656px ;
     height: 93px;
     border-radius: 46px;

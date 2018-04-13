@@ -256,7 +256,6 @@ export default {
       }
       if (this.isInputInvitation) {
         if (!b) {
-          this.BobmParamesConfig('', 'Invalid referral code, please check it now.', true, true)
           return false
         }
         api.VerificationCode(b).then(({data}) => {
@@ -420,6 +419,7 @@ export default {
       padding:0 25px 25px;
       justify-content: space-between;
       .invitation-code, .get-lives, .share-success{
+        max-width: 48%;
         width: 322px;
         height: 160px;
         border-radius: 26px;
@@ -517,6 +517,7 @@ export default {
       }
     }
     &__set{
+      max-width: 93% !important;
       width: 656px;
       height: 90px;
       background-color: #faa717 ;
@@ -548,6 +549,7 @@ export default {
       padding: 0 25px;
       background-color: rgba(68, 68, 68, 0.8);
       .invitation-bomb {
+        max-width: 93% !important;
         width: 670px;
         height: 350px;
         background-color: #fff;
