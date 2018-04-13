@@ -9,6 +9,8 @@ const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
+  pullMsgTimeoutCount: 0, // 拉去消息超时次数
+  isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
   listeners: {}, // 监听器,
@@ -274,14 +276,24 @@ const im = {
    */
   pullMsg () {
     pollMsg().then(({data}) => {
+      im.pullMsgTimeoutCount = 0
       if (+data.result === 1 && +data.code === 0) {
-        im.pollMsgHandler(data.data)
+        im.isHandledMsg && im.pollMsgHandler()
       } else {
-        console.log('拉去消息失败', data.msg)
+        console.log('拉去消息失败', data)
       }
-    }, (err) => {
-      console.log('拉取消息出错', err)
+    }).catch((error) => {
+      console.log(`拉取消息出错:`, error, new Date())
+      if (error.code === 'ECONNABORTED') {
+        im.pullMsgTimeoutCount = im.pullMsgTimeoutCount + 1
+      }
+      // 连续超时两次，提示网络错误
+      if (im.pullMsgTimeoutCount >= 2) {
+        im.emitListener(type.NETWORK_UNAVAILABLE)
+        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount
+      }
     })
+    console.log('拉取消息：', new Date())
   },
 
   /**
@@ -295,6 +307,7 @@ const im = {
    * 轮询消息处理
    */
   pollMsgHandler (data = {}) {
+    im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg = {}, l: validTime} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
       switch (msgType) {
@@ -355,6 +368,7 @@ const im = {
       }
     }
     im.pullMsgId = msgId
+    im.isHandledMsg = true
   },
 
   /**

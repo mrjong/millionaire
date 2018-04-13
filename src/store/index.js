@@ -17,6 +17,7 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 let syncTimer = null
 let countDownTimer = null
+let initTimer = null
 export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
@@ -70,6 +71,7 @@ export default new Vuex.Store({
     result: (state) => state.result,
     onlineAmount: (state) => state.onlineAmount,
     readyTime: (state) => state.readyTime,
+    syncIntervalTime: (state) => state.syncIntervalTime,
     isRefreshedToken: (state) => state.isRefreshedToken,
     showDialog: (state) => state.showDialog,
     dialogInfo: (state) => state.dialogInfo
@@ -99,12 +101,14 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
+      clearInterval(initTimer)
       commit(type._UPDATE, {
         isRefreshedToken: isRefreshToken
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
-          if (data.result === 1 && +data.code === 0) {
+          if (+data.result === 1 && +data.code === 0) {
+            console.log(data.data)
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, v: watchingMode, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
             const startTime = +info.sr || 0
@@ -221,14 +225,7 @@ export default new Vuex.Store({
                 commit(type._UPDATE, {
                   status: status._AWAIT
                 })
-                // 如果剩余剩余时间大于十分钟 或者 无下场信息
-                if (startTimeOffset * 1000 > getters.readyTime || getters.startTime < 0) {
-                  // 每隔一段时间同步开始时间
-                  const {syncIntervalTime} = state
-                  setTimeout(() => {
-                    dispatch(type._INIT)
-                  }, syncIntervalTime)
-                }
+                dispatch(type._POLL_INIT)
               }
             }
             // 如果聊天室开启，进入聊天室
@@ -253,14 +250,25 @@ export default new Vuex.Store({
           } else {
             console.log('初始化失败:', data.msg)
             reject(data.msg)
+            dispatch(type._POLL_INIT)
           }
         }, (err) => {
           console.log('初始化接口出错', err)
           reject(err)
+          dispatch(type._POLL_INIT)
         }).catch((err) => {
           console.log('代码逻辑出错:' + err)
         })
       })
+    },
+    /**
+     * 初始化轮询
+     * @param {any} {dispatch}
+     */
+    [type._POLL_INIT] ({dispatch, getters}) {
+      setTimeout(() => {
+        dispatch(type._INIT)
+      }, getters.syncIntervalTime)
     },
     /**
      * 同步开始时间

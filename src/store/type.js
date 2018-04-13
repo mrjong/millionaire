@@ -15,6 +15,7 @@ export const _UPDATE_AMOUNT = '_UPDATE_AMOUNT'
 export const _SYNC_TIME = '_SYNC_TIME'
 export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
 export const _INIT = '_INIT'
+export const _POLL_INIT = '_POLL_INIT'
 export const _END = '_END'
 export const _OPEN_DIALOG = '_OPEN_DIALOG'
 
