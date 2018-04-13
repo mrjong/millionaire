@@ -49,7 +49,7 @@
           {{invitationBombTitle}}
           <span>{{invitationCode}}</span>
           <span class="share-detail-entry iconfont icon-shuoming"
-                v-if="!invitationCode"
+                v-if="invitationCode"
                 @click="shareDetailEntry(invitationCode)"></span>
         </p>
         <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
@@ -95,7 +95,8 @@ export default {
       invitationCode: '',
       invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
       invitationBombTitle: 'Extra Life can be gained by SHARING',
-      logout: false
+      logout: false,
+      isFirstShare: false
     }
   },
   computed: {
@@ -174,11 +175,13 @@ export default {
           // 86400000 = 24h
           if (duration > 86400000) {
             this.invitationCode = ''
+            this.isFirstShare = true
             localStorage.setItem('isFirstShare', 'true')
             this.invitationBombTitle = 'Extra Life can be gained by SHARING'
             this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
           } else {
             if (isFirst === 'false') {
+              this.isFirstShare = false
               this.invitationCode = this.code
               this.invitationBombTitle = 'My Referral Code:'
               this.invitationBombHint = 'Inviting friends to get it now!'
@@ -301,10 +304,12 @@ export default {
       console.log('分享的回调' + isSucceed)
       this.isInvitation = false
       if (isSucceed) {
-        this.isSucceed = true
-        setTimeout(() => {
-          this.isSucceed = false
-        }, 3000)
+        if (this.isFirstShare) {
+          this.isSucceed = true
+          setTimeout(() => {
+            this.isSucceed = false
+          }, 3000)
+        }
         localStorage.setItem('isFirstShare', 'false')
         localStorage.setItem('firstTime', new Date().getTime())
         api.DailyShare().then(({data}) => {
@@ -456,11 +461,13 @@ export default {
         transition:opacity 300ms linear 2s;
         padding: 25px 30px;
         .revive-rule{
-          display: block;
           font-weight: 300;
           margin-top: 20px;
           font-size: 22px;
           color: #fff;
+        }
+        &__text{
+          margin-bottom: 20px;
         }
       }
       .share-success{
