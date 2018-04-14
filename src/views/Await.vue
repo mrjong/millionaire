@@ -141,23 +141,10 @@ export default {
     if (this.$route.query.shareType) {
       let shareType = this.$route.query.shareType
       if (shareType === 'share') {
-        let isFirst = localStorage.getItem('isFirstShare')
-        let duration = new Date().getTime() - localStorage.getItem('firstTime')
-        if (duration > 86400000) {
-          this.isFirstShare = true
-        } else {
-          if (isFirst === 'false') {
-            this.isFirstShare = false
-          }
-        }
-        this.invitationCode = ''
-        localStorage.setItem('isFirstShare', 'true')
-        this.invitationBombTitle = 'Extra Life can be gained by SHARING'
-        this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
+        this.isUserFirstShare()
+        this.shareText()
       } else {
-        this.invitationCode = this.code
-        this.invitationBombTitle = 'My Referral Code:'
-        this.invitationBombHint = 'Inviting friends to get it now!'
+        this.inviteText()
       }
       this.isInvitation = true
     }
@@ -177,30 +164,11 @@ export default {
     getLives () {
       if (utils.isOnline) {
         // 判断是否是第一次分享
-        if (localStorage.getItem('isFirstShare')) {
-          let isFirst = localStorage.getItem('isFirstShare')
-          let duration = new Date().getTime() - localStorage.getItem('firstTime')
-          console.log('第一次分享localStorage' + duration + '----' + isFirst)
-          // 86400000 = 24h
-          if (duration > 86400000) {
-            this.invitationCode = ''
-            this.isFirstShare = true
-            localStorage.setItem('isFirstShare', 'true')
-            this.invitationBombTitle = 'Extra Life can be gained by SHARING'
-            this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
-          } else {
-            if (isFirst === 'false') {
-              this.isFirstShare = false
-              this.invitationCode = this.code
-              this.invitationBombTitle = 'My Referral Code:'
-              this.invitationBombHint = 'Inviting friends to get it now!'
-            }
-          }
+        this.isUserFirstShare()
+        if (this.isFirstShare) {
+          this.shareText()
         } else {
-          this.invitationCode = ''
-          this.isFirstShare = true
-          this.invitationBombTitle = 'Extra Life can be gained by SHARING'
-          this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
+          this.inviteText()
         }
         if (this.code) {
           this.isInvitation = true
@@ -244,19 +212,12 @@ export default {
     },
     // 弹框ok
     okEvent (a, b) {
-      this.showDialog = false
-      if (this.logout) {
-        utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
-          this.logout = false
-          this.btnStatistic('issue_page')
-          this.$router.push({path: '/set-question'})
-        })
-      }
       if (this.isInputInvitation) {
         if (!b) {
+          this.showDialog = true
           return false
+        } else {
+          this.showDialog = false
         }
         api.VerificationCode(b).then(({data}) => {
           console.log('验证码校验')
@@ -284,6 +245,17 @@ export default {
           this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
         })
         this.isInputInvitation = false
+      } else {
+        this.showDialog = false
+      }
+      if (this.logout) {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.logout = false
+          this.btnStatistic('issue_page')
+          this.$router.push({path: '/set-question'})
+        })
       }
     },
     // 弹框cancel
@@ -356,12 +328,44 @@ export default {
     shareDetailEntry (code) {
       this.$router.push({path: '/share-detail', query: {'code': code}})
     },
+    // 判断用户是否是第一次分享
+    isUserFirstShare () {
+      // 判断是否是第一次分享
+      if (localStorage.getItem('isFirstShare')) {
+        let isFirst = localStorage.getItem('isFirstShare')
+        let duration = new Date().getTime() - localStorage.getItem('firstTime')
+        console.log('第一次分享localStorage' + duration + '----' + isFirst)
+        // 86400000 = 24h
+        if (duration > 86400000) {
+          this.isFirstShare = true
+        } else {
+          if (isFirst === 'false') {
+            this.isFirstShare = false
+          }
+        }
+      } else {
+        this.isFirstShare = true
+      }
+    },
     // 调起弹框参数配置
     BobmParamesConfig (title, text, markType, isShow) {
       this.dialogInfo.htmlTitle = title
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
+    },
+    // share text
+    shareText () {
+      this.invitationCode = ''
+      localStorage.setItem('isFirstShare', 'true')
+      this.invitationBombTitle = 'Extra Life can be gained by SHARING'
+      this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
+    },
+    // invite text
+    inviteText () {
+      this.invitationCode = this.code
+      this.invitationBombTitle = 'My Referral Code:'
+      this.invitationBombHint = 'Inviting friends to get it now!'
     }
   },
   components: {
