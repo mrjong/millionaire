@@ -9,7 +9,7 @@
     <div class="share-detail-content">
       <img src="../assets/images/share-live.png" class="share-lives">
       <p class="text">
-        Extra Lives can be used when you answer incorrectly.It will be applied automatically once per game on any question.
+        You can use EXTRA LIVES when you answer incorrectly after logging in.It will be applied automatically once per game on any question.
       </p>
       <p class="text">
         You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
@@ -71,7 +71,7 @@ export default {
 <style scoped lang="less" type="text/less">
 .share-detail {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background-color: #fff;
   overflow: hidden;
   display: flex;
@@ -146,13 +146,10 @@ export default {
       border-radius: 46px;
       font-size: 32px;
       font-family: "Roboto-Regular";
-      position: relative;
       &__icon{
-        position: absolute;
         font-size: 32px;
-        top: 50%;
-        left: 170px;
-        transform: translate(0,-50%);
+        margin-right: 30px;
+        align-self: center;
       }
     }
     &__share{

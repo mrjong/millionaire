@@ -10,28 +10,28 @@
         Follow Us</a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="30" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
-          <check-str-length :originalLength=30 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="300" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
-          <check-str-length :originalLength=300 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
+          <textarea class="" maxlength="200" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
+          <check-str-length :originalLength=200 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="150" v-model="questionInfo.option1">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="150" v-model="questionInfo.option2">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="150" v-model="questionInfo.option3">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="form__correct">
           <div class="form__correct__title">
