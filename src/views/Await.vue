@@ -19,16 +19,17 @@
     <div class="await__btn">
       <div class="invitation-code">
         <div class="extra-lives">
-          <span class="extra-lives__icon"></span>
+          <div style="position: relative;">
+            <span class="extra-lives__icon"></span>
+            <living class="invite-living" v-if="inviteLiving"></living>
+          </div>
           <span class="extra-lives__text">Extra Lives: {{lives}}</span>
         </div>
         <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
       </div>
       <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
         <div class="get-lives__text">Get More</div>
-        <router-link :to="'/share-detail?code=' + code">
-          <span class="revive-rule">Extra Lives Rules</span>
-        </router-link>
+        <span class="revive-rule" @click.stop="toExtraLiveRules">Extra Lives Rules</span>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-else>
         <div class="share-success__text">Share success</div>
@@ -96,7 +97,8 @@ export default {
       invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
       invitationBombTitle: 'Extra Life can be gained by SHARING',
       logout: false,
-      isFirstShare: true
+      isFirstShare: true,
+      inviteLiving: false
     }
   },
   computed: {
@@ -140,8 +142,8 @@ export default {
     })
     if (this.$route.query.shareType) {
       let shareType = this.$route.query.shareType
+      this.isUserFirstShare()
       if (shareType === 'share') {
-        this.isUserFirstShare()
         this.shareText()
       } else {
         this.inviteText()
@@ -185,12 +187,7 @@ export default {
           })
         }
       } else {
-        utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
-          utils.statistic('await_page', 1, {'result_code_s': '1'}, 'login_page')
-          this.$store.dispatch(type._INIT)
-        })
+        this.login()
       }
     },
     // 调起输入邀请码弹框
@@ -202,18 +199,14 @@ export default {
           'Enter a friend\'s Referral Code to get an extra life.',
           true, true)
       } else {
-        utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
-          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
-          this.$store.dispatch(type._INIT)
-        })
+        this.login()
       }
     },
     // 弹框ok
     okEvent (a, b) {
       if (this.isInputInvitation) {
         if (!b) {
+          this.dialogInfo.htmlText = 'Invalid referral code, please check it now.'
           this.showDialog = true
           return false
         } else {
@@ -253,7 +246,7 @@ export default {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
           this.logout = false
-          this.btnStatistic('issue_page')
+          utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
           this.$router.push({path: '/set-question'})
         })
       }
@@ -360,6 +353,23 @@ export default {
       this.invitationCode = this.code
       this.invitationBombTitle = 'My Referral Code:'
       this.invitationBombHint = 'Inviting friends to get it now!'
+    },
+    // toExtraLiveRules
+    toExtraLiveRules () {
+      if (utils.isOnline) {
+        this.$router.push({path: '/share-detail', query: {'code': this.code}})
+      } else {
+        this.login()
+      }
+    },
+    // login
+    login () {
+      utils.login(() => {
+        this.$store.commit(type._UPDATE, {isOnline: true})
+        utils.isOnline = true
+        utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
+        this.$store.dispatch(type._INIT)
+      })
     }
   },
   components: {
@@ -368,6 +378,16 @@ export default {
     BaseInfo,
     BalanceMark,
     Living
+  },
+  watch: {
+    code: function (val, oldVal) {
+      if (val > oldVal) {
+        this.inviteLiving = true
+        setTimeout(() => {
+          this.inviteLiving = false
+        })
+      }
+    }
   }
 }
 </script>
@@ -435,6 +455,12 @@ export default {
             display: block;
             height: 36px;
             line-height: 36px;
+          }
+          .invite-living{
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 50px;
           }
           &__icon{
             width: 40px;
