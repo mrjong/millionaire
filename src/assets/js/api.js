@@ -17,7 +17,8 @@ export const api = {
   pollMsg: '/cmp/q/', // 轮询消息
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
-  DailyShare: '/cmp/ds' // 每日分享
+  DailyShare: '/cmp/ds', // 每日分享
+  sharePage: '/cmp/res' // 分享中间页
 }
 
 export const init = function (isRefreshToken) {

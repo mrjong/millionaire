@@ -105,7 +105,7 @@ const actions = {
    * 开始答题
    * @param {any} {commit, getters}
    */
-  [type.QUESTION_START] ({commit, getters, rootGetters}) {
+  [type.QUESTION_START] ({commit, getters, rootGetters, dispatch}) {
     const timer = utils.Timer(1000, getters.restTime * 1000)
     timer.addCompleteListener(() => {
       if (getters.restTime > 0) {
@@ -119,9 +119,19 @@ const actions = {
         restTime: 0
       })
       if (!getters.isAnswered) {
+        // 若没有答题，弹窗提示
+        !getters.watchingMode && dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'You\'ve been eliminated. ',
+          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'Continue'
+        })
+
         commit(type.QUESTION_UPDATE, {
           watchingMode: true
         })
+
         utils.statistic('NOT_ANSWER', 6, {
           action_s: `${rootGetters.userInfo.userName}`,
           text_s: `${getters.index}`
@@ -240,16 +250,6 @@ const actions = {
           }
         }
 
-        // 若没有答题，弹窗提示
-        if (!getters.watchingMode && !getters.isAnswered) {
-          dispatch(type._OPEN_DIALOG, {
-            htmlTitle: 'You\'ve been eliminated. ',
-            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-            shouldSub: false,
-            markType: 0,
-            okBtnText: 'Continue'
-          })
-        }
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
