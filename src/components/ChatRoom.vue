@@ -5,7 +5,7 @@
     :class="{'chat-msg-wrap-haswrap': showInput}">
     <div class="chat-msg-wrap" id='chatMsgWrap'>
         <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
+          <p class="msg-container__item" v-for="(col, i) in msgList" :key="col.msg + i" v-if="msgList.length">
             <span class="msg-container__item__wrap">
               <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
               <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -109,13 +109,16 @@ export default {
         // commit(type.CHAT_LIST_FETCH, obj)
       }
       im.addListener(listenerType.MESSAGE_NORMAL, handler)
-      im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
     },
     // 2. 发送消息 【hack】
     sendMessage () {
       if (this.myMessage) {
         this.showInput = false
-        im.sendMessage(this.myMessage, this.userInfo.avatar, this.userInfo.userName)
+        const msg = this.myMessage
+        const nickname = this.userInfo.userName
+        const img = this.userInfo.avatar
+        im.sendMessage(msg, img, nickname)
+        this.msgList.push({msg, nickname, img})
         this.myMessage = ''
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面

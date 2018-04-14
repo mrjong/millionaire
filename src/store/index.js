@@ -97,6 +97,9 @@ export default new Vuex.Store({
     [type._OPEN_DIALOG] (state, dialogInfo) {
       state.dialogInfo = Object.assign(state.dialogInfo, dialogInfo)
       state.showDialog = true
+      setTimeout(() => {
+        state.showDialog = false
+      }, 5000)
     }
   },
   actions: {
@@ -191,7 +194,7 @@ export default new Vuex.Store({
                   htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: 'Continue'
+                  okBtnText: 'OK'
                 })
               }
 

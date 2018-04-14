@@ -222,6 +222,11 @@ export default {
         api.VerificationCode(b).then(({data}) => {
           console.log('验证码校验')
           console.log(data)
+          utils.statistic('wait_page', 2, {
+            to_destination_s: 'input_referral_code',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_code_s: data.result === 1 ? '1' : '0'
+          }, 'wait_page')
           if (data.result === 1) {
             this.$store.dispatch(type._INIT)
           } else {
@@ -281,7 +286,16 @@ export default {
       }
     },
     // 分享后的回调
-    callbackFn (isSucceed) {
+    callbackFn (isSucceed, packageName) {
+      console.log('分享的回调' + isSucceed)
+      const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
+      if (this.$route.query.shareType) {
+        this.$emit('shareFromDetailsPage', {isSucceed, shareType})
+      }
+      utils.statistic('millionaire', 3, {
+        to_destination_s: shareType,
+        result_code_s: isSucceed ? '1' : '0'
+      }, 'wait_page')
       this.isInvitation = false
       if (isSucceed) {
         if (this.isFirstShare) {
@@ -293,6 +307,13 @@ export default {
         localStorage.setItem('isFirstShare', 'false')
         localStorage.setItem('firstTime', new Date().getTime())
         api.DailyShare().then(({data}) => {
+          console.log('分享成功请求api结果')
+          console.log(data)
+          utils.statistic('wait_page', 2, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: data.result === 1 ? 'success' : 'fail'
+          }, 'wait_page')
           if (data.result === 1) {
             this.$store.dispatch(type._INIT)
           } else {
@@ -300,6 +321,11 @@ export default {
           }
         }).catch(() => {
           this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          utils.statistic('wait_page', 2, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: 'fail'
+          }, 'wait_page')
         })
       } else {
         // 失败回调

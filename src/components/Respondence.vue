@@ -114,7 +114,7 @@ export default {
           htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
           shouldSub: false,
           markType: 0,
-          okBtnText: 'Continue'
+          okBtnText: 'OK'
         })
         return false
       }
