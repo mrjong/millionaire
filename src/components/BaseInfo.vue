@@ -52,6 +52,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .base-info{
+    max-width: 93% !important;
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
