@@ -49,7 +49,7 @@
         <div class="form__submit" @click="submit">Submit</div>
         </div>
     </div>
-    <div class="set-question__mark">
+    <div class="set-question__mark" v-else>
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
