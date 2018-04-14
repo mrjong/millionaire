@@ -49,7 +49,7 @@
         <div class="form__submit" @click="submit">Submit</div>
         </div>
     </div>
-    <div class="set-question__mark" v-else>
+    <div class="set-question__mark">
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
@@ -429,6 +429,7 @@ export default {
     justify-content: center;
     position: absolute;
     .bomb{
+      max-width: 90%;
       width: 620px;
       min-height: 1000px ;
       background: url("../assets/images/bomb-bg.jpg") no-repeat top center;
@@ -438,6 +439,7 @@ export default {
       position: relative;
       padding: 0 35px 80px 50px;
       &__logo{
+        max-width: 52%;
         width: 323px;
         position: absolute;
         top: -70px;
@@ -478,6 +480,7 @@ export default {
       }
       &__btn{
         display: flex;
+        max-width: 90%;
         width: 502px;
         height: 76px;
         background-color: #faa717;

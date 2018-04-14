@@ -282,10 +282,8 @@ export default {
     },
     // 分享后的回调
     callbackFn (isSucceed) {
-      console.log('分享的回调' + isSucceed)
       this.isInvitation = false
       if (isSucceed) {
-        console.log('是否是第一次分享' + this.isFirstShare)
         if (this.isFirstShare) {
           this.isSucceed = true
           setTimeout(() => {
@@ -295,8 +293,6 @@ export default {
         localStorage.setItem('isFirstShare', 'false')
         localStorage.setItem('firstTime', new Date().getTime())
         api.DailyShare().then(({data}) => {
-          console.log('分享成功请求api结果')
-          console.log(data)
           if (data.result === 1) {
             this.$store.dispatch(type._INIT)
           } else {
@@ -307,7 +303,6 @@ export default {
         })
       } else {
         // 失败回调
-        console.log('分享失败')
         this.isSucceed = false
         this.isInputInvitation = false
         this.BobmParamesConfig('', 'Failed to share, please try again later.', false, true)
@@ -334,7 +329,6 @@ export default {
       if (localStorage.getItem('isFirstShare')) {
         let isFirst = localStorage.getItem('isFirstShare')
         let duration = new Date().getTime() - localStorage.getItem('firstTime')
-        console.log('第一次分享localStorage' + duration + '----' + isFirst)
         // 86400000 = 24h
         if (duration > 86400000) {
           this.isFirstShare = true
