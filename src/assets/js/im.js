@@ -177,7 +177,7 @@ const im = {
         console.log('Connect successfully.' + userId, token)
         keepLiveMessageTimer = setInterval(() => {
           im.sendAliveMessage()
-        }, 1500)
+        }, 5000)
         im.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {

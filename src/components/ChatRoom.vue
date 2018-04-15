@@ -5,7 +5,7 @@
     :class="{'chat-msg-wrap-haswrap': showInput}">
     <div class="chat-msg-wrap" id='chatMsgWrap'>
         <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-          <p class="msg-container__item" v-for="(col, i) in msgList" :key="col.msg + i" v-if="msgList.length">
+          <p class="msg-container__item" v-for="(col) in msgList" :key="col.msgId" v-if="msgList.length">
             <span class="msg-container__item__wrap">
               <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
               <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -86,29 +86,29 @@ export default {
   methods: {
     // 1. 获取聊天列表 【hack】
     fetchChatList () {
-      const handler = (message) => {
-        const obj = {
-          img: message.content.user.avatar,
-          nickname: message.content.user.name,
-          msg: message.content.content,
-          msgId: message.messageId
-        }
-        let msgList = this.msgList || []
-        msgList.push(obj)
-        const len = msgList.length
-        if (len >= 50) {
-          msgList.splice(0, 36)
-        }
-        this.msgList = msgList
-        this.$nextTick(() => {
-          const scrollContainer = document.getElementById('scrollContainer')
-          if (scrollContainer) {
-            scrollContainer.scrollTop = 100000
-          }
-        })
-        // commit(type.CHAT_LIST_FETCH, obj)
+      im.addListener(listenerType.MESSAGE_NORMAL, this.messageHandler)
+    },
+    // 消息处理器
+    messageHandler (message) {
+      const obj = {
+        img: message.content.user.avatar,
+        nickname: message.content.user.name,
+        msg: message.content.content,
+        msgId: message.messageId
       }
-      im.addListener(listenerType.MESSAGE_NORMAL, handler)
+      let msgList = this.msgList || []
+      msgList.push(obj)
+      const len = msgList.length
+      if (len >= 50) {
+        msgList.splice(0, 36)
+      }
+      this.msgList = msgList
+      this.$nextTick(() => {
+        const scrollContainer = document.getElementById('scrollContainer')
+        if (scrollContainer) {
+          scrollContainer.scrollTop = 100000
+        }
+      })
     },
     // 2. 发送消息 【hack】
     sendMessage () {
@@ -118,7 +118,16 @@ export default {
         const nickname = this.userInfo.userName
         const img = this.userInfo.avatar
         im.sendMessage(msg, img, nickname)
-        this.msgList.push({msg, nickname, img})
+        this.messageHandler({
+          content: {
+            user: {
+              avatar: img,
+              name: nickname
+            },
+            content: msg
+          },
+          messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
+        })
         this.myMessage = ''
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
