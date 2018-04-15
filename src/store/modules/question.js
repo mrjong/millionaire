@@ -89,9 +89,6 @@ const actions = {
           watchingMode: getters.watchingMode,
           ua: window.navigator.userAgent
         })
-        options.sort(() => {
-          return Math.random() > 0.5 ? 1 : -1
-        })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
         })
@@ -125,7 +122,7 @@ const actions = {
           htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
           shouldSub: false,
           markType: 0,
-          okBtnText: 'Continue'
+          okBtnText: 'OK'
         })
 
         commit(type.QUESTION_UPDATE, {
@@ -245,7 +242,7 @@ const actions = {
               htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
               shouldSub: false,
               markType: 0,
-              okBtnText: 'Continue'
+              okBtnText: 'OK'
             })
           }
         }
