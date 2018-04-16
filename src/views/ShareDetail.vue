@@ -139,7 +139,9 @@ export default {
       text-align: center;
       margin-top: 100px;
       span{
-        font-weight: 400;
+        font-weight: 500;
+        font-size: 48px;
+        color:#e03c79
       }
     }
   }

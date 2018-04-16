@@ -21,7 +21,7 @@
         <div class="share" @click="toFb">
           <a class="share__fb" ref="toFbBrowser">
             <p class="share__wrap">
-              <img src="../assets/images/facebook-icon.png" alt="" class="share__wrap__icon">
+              <img src="../assets/images/facebook.png" alt="" class="share__wrap__icon">
             </p>
             <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
           </a>
