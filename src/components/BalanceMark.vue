@@ -7,7 +7,7 @@
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
       <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
       <input type="text"
-             placeholder="Fill in the invitation code"
+             placeholder="Referral Code"
              class="balance-mark__wrap__invitation"
              v-if="isInvitation" v-model="invitationCode">
       <p class="balance-mark__wrap__btn">

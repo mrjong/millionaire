@@ -412,7 +412,7 @@ export default {
     Living
   },
   watch: {
-    code: function (val, oldVal) {
+    lives: function (val, oldVal) {
       console.log('新code= ' + val + '旧code= ' + oldVal)
       if (val > oldVal) {
         this.inviteLiving = true
