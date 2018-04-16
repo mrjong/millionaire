@@ -317,7 +317,8 @@ export default {
           } else {
             this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
           }
-        }).catch(() => {
+        }, (err) => {
+          console.log('分享失败:', err)
           this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
           utils.statistic('wait_page', 1, {
             to_destination_s: 'get_extra_life',
@@ -411,7 +412,7 @@ export default {
     Living
   },
   watch: {
-    code: function (val, oldVal) {
+    lives: function (val, oldVal) {
       console.log('新code= ' + val + '旧code= ' + oldVal)
       if (val > oldVal) {
         this.inviteLiving = true
