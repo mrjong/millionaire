@@ -27,6 +27,15 @@
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
+    <div class="living" v-if="isLiving">
+      <div class="living-bg">
+        <living class="living-animation"></living>
+      </div>
+      <p class="revive-title">You get revived.</p>
+      <p class="revive-text">
+        Note: Extra Lives could be used twice per game, except on the last question.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -36,6 +45,7 @@ import Answer from '../components/Answer.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import Living from '../components/Living'
 export default {
   name: 'Respondence',
   data () {
@@ -43,7 +53,8 @@ export default {
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
-      countdownStyle: 'color: #fff;'
+      countdownStyle: 'color: #fff;',
+      isLiving: false
       // game_answer: {
       //   current_question_l: 0,
       //   cost_time_l: 0,
@@ -66,7 +77,8 @@ export default {
       restTime: 'restTime',
       options: 'options',
       questionResult: 'question_result',
-      id: 'id'
+      id: 'id',
+      isUsedRecoveryCard: 'isUsedRecoveryCard'
     }),
     totalResult: function () {
       let result = {}
@@ -90,6 +102,7 @@ export default {
   },
   mounted () {
     this.countDown(this.question_status)
+    this.isClick = this.isAnswered
     utils.statistic('game_page', 0)
   },
   methods: {
@@ -101,7 +114,7 @@ export default {
           htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
           shouldSub: false,
           markType: 0,
-          okBtnText: 'Continue'
+          okBtnText: 'OK'
         })
         return false
       }
@@ -109,7 +122,10 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          this.$store.commit(type.QUESTION_UPDATE, {userAnswer: e, isAnswered: true})
+          const userAnswerInfo = {userAnswer: e, isAnswered: true}
+          this.$store.commit(type.QUESTION_UPDATE, userAnswerInfo)
+          // 作答情况存储在本地
+          localStorage.setItem('millionaire_user_answer', JSON.stringify({...userAnswerInfo, id: this.id, index: this.index, expire: Date.now() + 180000}))
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
             this.$emit('error', err)
           })
@@ -163,6 +179,19 @@ export default {
   watch: {
     question_status: function (status) {
       this.countDown(status)
+
+      // 复活成功显示复活动画
+      if (status === 7 && this.isUsedRecoveryCard) {
+        console.log('复活成功')
+        this.isLiving = true
+        utils.playSound('succeed')
+        setTimeout(() => {
+          this.isLiving = false
+        }, 3000)
+        this.$store.commit(type.QUESTION_UPDATE, {
+          isUsedRecoveryCard: false
+        })
+      }
     //  if (status === 7 && !this.watchingMode) {
     //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
     //    utils.statistic('', 2, this.game_answer)
@@ -173,11 +202,15 @@ export default {
         // 答题倒计时
         utils.playSound('countDown5')
       }
+    },
+    isAnswered: function (val) {
+      this.isClick = val
     }
   },
   components: {
     Answer,
-    Viewing
+    Viewing,
+    Living
   }
 }
 </script>
@@ -214,6 +247,47 @@ export default {
     }
     &__answer{
       font-size: 28px;
+    }
+    .living{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(68, 68, 68, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .living-bg{
+        width: 500px;
+        height: 500px;
+        background: url("../assets/images/light.png") no-repeat top;
+        background-size: cover;
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        margin-top: -100px;
+        .living-animation{
+          align-self: center;
+          width: 180px;
+          height: 180px;
+        }
+      }
+      .revive-title{
+        width: 80%;
+        color: #fff;
+        font-size: 48px;
+        font-family: "Roboto";
+        text-align: center;
+        margin: 0 auto 30px;
+      }
+      .revive-text{
+        width: 80%;
+        color: #ff70a5;
+        font-size: 28px;
+        text-align: center;
+        margin: 0 auto;
+      }
     }
   }
   #circleProcess {

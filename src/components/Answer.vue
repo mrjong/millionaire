@@ -128,6 +128,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .answer-container{
+    max-width: 100% !important;
     width: 624px;
     height: 93px;
     margin: 0 auto 20px ;

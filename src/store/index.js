@@ -17,6 +17,7 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 let syncTimer = null
 let countDownTimer = null
+let initTimer = null
 export default new Vuex.Store({
   state: {
     isOnline: utils.isOnline, // 是否登录
@@ -58,7 +59,9 @@ export default new Vuex.Store({
       markType: 0,
       okBtnText: 'OK',
       hintImg: './static/images/tip-fail.png'
-    }
+    },
+    lives: 0,
+    code: ''
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -70,9 +73,12 @@ export default new Vuex.Store({
     result: (state) => state.result,
     onlineAmount: (state) => state.onlineAmount,
     readyTime: (state) => state.readyTime,
+    syncIntervalTime: (state) => state.syncIntervalTime,
     isRefreshedToken: (state) => state.isRefreshedToken,
     showDialog: (state) => state.showDialog,
-    dialogInfo: (state) => state.dialogInfo
+    dialogInfo: (state) => state.dialogInfo,
+    lives: (state) => state.lives,
+    code: (state) => state.code
   },
   mutations: {
     /**
@@ -91,6 +97,9 @@ export default new Vuex.Store({
     [type._OPEN_DIALOG] (state, dialogInfo) {
       state.dialogInfo = Object.assign(state.dialogInfo, dialogInfo)
       state.showDialog = true
+      setTimeout(() => {
+        state.showDialog = false
+      }, 5000)
     }
   },
   actions: {
@@ -99,14 +108,15 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
+      clearInterval(initTimer)
       commit(type._UPDATE, {
         isRefreshedToken: isRefreshToken
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
-          if (data.result === 1 && +data.code === 0) {
+          if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
             // 更新首页信息
@@ -131,7 +141,12 @@ export default new Vuex.Store({
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
-              hostIntervalTime
+              hostIntervalTime,
+              lives,
+              code
+            })
+            commit(type.QUESTION_UPDATE, {
+              watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
             })
             // 如果已经开始
             if (isPlaying) {
@@ -154,15 +169,10 @@ export default new Vuex.Store({
                   index: +question.js || 0,
                   contents: question.jc || '',
                   options,
-                  optionsMd5Map,
-                  watchingMode: true
+                  optionsMd5Map
                 })
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_ANSWERING
-                })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
                 })
               }
               // 如果有答案直接进入答案页面
@@ -175,21 +185,22 @@ export default new Vuex.Store({
                 commit(type.QUESTION_UPDATE, {
                   status: status.QUESTION_END
                 })
-                // 更新当前状态
-                commit(type._UPDATE, {
-                  status: status._PLAYING
-                })
               }
 
-              if (question || answer) {
+              if (getters.watchingMode) {
                 dispatch(type._OPEN_DIALOG, {
                   htmlTitle: 'You are late.',
                   htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: 'Continue'
+                  okBtnText: 'OK'
                 })
               }
+
+              // 更新当前状态
+              commit(type._UPDATE, {
+                status: status._PLAYING
+              })
             } else {
               // 是否进入倒计时
               if (isInRoom) {
@@ -222,18 +233,12 @@ export default new Vuex.Store({
                 commit(type._UPDATE, {
                   status: status._AWAIT
                 })
-                // 如果剩余剩余时间大于十分钟 或者 无下场信息
-                if (startTimeOffset * 1000 > getters.readyTime || getters.startTime < 0) {
-                  // 每隔一段时间同步开始时间
-                  const {syncIntervalTime} = state
-                  setTimeout(() => {
-                    dispatch(type._INIT)
-                  }, syncIntervalTime)
-                }
+                dispatch(type._POLL_INIT)
               }
             }
             // 如果聊天室开启，进入聊天室
             if (isInRoom) {
+              im.startPullMsg()
               im.addListener(CONNECT_SUCCESS, (imUserId) => {
                 commit(type.HOME_UPDATE, {
                   imUserId
@@ -253,14 +258,25 @@ export default new Vuex.Store({
           } else {
             console.log('初始化失败:', data.msg)
             reject(data.msg)
+            dispatch(type._POLL_INIT)
           }
         }, (err) => {
           console.log('初始化接口出错', err)
           reject(err)
+          dispatch(type._POLL_INIT)
         }).catch((err) => {
           console.log('代码逻辑出错:' + err)
         })
       })
+    },
+    /**
+     * 初始化轮询
+     * @param {any} {dispatch}
+     */
+    [type._POLL_INIT] ({dispatch, getters}) {
+      setTimeout(() => {
+        dispatch(type._INIT)
+      }, getters.syncIntervalTime)
     },
     /**
      * 同步开始时间

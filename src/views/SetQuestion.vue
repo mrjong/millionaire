@@ -5,30 +5,33 @@
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">Set Questions Myself</p>
-      <a class="set-question__wrap__join" @click="join" ref="toFbGroup">
+      <a class="set-question__wrap__join" @click="join" ref="toFbGroup" v-if="isSetQuestion">
         <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
         Follow Us</a>
       <div class="form">
-        <input type="text" class="form__name base" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+        <div class="frame">
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+        </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="100" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
-          <check-str-length :originalLength=100 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
+          <textarea class="" maxlength="200" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
+          <check-str-length :originalLength=200 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="25" v-model="questionInfo.option1">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="150" v-model="questionInfo.option1">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="25" v-model="questionInfo.option2">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="150" v-model="questionInfo.option2">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="25" v-model="questionInfo.option3">
-          <check-str-length :originalLength=25 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
+          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="150" v-model="questionInfo.option3">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="form__correct">
           <div class="form__correct__title">
@@ -199,7 +202,7 @@ export default {
     setQuestionBtnStatics (destination, result) {
       let staticsObj = {}
       if (result) {
-        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code': result}
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code_s': `${result}`}
       } else {
         staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
       }
@@ -253,6 +256,7 @@ export default {
     }
     &__join{
       display: block;
+      max-width: 100%;
       width: 654px;
       height: 91px;
       line-height: 91px;
@@ -275,13 +279,24 @@ export default {
     }
     .form{
       padding: 24px 0;
-      input.answer-text {
-        padding-right: 70px;
-      }
-      input.answer-text::-webkit-input-placeholder{
-        text-align: left;
+      .frame{
+        input.answer-text {
+          padding-right: 70px;
+        }
+        .form__name{
+          padding-right: 70px;
+        }
+        .check-str-length-name{
+          position: absolute;
+          top: .3rem;
+          right: .4rem;
+        }
+        input.answer-text::-webkit-input-placeholder{
+          text-align: left;
+        }
       }
       &__question {
+        max-width: 100%;
         width:656px ;
         height: 334px;
         background: url("../assets/images/question-area-bg.png") no-repeat top left;
@@ -316,7 +331,7 @@ export default {
           width:100% ;
           height: 100%;
           border: 0;
-          padding:15px 20px 15px 30px;
+          padding:15px 40px 40px 30px;
           background-color: transparent;
         }
         textarea:focus {
@@ -324,8 +339,8 @@ export default {
         }
         .check-str-length-title{
           position: absolute;
-          right: 40px;
-          bottom: 40px;
+          right: 20px;
+          bottom: 30px;
         }
       }
       .frame{
@@ -337,6 +352,7 @@ export default {
         }
       }
       &__correct{
+        max-width: 100% !important;
         width: 656px;
         height: 192px;
         background-color: #f4f3f7;
@@ -392,6 +408,7 @@ export default {
         }
       }
       &__submit{
+        max-width: 100%;
         width: 656px;
         height: 93px;
         line-height: 93px;
@@ -412,6 +429,7 @@ export default {
     justify-content: center;
     position: absolute;
     .bomb{
+      max-width: 90%;
       width: 620px;
       min-height: 1000px ;
       background: url("../assets/images/bomb-bg.jpg") no-repeat top center;
@@ -421,6 +439,7 @@ export default {
       position: relative;
       padding: 0 35px 80px 50px;
       &__logo{
+        max-width: 52%;
         width: 323px;
         position: absolute;
         top: -70px;
@@ -461,6 +480,7 @@ export default {
       }
       &__btn{
         display: flex;
+        max-width: 90%;
         width: 502px;
         height: 76px;
         background-color: #faa717;
@@ -476,6 +496,7 @@ export default {
     }
   }
   .base {
+    max-width: 100% !important;
     width:656px ;
     height: 93px;
     border-radius: 46px;
