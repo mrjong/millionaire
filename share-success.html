@@ -184,7 +184,7 @@
       Like us on Facebook to get more<br>
       referral codes and win! Up to ₹1,000,000!!!
     </p>
-    <p class="btn like" onclick="toFb()">Like APUS Browser</p>
+    <p class="btn like" onclick="toFb('invite')">Like APUS Browser</p>
   </div>
   <div class="invite">
     <p class="text invite-text">
@@ -192,8 +192,8 @@
       for us to win up to ₹1,000,000!<br>
       Share to get an extra life and WIN!
     </p>
-    <p class="btn like" onclick="toFb()">GET HINTS NOW</p>
-    <p class="btn gp" onclick="toGp()">WIN CASH NOW</p>
+    <p class="btn like" onclick="toFb('share')">GET HINTS NOW</p>
+    <p class="btn gp" onclick="toGp('share')">WIN CASH NOW</p>
   </div>
 </div>
 <script>
@@ -205,18 +205,21 @@
   }
   console.log(window.location.search)
   function toGp () {
+    ga('send', 'event', 'link', 'click', 'millionaire-gp-' + type)
     setTimeout(function () {
       window.location.href = 'https://play.google.com/store/apps/details?id=com.apusapps.browser&referrer=id%3D300021'
     },5)
     window.location.href = 'market://details?id=com.apusapps.browser&referrer=id%3D300021'
   }
-  function toFb () {
+  function toFb (type) {
+    ga('send', 'event', 'link', 'click', 'millionaire-fb-' + type)
     setTimeout(function () {
       window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144'
     },5)
     window.location.href = 'fb://page/1532330666785144'
   }
   var type = getUrlParameter('type')
+  var packageName = getUrlParameter('packageName')
   var share = document.getElementsByClassName('share')[0]
   var invite = document.getElementsByClassName('invite')[0]
   if (getUrlParameter('code')) {
@@ -225,10 +228,20 @@
   if (type === 'share') {
     invite.style.display = 'block'
     share.style.display = 'none'
+    ga('send', 'event', 'link', 'click', 'millionaire-sharePage-' + packageName)
   } else {
     invite.style.display = 'none'
     share.style.display = 'block'
+    ga('send', 'event', 'link', 'click', 'millionaire-invitePage-' + packageName)
   }
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-117569661-1', 'auto');
+  ga('send', 'pageview');
 </script>
 </body>
 </html>

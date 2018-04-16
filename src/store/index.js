@@ -115,7 +115,6 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
-            console.log(data.data)
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || 0
