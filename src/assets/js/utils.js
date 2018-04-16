@@ -1,6 +1,8 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
 import md5 from 'md5'
+import { api } from './api'
+import { host, env } from './http'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -112,13 +114,16 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share (callback) {
+  share (callback, packageName, content, link = window.location.href) {
+    const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
+    const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
+    const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
     window.shareSuccessCallback = callback
     window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-      sharePackage: '',
-      shareTitle: 'Quiz in "GO! Millionaire" of APUS Browser.',
-      shareContent: 'Win real cash up to Rs. 1,000,000!',
-      shareLink: 'https://goo.gl/t6jWBU',
+      sharePackage: packageName,
+      shareTitle: title,
+      shareContent: content,
+      shareLink,
       callbackMethod: 'shareSuccess'
     }))
   },

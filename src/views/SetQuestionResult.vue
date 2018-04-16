@@ -122,7 +122,8 @@ export default {
     color: rgba(36, 18, 98, 0.8);
   }
 }
-.base {
+.base{
+    max-width: 100%;
     width:656px ;
     border-radius: 46px;
     background-color:#f4f3f7 ;

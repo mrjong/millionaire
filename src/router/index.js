@@ -8,7 +8,7 @@ const SetQuestionResult = () => import('@/views/SetQuestionResult.vue')
 const Rule = () => import('@/views/Rule.vue')
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
-
+const ShareDetail = () => import('@/views/ShareDetail.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -52,6 +52,11 @@ const router = new Router({
       path: '/set-question-result',
       name: 'set-question-result',
       component: SetQuestionResult
+    },
+    {
+      path: '/share-detail',
+      name: 'share-detail',
+      component: ShareDetail
     }
   ]
 })

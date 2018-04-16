@@ -22,7 +22,8 @@ const state = {
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
   restTime: 0, // 剩余时间
-  isWon: false // 是否展示you won
+  isWon: false, // 是否展示you wonThe resurrection of card
+  isUsedRecoveryCard: false // 是否使用过复活卡
 }
 
 const getters = {
@@ -40,7 +41,8 @@ const getters = {
   question_result: (state) => state.result,
   time: (state) => state.time,
   restTime: (state) => state.restTime,
-  isWon: (state) => state.isWon
+  isWon: (state) => state.isWon,
+  isUsedRecoveryCard: (state) => state.isUsedRecoveryCard
 }
 
 const mutations = {
@@ -72,7 +74,7 @@ const actions = {
       const content = (message.content && message.content.content) || ''
       if (content) {
         const question = JSON.parse(content)
-        const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = question
+        const {ji: id = '', js: index = 1, jc: contents = '', jo: options = [], restTime} = question
         utils.statistic('QUESTION', 6, {
           flag_s: `${id}`,
           text_s: `${index}`,
@@ -87,12 +89,10 @@ const actions = {
           watchingMode: getters.watchingMode,
           ua: window.navigator.userAgent
         })
-        options.sort(() => {
-          return Math.random() > 0.5 ? 1 : -1
-        })
         commit(type.QUESTION_UPDATE, {
-          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options)
+          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
         })
+        dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
         dispatch(type.QUESTION_START)
       }
     })
@@ -102,12 +102,8 @@ const actions = {
    * 开始答题
    * @param {any} {commit, getters}
    */
-  [type.QUESTION_START] ({commit, getters, rootGetters}) {
-    const {time} = getters
-    commit(type.QUESTION_UPDATE, {
-      restTime: time
-    })
-    const timer = utils.Timer(1000, time * 1000)
+  [type.QUESTION_START] ({commit, getters, rootGetters, dispatch}) {
+    const timer = utils.Timer(1000, getters.restTime * 1000)
     timer.addCompleteListener(() => {
       if (getters.restTime > 0) {
         commit(type.QUESTION_UPDATE, {
@@ -120,9 +116,19 @@ const actions = {
         restTime: 0
       })
       if (!getters.isAnswered) {
+        // 若没有答题，弹窗提示
+        !getters.watchingMode && dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'You\'ve been eliminated. ',
+          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'OK'
+        })
+
         commit(type.QUESTION_UPDATE, {
           watchingMode: true
         })
+
         utils.statistic('NOT_ANSWER', 6, {
           action_s: `${rootGetters.userInfo.userName}`,
           text_s: `${getters.index}`
@@ -150,18 +156,30 @@ const actions = {
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
       submitAnswer(id, userAnswer, index).then(({data}) => {
-        if (+data.result === 0) {
-          if (+data.code === 1005) {
-            reject('Time is out, you can view only.')
-          } else {
-            reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+        if (+data.result === 1) {
+          switch (+data.code) {
+            case 1007: {
+              commit(type.QUESTION_UPDATE, {
+                isUsedRecoveryCard: true
+              })
+              break
+            }
+          }
+          resolve()
+        } else {
+          switch (+data.code) {
+            case 1005: {
+              reject('Time is out, you can view only.')
+              break
+            }
+            default: {
+              reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+            }
           }
           commit(type.QUESTION_UPDATE, {
             watchingMode: true
           })
           console.log('答案提交失败:', id, data.msg)
-        } else {
-          resolve()
         }
       }, (err) => {
         reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
@@ -181,16 +199,28 @@ const actions = {
    */
   [type.QUESTION_RECEIVE_ANSWER] ({commit, getters, rootGetters, dispatch}, answer) {
     im.addListener(MESSAGE_ANSWER, (message) => {
-      const md5Map = getters.optionsMd5Map
       const answerStr = (message.content && message.content.answer) || ''
       const resultStr = (message.content && message.content.summary) || ''
+      const questionStr = (message.content && message.content.question) || ''
+
+      // 如果有题目信息，更新题目信息
+      if (questionStr) {
+        const question = JSON.parse(questionStr)
+        commit(type.QUESTION_UPDATE, {
+          ...question, optionsMd5Map: utils.generateMd5Map(question.options)
+        })
+        dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
+      }
+
+      const md5Map = getters.optionsMd5Map
+
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
         const {i: id, a: correctAnswer} = answer
 
         // 判断答案是否正确
-        const isCorrect = md5Map[correctAnswer] === getters.userAnswer
+        let isCorrect = md5Map[correctAnswer] === getters.userAnswer
 
         utils.statistic('ANSWER', 6, {
           flag_s: `${id}`,
@@ -202,30 +232,25 @@ const actions = {
         if (isCorrect && !getters.watchingMode) {
           utils.playSound('succeed')
         } else if (!isCorrect && !getters.watchingMode) {
-          utils.playSound('failed')
-          dispatch(type._OPEN_DIALOG, {
-            htmlTitle: 'You\'ve been eliminated. ',
-            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-            shouldSub: false,
-            markType: 0,
-            okBtnText: 'Continue'
-          })
+          // 如果使用了复活卡
+          if (getters.isUsedRecoveryCard) {
+            isCorrect = true
+          } else {
+            utils.playSound('failed')
+            dispatch(type._OPEN_DIALOG, {
+              htmlTitle: 'You\'ve been eliminated. ',
+              htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+              shouldSub: false,
+              markType: 0,
+              okBtnText: 'OK'
+            })
+          }
         }
 
-        // 若没有答题，弹窗提示
-        if (!getters.watchingMode && !getters.isAnswered) {
-          dispatch(type._OPEN_DIALOG, {
-            htmlTitle: 'You\'ve been eliminated. ',
-            htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-            shouldSub: false,
-            markType: 0,
-            okBtnText: 'Continue'
-          })
-        }
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0
+          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -239,6 +264,27 @@ const actions = {
         })
       }
     })
+  },
+  /**
+   * 同步本地答案信息
+   * @param {any} {commit, getters}
+   */
+  [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
+    // 从本地获取用户作答情况
+    const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
+    if (userAnswerInfoStr) {
+      const userAnswerInfo = JSON.parse(userAnswerInfoStr)
+      const {expire, id, index, isAnswered, userAnswer} = userAnswerInfo
+      // 若本地存储的答案信息与当前题目一致，则同步答案信息
+      if (expire > Date.now() && id === getters.id && index === getters.index) {
+        commit(type.QUESTION_UPDATE, {
+          id,
+          index,
+          isAnswered,
+          userAnswer
+        })
+      }
+    }
   },
   [type.QUESTION_YOU_WON] ({commit}, question) {
     commit(type.QUESTION_UPDATE, question)

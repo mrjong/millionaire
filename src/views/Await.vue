@@ -16,24 +16,58 @@
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
-    <router-link to="/set-question">
-      <div class="await__set" @click="btnStatistic('issue_page')">
-        <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-        <p class="await__set__text">Set Questions Myself</p>
-      </div>
-    </router-link>
     <div class="await__btn">
-      <router-link to="/rank">
-        <base-btn :baseStyle="baseStyle2"  @click="btnStatistic('rank_page')"></base-btn>
-      </router-link>
-      <base-btn :baseStyle="baseStyle1" @inviteFriends="inviteFriends"></base-btn>
+      <div class="invitation-code">
+        <div class="extra-lives">
+          <div style="position: relative;">
+            <span class="extra-lives__icon"></span>
+            <living class="invite-living" v-if="inviteLiving"></living>
+          </div>
+          <span class="extra-lives__text">Extra Lives: {{lives}}</span>
+        </div>
+        <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
+      </div>
+      <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
+        <div class="get-lives__text">Get More</div>
+        <span class="revive-rule" @click.stop="toExtraLiveRules">Extra Lives Rules</span>
+      </div>
+      <div class="share-success" ref="shareSuccessCard" v-else>
+        <div class="share-success__text">Share success</div>
+        <div class="share-success__base">
+          <living></living>
+          <span class="share-success__base__num">+1</span>
+        </div>
+      </div>
     </div>
-    <div class="await__bottom">
-      <img src="../assets/images/apus-logo.png" class="await__bottom__apus">
+    <div class="await__set" @click="getSetQuestion">
+      <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
+      <p class="await__set__text">Set Questions Myself</p>
     </div>
+    <div class="invitation-mark" v-if="isInvitation">
+      <div class="invitation-bomb">
+        <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
+        <p class="invitation-bomb__info">
+          {{invitationBombTitle}}
+          <span>{{invitationCode}}</span>
+          <span class="share-detail-entry iconfont icon-shuoming"
+                v-if="invitationCode"
+                @click="shareDetailEntry(invitationCode)"></span>
+        </p>
+        <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
+        <div class="invitation-bomb__channel">
+          <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
+          <div class="message" @click="shareInvitationCode('com.facebook.orca')"></div>
+        </div>
+      </div>
+    </div>
+    <balance-mark v-if="showDialog"
+                  :data-info="dialogInfo"
+                  :isInvitation = isInputInvitation
+                  @okEvent='okEvent'
+                  @cancelEvent = 'cancelEvent'>
+    </balance-mark>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import BaseBtn from '../components/BaseBtn.vue'
@@ -41,25 +75,39 @@ import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
+import Living from '../components/Living'
 export default {
   name: 'Await',
   data () {
     return {
-      baseStyle1: {
-        text: 'Share with friends',
-        bgColor: '#dc427a'
+      isInvitation: false,
+      isInputInvitation: false,
+      dialogInfo: {
+        htmlTitle: '',
+        htmlText: '',
+        shouldSub: false,
+        markType: false,
+        okBtnText: 'OK'
       },
-      baseStyle2: {
-        text: 'Leaderboard',
-        bgColor: '#4c08f3'
-      }
+      showDialog: false,
+      isSucceed: false,
+      invitationCode: '',
+      invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
+      invitationBombTitle: 'Extra Life can be gained by SHARING',
+      logout: false,
+      isFirstShare: true,
+      inviteLiving: false
     }
   },
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
       startTime: 'startTime',
-      status: 'status'
+      status: 'status',
+      lives: 'lives',
+      code: 'code'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -92,25 +140,287 @@ export default {
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
     })
+    if (this.$route.query.shareType) {
+      let shareType = this.$route.query.shareType
+      this.isUserFirstShare()
+      if (shareType === 'share') {
+        this.shareText()
+      } else {
+        this.inviteText()
+      }
+      this.isInvitation = true
+    }
     utils.statistic('wait_page', 0)
   },
   methods: {
-    inviteFriends () {
-      utils.share()
-      utils.statistic('millionaire', 3, {}, 'wait_page')
-    },
+    // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
+    // facebook 点赞
     likeToFb (val) {
       this.btnStatistic(val)
       utils.toFbBrowser()
+    },
+    // 获取邀请码分享到社交app
+    getLives () {
+      if (utils.isOnline) {
+        // 判断是否是第一次分享
+        this.isUserFirstShare()
+        if (this.isFirstShare) {
+          this.shareText()
+        } else {
+          this.inviteText()
+        }
+        if (this.code) {
+          this.isInvitation = true
+        } else {
+          api.generateCode().then(({data}) => {
+            if (data.result === 1) {
+              this.invitationCode = data.data
+              this.isInvitation = true
+            } else {
+              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+            }
+          }).catch(() => {
+            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          })
+        }
+      } else {
+        this.login()
+      }
+    },
+    // 调起输入邀请码弹框
+    inputInvitation () {
+      if (utils.isOnline) {
+        this.isInputInvitation = true
+        this.BobmParamesConfig(
+          'APPLY REFERRAL CODE',
+          'Enter a friend\'s Referral Code to get an extra life.',
+          true, true)
+      } else {
+        this.login()
+      }
+    },
+    // 弹框ok
+    okEvent (a, b) {
+      if (this.isInputInvitation) {
+        if (!b) {
+          this.dialogInfo.htmlText = 'Invalid referral code, please check it now.'
+          this.showDialog = true
+          return false
+        } else {
+          this.showDialog = false
+        }
+        api.VerificationCode(b).then(({data}) => {
+          console.log('验证码校验')
+          console.log(data)
+          utils.statistic('wait_page', 1, {
+            to_destination_s: 'input_referral_code',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_code_s: data.result === 1 ? '1' : '0'
+          }, 'wait_page')
+          if (data.result === 1) {
+            this.$store.dispatch(type._INIT)
+          } else {
+            if (data.code === 404) {
+              this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
+            } else if (data.code === 30100) {
+              this.BobmParamesConfig('', 'You\'ve already applied a referral code. You may only do this once.', false, true)
+            } else if (data.code === 30101) {
+              this.BobmParamesConfig('', 'This referral code expired.', false, true)
+            } else if (data.code === 30102) {
+              this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
+            } else if (data.code === 30103) {
+              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+            } else if (data.code === 30104) {
+              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+            } else {
+              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+            }
+          }
+        }).catch(() => {
+          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+        })
+        this.isInputInvitation = false
+      } else {
+        this.showDialog = false
+      }
+      if (this.logout) {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          this.logout = false
+          utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
+          this.$router.push({path: '/set-question'})
+        })
+      }
+    },
+    // 弹框cancel
+    cancelEvent () {
+      this.BobmParamesConfig('', '', false, false)
+      this.isInputInvitation = false
+    },
+    // 分享邀请码
+    shareInvitationCode (value) {
+      // http://static.subcdn.com/share-success-test.html
+      const packageName = value === 'com.facebook.katana' ? 'facebook' : 'message'
+      if (this.invitationCode) {
+        utils.share(
+          this.callbackFn,
+          value,
+          'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite&packageName=' + packageName)
+      } else {
+        utils.share(
+          this.callbackFn,
+          value,
+          'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share&packageName=' + packageName)
+      }
+    },
+    // 分享后的回调
+    callbackFn (isSucceed, packageName) {
+      console.log('分享的回调' + isSucceed)
+      const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
+      const type = this.$route.query.shareType
+      if (type) {
+        utils.statistic(type === 'share' ? 'referral_code_share' : 'referral_code_invite', 1, {
+          result_code_s: isSucceed ? '1' : '0',
+          to_destination_s: shareType
+        })
+      }
+      utils.statistic('millionaire', 3, {
+        to_destination_s: shareType,
+        result_code_s: isSucceed ? '1' : '0'
+      }, 'wait_page')
+      this.isInvitation = false
+      if (isSucceed) {
+        if (this.isFirstShare) {
+          this.isSucceed = true
+          setTimeout(() => {
+            this.isSucceed = false
+          }, 3000)
+        }
+        localStorage.setItem('isFirstShare', 'false')
+        localStorage.setItem('firstTime', new Date().getTime())
+        api.DailyShare().then(({data}) => {
+          console.log('分享成功请求api结果')
+          console.log(data)
+          utils.statistic('wait_page', 1, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: data.result === 1 ? 'success' : 'fail'
+          }, 'wait_page')
+          if (data.result === 1) {
+            this.$store.dispatch(type._INIT)
+          } else {
+            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          }
+        }, (err) => {
+          console.log('分享失败:', err)
+          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          utils.statistic('wait_page', 1, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: 'fail'
+          }, 'wait_page')
+        })
+      } else {
+        // 失败回调
+        this.isSucceed = false
+        this.isInputInvitation = false
+        this.BobmParamesConfig('', 'Failed to share, please try again later.', false, true)
+      }
+    },
+    // 设置问题
+    getSetQuestion () {
+      if (utils.isOnline) {
+        this.btnStatistic('issue_page')
+        this.$router.push({path: '/set-question'})
+      } else {
+        this.logout = true
+        this.BobmParamesConfig('',
+          'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
+      }
+    },
+    // 进入分享详情页
+    shareDetailEntry (code) {
+      this.$router.push({path: '/share-detail', query: {'code': code}})
+    },
+    // 判断用户是否是第一次分享
+    isUserFirstShare () {
+      // 判断是否是第一次分享
+      if (localStorage.getItem('isFirstShare')) {
+        let isFirst = localStorage.getItem('isFirstShare')
+        let duration = new Date().getTime() - localStorage.getItem('firstTime')
+        // 86400000 = 24h
+        if (duration > 86400000) {
+          this.isFirstShare = true
+        } else {
+          if (isFirst === 'false') {
+            this.isFirstShare = false
+          }
+        }
+      } else {
+        this.isFirstShare = true
+      }
+    },
+    // 调起弹框参数配置
+    BobmParamesConfig (title, text, markType, isShow) {
+      this.dialogInfo.htmlTitle = title
+      this.dialogInfo.htmlText = text
+      this.dialogInfo.markType = markType
+      this.showDialog = isShow
+    },
+    // share text
+    shareText () {
+      this.invitationCode = ''
+      localStorage.setItem('isFirstShare', 'true')
+      this.invitationBombTitle = 'Extra Life can be gained by SHARING'
+      this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
+    },
+    // invite text
+    inviteText () {
+      this.invitationCode = this.code
+      this.invitationBombTitle = 'My Referral Code:'
+      this.invitationBombHint = 'Inviting friends to get it now!'
+    },
+    // toExtraLiveRules
+    toExtraLiveRules () {
+      if (utils.isOnline) {
+        this.$router.push({path: '/share-detail', query: {'code': this.code}})
+      } else {
+        this.login()
+      }
+    },
+    // login
+    login () {
+      utils.login(() => {
+        this.$store.commit(type._UPDATE, {isOnline: true})
+        utils.isOnline = true
+        utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
+        this.$store.dispatch(type._INIT)
+      })
     }
   },
   components: {
     BaseBtn,
     NextTime,
-    BaseInfo
+    BaseInfo,
+    BalanceMark,
+    Living
+  },
+  watch: {
+    code: function (val, oldVal) {
+      console.log('新code= ' + val + '旧code= ' + oldVal)
+      if (val > oldVal) {
+        this.inviteLiving = true
+        setTimeout(() => {
+          this.inviteLiving = false
+        }, 3000)
+      }
+    }
   }
 }
 </script>
@@ -157,10 +467,114 @@ export default {
     }
     &__btn{
       display: flex;
-      padding:0 25px;
+      padding:0 25px 25px;
       justify-content: space-between;
+      .invitation-code, .get-lives, .share-success{
+        max-width: 48%;
+        width: 322px;
+        height: 160px;
+        border-radius: 26px;
+        background-color:#fff;
+        padding: 25px 0;
+        font-family: "Roboto";
+        .extra-lives{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          color: #241262;
+          height: 36px;
+          margin-bottom:18px;
+          span{
+            display: block;
+            height: 36px;
+            line-height: 36px;
+          }
+          .invite-living{
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 50px;
+          }
+          &__icon{
+            width: 40px;
+            height: 36px;
+            color: #f4387c;
+            font-size: 40px;
+            align-self: center;
+            background: url("../assets/images/lives-icon.png") no-repeat center;
+            background-size: cover;
+          }
+          &__text{
+            font-size: 28px;
+            margin: 0 0 0 12px;
+          }
+        }
+        &__btn{
+          width: 260px;
+          height: 62px;
+          line-height: 62px;
+          color: #fff;
+          font-size: 20px;
+          text-align: center;
+          background-color: #f4387c;
+          border-radius: 46px;
+          margin: 0 auto;
+        }
+      }
+      .get-lives{
+        background: url("../assets/images/revive-card-before.png") no-repeat center;
+        background-size: cover;
+        color: #fff;
+        font-size: 28px;
+        transition:opacity 300ms linear 2s;
+        padding: 25px 30px;
+        .revive-rule{
+          font-weight: 300;
+          margin-top: 20px;
+          font-size: 22px;
+          color: #fff;
+        }
+        &__text{
+          margin-bottom: 20px;
+        }
+      }
+      .share-success{
+        background: url("../assets/images/revive-card-after.png") no-repeat center;
+        background-size: cover;
+        color: #fff;
+        font-size: 28px;
+        opacity: 1;
+        transition:opacity 500ms linear 2s;
+        padding: 25px 30px;
+        &__base{
+          display: flex;
+          justify-content: center;
+          margin-top: 12px;
+          &__icon{
+            display: block;
+            width: 86px;
+            position: relative;
+            img{
+              width: 100%;
+            }
+            .top{
+              position: absolute;
+              top:0;
+              animation: lives 1.5s ease-in-out 0s infinite;
+            }
+          }
+          &__num{
+            height: 82px;
+            line-height: 82px;
+            text-align: right;
+            font-size: 54px;
+            margin-left: 30px;
+          }
+        }
+      }
     }
     &__set{
+      max-width: 93% !important;
       width: 656px;
       height: 90px;
       background-color: #faa717 ;
@@ -182,16 +596,80 @@ export default {
         font-size: 32px;
       }
     }
-    &__bottom{
+    .invitation-mark {
       width: 100%;
+      height: 100%;
       position: absolute;
-      bottom: 10px;
-      &__apus{
-        width: 134px;
-        margin: 0 auto;
-        font-family: 'Roboto', Arial, serif;
-        font-weight: 400;
+      top: 0;
+      left: 0;
+      z-index: 111;
+      padding: 0 25px;
+      background-color: rgba(68, 68, 68, 0.8);
+      .invitation-bomb {
+        max-width: 93% !important;
+        width: 670px;
+        height: 350px;
+        background-color: #fff;
+        border-radius: 26px;
+        position: absolute;
+        bottom: 25px;
+        padding: 50px 0 40px;
+        color: #241262;
+        text-align: center;
+        font-family: "Roboto";
+        &__close{
+          position:absolute;
+          top: 24px;
+          right: 24px;
+          color: #241262;
+          font-size: 20px;
+        }
+        &__info{
+          font-size: 32px;
+          margin-bottom: 20px;
+          .share-detail-entry{
+            font-size: 32px;
+            color: #241262;
+          }
+        }
+        &__hint{
+          font-weight: 300;
+          margin-bottom: 54px;
+          font-size: 28px;
+          padding: 0 30px;
+        }
+        &__channel{
+          display: flex;
+          margin: 0 148px 10px;
+          justify-content: space-between;
+          .facebook, .message{
+            width: 96px;
+            height: 96px;
+            background: url("../assets/images/facebook.png") no-repeat center;
+            background-size: cover;
+          }
+          .message{
+            background: url("../assets/images/messenger.png") no-repeat center;
+            background-size: cover;
+          }
+        }
       }
+    }
+  }
+  @keyframes lives {
+    0%{
+      transform: scale(1);
+    }
+    15%{
+      transform: scale(1.2);
+    }
+    25%{
+      transform: scale(1);
+      opacity: 1;
+    }
+    90%{
+      transform: scale(2);
+      opacity: 0;
     }
   }
 </style>

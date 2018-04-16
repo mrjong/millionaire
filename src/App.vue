@@ -3,7 +3,7 @@
     <router-view/>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
-    <div class="dialog-game" v-if="showGameDialog">
+    <!-- <div class="dialog-game" v-if="showGameDialog">
       <div class="con">
         <img src="http://static.subcdn.com/201804042026229f4a3491a2.png" alt="">
         <div class="contents">
@@ -11,7 +11,7 @@
           <button class="btn-fb" @click="toFb"></button>
         </div>
       </div>
-    </div>
+    </div> -->
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -112,6 +112,7 @@ export default {
       } else {
         this.$router.replace({path: '/'})
         utils.setGameState(false)
+        im.stopPullMsg()
       }
 
       if (status === 3) {

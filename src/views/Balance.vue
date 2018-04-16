@@ -71,7 +71,7 @@ export default {
         this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
-        const phone = /\+?\d[\d -]{8,12}\d/
+        const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const passRule = phone.test(this.myPay)
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
@@ -82,6 +82,7 @@ export default {
     },
     okEvent (info) {
       this.markInfo.showMark = false
+      let takeCash = ''
       if (info) {
         // 提交表单
         this.showLoading = true
@@ -93,7 +94,6 @@ export default {
           .then(({data}) => {
             console.log('提现申请后台返回结果如下')
             console.log(data)
-            let takeCash = ''
             this.showLoading = false
             if (+data.result === 1) { // 请求成功 code必为0
               if (+data.code === 0) {
@@ -102,17 +102,30 @@ export default {
                 takeCash = 'success'
               }
             } else { // 请求失败，判断code
-              if (+data.code === 3106) { // 账户记录不存在
-                this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
-                takeCash = 'bad_account'
-              } else if (+data.code === 3116) { // 可用金额不足
-                this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
-                takeCash = 'no_enough_money'
-              } else {
-                this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
-                takeCash = 'network_error'
+              switch (+data.code) {
+                case 3106: {
+                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                  takeCash = 'bad_account'
+                  break
+                }
+                case 3116: {
+                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                  takeCash = 'no_enough_money'
+                  break
+                }
+                default: {
+                  this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                  takeCash = 'network_error'
+                }
               }
             }
+            utils.statistic('', 4, {
+              result_code_s: takeCash
+            })
+          }, (error) => {
+            this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+            takeCash = 'network_error'
+            console.log('提现失败:', error)
             utils.statistic('', 4, {
               result_code_s: takeCash
             })

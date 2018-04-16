@@ -13,7 +13,12 @@ export const api = {
   setQuestion: '/cmp/submit_question/', // 用户出题
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
-  log: '/cmp/l/' // 日志
+  log: '/cmp/l/', // 日志
+  pollMsg: '/cmp/q/', // 轮询消息
+  generateCode: '/cmp/gc', // 生成邀请码,
+  VerificationCode: '/cmp/vc', // 相关码验证,
+  DailyShare: '/cmp/ds', // 每日分享
+  sharePage: '/cmp/res' // 分享中间页
 }
 
 export const init = function (isRefreshToken) {
@@ -95,11 +100,49 @@ export const syncInfo = function () {
   })
 }
 
+// 轮询消息
+export const pollMsg = function () {
+  return axios.get(api.pollMsg, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    },
+    timeout: 5000
+  })
+}
+
 // 日志
 export const log = function (content) {
   return axios.post(api.log, {
     content: JSON.stringify(content)
   }).then(() => {}).catch((err) => {
     console.log('日志上报出错：', err)
+  })
+}
+
+// 生成邀请码
+export const generateCode = function () {
+  return axios.post(api.generateCode, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 相关码验证
+
+export const VerificationCode = function (code) {
+  return axios.post(api.VerificationCode, {
+    code: code,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 每日分享
+
+export const DailyShare = function () {
+  return axios.post(api.DailyShare, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
   })
 }
