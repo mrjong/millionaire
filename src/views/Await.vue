@@ -407,11 +407,12 @@ export default {
   },
   watch: {
     code: function (val, oldVal) {
+      console.log('新code= ' + val + '旧code= ' + oldVal)
       if (val > oldVal) {
         this.inviteLiving = true
         setTimeout(() => {
           this.inviteLiving = false
-        })
+        }, 3000)
       }
     }
   }
