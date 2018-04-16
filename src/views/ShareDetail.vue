@@ -45,7 +45,7 @@ export default {
     }
   },
   mounted () {
-    utils.statistic('referral_code_page', 1)
+    utils.statistic('referral_code_page', 0)
     if (this.$route.query.code) {
       this.code = this.$route.query.code
     }
@@ -57,14 +57,7 @@ export default {
     shareAndInvite (type) {
       // 点击分享,跳回首页调起社交app
       const statisticName = type === 'share' ? 'referral_code_share' : 'referral_code_invite'
-      utils.statistic(statisticName, 2)
-      this.$on('shareFromDetailsPage', ({isSucceed, shareType}) => {
-        utils.statistic(statisticName, 2, {
-          result_code_s: isSucceed ? '1' : '0',
-          to_destination_s: shareType
-        })
-      })
-      console.log(type)
+      utils.statistic(statisticName, 1)
       if (type === 'share') {
         // 调首次分享
         this.$router.replace({path: '/', query: {'shareType': 'share'}})

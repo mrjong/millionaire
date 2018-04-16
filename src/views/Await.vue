@@ -215,7 +215,7 @@ export default {
         api.VerificationCode(b).then(({data}) => {
           console.log('验证码校验')
           console.log(data)
-          utils.statistic('wait_page', 2, {
+          utils.statistic('wait_page', 1, {
             to_destination_s: 'input_referral_code',
             loggin_state_s: utils.isOnline ? '1' : '0',
             result_code_s: data.result === 1 ? '1' : '0'
@@ -264,26 +264,31 @@ export default {
     // 分享邀请码
     shareInvitationCode (value) {
       // http://static.subcdn.com/share-success-test.html
+      const packageName = value === 'com.facebook.katana' ? 'facebook' : 'message'
       if (this.invitationCode) {
         utils.share(
           this.callbackFn,
           value,
           'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite')
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite&packageName=' + packageName)
       } else {
         utils.share(
           this.callbackFn,
           value,
           'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share')
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share&packageName=' + packageName)
       }
     },
     // 分享后的回调
     callbackFn (isSucceed, packageName) {
       console.log('分享的回调' + isSucceed)
       const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
-      if (this.$route.query.shareType) {
-        this.$emit('shareFromDetailsPage', {isSucceed, shareType})
+      const type = this.$route.query.shareType
+      if (type) {
+        utils.statistic(type === 'share' ? 'referral_code_share' : 'referral_code_invite', 1, {
+          result_code_s: isSucceed ? '1' : '0',
+          to_destination_s: shareType
+        })
       }
       utils.statistic('millionaire', 3, {
         to_destination_s: shareType,
@@ -302,7 +307,7 @@ export default {
         api.DailyShare().then(({data}) => {
           console.log('分享成功请求api结果')
           console.log(data)
-          utils.statistic('wait_page', 2, {
+          utils.statistic('wait_page', 1, {
             to_destination_s: 'get_extra_life',
             loggin_state_s: utils.isOnline ? '1' : '0',
             result_info_s: data.result === 1 ? 'success' : 'fail'
@@ -314,7 +319,7 @@ export default {
           }
         }).catch(() => {
           this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
-          utils.statistic('wait_page', 2, {
+          utils.statistic('wait_page', 1, {
             to_destination_s: 'get_extra_life',
             loggin_state_s: utils.isOnline ? '1' : '0',
             result_info_s: 'fail'
