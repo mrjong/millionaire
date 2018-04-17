@@ -22,7 +22,7 @@
             type="text"
             @focus="focusEvent"
             @blur="blurEvent"
-            v-model.trim="myMessage">
+            v-model.trim="myMessage" @keyup.enter="sendMessage">
           <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
         </div>
         <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
@@ -113,6 +113,7 @@ export default {
     // 2. 发送消息 【hack】
     sendMessage () {
       if (this.myMessage) {
+        document.getElementById('sendmessage').blur()
         this.showInput = false
         const msg = this.myMessage
         const nickname = this.userInfo.userName

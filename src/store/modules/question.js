@@ -162,6 +162,9 @@ const actions = {
               commit(type.QUESTION_UPDATE, {
                 isUsedRecoveryCard: true
               })
+              utils.statistic('extra_life', 6, {
+                action_s: `${getters.index}`
+              })
               break
             }
           }
