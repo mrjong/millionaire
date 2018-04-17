@@ -99,7 +99,7 @@ export default new Vuex.Store({
       state.showDialog = true
       setTimeout(() => {
         state.showDialog = false
-      }, 5000)
+      }, 3000)
     }
   },
   actions: {

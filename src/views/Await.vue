@@ -307,7 +307,7 @@ export default {
         api.DailyShare().then(({data}) => {
           console.log('分享成功请求api结果')
           console.log(data)
-          utils.statistic('wait_page', 1, {
+          this.isFirstShare && utils.statistic('wait_page', 1, {
             to_destination_s: 'get_extra_life',
             loggin_state_s: utils.isOnline ? '1' : '0',
             result_info_s: data.result === 1 ? 'success' : 'fail'
