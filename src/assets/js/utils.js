@@ -123,7 +123,18 @@ export default {
         ...params
       }
     }
+    // 客户端打点
     njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
+    // h5 打点
+    const webParams = {}
+    for (let prop in params) {
+      webParams[`web_${prop.replace(/_s|l$/g, '')}`] = params[prop]
+    }
+    window.ares && window.ares.track(eventType, {
+      web_name: name,
+      web_from: from,
+      ...webParams
+    })
   },
   /**
    * 计时器
