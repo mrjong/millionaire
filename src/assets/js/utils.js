@@ -1,5 +1,6 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
+/* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
 import { api } from './api'
 import { host, env } from './http'
@@ -135,13 +136,21 @@ export default {
     const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
     const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
     window.shareSuccessCallback = callback
-    window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-      sharePackage: packageName,
-      shareTitle: title,
-      shareContent: content,
-      shareLink,
-      callbackMethod: 'shareSuccess'
-    }))
+    if (window.njordGame) {
+      window.njordInvite.share && window.njordInvite.share(JSON.stringify({
+        sharePackage: packageName,
+        shareTitle: title,
+        shareContent: content,
+        shareLink,
+        callbackMethod: 'shareSuccess'
+      }))
+    } else {
+      callback(true, 'com.facebook.katana')
+      setTimeout(() => {
+        window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+      }, 5)
+      window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+    }
   },
   /**
    * 时间格式化
