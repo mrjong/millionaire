@@ -17,6 +17,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import { _UPDATE } from '../store/type'
 export default {
   name: 'CountDown',
   data () {
@@ -57,6 +58,11 @@ export default {
   watch: {
     startTime: function (startTime) {
       this.playingAudio(startTime)
+      if (startTime <= 10) {
+        this.$store.commit(_UPDATE, {
+          disableNetworkTip: true
+        })
+      }
     }
   }
 }
