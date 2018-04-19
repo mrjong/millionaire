@@ -145,6 +145,7 @@ export default {
     },
     // 调起输入邀请码弹框
     inputInvitation () {
+      this.btnStatistic('apply_referral_code')
       if (utils.isOnline) {
         this.isInputInvitation = true
         this.BobmParamesConfig(
@@ -226,6 +227,7 @@ export default {
     },
     // toExtraLiveRules
     toExtraLiveRules () {
+      this.btnStatistic('referral_code_page')
       if (utils.isOnline) {
         this.$router.push({path: '/share-detail', query: {'code': this.code}})
       } else {
