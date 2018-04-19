@@ -18,7 +18,7 @@ export default {
     return {
       supaTimer: null,
       supaOrder: 1,
-      compereMsg: `Welcome to 'Go! Millionaire'!`,
+      compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
       supaStyle: `background-position: 0% 0%;`
     }
   },

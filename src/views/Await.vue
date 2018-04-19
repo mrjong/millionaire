@@ -27,9 +27,8 @@
         </div>
         <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
       </div>
-      <div class="get-lives" @click="getLives" ref="getLivesCard" v-if="!isSucceed">
+      <div class="get-lives" @click="toExtraLiveRules" ref="getLivesCard" v-if="!isSucceed">
         <div class="get-lives__text">Get More</div>
-        <span class="revive-rule" @click.stop="toExtraLiveRules">Extra Lives Rules</span>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-else>
         <div class="share-success__text">Share success</div>
@@ -43,29 +42,13 @@
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <div class="invitation-mark" v-if="isInvitation">
-      <div class="invitation-bomb">
-        <span class="invitation-bomb__close iconfont icon-cuowu" @click="isInvitation = false"></span>
-        <p class="invitation-bomb__info">
-          {{invitationBombTitle}}
-          <span>{{invitationCode}}</span>
-          <span class="share-detail-entry iconfont icon-shuoming"
-                v-if="invitationCode"
-                @click="shareDetailEntry(invitationCode)"></span>
-        </p>
-        <p class="invitation-bomb__hint">{{invitationBombHint}}</p>
-        <div class="invitation-bomb__channel">
-          <div class="facebook" @click="shareInvitationCode('com.facebook.katana')"></div>
-          <div class="message" @click="shareInvitationCode('com.facebook.orca')"></div>
-        </div>
-      </div>
-    </div>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+    <revive-guide></revive-guide>
   </div>
 </template>
 <script>
@@ -78,6 +61,7 @@ import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
 import Living from '../components/Living'
+import ReviveGuide from '../components/ReviveGuide'
 export default {
   name: 'Await',
   data () {
@@ -93,11 +77,7 @@ export default {
       },
       showDialog: false,
       isSucceed: false,
-      invitationCode: '',
-      invitationBombHint: 'The first SHARE of this game will help you get one extra life per day.',
-      invitationBombTitle: 'Extra Life can be gained by SHARING',
       logout: false,
-      isFirstShare: true,
       inviteLiving: false
     }
   },
@@ -140,15 +120,16 @@ export default {
       const bodyHeight = bodys.clientHeight
       bodys.style.height = bodyHeight + 'px'
     })
-    if (this.$route.query.shareType) {
-      let shareType = this.$route.query.shareType
-      this.isUserFirstShare()
-      if (shareType === 'share') {
-        this.shareText()
-      } else {
-        this.inviteText()
+    if (localStorage.getItem('isFirstShare')) {
+      let isFirst = localStorage.getItem('isFirstShare')
+      let duration = new Date().getTime() - localStorage.getItem('firstTime')
+      if (duration > 86400000 || isFirst === 'true') {
+        this.isSucceed = true
+        setTimeout(() => {
+          this.isSucceed = false
+        }, 3000)
+        localStorage.setItem('isFirstShare', 'false')
       }
-      this.isInvitation = true
     }
     utils.statistic('wait_page', 0)
   },
@@ -161,34 +142,6 @@ export default {
     likeToFb (val) {
       this.btnStatistic(val)
       utils.toFbBrowser()
-    },
-    // 获取邀请码分享到社交app
-    getLives () {
-      if (utils.isOnline) {
-        // 判断是否是第一次分享
-        this.isUserFirstShare()
-        if (this.isFirstShare) {
-          this.shareText()
-        } else {
-          this.inviteText()
-        }
-        if (this.code) {
-          this.isInvitation = true
-        } else {
-          api.generateCode().then(({data}) => {
-            if (data.result === 1) {
-              this.invitationCode = data.data
-              this.isInvitation = true
-            } else {
-              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
-            }
-          }).catch(() => {
-            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
-          })
-        }
-      } else {
-        this.login()
-      }
     },
     // 调起输入邀请码弹框
     inputInvitation () {
@@ -206,8 +159,6 @@ export default {
     okEvent (a, b) {
       if (this.isInputInvitation) {
         if (!b) {
-          this.dialogInfo.htmlText = 'Invalid referral code, please check it now.'
-          this.showDialog = true
           return false
         } else {
           this.showDialog = false
@@ -261,77 +212,6 @@ export default {
       this.BobmParamesConfig('', '', false, false)
       this.isInputInvitation = false
     },
-    // 分享邀请码
-    shareInvitationCode (value) {
-      // http://static.subcdn.com/share-success-test.html
-      const packageName = value === 'com.facebook.katana' ? 'facebook' : 'message'
-      if (this.invitationCode) {
-        utils.share(
-          this.callbackFn,
-          value,
-          'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite&packageName=' + packageName)
-      } else {
-        utils.share(
-          this.callbackFn,
-          value,
-          'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share&packageName=' + packageName)
-      }
-    },
-    // 分享后的回调
-    callbackFn (isSucceed, packageName) {
-      console.log('分享的回调' + isSucceed)
-      const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
-      const type = this.$route.query.shareType
-      if (type) {
-        utils.statistic(type === 'share' ? 'referral_code_share' : 'referral_code_invite', 1, {
-          result_code_s: isSucceed ? '1' : '0',
-          to_destination_s: shareType
-        })
-      }
-      utils.statistic('millionaire', 3, {
-        to_destination_s: shareType,
-        result_code_s: isSucceed ? '1' : '0'
-      }, 'wait_page')
-      this.isInvitation = false
-      if (isSucceed) {
-        if (this.isFirstShare) {
-          this.isSucceed = true
-          setTimeout(() => {
-            this.isSucceed = false
-          }, 3000)
-        }
-        localStorage.setItem('isFirstShare', 'false')
-        localStorage.setItem('firstTime', new Date().getTime())
-        api.DailyShare().then(({data}) => {
-          console.log('分享成功请求api结果')
-          console.log(data)
-          utils.statistic('wait_page', 1, {
-            to_destination_s: 'get_extra_life',
-            loggin_state_s: utils.isOnline ? '1' : '0',
-            result_info_s: data.result === 1 ? 'success' : 'fail'
-          }, 'wait_page')
-          if (data.result === 1) {
-            this.$store.dispatch(type._INIT)
-          } else {
-            this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
-          }
-        }).catch(() => {
-          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
-          utils.statistic('wait_page', 1, {
-            to_destination_s: 'get_extra_life',
-            loggin_state_s: utils.isOnline ? '1' : '0',
-            result_info_s: 'fail'
-          }, 'wait_page')
-        })
-      } else {
-        // 失败回调
-        this.isSucceed = false
-        this.isInputInvitation = false
-        this.BobmParamesConfig('', 'Failed to share, please try again later.', false, true)
-      }
-    },
     // 设置问题
     getSetQuestion () {
       if (utils.isOnline) {
@@ -343,47 +223,12 @@ export default {
           'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
       }
     },
-    // 进入分享详情页
-    shareDetailEntry (code) {
-      this.$router.push({path: '/share-detail', query: {'code': code}})
-    },
-    // 判断用户是否是第一次分享
-    isUserFirstShare () {
-      // 判断是否是第一次分享
-      if (localStorage.getItem('isFirstShare')) {
-        let isFirst = localStorage.getItem('isFirstShare')
-        let duration = new Date().getTime() - localStorage.getItem('firstTime')
-        // 86400000 = 24h
-        if (duration > 86400000) {
-          this.isFirstShare = true
-        } else {
-          if (isFirst === 'false') {
-            this.isFirstShare = false
-          }
-        }
-      } else {
-        this.isFirstShare = true
-      }
-    },
     // 调起弹框参数配置
     BobmParamesConfig (title, text, markType, isShow) {
       this.dialogInfo.htmlTitle = title
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
-    },
-    // share text
-    shareText () {
-      this.invitationCode = ''
-      localStorage.setItem('isFirstShare', 'true')
-      this.invitationBombTitle = 'Extra Life can be gained by SHARING'
-      this.invitationBombHint = 'The first SHARE of this game will help you get one extra life per day.'
-    },
-    // invite text
-    inviteText () {
-      this.invitationCode = this.code
-      this.invitationBombTitle = 'My Referral Code:'
-      this.invitationBombHint = 'Inviting friends to get it now!'
     },
     // toExtraLiveRules
     toExtraLiveRules () {
@@ -408,10 +253,11 @@ export default {
     NextTime,
     BaseInfo,
     BalanceMark,
-    Living
+    Living,
+    ReviveGuide
   },
   watch: {
-    code: function (val, oldVal) {
+    lives: function (val, oldVal) {
       console.log('新code= ' + val + '旧code= ' + oldVal)
       if (val > oldVal) {
         this.inviteLiving = true
