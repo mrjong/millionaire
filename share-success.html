@@ -214,10 +214,7 @@
   console.log(window.location.search)
   function toGp () {
     ga('send', 'event', 'link', 'click', 'millionaire-gp-' + type)
-    setTimeout(function () {
-      window.location.href = 'https://play.google.com/store/apps/details?id=com.apusapps.browser&referrer=id%3D300021'
-    },5)
-    window.location.href = 'market://details?id=com.apusapps.browser&referrer=id%3D300021'
+    window.location.href = 'http://www.apusapps.com/en/browser/'
   }
   function toFb (type) {
     ga('send', 'event', 'link', 'click', 'millionaire-fb-' + type)
