@@ -293,7 +293,6 @@ const im = {
         im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount
       }
     })
-    console.log('拉取消息：', new Date())
   },
 
   /**

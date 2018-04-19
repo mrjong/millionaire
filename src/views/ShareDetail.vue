@@ -22,59 +22,159 @@
         <span>{{code}}</span>
       </p>
       <div class="btn">
-        <p class="btn__share" @click="shareAndInvite('share')">
+        <p class="btn__share" @click="share('share')">
           <span class="btn__share__icon iconfont icon-share"></span>
           <span class="btn__share__text">Share</span>
         </p>
-        <p class="btn__invite" @click="shareAndInvite('invite')">
+        <p class="btn__invite" @click="share('invite')">
           <span class="btn__invite__icon"></span>
           <span class="btn__invite__text">Invite</span>
         </p>
       </div>
     </div>
+    <revive-card :reviveObj="reviveObj" @fbAndMess ="fbAndMess"></revive-card>
+    <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='okEvent'>
+    </balance-mark>
   </div>
 </template>
 
 <script>
 import utils from '../assets/js/utils'
+import ReviveCard from '../components/ReviveCard'
+import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
+import * as type from '../store/type'
 export default {
   name: 'ShareDetail',
   data () {
     return {
-      code: ''
+      code: '',
+      reviveObj: {
+        title: '',
+        hint: '',
+        code: '',
+        shareType: '',
+        isShare: false
+      },
+      dialogInfo: {
+        htmlTitle: '',
+        htmlText: '',
+        okBtnText: 'OK'
+      },
+      showDialog: false
     }
   },
   mounted () {
-    utils.statistic('referral_code_page', 1)
+    utils.statistic('referral_code_page', 0)
     if (this.$route.query.code) {
       this.code = this.$route.query.code
+    } else {
+      this.getCode()
     }
   },
   methods: {
     goBack () {
       this.$router.go(-1)
     },
-    shareAndInvite (type) {
-      // 点击分享,跳回首页调起社交app
-      const statisticName = type === 'share' ? 'referral_code_share' : 'referral_code_invite'
-      utils.statistic(statisticName, 2)
-      this.$on('shareFromDetailsPage', ({isSucceed, shareType}) => {
-        utils.statistic(statisticName, 2, {
-          result_code_s: isSucceed ? '1' : '0',
-          to_destination_s: shareType
-        })
-      })
-      console.log(type)
+    share (type) {
+      // 判断分享类型
       if (type === 'share') {
-        // 调首次分享
-        this.$router.replace({path: '/', query: {'shareType': 'share'}})
+        // 调起分享弹框
+        this.reviveObj.title = 'Extra Life can be gained by SHARING'
+        this.reviveObj.hint = 'The first SHARE of this game will help you get one extra life per day.'
+        this.reviveObj.code = ''
       } else if (type === 'invite') {
-        // 多次邀请
-        this.$router.replace({path: '/', query: {'shareType': 'invite'}})
-      } else {
-        this.$router.replace({path: '/'})
+        // 调起邀请弹框
+        this.reviveObj.title = 'My Referral Code:'
+        this.reviveObj.hint = 'Inviting friends to get it now!'
+        this.reviveObj.code = this.code
       }
+      this.reviveObj.shareType = type
+      this.reviveObj.isShare = true
+    },
+    fbAndMess (val) {
+      console.log('sharedetail = ' + val)
+      const packageName = val === 'com.facebook.katana' ? 'facebook' : 'message'
+      if (this.reviveObj.shareType === 'invite') {
+        utils.share(
+          this.callbackFn,
+          val,
+          'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite&packageName=' + packageName)
+      } else if (this.reviveObj.shareType === 'share') {
+        utils.share(
+          this.callbackFn,
+          val,
+          'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
+          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share&packageName=' + packageName)
+      }
+    },
+    // 分享后的回调
+    callbackFn (isSucceed, packageName) {
+      console.log('分享的回调' + isSucceed)
+      this.reviveObj.isShare = false
+      const sharepackageName = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
+      utils.statistic('millionaire', 3, {
+        to_destination_s: sharepackageName,
+        result_code_s: isSucceed ? '1' : '0'
+      }, 'share-detail_page')
+      if (isSucceed) {
+        if (localStorage.getItem('firstTime') === '' || (new Date().getTime() - localStorage.getItem('firstTime')) > 86400000) {
+          localStorage.setItem('isFirstShare', 'true')
+        } else {
+          localStorage.setItem('isFirstShare', 'false')
+        }
+        localStorage.setItem('firstTime', new Date().getTime())
+        api.DailyShare().then(({data}) => {
+          console.log('分享成功请求api结果' + data.result)
+          utils.statistic('wait_page', 1, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: data.result === 1 ? 'success' : 'fail'
+          }, 'share-detail_page')
+          if (data.result === 1) {
+            this.$store.dispatch(type._INIT)
+          } else {
+            // 提交失败
+            this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+            this.showDialog = true
+          }
+        }).catch(() => {
+          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          utils.statistic('share-detail_page', 1, {
+            to_destination_s: 'get_extra_life',
+            loggin_state_s: utils.isOnline ? '1' : '0',
+            result_info_s: 'fail'
+          }, 'wait_page')
+        })
+        this.$router.replace({path: '/'})
+      } else {
+        // 失败回调
+        this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+        this.showDialog = false
+      }
+    },
+    getCode () {
+      api.generateCode().then(({data}) => {
+        if (data.result === 1) {
+          this.code = data.data
+        } else {
+          this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+          this.showDialog = true
+        }
+      }).catch(() => {
+        this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+        this.showDialog = true
+      })
+    },
+    // 弹框ok
+    okEvent (a, b) {
+      this.showDialog = false
     }
+  },
+  components: {
+    ReviveCard,
+    BalanceMark
   }
 }
 </script>
