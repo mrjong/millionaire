@@ -1,4 +1,4 @@
-import axios from './http'
+import axios, { accountHost, env } from './http'
 import utils from './utils'
 import md5 from 'md5'
 
@@ -18,7 +18,9 @@ export const api = {
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
   DailyShare: '/cmp/ds', // 每日分享
-  sharePage: '/cmp/res' // 分享中间页
+  sharePage: '/cmp/res', // 分享中间页
+  register: '/v2/user/register', // 手机号注册
+  signInByPhone: '/v2/user/verifycode' // 手机号登陆
 }
 
 export const init = function (isRefreshToken) {
@@ -139,10 +141,18 @@ export const VerificationCode = function (code) {
 }
 
 // 每日分享
-
 export const DailyShare = function () {
   return axios.post(api.DailyShare, {
     app_id: utils.app_id,
     client_id: utils.clientId
+  })
+}
+
+export const register = function (phoneNumber, nationcode = 86) {
+  return axios.post(`${accountHost[env]}${api.register}`, {
+    app_id: utils.app_id,
+    nationcode: 86,
+    mobile: phoneNumber,
+    account_type: 8
   })
 }

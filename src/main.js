@@ -24,8 +24,6 @@ Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {
   if (!utils.isOnline && !utils.clientId && to.name !== 'login') {
     next({path: '/login', replace: true})
-  } else if ((utils.isOnline || utils.clientId) && to.name === 'login') {
-    next({path: '/', replace: true})
   } else {
     next()
   }

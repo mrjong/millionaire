@@ -1,14 +1,31 @@
 <template>
   <div class="login-container">
-    <img src="../assets/images/logo.png" class="login-container__title">
-    <div class="login-container__info" @click="Login">
-      <p class="login-container__info__hint">Log in to join Go! Millionaire</p>
-      <p class="login-container__info__hint">Win real cash up to Rs. 1,000,000 every 20:00</p>
-      <div class="login-container__info__login">
-        <p class="login-container__info__login__btn"></p>
-        <span  class="login-container__info__login__text">Log in</span>
-      </div>
-    </div>
+    <header class="flex-box flex-align-center">
+      <button class="back iconfont icon-fanhui" @click="back">
+      </button>
+      <p class="title">Sign In</p>
+    </header>
+    <form class="login" name="login">
+      <section class="username inputItem">
+        <span class="iconfont icon-nicheng"></span>
+        <input type="text" placeholder="Enter Your Name">
+      </section>
+      <section class="phone inputItem">
+        <span class="iconfont icon-shouji"></span>
+        <input type="text" placeholder="Enter Your Phone Number">
+      </section>
+      <section class="code inputItem">
+        <span class="iconfont icon-yanzhengma"></span>
+        <input type="text" placeholder="Enter Verification Code ">
+        <button class="send" :class="{'send-disable': disableGetCode}" :disabled="disableGetCode" @click="sendCode">
+          <span v-if="!disableGetCode">Send</span>
+          <span v-else>{{restResetTime}}s</span>
+        </button>
+      </section>
+      <p class="errorMsg">{{errorMsg}}</p>
+      <button class="btn-login">Sign in</button>
+    </form>
+    <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -22,7 +39,11 @@ export default {
   name: 'Login',
   data () {
     return {
-      loading: false
+      loading: false,
+      disableGetCode: false, // 是否禁用获取验证码
+      resetIntervalTime: 60, // 验证码获取重置间隔时间
+      restResetTime: 0, // 剩余重置时间
+      errorMsg: 'Please enter a right phone number.'
     }
   },
   computed: {
@@ -31,6 +52,9 @@ export default {
     })
   },
   methods: {
+    back () {
+      this.$router.go(-1)
+    },
     // 登录方法
     Login: function () {
       console.log('login')
@@ -59,6 +83,20 @@ export default {
       }, () => {
         this.loading = false
       })
+    },
+    sendCode () {
+      this.disableGetCode = true
+      const {resetIntervalTime} = this
+      this.restResetTime = resetIntervalTime
+      const timer = utils.Timer(1000, resetIntervalTime * 1000)
+      timer.addCompleteListener(() => {
+        this.restResetTime = this.restResetTime - 1
+      })
+      timer.addEndListener(() => {
+        this.restResetTime = 0
+        this.disableGetCode = false
+      })
+      timer.start()
     }
   },
   mounted () {
@@ -73,70 +111,116 @@ export default {
   .login-container {
     width: 100%;
     height: 100%;
-    background: url("../assets/images/login-bg.jpg") no-repeat top left;
+    background: url("../assets/images/await-bg.jpg") no-repeat top left;
     background-size: cover;
     position: relative;
-    &__title {
-      padding-top: 86px;
-      width: 592px;
-      margin: 0 auto;
-    }
-    &__info {
-      position: absolute;
-      bottom: 100px;
-      width: 100%;
-      text-align: center;
-      &__hint{
-        font: 400 26px/32px 'Roboto', Arial, serif;
-        width: 100%;
-        color: #ffe033;
-        text-shadow: 4px 4px 4px rgba(39, 20, 166, 0.6);
-      }
-      &__login{
-        width: 658px;
-        height: 94px;
-        line-height: 94px;
-        margin: 28px auto 0;
-        position: relative;
-        &__text{
-          display: block;
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top:50%;
-          left: 50%;
-          font-size: 36px;
-          transform: translate(-50%,-50%);
-          color: #fff;
-          font-family: 'Roboto Regular';
-        }
-        &__btn{
-          width: 100%;
-          height: 100%;
-          color: #ffffff;
-          background-color: #faa717;
-          opacity: 0.95;
-          border-radius: 46px;
-          box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.5);
-          transform-origin: center center;
-          animation: breath 2s ease-out 0s infinite;
-        }
-      }
-    }
-  }
-  @keyframes breath{
-    0%{
-      box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.7);
-      transform: scale(1);
+    padding: 3.7% 3.7% 0;
+
+    button {
+      outline: none;
+      border: none;
     }
 
-    50%{
-      box-shadow: 0px 0px 30px 5px rgba(239, 160, 24, 0.3);
-      transform: scale(0.95);
+    header {
+      width: 100%;
+      min-height: 51.5px;
+      position: relative;
+      box-sizing: content-box;
+      .back {
+        width: 51.5px;
+        height: 51.5px;
+        border-radius: 51.5px;
+        background-color: #3f3567;
+        font-size: 24.67px;
+        line-height: 51.5px;
+        padding: 2px 2px 0 0;
+        text-align: center;
+      }
+
+      .title {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        text-align: center;
+        font: 400 36px 'Roboto', Arial, serif;
+        color: #fff;
+      }
     }
-    100%{
-    box-shadow: 0px 0px 50px 15px rgba(239, 160, 24, 0.7);
-    transform: scale(1);
+
+    .login {
+      margin-top: 37%;
+      font: 400 28px 'Roboto', Arial, serif;
+
+      input {
+        background-color: rgba(0, 0, 0, 0);
+        outline: none;
+        border: none;
+        color:#fff;
+        width: 65%;
+      }
+
+      input::-webkit-input-placeholder{
+        color:#58528b;
+      }
+
+      .inputItem {
+        padding: 40px 0 23px;
+        border-bottom: 1px solid #585188;
+        position: relative;
+        font-size: 32px;
+
+        .iconfont {
+          vertical-align: middle;
+          font-size: 32px;
+          margin-right:28px;
+        }
+
+        .icon-shouji {
+          font-size: 35px;
+        }
+
+      }
+      .errorMsg {
+        padding: 24px;
+        font-size: 24px;
+        color: #ee2d7a;
+        text-align: right;
+      }
+      .code {
+        .send {
+          width: 140px;
+          height: 53px;
+          border: none;
+          outline: none;
+          border-radius: 27px;
+          background-color: #ee2d7a;
+          color: #fff;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .send-disable {
+          color: #9288b3;
+          background-color: #493981;
+        }
+      }
+
+      .btn-login {
+        width: 100%;
+        height: 93px;
+        border-radius: 1rem;
+        background-color: #f3a207;
+        color: #fff;
+      }
+    }
+
+    &__footer {
+      width: 135px;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 </style>
