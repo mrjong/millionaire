@@ -48,6 +48,7 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+    <revive-guide></revive-guide>
   </div>
 </template>
 <script>
@@ -60,6 +61,7 @@ import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
 import Living from '../components/Living'
+import ReviveGuide from '../components/ReviveGuide'
 export default {
   name: 'Await',
   data () {
@@ -251,7 +253,8 @@ export default {
     NextTime,
     BaseInfo,
     BalanceMark,
-    Living
+    Living,
+    ReviveGuide
   },
   watch: {
     lives: function (val, oldVal) {

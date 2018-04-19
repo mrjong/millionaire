@@ -1,18 +1,18 @@
 <template>
-<div class="invitation-mark"  v-if="reviveObj.isShare">
-      <div class="invitation-bomb">
-        <span class="invitation-bomb__close iconfont icon-cuowu" @click="reviveObj.isShare =false"></span>
-        <p class="invitation-bomb__info">
-          {{reviveObj.title}}
-          <span v-if="reviveObj.shareType">{{reviveObj.code}}</span>
-        </p>
-        <p class="invitation-bomb__hint">{{reviveObj.hint}}</p>
-        <div class="invitation-bomb__channel">
-          <div class="facebook" @click="fbAndMess('com.facebook.katana')"></div>
-          <div class="message" @click="fbAndMess('com.facebook.orca')"></div>
-        </div>
+  <div class="invitation-mark"  v-if="reviveObj.isShare">
+    <div class="invitation-bomb">
+      <span class="invitation-bomb__close iconfont icon-cuowu" @click="reviveObj.isShare =false"></span>
+      <p class="invitation-bomb__info">
+        {{reviveObj.title}}
+        <span v-if="reviveObj.shareType">{{reviveObj.code}}</span>
+      </p>
+      <p class="invitation-bomb__hint">{{reviveObj.hint}}</p>
+      <div class="invitation-bomb__channel">
+        <div class="facebook" @click="fbAndMess('com.facebook.katana')"></div>
+        <div class="message" @click="fbAndMess('com.facebook.orca')"></div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
