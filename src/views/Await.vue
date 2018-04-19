@@ -198,13 +198,7 @@ export default {
         this.showDialog = false
       }
       if (this.logout) {
-        utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
-          this.logout = false
-          utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
-          this.$router.push({path: '/set-question'})
-        })
+        this.login('/set-question')
       }
     },
     // 弹框cancel
@@ -235,16 +229,20 @@ export default {
       if (utils.isOnline) {
         this.$router.push({path: '/share-detail', query: {'code': this.code}})
       } else {
-        this.login()
+        this.login('/share-detail')
       }
     },
     // login
-    login () {
+    login (path) {
       utils.login(() => {
         this.$store.commit(type._UPDATE, {isOnline: true})
         utils.isOnline = true
-        utils.statistic('await_page', 1, {'result_code_s': '1'}, 'await_page')
+        this.logout = false
+        utils.statistic('wait_page', 1, {'result_code_s': '1'}, 'wait_page')
         this.$store.dispatch(type._INIT)
+        if (path) {
+          this.$router.push({path: path, query: {'code': this.code}})
+        }
       })
     }
   },

@@ -78,6 +78,8 @@ export default {
     },
     share (type) {
       // 判断分享类型
+      const statisticName = type === 'share' ? 'referral_code_share' : 'referral_code_invite'
+      utils.statistic(statisticName, 1)
       if (type === 'share') {
         // 调起分享弹框
         this.reviveObj.title = 'Extra Life can be gained by SHARING'

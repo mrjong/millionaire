@@ -1,17 +1,18 @@
 <template>
   <div class="guide" v-if="FirstGuide && !isClose">
     <span class="guide__close iconfont icon-cuowu" @click="isClose = true"></span>
-    <p class="guide__text">When you accidentally answer the wrong question.</p>
-    <p class="guide__text">When you are eliminated by the game.</p>
-    <p class="guide__text">When you have only one step away from the big prize.</p>
-    <p class="guide__text important ">Resurrection card goes online</p>
-    <p class="guide__text">Wish you success towards the success of the millionaire.</p>
+    <p class="guide__text important ">Referral Code Available Now!</p>
+    <p class="guide__text">You can keep playing when answer incorrectly</p>
+    <p class="guide__text">Get more chances to WIN</p>
+    <p class="guide__text">Win cash to be the next MILLIONAIRE!</p>
+    <p class="guide__text">Go! Millionaire</p>
     <img src="../assets/images/guide-supa.png" class="guide__supa">
-    <div class="guide__btn" @click="toShareDetail">Get resurrected card</div>
+    <div class="guide__btn" @click="toShareDetail">Get Extra Life Now</div>
   </div>
 </template>
 
 <script>
+import utils from '../assets/js/utils'
 export default {
   name: 'ReviveCard',
   props: {
@@ -33,7 +34,17 @@ export default {
   },
   methods: {
     toShareDetail () {
-      this.$router.push({path: '/share-detail'})
+      if (utils.isOnline) {
+        this.$router.push({path: '/share-detail'})
+      } else {
+        utils.login(() => {
+          this.$store.commit(type._UPDATE, {isOnline: true})
+          utils.isOnline = true
+          utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
+          this.$store.dispatch(type._INIT)
+          this.$router.push({path: '/share-detail'})
+        })
+      }
     }
   }
 }
