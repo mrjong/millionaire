@@ -119,9 +119,11 @@ export default new Vuex.Store({
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || 0
             const startTimeOffset = +info.ls || 0
+            const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
+            utils.isOnline = isOnline
             // 更新首页信息
             commit(type.HOME_UPDATE, {
-              userId: userInfo.ud || '',
+              userId: userInfo.us || '',
               supaId: userInfo.us || '',
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
@@ -136,14 +138,15 @@ export default new Vuex.Store({
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
             commit(type._UPDATE, {
+              hostIntervalTime,
+              lives,
+              code,
+              isOnline,
               startTime,
               startTimeOffset,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || '',
-              hostIntervalTime,
-              lives,
-              code
+              imToken: chatRoomInfo.it || ''
             })
             commit(type.QUESTION_UPDATE, {
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true

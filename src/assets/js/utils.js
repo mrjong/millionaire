@@ -77,11 +77,12 @@ export default {
         from_source: 'million_aire'
       })
       njordGame.login && njordGame.login(loginArgs)
+    } else {
+      window.location.replace(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
-
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : 'da8b8fdef4913be60044726055514db0',
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
@@ -307,6 +308,18 @@ export default {
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
     window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
+  },
+  /**
+   * 生成指定长度的随机串
+   * @param {any} len
+   */
+  generateRandomStr (len) {
+    let str = ''
+    while (len > 0) {
+      str = str + String.fromCharCode(parseInt(Math.random() * 58) + 65)
+      len--
+    }
+    return str
   }
 }
 

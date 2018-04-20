@@ -5,26 +5,29 @@
       </button>
       <p class="title">Sign In</p>
     </header>
-    <form class="login" name="login">
-      <section class="username inputItem">
+    <section class="login">
+      <!-- <section class="username inputItem">
         <span class="iconfont icon-nicheng"></span>
-        <input type="text" placeholder="Enter Your Name">
-      </section>
+        <input type="text" placeholder="Enter Your Name" v-model="username">
+      </section> -->
       <section class="phone inputItem">
+        <!-- 手机号 -->
         <span class="iconfont icon-shouji"></span>
-        <input type="text" placeholder="Enter Your Phone Number">
+        <input type="number" placeholder="Enter Your Phone Number" v-model="phoneNumber">
       </section>
       <section class="code inputItem">
+        <!-- 验证码 -->
         <span class="iconfont icon-yanzhengma"></span>
-        <input type="text" placeholder="Enter Verification Code ">
+        <input type="text" placeholder="Enter Verification Code " v-model="code" @keyup.enter="login">
         <button class="send" :class="{'send-disable': disableGetCode}" :disabled="disableGetCode" @click="sendCode">
           <span v-if="!disableGetCode">Send</span>
           <span v-else>{{restResetTime}}s</span>
         </button>
       </section>
+      <!-- 错误信息 -->
       <p class="errorMsg">{{errorMsg}}</p>
-      <button class="btn-login">Sign in</button>
-    </form>
+      <button class="btn-login" @click="login">Sign in</button>
+    </section>
     <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
     <loading v-if="loading"></loading>
   </div>
@@ -35,6 +38,8 @@ import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
+import { register, signInByPhone } from '../assets/js/api'
+let timer = null
 export default {
   name: 'Login',
   data () {
@@ -43,7 +48,10 @@ export default {
       disableGetCode: false, // 是否禁用获取验证码
       resetIntervalTime: 60, // 验证码获取重置间隔时间
       restResetTime: 0, // 剩余重置时间
-      errorMsg: 'Please enter a right phone number.'
+      errorMsg: '',
+      username: '',
+      phoneNumber: '',
+      code: ''
     }
   },
   computed: {
@@ -55,21 +63,55 @@ export default {
     back () {
       this.$router.go(-1)
     },
-    // 登录方法
-    Login: function () {
-      console.log('login')
-      if (utils.isOnline) {
-        this.init()
-      } else {
-        utils.login(() => {
-        // 更新登陆状态
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
-          this.init()
-          utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
+    /**
+     * 登录验证
+     */
+    loginValidate () {
+      if (!this.phoneNumber) {
+        this.error('Please enter a right phone number.')
+        return false
+      } else if (!this.code) {
+        this.error('Please enter a right verification code.')
+        return false
+      }
+      return true
+    },
+    /**
+     * 登录
+     */
+    login () {
+      if (this.loginValidate()) {
+        this.loading = true
+        signInByPhone(this.code).then(({data}) => {
+          const code = +data.error_code
+          switch (code) {
+            case 0: {
+              this.init()
+              this.$store.commit(type._UPDATE, {
+                isOnline: true
+              })
+              utils.isOnline = true
+              break
+            }
+            case 20002: {
+              this.error('Please enter a right verification code.')
+              break
+            }
+            default: {
+              this.error('Verification code validation failed, please try again later')
+              console.log('手机验证码验证失败:', data.error_msg)
+            }
+          }
+          this.loading = false
+        }, (err) => {
+          this.error('Verification code validation failed, please try again later')
+          console.log('手机验证码验证出错', err)
         })
       }
     },
+    /**
+     * 初始化
+     */
     init () {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
@@ -84,19 +126,65 @@ export default {
         this.loading = false
       })
     },
+    /**
+     * 发送验证码验证
+     */
+    sendCodeValidate () {
+      if (!this.phoneNumber) {
+        this.error('Please enter a right phone number.')
+        return false
+      }
+      return true
+    },
+    /**
+     * 发送验证码
+     */
     sendCode () {
-      this.disableGetCode = true
-      const {resetIntervalTime} = this
-      this.restResetTime = resetIntervalTime
-      const timer = utils.Timer(1000, resetIntervalTime * 1000)
-      timer.addCompleteListener(() => {
-        this.restResetTime = this.restResetTime - 1
-      })
-      timer.addEndListener(() => {
-        this.restResetTime = 0
-        this.disableGetCode = false
-      })
-      timer.start()
+      if (this.sendCodeValidate()) {
+        this.disableGetCode = true
+        // 60s 后重试
+        const {resetIntervalTime} = this
+        this.restResetTime = resetIntervalTime
+        const timer = utils.Timer(1000, resetIntervalTime * 1000)
+        timer.addCompleteListener(() => {
+          this.restResetTime = this.restResetTime - 1
+        })
+        timer.addEndListener(() => {
+          this.restResetTime = 0
+          this.disableGetCode = false
+        })
+        timer.start()
+        // 若输入的手机号码包含国家码，则只取手机号码
+        if (+this.phoneNumber[0] === 8 && +this.phoneNumber[1] === 6) {
+          this.phoneNumber = this.phoneNumber.slice(2)
+        }
+        register(this.phoneNumber).then(({data}) => {
+          const code = +data.error_code
+          switch (code) {
+            case 0: {
+              break
+            }
+            case 40022: {
+              this.error('Send verification code too frequently, please try again later')
+              break
+            }
+            default: {
+              this.error('Failed to send verification code, please try again')
+              console.log('发送验证码失败：', data.error_msg)
+            }
+          }
+        }, err => {
+          this.error('Failed to send verification code, please try again')
+          console.log('发送验证码出错：', err)
+        })
+      }
+    },
+    error (msg) {
+      this.errorMsg = msg
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        this.errorMsg = ''
+      }, 3000)
     }
   },
   mounted () {

@@ -11,9 +11,9 @@ export const host = {
 }
 
 export const accountHost = {
-  local: 'http://test-accounts.apusapps.com',
-  dev: 'http://test-accounts.apusapps.com',
-  test: 'http://test-account.apusapps.com',
+  local: 'http://test-accounts.apuscn.com',
+  dev: 'http://test-accounts.apuscn.com',
+  test: 'http://test-account.apuscn.com',
   check: 'http://account.apusapps.com'
 }
 

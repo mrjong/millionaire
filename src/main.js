@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Fingerprint2 from 'fingerprintjs2'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -15,6 +16,12 @@ function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
 }
 
+// 若在h5页面或无clientId 则生成clientId
+if (!utils.clientId) {
+  new Fingerprint2({excludeFlashFonts: true, excludeJsFonts: true}).get((result) => {
+    utils.clientId = result
+  })
+}
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false

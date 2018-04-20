@@ -148,11 +148,38 @@ export const DailyShare = function () {
   })
 }
 
+// 手机号注册获取验证码
 export const register = function (phoneNumber, nationcode = 86) {
   return axios.post(`${accountHost[env]}${api.register}`, {
     app_id: utils.app_id,
     nationcode: 86,
     mobile: phoneNumber,
+    account_type: 8,
+    cr: utils.generateRandomStr(16)
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
+  })
+}
+
+// 手机号登陆
+export const signInByPhone = function (code) {
+  return axios.post(`${accountHost[env]}${api.signInByPhone}`, {
+    code,
+    app_id: utils.app_id,
     account_type: 8
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
   })
 }
