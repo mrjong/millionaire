@@ -11,6 +11,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
+const host = {
+  local: 'https://mock.apuscn.com/mock/30/millionaire',
+  dev: 'http://dev-millionaire-api.apuscn.com',
+  test: 'http://test-millionaire-api.apuscn.com',
+  check: 'http://check-millionaire-api.apusapps.com',
+  prod: 'http://millionaire-api.apusapps.com'
+}
+
 const env = require('../config/prod.env')
 let buildEnv
 for(let arg of process.argv){
@@ -79,7 +87,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      chunksSortMode: 'dependency',
+      host: JSON.stringify(host[buildEnv || process.env.BUILD_ENV || 'prod'])
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
