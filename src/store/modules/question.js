@@ -85,6 +85,7 @@ const actions = {
           name: 'question',
           id,
           index,
+          clientId: utils.clientId,
           userName: rootGetters.userInfo.userName,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
@@ -257,6 +258,7 @@ const actions = {
           id,
           isCorrect,
           userName: rootGetters.userInfo.userName,
+          clientId: utils.clientId,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
           isAnswered: getters.isAnswered
