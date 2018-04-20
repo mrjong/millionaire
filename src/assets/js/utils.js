@@ -78,7 +78,7 @@ export default {
       })
       njordGame.login && njordGame.login(loginArgs)
     } else {
-      window.location.replace(`${window.location.origin}${window.location.pathname}#/login`)
+      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),

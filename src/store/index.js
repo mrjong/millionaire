@@ -61,7 +61,9 @@ export default new Vuex.Store({
       hintImg: './static/images/tip-fail.png'
     },
     lives: 0,
-    code: ''
+    code: '',
+    phoneNationCodeList: [], // 手机号国家码列表
+    phoneNationCode: '91' // 当前手机国家码
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -78,7 +80,9 @@ export default new Vuex.Store({
     showDialog: (state) => state.showDialog,
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
-    code: (state) => state.code
+    code: (state) => state.code,
+    phoneNationCodeList: (state) => state.phoneNationCodeList,
+    phoneNationCode: (state) => state.phoneNationCode
   },
   mutations: {
     /**

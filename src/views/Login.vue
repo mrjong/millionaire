@@ -1,9 +1,8 @@
 <template>
   <div class="login-container">
-    <header class="flex-box flex-align-center">
-      <button class="back iconfont icon-fanhui" @click="back">
-      </button>
+    <header>
       <p class="title">Sign In</p>
+      <p class="back iconfont icon-fanhui" @click="back"> </p>
     </header>
     <section class="login">
       <!-- <section class="username inputItem">
@@ -55,9 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      status: 'status'
-    })
+    ...mapGetters(['status', 'phoneNationCode'])
   },
   methods: {
     back () {
@@ -140,6 +137,7 @@ export default {
      * 发送验证码
      */
     sendCode () {
+      const {phoneNationCode} = this
       if (this.sendCodeValidate()) {
         this.disableGetCode = true
         // 60s 后重试
@@ -155,10 +153,10 @@ export default {
         })
         timer.start()
         // 若输入的手机号码包含国家码，则只取手机号码
-        if (+this.phoneNumber[0] === 8 && +this.phoneNumber[1] === 6) {
-          this.phoneNumber = this.phoneNumber.slice(2)
+        if (this.phoneNumber.slice(phoneNationCode.length) === phoneNationCode) {
+          this.phoneNumber = this.phoneNumber.slice(phoneNationCode.length)
         }
-        register(this.phoneNumber).then(({data}) => {
+        register(this.phoneNumber, phoneNationCode).then(({data}) => {
           const code = +data.error_code
           switch (code) {
             case 0: {
@@ -223,14 +221,17 @@ export default {
         line-height: 51.5px;
         padding: 2px 2px 0 0;
         text-align: center;
+        position: absolute;
+        left: 0;
       }
 
       .title {
         width: 100%;
+        height: 100%;
         position: absolute;
         left: 0;
         text-align: center;
-        font: 400 36px 'Roboto', Arial, serif;
+        font: 400 36px/51.5px 'Roboto', Arial, serif;
         color: #fff;
       }
     }

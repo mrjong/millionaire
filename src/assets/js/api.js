@@ -20,7 +20,8 @@ export const api = {
   DailyShare: '/cmp/ds', // 每日分享
   sharePage: '/cmp/res', // 分享中间页
   register: '/v2/user/register', // 手机号注册
-  signInByPhone: '/v2/user/verifycode' // 手机号登陆
+  signInByPhone: '/v2/user/verifycode', // 手机号登陆
+  getPhoneNationCode: '/v2/user/nationcode' // 获取手机号国家码
 }
 
 export const init = function (isRefreshToken) {
@@ -149,10 +150,10 @@ export const DailyShare = function () {
 }
 
 // 手机号注册获取验证码
-export const register = function (phoneNumber, nationcode = 86) {
+export const register = function (phoneNumber, phoneNationcode = '91') {
   return axios.post(`${accountHost[env]}${api.register}`, {
     app_id: utils.app_id,
-    nationcode: 86,
+    nationcode: phoneNationcode,
     mobile: phoneNumber,
     account_type: 8,
     cr: utils.generateRandomStr(16)
@@ -182,4 +183,9 @@ export const signInByPhone = function (code) {
       return formData
     }]
   })
+}
+
+// 获取手机号国家码
+export const getPhoneNationCode = function () {
+  return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
 }
