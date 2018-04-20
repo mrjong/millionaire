@@ -16,10 +16,11 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 export default {
-  name: 'ReviveCard',
+  name: 'ReviveGuide',
   props: {
   },
   data () {
@@ -28,9 +29,14 @@ export default {
       FirstGuide: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      status: 'status',
+      questionStatus: 'question_status'
+    })
+  },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide')) {
+    if (localStorage.getItem('NoFirstGuide') && this.status === 1) {
       this.FirstGuide = false
     } else {
       this.FirstGuide = true
@@ -50,6 +56,13 @@ export default {
           this.$store.dispatch(type._INIT)
           this.$router.push({path: '/share-detail'})
         })
+      }
+    }
+  },
+  watch: {
+    status: function (status) {
+      if (status !== 1) {
+        this.FirstGuide = false
       }
     }
   }

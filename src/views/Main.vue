@@ -1,6 +1,9 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
+      <div class="main-container__top__back" @click="back">
+        <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
+      </div>
       <div class="main-container__top__online">
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
@@ -55,6 +58,9 @@ export default {
     sure () {
       this.showDialog = false
     },
+    back () {
+      this.$router.push({path: '/'})
+    },
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
@@ -86,8 +92,16 @@ export default {
       width: 100%;
       display: flex;
       padding: 25px 25px 0;
-      justify-content: space-between;
       min-height: 59px;
+      &__back{
+        width: 54px;
+        height: 54px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 26px;
+        line-height: 54px;
+        text-align: center;
+        margin-right: 15px;
+      }
       &__online{
         padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -111,9 +125,13 @@ export default {
         }
       }
       &__logo{
-        align-self: center;
+        flex: 5;
+        position: relative;
         img{
           width: 135px;
+          text-align: right;
+          position: absolute;
+          right: 0;
         }
       }
     }
