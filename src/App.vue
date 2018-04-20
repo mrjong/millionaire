@@ -67,7 +67,7 @@ export default {
   methods: {
     init () {
       im.addListener(NETWORK_UNAVAILABLE, () => {
-        !this.disableNetworkTip && this.$store.dispatch(type._OPEN_DIALOG, {
+        this.$store.dispatch(type._OPEN_DIALOG, {
           htmlTitle: 'Please check your internet connection.',
           htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
           shouldSub: false,
