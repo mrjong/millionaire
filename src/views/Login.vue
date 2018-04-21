@@ -47,7 +47,7 @@ export default {
       disableGetCode: false, // 是否禁用获取验证码
       resetIntervalTime: 60, // 验证码获取重置间隔时间
       restResetTime: 0, // 剩余重置时间
-      errorMsg: '',
+      errorMsg: '  ',
       username: '',
       phoneNumber: '',
       code: ''
@@ -274,8 +274,11 @@ export default {
       .errorMsg {
         padding: 24px;
         font-size: 24px;
+        line-height: 1.2;
         color: #ee2d7a;
         text-align: right;
+        position: absolute;
+        right: 0;
       }
       .code {
         .send {
@@ -303,6 +306,7 @@ export default {
         border-radius: 1rem;
         background-color: #f3a207;
         color: #fff;
+        margin-top: 72px;
       }
     }
 

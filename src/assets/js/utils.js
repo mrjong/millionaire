@@ -143,12 +143,21 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
+  /**
+   * 分享
+   * @param {any} callback 回调函数
+   * @param {any} packageName 分享包名
+   * @param {any} content 分享内容
+   * @param {any} [link=window.location.href] 分享链接
+   */
   share (callback, packageName, content, link = window.location.href) {
+    const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'messager'
     const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
     const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
     const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
     window.shareSuccessCallback = callback
     if (window.njordGame) {
+      // 调用客户端分享
       window.njordInvite.share && window.njordInvite.share(JSON.stringify({
         sharePackage: packageName,
         shareTitle: title,
@@ -157,11 +166,16 @@ export default {
         callbackMethod: 'shareSuccess'
       }))
     } else {
-      callback(true, 'com.facebook.katana')
-      setTimeout(() => {
-        window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
-      }, 5)
-      window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+      // h5 分享
+      callback(true, packageName)
+      if (shareType === 'facebook') {
+        setTimeout(() => {
+          window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+        }, 5)
+        window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+      } else {
+        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
+      }
     }
   },
   /**
