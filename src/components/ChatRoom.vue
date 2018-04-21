@@ -48,7 +48,8 @@ export default {
       msgList: [], // 显示的消息列表
       myMessage: '', // 我发送的消息
       showInput: false, // 是否显示输入框
-      windowInnerHeight: 0 // 窗口高度
+      windowInnerHeight: 0, // 窗口高度
+      isSendMessageComplete: true // 消息是否发送完成
     }
   },
   computed: {
@@ -112,12 +113,14 @@ export default {
     },
     // 2. 发送消息 【hack】
     sendMessage () {
-      if (this.myMessage) {
+      if (this.myMessage && this.isSendMessageComplete) {
+        this.isSendMessageComplete = false
         document.getElementById('sendmessage').blur()
         this.showInput = false
         const msg = this.myMessage
         const nickname = this.userInfo.userName
         const img = this.userInfo.avatar
+        this.myMessage = ''
         im.sendMessage(msg, img, nickname)
         this.messageHandler({
           content: {
@@ -129,7 +132,7 @@ export default {
           },
           messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
         })
-        this.myMessage = ''
+        this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
           fromSource = 'game_page'
