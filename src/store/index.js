@@ -63,7 +63,8 @@ export default new Vuex.Store({
     lives: 0,
     code: '',
     phoneNationCodeList: [], // 手机号国家码列表
-    phoneNationCode: '91' // 当前手机国家码
+    phoneNationCode: '91', // 当前手机国家码
+    disableNetworkTip: false // 是否禁止网络状况提示
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -82,7 +83,8 @@ export default new Vuex.Store({
     lives: (state) => state.lives,
     code: (state) => state.code,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
-    phoneNationCode: (state) => state.phoneNationCode
+    phoneNationCode: (state) => state.phoneNationCode,
+    disableNetworkTip: (state) => state.disableNetworkTip
   },
   mutations: {
     /**
@@ -121,7 +123,7 @@ export default new Vuex.Store({
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
-            const startTime = +info.sr || 0
+            const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
             utils.isOnline = isOnline
