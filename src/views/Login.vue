@@ -37,7 +37,7 @@ import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
-import { register, signInByPhone } from '../assets/js/api'
+import { register, signInByPhone, addExtraLife } from '../assets/js/api'
 let timer = null
 export default {
   name: 'Login',
@@ -68,7 +68,7 @@ export default {
         this.error('Please enter a right phone number.')
         return false
       } else if (!this.code) {
-        this.error('Please enter a right verification code.')
+        this.error('Wrong verification code, please try again.')
         return false
       }
       return true
@@ -83,25 +83,27 @@ export default {
           const code = +data.error_code
           switch (code) {
             case 0: {
-              this.init()
-              this.$store.commit(type._UPDATE, {
-                isOnline: true
-              })
-              utils.isOnline = true
+              addExtraLife() // 检查首次登录增加复活卡
+              // 若为等待状态，返回首页
+              if (this.status === 1) {
+                this.$router.replace({path: '/'})
+              }
+              // 调用登陆成功回调
+              window.loginSuccess()
               break
             }
             case 20002: {
-              this.error('Please enter a right verification code.')
+              this.error('Wrong verification code, please try again.')
               break
             }
             default: {
-              this.error('Verification code validation failed, please try again later')
+              this.error('Fail to verify the code, please try again. ')
               console.log('手机验证码验证失败:', data.error_msg)
             }
           }
           this.loading = false
         }, (err) => {
-          this.error('Verification code validation failed, please try again later')
+          this.error('Fail to verify the code, please try again. ')
           console.log('手机验证码验证出错', err)
         })
       }
@@ -163,16 +165,16 @@ export default {
               break
             }
             case 40022: {
-              this.error('Send verification code too frequently, please try again later')
+              this.error('Sending the code too often. Please verify later.')
               break
             }
             default: {
-              this.error('Failed to send verification code, please try again')
+              this.error('Fail to send, please try again.')
               console.log('发送验证码失败：', data.error_msg)
             }
           }
         }, err => {
-          this.error('Failed to send verification code, please try again')
+          this.error('Fail to send, please try again.')
           console.log('发送验证码出错：', err)
         })
       }
