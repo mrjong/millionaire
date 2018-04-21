@@ -383,7 +383,6 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-        im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
         let info = ''
