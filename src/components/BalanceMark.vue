@@ -68,7 +68,7 @@ export default {
   .balance-mark {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.8);
@@ -76,6 +76,7 @@ export default {
     justify-content: center;
     align-items: center;
     text-align: center;
+    z-index: 111;
     &__wrap {
       width: 602px;
       background: #fff;

@@ -31,13 +31,14 @@ export default {
   .loading{
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top:0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 1111;
     display: flex;
     justify-content: center;
+    z-index: 111;
     &__img{
       width: 80px;
       align-self: center;

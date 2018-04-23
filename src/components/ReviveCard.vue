@@ -42,12 +42,13 @@ export default {
   .invitation-mark {
       width: 100%;
       height: 100%;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       z-index: 111;
       padding: 0 25px;
       background-color: rgba(68, 68, 68, 0.8);
+      z-index: 111;
       .invitation-bomb {
         max-width: 93% !important;
         width: 670px;

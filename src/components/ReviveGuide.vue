@@ -72,12 +72,13 @@ export default {
   .guide {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 111;
     padding: 120px 40px 0;
     background-color: rgba(0, 0, 0, 0.9);
+    z-index: 111;
     &__close{
       position: absolute;
       top: 24px;
@@ -156,5 +157,56 @@ export default {
       text-align: center;
       line-height: 70px;
     }
+  }
+  @media screen and (max-width: 321px){
+    .guide {
+      padding: 120px 40px 0;
+    &__close{
+      position: absolute;
+      top: 24px;
+      right: 24px;;
+      width: 50px;
+      height: 50px;
+      background-color:  rgba(255, 255, 255, 0.7);
+      font-size: 22px;
+      line-height: 50px;
+    }
+    &__text{
+      font-size: 30px;
+      line-height: 45px;
+      margin-bottom: 20px;
+      .dot{
+        margin-right: 15px;
+      }
+    }
+    &__img{
+      width: 100%;
+      position: relative;
+      .light{
+        max-width: 65%;
+        width: 600px;
+        margin: 40px auto 0;
+      }
+      .lives{
+        width:186px;
+        position: absolute;
+        top: 50%;
+        left:50%;
+        transform: translate(-50%,-50%)
+      }
+    }
+    &__btn{
+      font-size: 30px;
+      width: 650px;
+      height: 94px;
+      line-height: 94px;
+      margin: 100px auto 0;
+    }
+    .important{
+      font-size: 56px;
+      margin: 0 0 35px;
+      line-height: 70px;
+    }
+  }
   }
 </style>
