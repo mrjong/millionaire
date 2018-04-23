@@ -220,7 +220,7 @@ const im = {
    * 断开连接
    */
   disconnect () {
-    RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+    RongIMClient && RongIMClient.getInstance && RongIMClient.getInstance() && RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
   },
   /**
    * 重新连接
