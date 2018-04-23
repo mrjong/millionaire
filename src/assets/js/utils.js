@@ -1,5 +1,6 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
+/* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
 import { api } from './api'
 import { host, env } from './http'
@@ -69,18 +70,19 @@ export default {
    * @param {any} callback
    */
   login (callback) {
+    window.top.loginCallback = callback
     if (njordGame) {
-      window.top.loginCallback = callback
       const loginArgs = JSON.stringify({
         callbackMethod: 'loginSuccess()',
         from_source: 'million_aire'
       })
       njordGame.login && njordGame.login(loginArgs)
+    } else {
+      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
-
   app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : 'da8b8fdef4913be60044726055514db0',
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
 
@@ -122,7 +124,18 @@ export default {
         ...params
       }
     }
+    // 客户端打点
     njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
+    // h5 打点
+    const webParams = {}
+    for (let prop in params) {
+      webParams[`web_${prop.replace(/_s|l$/g, '')}`] = params[prop]
+    }
+    window.ares && window.ares.track(eventType, {
+      web_name: name,
+      web_from: from,
+      ...webParams
+    })
   },
   /**
    * 计时器
@@ -130,18 +143,40 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
+  /**
+   * 分享
+   * @param {any} callback 回调函数
+   * @param {any} packageName 分享包名
+   * @param {any} content 分享内容
+   * @param {any} [link=window.location.href] 分享链接
+   */
   share (callback, packageName, content, link = window.location.href) {
+    const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'messager'
     const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
     const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
     const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
     window.shareSuccessCallback = callback
-    window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-      sharePackage: packageName,
-      shareTitle: title,
-      shareContent: content,
-      shareLink,
-      callbackMethod: 'shareSuccess'
-    }))
+    if (window.njordGame) {
+      // 调用客户端分享
+      window.njordInvite.share && window.njordInvite.share(JSON.stringify({
+        sharePackage: packageName,
+        shareTitle: title,
+        shareContent: content,
+        shareLink,
+        callbackMethod: 'shareSuccess'
+      }))
+    } else {
+      // h5 分享
+      callback(true, packageName)
+      if (shareType === 'facebook') {
+        setTimeout(() => {
+          window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+        }, 5)
+        window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+      } else {
+        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
+      }
+    }
   },
   /**
    * 时间格式化
@@ -287,6 +322,18 @@ export default {
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
     window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
+  },
+  /**
+   * 生成指定长度的随机串
+   * @param {any} len
+   */
+  generateRandomStr (len) {
+    let str = ''
+    while (len > 0) {
+      str = str + String.fromCharCode(parseInt(Math.random() * 58) + 65)
+      len--
+    }
+    return str
   }
 }
 

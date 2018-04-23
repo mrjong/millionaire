@@ -62,6 +62,8 @@ export default new Vuex.Store({
     },
     lives: 0,
     code: '',
+    phoneNationCodeList: [], // 手机号国家码列表
+    phoneNationCode: '91', // 当前手机国家码
     disableNetworkTip: false // 是否禁止网络状况提示
   },
   getters: {
@@ -80,6 +82,8 @@ export default new Vuex.Store({
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
     code: (state) => state.code,
+    phoneNationCodeList: (state) => state.phoneNationCodeList,
+    phoneNationCode: (state) => state.phoneNationCode,
     disableNetworkTip: (state) => state.disableNetworkTip
   },
   mutations: {
@@ -121,9 +125,11 @@ export default new Vuex.Store({
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
+            const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
+            utils.isOnline = isOnline
             // 更新首页信息
             commit(type.HOME_UPDATE, {
-              userId: userInfo.ud || '',
+              userId: userInfo.us || '',
               supaId: userInfo.us || '',
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
@@ -138,14 +144,15 @@ export default new Vuex.Store({
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
             commit(type._UPDATE, {
+              hostIntervalTime,
+              lives,
+              code,
+              isOnline,
               startTime,
               startTimeOffset,
               onlineAmount: +chatRoomInfo.ic || 0,
               chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || '',
-              hostIntervalTime,
-              lives,
-              code
+              imToken: chatRoomInfo.it || ''
             })
             commit(type.QUESTION_UPDATE, {
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true

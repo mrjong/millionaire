@@ -19,6 +19,7 @@ import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
+import { env } from './assets/js/http'
 export default {
   name: 'App',
   data () {
@@ -40,6 +41,7 @@ export default {
   },
   created () {
     this.init()
+    this.getPhoneNationCode()
     if (this.isOnline || utils.clientId) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
@@ -48,7 +50,6 @@ export default {
         }, 500)
         this.$statisticEntry()
       }, (err) => {
-        this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
@@ -72,6 +73,9 @@ export default {
       this.$store.dispatch(type._RECEIVE_RESULT)
       this.$store.dispatch(type._END)
     },
+    /**
+     * 关闭弹窗
+     */
     closeDialog () {
       this.$store.commit(type._UPDATE, {
         showDialog: false,
@@ -82,6 +86,27 @@ export default {
           markType: 0,
           okBtnText: 'OK',
           hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+        }
+      })
+    },
+    /**
+     * 获取手机号国家码
+     */
+    getPhoneNationCode () {
+      api.getPhoneNationCode().then(({data}) => {
+        const code = +data.error_code
+        switch (code) {
+          case 0: {
+            let phoneNationCode = (data.data && data.data.default && data.data.default.code) || '91'
+            let phoneNationCodeList = (data.data && data.data.codes) || []
+            if (env !== 'check' && env !== 'prod') { // 不是生产环境和验证环境，国家码为中国
+              phoneNationCode = '86'
+            }
+            this.$store.commit(type._UPDATE, {
+              phoneNationCodeList,
+              phoneNationCode
+            })
+          }
         }
       })
     }

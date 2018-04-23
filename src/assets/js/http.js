@@ -9,6 +9,14 @@ export const host = {
   check: 'http://check-millionaire-api.apusapps.com',
   prod: 'http://millionaire-api.apusapps.com'
 }
+
+export const accountHost = {
+  local: 'http://test-accounts.apuscn.com',
+  dev: 'http://test-accounts.apuscn.com',
+  test: 'http://test-account.apuscn.com',
+  check: 'http://account.apusapps.com'
+}
+
 const imAppKey = {
   local: 'p5tvi9dsphpf4',
   dev: 'pvxdm17jp3vvr',

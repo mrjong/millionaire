@@ -2,7 +2,7 @@
   <div class="base-info">
     <div class="base-info__user">
         <div class="base-info__user__head"
-             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}"></div>
+             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login"></div>
         <p class="base-info__user__name">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
@@ -31,6 +31,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'BaseInfo',
   props: {
@@ -46,6 +47,17 @@ export default {
   methods: {
     routerStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    },
+    login () {
+      if (!this.isOnline) {
+        utils.login(() => {
+          utils.isOnline = true
+          this.$store.commit(_UPDATE, {
+            isOnline: true
+          })
+          this.$store.dispatch(_INIT)
+        })
+      }
     }
   }
 }

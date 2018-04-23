@@ -1,4 +1,4 @@
-import axios from './http'
+import axios, { accountHost, env } from './http'
 import utils from './utils'
 import md5 from 'md5'
 
@@ -18,7 +18,11 @@ export const api = {
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
   DailyShare: '/cmp/ds', // 每日分享
-  sharePage: '/cmp/res' // 分享中间页
+  sharePage: '/cmp/res', // 分享中间页
+  addExtraLife: '/cmp/lc', // 首次登陆增加额外生命
+  register: '/v2/user/register', // 手机号注册
+  signInByPhone: '/v2/user/verifycode', // 手机号登陆
+  getPhoneNationCode: '/v2/user/nationcode' // 获取手机号国家码
 }
 
 export const init = function (isRefreshToken) {
@@ -139,10 +143,58 @@ export const VerificationCode = function (code) {
 }
 
 // 每日分享
-
 export const DailyShare = function () {
   return axios.post(api.DailyShare, {
     app_id: utils.app_id,
     client_id: utils.clientId
   })
+}
+
+// 首次登陆增加额外生命
+export const addExtraLife = function () {
+  return axios.post(api.addExtraLife, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 手机号注册获取验证码
+export const register = function (phoneNumber, phoneNationcode = '91') {
+  return axios.post(`${accountHost[env]}${api.register}`, {
+    app_id: utils.app_id,
+    nationcode: phoneNationcode,
+    mobile: phoneNumber,
+    account_type: 8,
+    cr: utils.generateRandomStr(16)
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
+  })
+}
+
+// 手机号登陆
+export const signInByPhone = function (code) {
+  return axios.post(`${accountHost[env]}${api.signInByPhone}`, {
+    code,
+    app_id: utils.app_id,
+    account_type: 8
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
+  })
+}
+
+// 获取手机号国家码
+export const getPhoneNationCode = function () {
+  return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
 }
