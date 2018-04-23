@@ -312,7 +312,7 @@ export default {
 
     &__footer {
       width: 135px;
-      position: absolute;
+      position: fixed;
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
