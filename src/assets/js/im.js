@@ -27,7 +27,7 @@ const im = {
     },
     {
       messageName: 'PeopleMessage',
-      propertys: ['count'],
+      propertys: ['count', 'extra'],
       objectName: 'APUS:PeopleMsg'
     },
     {

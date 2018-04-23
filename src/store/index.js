@@ -140,7 +140,7 @@ export default new Vuex.Store({
             commit(type._UPDATE, {
               startTime,
               startTimeOffset,
-              onlineAmount: +chatRoomInfo.ic || 0,
+              onlineAmount: chatRoomInfo.is || '',
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || '',
               hostIntervalTime,
@@ -309,7 +309,7 @@ export default new Vuex.Store({
      */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
-        const count = +(message.content && message.content.count)
+        const count = (message.content && message.content.extra) || 0
         commit(type._UPDATE, {
           onlineAmount: count
         })
