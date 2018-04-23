@@ -62,6 +62,8 @@ export default new Vuex.Store({
     },
     lives: 0,
     code: '',
+    phoneNationCodeList: [], // 手机号国家码列表
+    phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     disableNetworkTip: false // 是否禁止网络状况提示
   },
   getters: {
@@ -80,6 +82,8 @@ export default new Vuex.Store({
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
     code: (state) => state.code,
+    phoneNationCodeList: (state) => state.phoneNationCodeList,
+    phoneNationCode: (state) => state.phoneNationCode,
     disableNetworkTip: (state) => state.disableNetworkTip
   },
   mutations: {
@@ -121,6 +125,8 @@ export default new Vuex.Store({
             const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
+            const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
+            utils.isOnline = isOnline
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
@@ -138,14 +144,15 @@ export default new Vuex.Store({
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
             commit(type._UPDATE, {
-              startTime,
-              startTimeOffset,
-              onlineAmount: +chatRoomInfo.ic || 0,
-              chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || '',
               hostIntervalTime,
               lives,
-              code
+              code,
+              isOnline,
+              startTime,
+              startTimeOffset,
+              onlineAmount: chatRoomInfo.is || '',
+              chatRoomId: chatRoomInfo.rn || '',
+              imToken: chatRoomInfo.it || ''
             })
             commit(type.QUESTION_UPDATE, {
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
@@ -309,7 +316,7 @@ export default new Vuex.Store({
      */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
-        const count = +(message.content && message.content.count)
+        const count = (message.content && message.content.extra) || 0
         commit(type._UPDATE, {
           onlineAmount: count
         })
