@@ -132,6 +132,7 @@ export default {
           },
           messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
         })
+        console.log('发送消息', msg, nickname, img)
         this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面

@@ -89,7 +89,8 @@ const actions = {
           userName: rootGetters.userInfo.userName,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
-          ua: window.navigator.userAgent
+          ua: window.navigator.userAgent,
+          isPlaying: window.isPlaying
         })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
@@ -261,7 +262,8 @@ const actions = {
           clientId: utils.clientId,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
-          isAnswered: getters.isAnswered
+          isAnswered: getters.isAnswered,
+          isPlaying: window.isPlaying
         })
 
         // 更新观战模式
