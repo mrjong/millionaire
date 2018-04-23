@@ -50,6 +50,7 @@ export default {
   },
   created () {
     this.init()
+    this.getPhoneNationCode()
     if (this.isOnline || utils.clientId) {
       this.loading = true
       this.$store.dispatch(type._INIT).then(() => {
@@ -58,7 +59,6 @@ export default {
         }, 500)
         this.$statisticEntry()
       }, (err) => {
-        this.$router.replace({path: '/login'})
         this.loading = false
         console.log(err)
       })
@@ -82,6 +82,9 @@ export default {
       this.$store.dispatch(type._RECEIVE_RESULT)
       this.$store.dispatch(type._END)
     },
+    /**
+     * 关闭弹窗
+     */
     closeDialog () {
       this.$store.commit(type._UPDATE, {
         showDialog: false,
@@ -95,9 +98,23 @@ export default {
         }
       })
     },
-    toFb () {
-      utils.statistic('millionaire', 3, null, 'wait_page_dialog')
-      utils.toFbBrowser()
+    /**
+     * 获取手机号国家码
+     */
+    getPhoneNationCode () {
+      api.getPhoneNationCode().then(({data}) => {
+        const code = +data.error_code
+        switch (code) {
+          case 0: {
+            let phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
+            let phoneNationCodeList = (data.data && data.data.codes) || []
+            this.$store.commit(type._UPDATE, {
+              phoneNationCodeList,
+              phoneNationCode
+            })
+          }
+        }
+      })
     }
   },
   components: {

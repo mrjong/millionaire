@@ -27,7 +27,7 @@ const im = {
     },
     {
       messageName: 'PeopleMessage',
-      propertys: ['count'],
+      propertys: ['count', 'extra'],
       objectName: 'APUS:PeopleMsg'
     },
     {
@@ -138,7 +138,7 @@ const im = {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            // console.warn(message.messageUId, message.sentTime, message.content.content)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -215,7 +215,6 @@ const im = {
       }
     })
   },
-
   /**
    * 重新连接
    */

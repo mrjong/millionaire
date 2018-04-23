@@ -75,6 +75,7 @@ export default {
       // 横屏切换为竖屏是 隐藏输入框 【hack】 什么鬼 maybe 用不上呢！！！
       window.addEventListener('resize', () => {
         if (this.windowInnerHeight < window.innerHeight) {
+          this.reSetMsgBot(true)
           this.showInput = false
         }
         this.windowInnerHeight = window.innerHeight
@@ -132,6 +133,7 @@ export default {
           },
           messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
         })
+        console.log('发送消息', msg, nickname, img)
         this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
@@ -172,7 +174,7 @@ export default {
     },
     // 4. 输入框 失去焦点时 【hack】 增加注释
     blurEvent () {
-      this.showInput = false
+      // this.showInput = false
       this.reSetMsgBot(1)
     },
     // 5. 输入框弹起或收起时 修改消息区域高度 【hack】 增加注释
