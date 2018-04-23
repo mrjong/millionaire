@@ -129,7 +129,7 @@ export default new Vuex.Store({
             utils.isOnline = isOnline
             // 更新首页信息
             commit(type.HOME_UPDATE, {
-              userId: userInfo.us || '',
+              userId: userInfo.ud || '',
               supaId: userInfo.us || '',
               avatar: userInfo.up || '',
               userName: userInfo.un || '',

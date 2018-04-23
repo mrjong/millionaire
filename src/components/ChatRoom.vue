@@ -174,7 +174,7 @@ export default {
     },
     // 4. 输入框 失去焦点时 【hack】 增加注释
     blurEvent () {
-      // this.showInput = false
+      this.showInput = false
       this.reSetMsgBot(1)
     },
     // 5. 输入框弹起或收起时 修改消息区域高度 【hack】 增加注释

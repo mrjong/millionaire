@@ -3,6 +3,15 @@
     <router-view/>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
+    <!-- <div class="dialog-game" v-if="showGameDialog">
+      <div class="con">
+        <img src="http://static.subcdn.com/201804042026229f4a3491a2.png" alt="">
+        <div class="contents">
+          <span class="iconfont icon-cuowu" style="font-size:0.28rem;color:#fff;margin-left:91.22%;margin-top:3.8%;display: inline-block;" @click="showGameDialog = false"></span>
+          <button class="btn-fb" @click="toFb"></button>
+        </div>
+      </div>
+    </div> -->
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -24,7 +33,8 @@ export default {
   data () {
     return {
       loading: false,
-      showLogin: false
+      showLogin: false,
+      showGameDialog: true
     }
   },
   computed: {
@@ -169,7 +179,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" type="text/less">
   @import "assets/css/iconfont/iconfont.css";
   html,body,#app{
     width:100%;
@@ -210,5 +220,47 @@ export default {
   font-weight: 700;
   src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/201803201601353e1f01c5c2.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+.dialog-game {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  .con {
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    img {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .contents {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      button {
+        width: 320px;
+        height: 85px;
+        border: none;
+        margin-left: 22.8%;
+        margin-top: 102.91%;
+        border-radius: 1rem;
+        background: rgba(0,0,0,0);
+        padding: 0;
+        outline: none;
+      }
+    }
+  }
 }
 </style>
