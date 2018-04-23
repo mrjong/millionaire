@@ -16,10 +16,11 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 export default {
-  name: 'ReviveCard',
+  name: 'ReviveGuide',
   props: {
   },
   data () {
@@ -28,9 +29,14 @@ export default {
       FirstGuide: false
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      status: 'status',
+      questionStatus: 'question_status'
+    })
+  },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide')) {
+    if (localStorage.getItem('NoFirstGuide') && this.status === 1) {
       this.FirstGuide = false
     } else {
       this.FirstGuide = true
@@ -52,6 +58,13 @@ export default {
         })
       }
     }
+  },
+  watch: {
+    status: function (status) {
+      if (status !== 1) {
+        this.FirstGuide = false
+      }
+    }
   }
 }
 </script>
@@ -59,12 +72,13 @@ export default {
   .guide {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 111;
     padding: 120px 40px 0;
     background-color: rgba(0, 0, 0, 0.9);
+    z-index: 111;
     &__close{
       position: absolute;
       top: 24px;
@@ -142,6 +156,55 @@ export default {
       margin: 10px 0 40px;
       text-align: center;
       line-height: 70px;
+    }
+  }
+  @media screen and (max-width: 321px){
+    .guide {
+      padding: 100px 40px 0;
+      &__close{
+        position: absolute;
+        top: 24px;
+        right: 24px;;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+        line-height: 50px;
+      }
+      &__text{
+        font-size: 30px;
+        line-height: 45px;
+        margin-bottom: 10px;
+      }
+      &__btn{
+        font-size: 30px;
+        width: 600px;
+        height: 94px;
+        line-height: 94px;
+        margin: 30px auto 0;
+      }
+      .important{
+        font-size: 56px;
+        margin: 0 0 35px;
+        line-height: 70px;
+      }
+    }
+  }
+  @media screen and (max-width: 321px){
+    .guide {
+      padding: 100px 40px 0;
+      &__text{
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      &__btn{
+        font-size: 30px;
+        width: 600px;
+        margin: 30px auto 0;
+      }
+      .important{
+        font-size: 56px;
+        margin: 0 0 35px;
+      }
     }
   }
 </style>

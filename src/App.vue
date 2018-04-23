@@ -119,10 +119,10 @@ export default {
   watch: {
     status: function (status, oldStatus) {
       if (status !== 1) {
-        this.$router.replace({path: '/main'})
+        // this.$router.replace({path: '/main'})
         utils.setGameState(true)
       } else {
-        this.$router.replace({path: '/'})
+        // this.$router.replace({path: '/'})
         utils.setGameState(false)
         im.stopPullMsg()
       }
