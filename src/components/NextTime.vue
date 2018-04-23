@@ -5,14 +5,14 @@
         Next Game
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
+      <!-- <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
         <span class="living-text">LIVING</span>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
           <span class="living-icon iconfont icon-LIVINGyoujiantou right"></span>
         </div>
-      </div>
-      <p class="hint__time__hour" v-else>
+      </div> -->
+      <p class="hint__time__hour">
         {{nextTime[1]}}
       </p>
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+// import {mapGetters} from 'vuex'
 export default {
   name: 'NextTime',
   props: {
@@ -43,38 +43,37 @@ export default {
   },
   data () {
     return {
-      isPlaying: false
+      // isPlaying: false
     }
   },
   computed: {
-    ...mapGetters({
-      status: 'status',
-      watchingMode: 'watchingMode',
-      questionStatus: 'question_status',
-      startTime: 'startTime'
-    })
+    // ...mapGetters({
+    //   status: 'status',
+    //   watchingMode: 'watchingMode',
+    //   questionStatus: 'question_status',
+    //   startTime: 'startTime'
+    // })
   },
   mounted () {
-    console.log('nextTime-status' + this.status)
-    if (this.status === 1) {
-      this.isPlaying = false
-    } else {
-      this.isPlaying = true
-    }
+    // if (this.status === 1) {
+    //   this.isPlaying = false
+    // } else {
+    //   this.isPlaying = true
+    // }
   },
   methods: {
-    toGamePage () {
-      this.$router.push({path: '/main'})
-    }
+    // toGamePage () {
+    //   this.$router.push({path: '/main'})
+    // }
   },
   watch: {
-    status: function (status) {
-      if (status === 1) {
-        this.isPlaying = false
-      } else {
-        this.isPlaying = true
-      }
-    }
+    // status: function (status) {
+    //   if (status === 1) {
+    //     this.isPlaying = false
+    //   } else {
+    //     this.isPlaying = true
+    //   }
+    // }
   }
 }
 </script>
