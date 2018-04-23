@@ -6,7 +6,7 @@
     </header>
     <section class="login">
       <section class="country inputItem" @click.stop="showCountryList = !showCountryList">
-        <span class="iconfont icon-nicheng"></span>
+        <span class="iconfont icon-guojia"></span>
         <label>{{phoneNationCode.country}} +{{phoneNationCode.code}}</label>
         <span class="iconfont icon-LIVINGyoujiantou" style="float:right;transform: rotateZ(90deg);"></span>
       </section>
