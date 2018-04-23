@@ -156,7 +156,7 @@ export default {
         setTimeout(() => {
           window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
         }, 5)
-        window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+        // window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
       } else {
         window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
       }
