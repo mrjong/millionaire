@@ -76,9 +76,8 @@ export default {
     top: 0;
     left: 0;
     z-index: 111;
-    padding: 120px 40px 0;
+    padding: 110px 40px 0;
     background-color: rgba(0, 0, 0, 0.9);
-    z-index: 111;
     &__close{
       position: absolute;
       top: 24px;
@@ -95,7 +94,7 @@ export default {
     }
     &__text{
       color: #fff;
-      font-size: 33px;
+      font-size: 30px;
       line-height: 45px;
       margin-bottom: 20px;
       .dot{
@@ -134,7 +133,7 @@ export default {
       text-align: center;
       line-height: 94px;
       border-radius: 46px;
-      margin: 100px auto 0;
+      margin: 70px auto 0;
       display: flex;
       justify-content: center;
       &__icon{
@@ -171,7 +170,7 @@ export default {
         line-height: 50px;
       }
       &__text{
-        font-size: 30px;
+        font-size: 28px;
         line-height: 45px;
         margin-bottom: 10px;
       }

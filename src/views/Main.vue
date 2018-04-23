@@ -59,7 +59,7 @@ export default {
       this.showDialog = false
     },
     back () {
-      this.$router.push({path: '/'})
+      this.$router.go(-1)
     },
     onError (err) {
       this.dialogInfo.htmlText = err
