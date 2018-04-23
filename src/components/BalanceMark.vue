@@ -71,12 +71,12 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 22;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    z-index: 111;
     &__wrap {
       width: 602px;
       background: #fff;

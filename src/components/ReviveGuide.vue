@@ -189,4 +189,22 @@ export default {
       }
     }
   }
+  @media screen and (max-width: 321px){
+    .guide {
+      padding: 100px 40px 0;
+      &__text{
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      &__btn{
+        font-size: 30px;
+        width: 600px;
+        margin: 30px auto 0;
+      }
+      .important{
+        font-size: 56px;
+        margin: 0 0 35px;
+      }
+    }
+  }
 </style>

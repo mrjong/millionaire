@@ -38,7 +38,6 @@ export default {
     z-index: 1111;
     display: flex;
     justify-content: center;
-    z-index: 111;
     &__img{
       width: 80px;
       align-self: center;
