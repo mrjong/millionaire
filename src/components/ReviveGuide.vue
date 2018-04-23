@@ -160,53 +160,33 @@ export default {
   }
   @media screen and (max-width: 321px){
     .guide {
-      padding: 120px 40px 0;
-    &__close{
-      position: absolute;
-      top: 24px;
-      right: 24px;;
-      width: 50px;
-      height: 50px;
-      background-color:  rgba(255, 255, 255, 0.7);
-      font-size: 22px;
-      line-height: 50px;
-    }
-    &__text{
-      font-size: 30px;
-      line-height: 45px;
-      margin-bottom: 20px;
-      .dot{
-        margin-right: 15px;
-      }
-    }
-    &__img{
-      width: 100%;
-      position: relative;
-      .light{
-        max-width: 65%;
-        width: 600px;
-        margin: 40px auto 0;
-      }
-      .lives{
-        width:186px;
+      padding: 100px 40px 0;
+      &__close{
         position: absolute;
-        top: 50%;
-        left:50%;
-        transform: translate(-50%,-50%)
+        top: 24px;
+        right: 24px;;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+        line-height: 50px;
+      }
+      &__text{
+        font-size: 30px;
+        line-height: 45px;
+        margin-bottom: 10px;
+      }
+      &__btn{
+        font-size: 30px;
+        width: 600px;
+        height: 94px;
+        line-height: 94px;
+        margin: 30px auto 0;
+      }
+      .important{
+        font-size: 56px;
+        margin: 0 0 35px;
+        line-height: 70px;
       }
     }
-    &__btn{
-      font-size: 30px;
-      width: 650px;
-      height: 94px;
-      line-height: 94px;
-      margin: 100px auto 0;
-    }
-    .important{
-      font-size: 56px;
-      margin: 0 0 35px;
-      line-height: 70px;
-    }
-  }
   }
 </style>
