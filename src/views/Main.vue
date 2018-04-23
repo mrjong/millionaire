@@ -1,9 +1,9 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
-      <div class="main-container__top__back" @click="back">
+      <!-- <div class="main-container__top__back" @click="back">
         <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
-      </div>
+      </div> -->
       <div class="main-container__top__online">
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
@@ -58,9 +58,9 @@ export default {
     sure () {
       this.showDialog = false
     },
-    back () {
-      this.$router.push({path: '/'})
-    },
+    // back () {
+    //   this.$router.go(-1)
+    // },
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
@@ -101,6 +101,7 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
+        font-size: 24px;
       }
       &__online{
         padding: 0 18px;
