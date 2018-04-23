@@ -14,6 +14,7 @@
     var startTime = Date.now();
   </script>
   <script>
+    var isPlaying = true
     var njordGame = window.top.njordGame
     var playAudioCallback = null
     var resumeCallback = null
@@ -45,6 +46,7 @@
       playAudioCallback && playAudioCallback()
     }
     njordCallback.onResume = function () {
+      isPlaying = true
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = false
@@ -55,6 +57,7 @@
       })
     }
     njordCallback.onPause = function () {
+      isPlaying = false
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = true
