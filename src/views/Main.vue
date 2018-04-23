@@ -11,6 +11,10 @@
       <div class="main-container__top__logo">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
+      <div class="main-container__top__music" @click="isPlay">
+        <img src="../assets/images/music-icon.png" v-if="!musicPlay">
+        <img src="../assets/images/music_close-icon.png" v-else>
+      </div>
     </div>
     <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
@@ -29,6 +33,7 @@ import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
+import utils from '../assets/js/utils'
 export default {
   name: 'Main',
   data () {
@@ -42,7 +47,8 @@ export default {
         markType: 0,
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-      }
+      },
+      musicPlay: true
     }
   },
   computed: {
@@ -67,6 +73,15 @@ export default {
       setTimeout(() => {
         this.showDialog = false
       }, 1000)
+    },
+    isPlay () {
+      if (this.musicPlay) {
+        utils.playSound('bg')
+        this.musicPlay = false
+      } else {
+        utils.stopSound('bg')
+        this.musicPlay = true
+      }
     }
   },
   components: {
@@ -93,6 +108,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       min-height: 59px;
+      justify-content: space-between;
       &__back{
         width: 54px;
         height: 54px;
@@ -126,13 +142,26 @@ export default {
         }
       }
       &__logo{
-        flex: 5;
         position: relative;
         img{
           width: 135px;
           text-align: right;
           position: absolute;
           right: 0;
+        }
+      }
+      &__music{
+        width: 54px;
+        height: 54px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 26px;
+        line-height: 54px;
+        text-align: center;
+        margin-right: 15px;
+        font-size: 24px;
+        img{
+          width: 60%;
+          margin: 10px auto 0;
         }
       }
     }
