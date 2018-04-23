@@ -254,6 +254,7 @@ export default new Vuex.Store({
                   im.removeLister(INVALID_TOKEN)
                 })
               }
+              im.disconnect()
               im.connect(state.imToken)
             }
             resolve()
