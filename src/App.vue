@@ -19,7 +19,6 @@ import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
-import { env } from './assets/js/http'
 export default {
   name: 'App',
   data () {
@@ -97,11 +96,8 @@ export default {
         const code = +data.error_code
         switch (code) {
           case 0: {
-            let phoneNationCode = (data.data && data.data.default && data.data.default.code) || '91'
+            let phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
             let phoneNationCodeList = (data.data && data.data.codes) || []
-            if (env !== 'check' && env !== 'prod') { // 不是生产环境和验证环境，国家码为中国
-              phoneNationCode = '86'
-            }
             this.$store.commit(type._UPDATE, {
               phoneNationCodeList,
               phoneNationCode

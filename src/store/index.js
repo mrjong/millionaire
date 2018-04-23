@@ -63,7 +63,7 @@ export default new Vuex.Store({
     lives: 0,
     code: '',
     phoneNationCodeList: [], // 手机号国家码列表
-    phoneNationCode: '91', // 当前手机国家码
+    phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     disableNetworkTip: false // 是否禁止网络状况提示
   },
   getters: {
