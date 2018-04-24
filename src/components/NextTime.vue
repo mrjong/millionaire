@@ -109,19 +109,21 @@ export default {
         border-radius: 46px;
         box-shadow:0 0 0 2px #ffb227;
         color:#ffb227;
-        line-height: 55px;
         margin: 30px auto 0;
         display: flex;
         justify-content: center;
+        align-items: center;
         .living-text{
           height: 55px;
           font-size: 28px;
-          line-height: 55px;
+          line-height: 60px;
+          align-self: center;
         }
         .living-icon{
           letter-spacing: -20px;
           color: #ffb227;
           font-size: 26px;
+          align-self: center;
         }
         .left{
           opacity: 1;
@@ -142,17 +144,6 @@ export default {
     }
   }
   @media screen and (max-width: 321px){
-  }
-  @keyframes playing {
-    0%{
-      right:25px;
-    }
-    50%{
-      right: 30px;
-    }
-    100%{
-      right: 25px;
-    }
   }
   @keyframes right {
     0%{

@@ -117,9 +117,9 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
-        &__icon{
+        &__icon {
           font-size: 24px;
-        }     
+        }
       }
       &__online{
         padding: 0 18px;
