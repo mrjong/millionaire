@@ -157,7 +157,6 @@ export default {
           const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
           window.location.href = href
         }, 5)
-        alert(encodeURI(shareLink))
         window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
       } else {
         window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
