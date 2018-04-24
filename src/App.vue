@@ -44,8 +44,7 @@ export default {
       watchingMode: 'watchingMode',
       questionStatus: 'question_status',
       showDialog: 'showDialog',
-      dialogInfo: 'dialogInfo',
-      disableNetworkTip: 'disableNetworkTip'
+      dialogInfo: 'dialogInfo'
     })
   },
   created () {
@@ -142,16 +141,8 @@ export default {
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
-        // 启用网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: false
-        })
       } else {
         utils.playSound('bg')
-        // 禁止网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: true
-        })
       }
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {

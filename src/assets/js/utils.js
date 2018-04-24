@@ -9,37 +9,37 @@ const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
   'countDown10-before': {
-    url: 'http://static.subcdn.com/countDown10-before.mp3',
+    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    url: 'http://static.subcdn.com/countDown10-after.mp3',
+    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/20180314200629b0edee0942.ogg',
+    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    url: 'http://static.subcdn.com/5s-countdown.mp3',
+    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    url: 'http://static.subcdn.com/20180313173916879991205a.mp3',
+    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    url: 'http://static.subcdn.com/2018031317404850dad39593.mp3',
+    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    url: 'http://static.subcdn.com/201803131742354229751a36.mp3',
+    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
@@ -68,8 +68,8 @@ export default {
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
-
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
+  disableNetworkTip: false, // 是否禁止网络状况提示
   /**
    * 打点
    * @static
@@ -154,7 +154,9 @@ export default {
       callback(true, packageName)
       if (shareType === 'facebook') {
         setTimeout(() => {
-          window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          console.log(href)
+          window.location.href = href
         }, 5)
         window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
       } else {
@@ -209,10 +211,14 @@ export default {
   loadSounds () {
     for (let prop in sounds) {
       const obj = sounds[prop]
-      const url = obj.url
-      if (url) {
+      const urls = obj.urls
+      if (urls && urls.length) {
         const sound = document.createElement('audio')
-        sound.src = url
+        urls.forEach((url) => {
+          const source = document.createElement('source')
+          source.src = url
+          sound.appendChild(source)
+        })
         sound.loop = obj.loop
         sound.preload = 'true'
         sound.oncanplay = function () {
@@ -234,8 +240,8 @@ export default {
   playSound (name) {
     this.stopSound(name)
     if (name) {
-      const url = sounds[name] && sounds[name].url
-      if (url) {
+      const urls = sounds[name] && sounds[name].urls
+      if (urls.length) {
         const sound = sounds[name].instance
         window.playAudioCallback = () => {
           sound.play()

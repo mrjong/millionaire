@@ -59,6 +59,11 @@ export default {
       isWon: 'isWon'
     })
   },
+  created () {
+    if (this.status === 1) {
+      this.$router.replace({path: '/'})
+    }
+  },
   mounted () {},
   methods: {
     sure () {

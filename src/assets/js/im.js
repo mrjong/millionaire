@@ -294,7 +294,7 @@ const im = {
       // 连续超时两次，提示网络错误
       if (im.pullMsgTimeoutCount >= 2) {
         im.emitListener(type.NETWORK_UNAVAILABLE)
-        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount
+        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount * 15
       }
     })
   },
