@@ -1,8 +1,8 @@
 <template>
   <div class="count-down-container">
     <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
-      <p class="count-down-container__module__text">Starting in</p>
-      <p class="count-down-container__module__time">{{countDown}}</p>
+      <p class="count-down-container__module__text">Starting in {{countDown}}</p>
+      <count-down-compere></count-down-compere>
     </div>
     <div class="count-down-container__animation" v-show = 'startTime <= 10 && startTime !== 0'>
       <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
@@ -18,6 +18,7 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import { _UPDATE } from '../store/type'
+import CountDownCompere from '../components/CountDownCompere'
 export default {
   name: 'CountDown',
   data () {
@@ -54,7 +55,9 @@ export default {
       }
     }
   },
-  components: {},
+  components: {
+    CountDownCompere
+  },
   watch: {
     startTime: function (startTime) {
       this.playingAudio(startTime)
@@ -71,10 +74,14 @@ export default {
   .count-down-container{
     width: 100%;
     &__module{
-      padding: 270px 0;
-      color: #ffffff;
-      text-align: center;
       &__text{
+        width: 280px;
+        padding: 10px 0;
+        color: #ffffff;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 26px;
+        margin: 27px auto 0;
         font: 300 32px 'Roboto', Arial, serif;
       }
       &__time{

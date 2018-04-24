@@ -5,8 +5,8 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-       <p class="supa" :style="supaStyle"></p>
-       <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
+       <img src="../assets/images/countdown-light.png" class="bg-light">
+       <div class="countdown-supa"></div>
     </div>
   </div>
 </template>
@@ -69,7 +69,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 150px 29px 0px 44px;
+  padding: 50px 29px 0px 44px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -77,30 +77,29 @@ export default {
   &__text {
     width: 100%;
     height: 200px;
-    color: #fed331;
+    color: #fff;
     font: 500 40px/48px 'Roboto', Arial, serif;;
     margin: 0 10px 20px 0;
     position: relative;
     overflow: hidden;
-    font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   &__supa {
-    width: 211px;
-    height: 355px;
+    width: 500px;
     position: relative;
-    .supa {
-      width: 186px;
-      height: 256px;
-      background: url(../assets/images/supaes.png) no-repeat;
+    .bg-light{
+      width: 100%;
+    }
+    .countdown-supa {
+      width: 232px;
+      height: 324px;
+      background: url(../assets/images/countdown-supa1.png) no-repeat;
       background-size: cover;
+      margin: 0 auto;
     }
     .supa-desk {
       width: 100%;
-      position: absolute;
-      top: 175px;
-      left: -16px;
     }
   }
 }
