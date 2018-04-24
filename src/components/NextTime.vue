@@ -5,14 +5,14 @@
         Next Game
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <!-- <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
-        <span class="living-text">LIVING</span>
+      <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
+        <p class="living-text">LIVING</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
           <span class="living-icon iconfont icon-LIVINGyoujiantou right"></span>
         </div>
-      </div> -->
-      <p class="hint__time__hour">
+      </div>
+      <p class="hint__time__hour" v-else>
         {{nextTime[1]}}
       </p>
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-// import {mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
   name: 'NextTime',
   props: {
@@ -43,37 +43,37 @@ export default {
   },
   data () {
     return {
-      // isPlaying: false
+      isPlaying: false
     }
   },
   computed: {
-    // ...mapGetters({
-    //   status: 'status',
-    //   watchingMode: 'watchingMode',
-    //   questionStatus: 'question_status',
-    //   startTime: 'startTime'
-    // })
+    ...mapGetters({
+      status: 'status',
+      watchingMode: 'watchingMode',
+      questionStatus: 'question_status',
+      startTime: 'startTime'
+    })
   },
   mounted () {
-    // if (this.status === 1) {
-    //   this.isPlaying = false
-    // } else {
-    //   this.isPlaying = true
-    // }
+    if (this.$route.path === '/' && this.status !== 1) {
+      this.isPlaying = true
+    } else {
+      this.isPlaying = false
+    }
   },
   methods: {
-    // toGamePage () {
-    //   this.$router.push({path: '/main'})
-    // }
+    toGamePage () {
+      this.$router.push({path: '/main'})
+    }
   },
   watch: {
-    // status: function (status) {
-    //   if (status === 1) {
-    //     this.isPlaying = false
-    //   } else {
-    //     this.isPlaying = true
-    //   }
-    // }
+    status: function (status) {
+      if (this.$route.path === '/' && status !== 1) {
+        this.isPlaying = true
+      } else {
+        this.isPlaying = false
+      }
+    }
   }
 }
 </script>
@@ -109,17 +109,14 @@ export default {
         border-radius: 46px;
         box-shadow:0 0 0 2px #ffb227;
         color:#ffb227;
-        line-height: 50px;
+        line-height: 55px;
         margin: 30px auto 0;
-        position: relative;
+        display: flex;
+        justify-content: center;
         .living-text{
+          height: 55px;
           font-size: 28px;
-          margin-left: 10px;
-        }
-        .game-playing{
-          position: absolute;
-          top: 0;
-          right: 30px;
+          line-height: 55px;
         }
         .living-icon{
           letter-spacing: -20px;

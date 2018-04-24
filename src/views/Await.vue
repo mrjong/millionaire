@@ -132,6 +132,7 @@ export default {
       }
     }
     utils.statistic('wait_page', 0)
+    console.log('初始化' + this.status)
   },
   methods: {
     // 按钮打点
@@ -265,14 +266,15 @@ export default {
           this.inviteLiving = false
         }, 3000)
       }
+    },
+    status: function (status, oldStatus) {
+      console.log('监听' + this.status)
+      if (status === 2) {
+        this.$router.replace({path: '/main'})
+      } else {
+        this.$router.replace({path: '/'})
+      }
     }
-    // status: function (status, oldStatus) {
-    //   if (status === 2) {
-    //     this.$router.replace({path: '/main'})
-    //   } else {
-    //     this.$router.replace({path: '/'})
-    //   }
-    // }
   }
 }
 </script>
