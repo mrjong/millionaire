@@ -65,6 +65,20 @@ export default {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
+  getQuery:
+  /**
+  * 获取浏览器公共参数
+  * @param {any} name
+  * @param {string} [url='']
+  * @returns
+  */
+  function (name, url = '') {
+    const queryUrlArr = url.match(/.*\?(\S+)$/)
+    const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
+    const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
+    const search = queryUrl.match(regx)
+    return (search && decodeURIComponent(search[2])) || null
+  },
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
