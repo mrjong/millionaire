@@ -1,9 +1,9 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
-      <!-- <div class="main-container__top__back" @click="back">
+      <div class="main-container__top__back" @click="back">
         <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
-      </div> -->
+      </div>
       <div class="main-container__top__online">
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
@@ -64,9 +64,9 @@ export default {
     sure () {
       this.showDialog = false
     },
-    // back () {
-    //   this.$router.go(-1)
-    // },
+    back () {
+      this.$router.replace({path: '/'})
+    },
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
@@ -108,7 +108,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       min-height: 59px;
-      justify-content: space-between;
+      position: relative;
       &__back{
         width: 54px;
         height: 54px;
@@ -127,6 +127,7 @@ export default {
         align-items: center;
         align-self: center;
         height: 52px;
+        position: relative;
         &__icon{
           width: 24px;
           height: 24px;
@@ -142,12 +143,11 @@ export default {
         }
       }
       &__logo{
-        position: relative;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
         img{
           width: 135px;
-          text-align: right;
-          position: absolute;
-          right: 0;
         }
       }
       &__music{
@@ -159,6 +159,8 @@ export default {
         text-align: center;
         margin-right: 15px;
         font-size: 24px;
+        position: absolute;
+        right:0;
         img{
           width: 60%;
           margin: 10px auto 0;

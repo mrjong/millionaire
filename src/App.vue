@@ -15,7 +15,7 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import im from './assets/js/im'
 import * as api from './assets/js/api'
-import {_AWAIT} from './assets/js/status'
+// import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
@@ -160,15 +160,15 @@ export default {
             }
           })
       }
-    },
-    '$route' (route) {
-      // 路由变化切换状态
-      if (route.path !== '/main') {
-        this.$store.commit(type._UPDATE, {
-          status: _AWAIT
-        })
-      }
     }
+    // '$route' (route) {
+    //   // 路由变化切换状态
+    //   if (route.path !== '/main') {
+    //     this.$store.commit(type._UPDATE, {
+    //       status: _AWAIT
+    //     })
+    //   }
+    // }
   }
 }
 </script>
