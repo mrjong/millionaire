@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
 import {mapGetters} from 'vuex'
 // import * as type from '../store/type' // 【hack】 未用到 注释掉
 import * as listenerType from '../assets/js/listener-type' // 【hack】
@@ -60,6 +61,9 @@ export default {
       status: 'status',
       questionStatus: 'question_status'
     })
+  },
+  created () {
+    this.sendMessage = throttle(this.sendMessage, 1500)
   },
   mounted () {
     // this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION) // 【hack】

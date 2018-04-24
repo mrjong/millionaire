@@ -1,14 +1,14 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
-      <!-- <div class="main-container__top__back" @click="back">
+      <div class="main-container__top__back" @click="back">
         <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
-      </div> -->
+      </div>
       <div class="main-container__top__online">
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
-      <div class="main-container__top__logo">
+      <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
       <div class="main-container__top__music" @click="isPlay">
@@ -59,14 +59,19 @@ export default {
       isWon: 'isWon'
     })
   },
+  created () {
+    if (this.status === 1) {
+      this.$router.replace({path: '/'})
+    }
+  },
   mounted () {},
   methods: {
     sure () {
       this.showDialog = false
     },
-    // back () {
-    //   this.$router.go(-1)
-    // },
+    back () {
+      this.$router.replace({path: '/'})
+    },
     onError (err) {
       this.dialogInfo.htmlText = err
       this.showDialog = true
@@ -108,7 +113,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       min-height: 59px;
-      justify-content: space-between;
+      position: relative;
       &__back{
         width: 54px;
         height: 54px;
@@ -117,7 +122,9 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
-        font-size: 24px;
+        &__icon {
+          font-size: 24px;
+        }
       }
       &__online{
         padding: 0 18px;
@@ -127,6 +134,7 @@ export default {
         align-items: center;
         align-self: center;
         height: 52px;
+        position: relative;
         &__icon{
           width: 24px;
           height: 24px;
@@ -142,12 +150,11 @@ export default {
         }
       }
       &__logo{
-        position: relative;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
         img{
           width: 135px;
-          text-align: right;
-          position: absolute;
-          right: 0;
         }
       }
       &__music{
@@ -159,6 +166,8 @@ export default {
         text-align: center;
         margin-right: 15px;
         font-size: 24px;
+        position: absolute;
+        right:0;
         img{
           width: 60%;
           margin: 10px auto 0;
