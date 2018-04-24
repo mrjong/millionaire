@@ -8,7 +8,7 @@
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
-      <div class="main-container__top__logo">
+      <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
       <div class="main-container__top__music" @click="isPlay">
@@ -122,7 +122,9 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
-        font-size: 24px;
+        &__icon{
+          font-size: 24px;
+        }
       }
       &__online{
         padding: 0 18px;
