@@ -101,19 +101,35 @@ export default {
      * 获取手机号国家码
      */
     getPhoneNationCode () {
-      api.getPhoneNationCode().then(({data}) => {
-        const code = +data.error_code
-        switch (code) {
-          case 0: {
-            let phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
-            let phoneNationCodeList = (data.data && data.data.codes) || []
-            this.$store.commit(type._UPDATE, {
-              phoneNationCodeList,
-              phoneNationCode
-            })
+      const phoneNationCodeStr = localStorage.getItem('millionaire-phoneNationCode')
+      let phoneNationCodes = null
+      // 从本地获取
+      if (phoneNationCodeStr) {
+        phoneNationCodes = JSON.parse(phoneNationCodeStr)
+        const {phoneNationCode, phoneNationCodeList} = phoneNationCodes
+        this.$store.commit(type._UPDATE, {
+          phoneNationCodeList,
+          phoneNationCode
+        })
+      } else {
+        api.getPhoneNationCode().then(({data}) => {
+          const code = +data.error_code
+          switch (code) {
+            case 0: {
+              const phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
+              const phoneNationCodeList = (data.data && data.data.codes) || []
+              this.$store.commit(type._UPDATE, {
+                phoneNationCodeList,
+                phoneNationCode
+              })
+              localStorage.setItem('millionaire-phoneNationCode', JSON.stringify({
+                phoneNationCode,
+                phoneNationCodeList
+              }))
+            }
           }
-        }
-      })
+        })
+      }
     }
   },
   components: {

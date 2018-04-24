@@ -69,7 +69,7 @@ export default {
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
-  disableNetworkTip: false, // 是否禁止网络状况提示
+  disableNetworkTip: false,
   /**
    * 打点
    * @static
@@ -138,7 +138,7 @@ export default {
     const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'messager'
     const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
     const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
-    const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
+    const shareLink = `${host[env]}${api.sharePage}` + encodeURIComponent(`?shareUrl=${encodeURIComponent(link)}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&title=${title}`)
     window.shareSuccessCallback = callback
     if (window.njordGame) {
       // 调用客户端分享
@@ -155,10 +155,10 @@ export default {
       if (shareType === 'facebook') {
         setTimeout(() => {
           const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
-          console.log(href)
           window.location.href = href
         }, 5)
-        window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+        alert(encodeURI(shareLink))
+        window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
       } else {
         window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
       }

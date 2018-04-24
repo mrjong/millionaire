@@ -102,13 +102,13 @@ export default {
           this.callbackFn,
           val,
           'I’m playing ‘Go! Millionaire’, use my referral code and we’ll get extra life!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=invite&packageName=' + packageName)
+          encodeURIComponent(`http://static.subcdn.com/share-success-test.html?code=${this.code}&type=invite&packageName=${packageName}`))
       } else if (this.reviveObj.shareType === 'share') {
         utils.share(
           this.callbackFn,
           val,
           'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
-          'http://static.subcdn.com/share-success-test.html?code=' + this.code + '&type=share&packageName=' + packageName)
+          encodeURIComponent(`http://static.subcdn.com/share-success-test.html?code=${this.code}&type=share&packageName=${packageName}`))
       }
     },
     // 分享后的回调
