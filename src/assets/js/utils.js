@@ -9,37 +9,37 @@ const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 const sounds = {
   'countDown10-before': {
-    url: 'http://static.subcdn.com/countDown10-before.mp3',
+    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    url: 'http://static.subcdn.com/countDown10-after.mp3',
+    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/20180314200629b0edee0942.ogg',
+    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    url: 'http://static.subcdn.com/5s-countdown.mp3',
+    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    url: 'http://static.subcdn.com/20180313173916879991205a.mp3',
+    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    url: 'http://static.subcdn.com/2018031317404850dad39593.mp3',
+    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    url: 'http://static.subcdn.com/201803131742354229751a36.mp3',
+    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
@@ -65,11 +65,25 @@ export default {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
+  getQuery:
+  /**
+  * 获取浏览器公共参数
+  * @param {any} name
+  * @param {string} [url='']
+  * @returns
+  */
+  function (name, url = '') {
+    const queryUrlArr = url.match(/.*\?(\S+)$/)
+    const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
+    const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
+    const search = queryUrl.match(regx)
+    return (search && decodeURIComponent(search[2])) || null
+  },
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
-
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
+  disableNetworkTip: false,
   /**
    * 打点
    * @static
@@ -138,7 +152,7 @@ export default {
     const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'messager'
     const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
     const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
-    const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
+    const shareLink = `${host[env]}${api.sharePage}` + encodeURIComponent(`?shareUrl=${encodeURIComponent(link)}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&title=${title}`)
     window.shareSuccessCallback = callback
     if (window.njordGame) {
       // 调用客户端分享
@@ -154,9 +168,10 @@ export default {
       callback(true, packageName)
       if (shareType === 'facebook') {
         setTimeout(() => {
-          window.location.href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          window.location.href = href
         }, 5)
-        // window.location.href = `fb://facewebmodal/f?href=https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+        window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
       } else {
         window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
       }
@@ -209,10 +224,14 @@ export default {
   loadSounds () {
     for (let prop in sounds) {
       const obj = sounds[prop]
-      const url = obj.url
-      if (url) {
+      const urls = obj.urls
+      if (urls && urls.length) {
         const sound = document.createElement('audio')
-        sound.src = url
+        urls.forEach((url) => {
+          const source = document.createElement('source')
+          source.src = url
+          sound.appendChild(source)
+        })
         sound.loop = obj.loop
         sound.preload = 'true'
         sound.oncanplay = function () {
@@ -234,8 +253,8 @@ export default {
   playSound (name) {
     this.stopSound(name)
     if (name) {
-      const url = sounds[name] && sounds[name].url
-      if (url) {
+      const urls = sounds[name] && sounds[name].urls
+      if (urls.length) {
         const sound = sounds[name].instance
         window.playAudioCallback = () => {
           sound.play()

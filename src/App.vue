@@ -24,7 +24,7 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import im from './assets/js/im'
 import * as api from './assets/js/api'
-import {_AWAIT} from './assets/js/status'
+// import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
@@ -44,8 +44,7 @@ export default {
       watchingMode: 'watchingMode',
       questionStatus: 'question_status',
       showDialog: 'showDialog',
-      dialogInfo: 'dialogInfo',
-      disableNetworkTip: 'disableNetworkTip'
+      dialogInfo: 'dialogInfo'
     })
   },
   created () {
@@ -102,19 +101,35 @@ export default {
      * 获取手机号国家码
      */
     getPhoneNationCode () {
-      api.getPhoneNationCode().then(({data}) => {
-        const code = +data.error_code
-        switch (code) {
-          case 0: {
-            let phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
-            let phoneNationCodeList = (data.data && data.data.codes) || []
-            this.$store.commit(type._UPDATE, {
-              phoneNationCodeList,
-              phoneNationCode
-            })
+      const phoneNationCodeStr = localStorage.getItem('millionaire-phoneNationCode')
+      let phoneNationCodes = null
+      // 从本地获取
+      if (phoneNationCodeStr) {
+        phoneNationCodes = JSON.parse(phoneNationCodeStr)
+        const {phoneNationCode, phoneNationCodeList} = phoneNationCodes
+        this.$store.commit(type._UPDATE, {
+          phoneNationCodeList,
+          phoneNationCode
+        })
+      } else {
+        api.getPhoneNationCode().then(({data}) => {
+          const code = +data.error_code
+          switch (code) {
+            case 0: {
+              const phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
+              const phoneNationCodeList = (data.data && data.data.codes) || []
+              this.$store.commit(type._UPDATE, {
+                phoneNationCodeList,
+                phoneNationCode
+              })
+              localStorage.setItem('millionaire-phoneNationCode', JSON.stringify({
+                phoneNationCode,
+                phoneNationCodeList
+              }))
+            }
           }
-        }
-      })
+        })
+      }
     }
   },
   components: {
@@ -142,16 +157,8 @@ export default {
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
-        // 启用网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: false
-        })
       } else {
         utils.playSound('bg')
-        // 禁止网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: true
-        })
       }
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
@@ -166,15 +173,15 @@ export default {
             }
           })
       }
-    },
-    '$route' (route) {
-      // 路由变化切换状态
-      if (route.path !== '/main') {
-        this.$store.commit(type._UPDATE, {
-          status: _AWAIT
-        })
-      }
     }
+    // '$route' (route) {
+    //   // 路由变化切换状态
+    //   if (route.path !== '/main') {
+    //     this.$store.commit(type._UPDATE, {
+    //       status: _AWAIT
+    //     })
+    //   }
+    // }
   }
 }
 </script>

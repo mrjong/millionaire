@@ -36,7 +36,7 @@ export default {
     })
   },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide') && this.status === 1) {
+    if (localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = false
     } else {
       this.FirstGuide = true

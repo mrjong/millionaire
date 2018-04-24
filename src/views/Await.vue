@@ -265,14 +265,14 @@ export default {
           this.inviteLiving = false
         }, 3000)
       }
+    },
+    status: function (status, oldStatus) {
+      if (status === 2) {
+        this.$router.replace({path: '/main'})
+      } else {
+        this.$router.replace({path: '/'})
+      }
     }
-    // status: function (status, oldStatus) {
-    //   if (status === 2) {
-    //     this.$router.replace({path: '/main'})
-    //   } else {
-    //     this.$router.replace({path: '/'})
-    //   }
-    // }
   }
 }
 </script>
