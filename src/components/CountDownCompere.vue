@@ -86,21 +86,54 @@ export default {
     -moz-osx-font-smoothing: grayscale;
   }
   &__supa {
-    width: 500px;
+    width: 100%;
     position: relative;
     .bg-light{
       width: 100%;
+      position: absolute;
+      left:50%;
+      transform: translate(-50%,-15%);
+      z-index: 1;
+      animation: light 3s ease infinite
     }
     .countdown-supa {
+      position: absolute;
+      left:50%;
+      top:60%;
+      transform: translate(-50%,30%);
+      z-index: 11;
       width: 232px;
       height: 324px;
       background: url(../assets/images/countdown-supa1.png) no-repeat;
       background-size: cover;
       margin: 0 auto;
+      animation: countdownAnimation 1s ease infinite
     }
     .supa-desk {
       width: 100%;
     }
+  }
+}
+@keyframes countdownAnimation {
+  0%{
+    background-image: url(../assets/images/countdown-supa1.png);
+  }
+  10%{
+    background-image: url(../assets/images/countdown-supa2.png);
+  }
+  100%{
+    background-image: url(../assets/images/countdown-supa1.png);
+  }
+}
+@keyframes light {
+  0%{
+    opacity: 0.3;
+  }
+  50%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0.3;
   }
 }
 </style>
