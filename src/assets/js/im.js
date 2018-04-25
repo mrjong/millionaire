@@ -27,7 +27,7 @@ const im = {
     },
     {
       messageName: 'PeopleMessage',
-      propertys: ['count'],
+      propertys: ['count', 'extra'],
       objectName: 'APUS:PeopleMsg'
     },
     {
@@ -87,9 +87,8 @@ const im = {
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
-      clearInterval(keepLiveMessageTimer)
       im.emitListener(type.NETWORK_UNAVAILABLE)
-      RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+      im.disconnect()
     })
 
     window.addEventListener('online', () => {
@@ -122,8 +121,7 @@ const im = {
             console.log('网络不可用')
             im.emitListener(type.NETWORK_UNAVAILABLE)
             setTimeout(() => {
-              clearInterval(keepLiveMessageTimer)
-              RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+              im.disconnect()
               im.connect(im.token)
             }, 500)
             break
@@ -133,13 +131,12 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
-        // console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            // console.warn(message.messageUId, message.sentTime, message.content.content)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -171,6 +168,7 @@ const im = {
    * @param {any} token
    */
   connect (token) {
+    im.disconnect() // 先断开链接
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
@@ -216,7 +214,17 @@ const im = {
       }
     })
   },
-
+  /**
+   * 断开连接
+   */
+  disconnect () {
+    try {
+      clearInterval(keepLiveMessageTimer)
+      RongIMClient && RongIMClient.getInstance && RongIMClient.getInstance() && RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+    } catch (err) {
+      console.log('disconnect 失败：', err)
+    }
+  },
   /**
    * 重新连接
    */
@@ -290,7 +298,7 @@ const im = {
       // 连续超时两次，提示网络错误
       if (im.pullMsgTimeoutCount >= 2) {
         im.emitListener(type.NETWORK_UNAVAILABLE)
-        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount
+        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount * 15
       }
     })
   },

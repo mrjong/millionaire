@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
 import {mapGetters} from 'vuex'
 // import * as type from '../store/type' // 【hack】 未用到 注释掉
 import * as listenerType from '../assets/js/listener-type' // 【hack】
@@ -61,6 +62,9 @@ export default {
       questionStatus: 'question_status'
     })
   },
+  created () {
+    this.sendMessage = throttle(this.sendMessage, 1500)
+  },
   mounted () {
     // this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION) // 【hack】
     // this.$store.commit(type.CHAT_UPDATE, {msgList: []}) // 【hack】
@@ -75,6 +79,7 @@ export default {
       // 横屏切换为竖屏是 隐藏输入框 【hack】 什么鬼 maybe 用不上呢！！！
       window.addEventListener('resize', () => {
         if (this.windowInnerHeight < window.innerHeight) {
+          this.reSetMsgBot(true)
           this.showInput = false
         }
         this.windowInnerHeight = window.innerHeight
@@ -132,6 +137,7 @@ export default {
           },
           messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
         })
+        console.log('发送消息', msg, nickname, img)
         this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面

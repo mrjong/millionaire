@@ -89,7 +89,8 @@ const actions = {
           userName: rootGetters.userInfo.userName,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
-          ua: window.navigator.userAgent
+          ua: window.navigator.userAgent,
+          isPlaying: window.isPlaying
         })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
@@ -164,6 +165,13 @@ const actions = {
               commit(type.QUESTION_UPDATE, {
                 isUsedRecoveryCard: true
               })
+              // 保存使用复活卡信息
+              const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
+              if (userAnswerInfoStr) {
+                const userAnswerInfo = JSON.parse(userAnswerInfoStr)
+                userAnswerInfo.isUsedRecoveryCard = true
+                localStorage.setItem('millionaire_user_answer', JSON.stringify(userAnswerInfo))
+              }
               utils.statistic('extra_life', 6, {
                 action_s: `${getters.index}`
               })
@@ -261,13 +269,14 @@ const actions = {
           clientId: utils.clientId,
           watchingMode: getters.watchingMode,
           isOnline: rootGetters.isOnline,
-          isAnswered: getters.isAnswered
+          isAnswered: getters.isAnswered,
+          isPlaying: window.isPlaying
         })
 
         // 更新观战模式
         const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false
+          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false, isUsedRecoveryCard: false
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -284,14 +293,15 @@ const actions = {
     const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
     if (userAnswerInfoStr) {
       const userAnswerInfo = JSON.parse(userAnswerInfoStr)
-      const {expire, id, index, isAnswered, userAnswer} = userAnswerInfo
+      const {expire, id, index, isAnswered, userAnswer, isUsedRecoveryCard} = userAnswerInfo
       // 若本地存储的答案信息与当前题目一致，则同步答案信息
       if (expire > Date.now() && id === getters.id && index === getters.index) {
         commit(type.QUESTION_UPDATE, {
           id,
           index,
           isAnswered,
-          userAnswer
+          userAnswer,
+          isUsedRecoveryCard
         })
       }
     }

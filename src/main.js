@@ -12,6 +12,14 @@ import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 im.init()
 
+window.onload = function () {
+  // 初始化打点
+  utils.statistic('referrer', 0, {
+    from: utils.getQuery('referrer'), // 来源
+    type: window.top.njordGame ? 'app' : 'h5' // 页面类型
+  })
+}
+
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
 }
@@ -25,7 +33,6 @@ if (!utils.clientId) {
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
-Vue.config.devtools = true
 Vue.prototype.$http = http
 Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {

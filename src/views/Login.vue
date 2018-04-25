@@ -1,14 +1,15 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" @click="showCountryList = false">
     <header>
-      <p class="title">Sign In</p>
+      <p class="title">Sign Up</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
     </header>
     <section class="login">
-      <!-- <section class="username inputItem">
-        <span class="iconfont icon-nicheng"></span>
-        <input type="text" placeholder="Enter Your Name" v-model="username">
-      </section> -->
+      <section class="country inputItem" @click.stop="showCountryList = !showCountryList">
+        <span class="iconfont icon-guojia"></span>
+        <label>{{phoneNationCode.country}} +{{phoneNationCode.code}}</label>
+        <span class="iconfont icon-LIVINGyoujiantou" style="float:right;transform: rotateZ(90deg);"></span>
+      </section>
       <section class="phone inputItem">
         <!-- 手机号 -->
         <span class="iconfont icon-shouji"></span>
@@ -25,9 +26,15 @@
       </section>
       <!-- 错误信息 -->
       <p class="errorMsg">{{errorMsg}}</p>
-      <button class="btn-login" @click="login">Sign in</button>
+      <button class="btn-login" @click="login">Sign up</button>
+      <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
     </section>
-    <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
+    <section class="country-list" v-show="showCountryList">
+      <div class="country-item" v-for="(item, index) in phoneNationCodeList" :key="index" @click="selectCountryCode(item)">
+        <span class="country-name">{{item[2] || ''}}</span>
+        <span class="country-code">+{{item[1] || ''}}</span>
+      </div>
+    </section>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -44,6 +51,7 @@ export default {
   data () {
     return {
       loading: false,
+      showCountryList: false,
       disableGetCode: false, // 是否禁用获取验证码
       resetIntervalTime: 60, // 验证码获取重置间隔时间
       restResetTime: 0, // 剩余重置时间
@@ -54,7 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['status', 'phoneNationCode'])
+    ...mapGetters(['status', 'phoneNationCode', 'phoneNationCodeList'])
   },
   methods: {
     back () {
@@ -158,7 +166,7 @@ export default {
         if (this.phoneNumber.slice(phoneNationCode.length) === phoneNationCode) {
           this.phoneNumber = this.phoneNumber.slice(phoneNationCode.length)
         }
-        register(this.phoneNumber, phoneNationCode).then(({data}) => {
+        register(this.phoneNumber, phoneNationCode.code || '91').then(({data}) => {
           const code = +data.error_code
           switch (code) {
             case 0: {
@@ -185,6 +193,14 @@ export default {
       timer = setTimeout(() => {
         this.errorMsg = ''
       }, 3000)
+    },
+    selectCountryCode (countryItem) {
+      this.$store.commit(type._UPDATE, {
+        phoneNationCode: {
+          code: countryItem[1],
+          country: countryItem[2]
+        }
+      })
     }
   },
   mounted () {
@@ -201,8 +217,9 @@ export default {
     height: 100%;
     background: url("../assets/images/await-bg.jpg") no-repeat top left;
     background-size: cover;
-    position: relative;
     padding: 3.7% 3.7% 0;
+    display: flex;
+    flex-direction: column;
 
     button {
       outline: none;
@@ -239,14 +256,16 @@ export default {
     }
 
     .login {
-      margin-top: 37%;
+      margin-top: 35%;
       font: 400 28px 'Roboto', Arial, serif;
+      color:#fff;
+      flex: 1;
+      position: relative;
 
       input {
         background-color: rgba(0, 0, 0, 0);
         outline: none;
         border: none;
-        color:#fff;
         width: 65%;
       }
 
@@ -272,9 +291,8 @@ export default {
 
       }
       .errorMsg {
-        padding: 24px;
+        padding: 24px 0;
         font-size: 24px;
-        line-height: 1.2;
         color: #ee2d7a;
         text-align: right;
         position: absolute;
@@ -316,6 +334,30 @@ export default {
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
+    }
+
+    .country-list {
+      width: 100%;
+      max-height: 475px;
+      overflow: auto;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(255, 255, 255, .95);
+
+      .country-item {
+        width: 92.6%;
+        margin-left: 3.7%;
+        font: 400 32px/1.2 "Roboto", Arial, serif;
+        color: #260964;
+        padding: 28px 0;
+        position: relative;
+        border-bottom: 1px solid #dedae8;
+
+        .country-code {
+          float: right;
+        }
+      }
     }
   }
 </style>

@@ -63,8 +63,7 @@ export default new Vuex.Store({
     lives: 0,
     code: '',
     phoneNationCodeList: [], // 手机号国家码列表
-    phoneNationCode: '91', // 当前手机国家码
-    disableNetworkTip: false // 是否禁止网络状况提示
+    phoneNationCode: {code: '91', country: 'India'} // 当前手机国家码
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -83,8 +82,7 @@ export default new Vuex.Store({
     lives: (state) => state.lives,
     code: (state) => state.code,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
-    phoneNationCode: (state) => state.phoneNationCode,
-    disableNetworkTip: (state) => state.disableNetworkTip
+    phoneNationCode: (state) => state.phoneNationCode
   },
   mutations: {
     /**
@@ -129,7 +127,7 @@ export default new Vuex.Store({
             utils.isOnline = isOnline
             // 更新首页信息
             commit(type.HOME_UPDATE, {
-              userId: userInfo.us || '',
+              userId: userInfo.ud || '',
               supaId: userInfo.us || '',
               avatar: userInfo.up || '',
               userName: userInfo.un || '',
@@ -150,7 +148,7 @@ export default new Vuex.Store({
               isOnline,
               startTime,
               startTimeOffset,
-              onlineAmount: +chatRoomInfo.ic || 0,
+              onlineAmount: chatRoomInfo.is || '',
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || ''
             })
@@ -316,7 +314,7 @@ export default new Vuex.Store({
      */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
-        const count = +(message.content && message.content.count)
+        const count = (message.content && message.content.extra) || 0
         commit(type._UPDATE, {
           onlineAmount: count
         })

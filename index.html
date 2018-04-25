@@ -3,12 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="browsermode" content="application">
+  <meta name="x5-page-mode" content="app">
+  <meta name="full-screen" content="yes">
   <title>Go! Millionaire</title>
-   <script src="http://static.appbox.apuslauncher.com/upload/fe/vconsole.min.js"></script>
+  <script src="http://static.subcdn.com/201803200926094de645fbfe.js"></script>
+  <script>new VConsole()</script>
   <script>
     var startTime = Date.now();
   </script>
   <script>
+    var isPlaying = true
     var njordGame = window.top.njordGame
     var playAudioCallback = null
     var resumeCallback = null
@@ -18,9 +25,6 @@
     var loginCallback = null
     window.onload = function () {
       var loadTime = Date.now() - startTime
-      statistic({
-        event_name: 'first_page_loading_time_cost'
-      })
       console.log('加载时间：', loadTime)
     }
     function isLogin () {
@@ -40,6 +44,7 @@
       playAudioCallback && playAudioCallback()
     }
     njordCallback.onResume = function () {
+      isPlaying = true
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = false
@@ -50,6 +55,7 @@
       })
     }
     njordCallback.onPause = function () {
+      isPlaying = false
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = true

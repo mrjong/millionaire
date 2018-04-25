@@ -8,7 +8,7 @@
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
-      <div class="main-container__top__logo">
+      <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
       <div class="main-container__top__music" @click="isPlay">
@@ -58,6 +58,11 @@ export default {
       questionStatus: 'question_status',
       isWon: 'isWon'
     })
+  },
+  created () {
+    if (this.status === 1) {
+      this.$router.replace({path: '/'})
+    }
   },
   mounted () {},
   methods: {
