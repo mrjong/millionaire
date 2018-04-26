@@ -182,7 +182,6 @@ export default {
   background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -306,7 +305,7 @@ export default {
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
       text-align: center;
-      margin: 27px auto;
+      margin: 27px auto 35px;
     }
     &__btn {
       width: 100%;
