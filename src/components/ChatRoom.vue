@@ -243,6 +243,7 @@ export default {
   position: fixed;
   bottom: 35px;
   right: 30px;
+  z-index: 112;
   display: flex;
   justify-content: flex-end;
   &__icon {
