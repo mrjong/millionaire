@@ -38,7 +38,7 @@ export default {
         if (this.supaOrder >= 5) {
           this.supaOrder = 0
         }
-        this.supaStyle = 'background-position: 0%' + (this.supaOrder *25.05) + '%'
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 25.05) + '%'
         this.supaOrder++
       }, 800)
     },

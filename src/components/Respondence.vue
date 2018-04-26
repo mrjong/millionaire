@@ -37,7 +37,7 @@
       </p>
     </div>
     <!-- 答错或未答提示 -->
-    <answer-error-tip v-model="answerErrorTip" :type="errorType"></answer-error-tip>
+    <answer-error-tip v-model="answerErrorTip" :type="answerErrorType"></answer-error-tip>
     <!-- 使用复活卡提示 -->
     <modal v-model="extraLifeTip">
       <section class="tip-extra-life">
@@ -86,21 +86,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      question_status: 'question_status',
-      watchingMode: 'watchingMode',
-      contents: 'contents',
-      index: 'index',
-      isAnswered: 'isAnswered',
-      isCorrect: 'isCorrect',
-      correctAnswer: 'correctAnswer',
-      userAnswer: 'userAnswer',
-      time: 'time',
-      restTime: 'restTime',
-      options: 'options',
-      questionResult: 'question_result',
-      id: 'id'
-    }),
+    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives']),
     totalResult: function () {
       let result = {}
       let totalNum = 0
@@ -208,9 +194,11 @@ export default {
      */
     useRecoveryCard () {
       this.isUsedRecoveryCard = true
-      const {id, index, isAnswered} = this.$store.getters
-      let type = isAnswered ? 1 : 2 // 复活类型 1 答错复活 2 未答复活
-      useRecoveryCard(id, index, type).then(({data}) => {
+      this.extraLifeTip = false
+      const {id, index, isAnswered} = this
+      console.log('使用复活卡时题目信息：', id, index, isAnswered)
+      let recoveryType = isAnswered ? 1 : 2 // 复活类型 1 答错复活 2 未答复活
+      useRecoveryCard(id, index, recoveryType).then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {
           // 更新复活卡数量与复活次数
           const {cardNumber = 0, reviveTimes = 0} = data.data || {}
@@ -226,7 +214,6 @@ export default {
           setTimeout(() => {
             this.isLiving = false
           }, 3000)
-          this.resetState()
         } else {
           this.cancelUseRecoveryCard()
           console.log('复活卡使用失败:', data.msg)
@@ -254,9 +241,9 @@ export default {
      * 取消使用复活卡
      */
     cancelUseRecoveryCard () {
-      const {watchingMode, isCorrect} = this.$store.getters
+      const {watchingMode, isCorrect, isAnswered} = this.$store.getters
       this.$store.commit(type.QUESTION_UPDATE, {
-        watchingMode: watchingMode ? true : !isCorrect
+        watchingMode: watchingMode ? true : (!isAnswered || !isCorrect)
       })
       this.resetState()
     }
@@ -266,27 +253,29 @@ export default {
       this.countDown(status)
 
       if (status === 7) {
-        const {isCorrect, watchingMode, isAnswered, maxRecoveryCount, isOnline, index, questionCount, lives} = this.$store.getters
+        const {isCorrect, watchingMode, isAnswered, maxRecoveryCount, isOnline, index, questionCount, lives} = this
 
         // 如果已经观战 直接退出
         if (watchingMode) {
+          this.resetState()
           return false
         }
 
         // 答案正确播放提示音
         if (isCorrect && !watchingMode) {
           utils.playSound('succeed')
+          this.resetState()
           return false
         }
 
         // 没有答题或者答错
         if (!isAnswered || !isCorrect) {
-          if (!isAnswered) {
-            this.answerErrorType = 'out'
-          }
-
           if (!isCorrect) {
             this.answerErrorType = 'incorrect'
+          }
+
+          if (!isAnswered) {
+            this.answerErrorType = 'out'
           }
           // 显示错误提示，三秒后消失
           this.answerErrorTip = true
@@ -306,6 +295,7 @@ export default {
                   this.extraLifeTip = false
                   this.useRecoveryCard()
                 }
+                this.resetState()
               }, 5000)
             } else {
               this.cancelUseRecoveryCard()
