@@ -80,7 +80,7 @@ export default {
         text-align: center;
         background: rgba(250,167,23, 0.95);
         border-radius: 26px;
-        margin: 27px auto 0;
+        margin: 35px auto 0;
         font: 300 32px 'Roboto', Arial, serif;
         box-shadow: 0px 1px 10px 0.5px #faa729;
       }
