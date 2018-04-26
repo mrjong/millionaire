@@ -81,10 +81,15 @@ export default {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
-        const passRule = phone.test(this.myPay)
+        const nameRule = /^[a-zA-Z]{1,100}$/
+        const isNamePass = nameRule.test(this.name)
         const isPass = panRule.test(this.pan)
+        const passRule = phone.test(this.myPay)
+        if (!isNamePass) {
+          this.changeMarkInfo(true, false, 0, ` Please enter the right NAME`)
+        }
         if (!isPass) {
-          this.changeMarkInfo(true, false, 0, `请输入正确的pan码`)
+          this.changeMarkInfo(true, false, 0, `Please enter a right PAN ID`)
         }
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
@@ -182,7 +187,6 @@ export default {
   background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -306,7 +310,7 @@ export default {
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
       text-align: center;
-      margin: 27px auto;
+      margin: 27px auto 35px;
     }
     &__btn {
       width: 100%;
