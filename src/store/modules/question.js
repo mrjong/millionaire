@@ -23,7 +23,8 @@ const state = {
   time: 10, // 作答时间, 默认10秒
   restTime: 0, // 剩余时间
   isWon: false, // 是否展示you wonThe resurrection of card
-  isUsedRecoveryCard: false // 是否使用过复活卡
+  maxRecoveryCount: 0, // 最大复活次数
+  count: 12 // 问题数量
 }
 
 const getters = {
@@ -42,7 +43,8 @@ const getters = {
   time: (state) => state.time,
   restTime: (state) => state.restTime,
   isWon: (state) => state.isWon,
-  isUsedRecoveryCard: (state) => state.isUsedRecoveryCard
+  maxRecoveryCount: (state) => state.maxRecoveryCount,
+  questionCount: (state) => state.count
 }
 
 const mutations = {
@@ -118,25 +120,6 @@ const actions = {
       commit(type.QUESTION_UPDATE, {
         restTime: 0
       })
-      if (!getters.isAnswered) {
-        // 若没有答题，弹窗提示
-        !getters.watchingMode && dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'You\'ve been eliminated. ',
-          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK'
-        })
-
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
-        })
-
-        utils.statistic('NOT_ANSWER', 6, {
-          action_s: `${rootGetters.userInfo.userName}`,
-          text_s: `${getters.index}`
-        })
-      }
     })
     timer.start()
     // 答题开始
@@ -161,20 +144,7 @@ const actions = {
       submitAnswer(id, userAnswer, index).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
-            case 1007: {
-              commit(type.QUESTION_UPDATE, {
-                isUsedRecoveryCard: true
-              })
-              // 保存使用复活卡信息
-              const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
-              if (userAnswerInfoStr) {
-                const userAnswerInfo = JSON.parse(userAnswerInfoStr)
-                userAnswerInfo.isUsedRecoveryCard = true
-                localStorage.setItem('millionaire_user_answer', JSON.stringify(userAnswerInfo))
-              }
-              utils.statistic('extra_life', 6, {
-                action_s: `${getters.index}`
-              })
+            case 0: {
               break
             }
           }
@@ -241,25 +211,6 @@ const actions = {
           type_s: `${isCorrect ? 1 : 0}`
         })
 
-        // 根据答案是否正确播放提示音
-        if (isCorrect && !getters.watchingMode) {
-          utils.playSound('succeed')
-        } else if (!isCorrect && !getters.watchingMode) {
-          // 如果使用了复活卡
-          if (getters.isUsedRecoveryCard) {
-            isCorrect = true
-          } else {
-            utils.playSound('failed')
-            dispatch(type._OPEN_DIALOG, {
-              htmlTitle: 'You\'ve been eliminated. ',
-              htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-              shouldSub: false,
-              markType: 0,
-              okBtnText: 'OK'
-            })
-          }
-        }
-
         // 服务端上报日志
         log({
           name: 'answer',
@@ -273,10 +224,8 @@ const actions = {
           isPlaying: window.isPlaying
         })
 
-        // 更新观战模式
-        const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false, isUsedRecoveryCard: false
+          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -290,18 +239,16 @@ const actions = {
    */
   [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
     // 从本地获取用户作答情况
-    const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
-    if (userAnswerInfoStr) {
-      const userAnswerInfo = JSON.parse(userAnswerInfoStr)
-      const {expire, id, index, isAnswered, userAnswer, isUsedRecoveryCard} = userAnswerInfo
+    const userAnswerInfo = utils.getLocaStorge('user-answer')
+    if (userAnswerInfo) {
+      const {id, index, isAnswered, userAnswer} = userAnswerInfo
       // 若本地存储的答案信息与当前题目一致，则同步答案信息
-      if (expire > Date.now() && id === getters.id && index === getters.index) {
+      if (id === getters.id && index === getters.index) {
         commit(type.QUESTION_UPDATE, {
           id,
           index,
           isAnswered,
-          userAnswer,
-          isUsedRecoveryCard
+          userAnswer
         })
       }
     }

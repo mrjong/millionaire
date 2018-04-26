@@ -31,7 +31,6 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
-import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'BaseInfo',
   props: {
@@ -51,11 +50,7 @@ export default {
     login () {
       if (!this.isOnline) {
         utils.login(() => {
-          utils.isOnline = true
-          this.$store.commit(_UPDATE, {
-            isOnline: true
-          })
-          this.$store.dispatch(_INIT)
+          this.$emit('loginSuccess')
         })
       }
     }

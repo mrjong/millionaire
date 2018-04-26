@@ -48,7 +48,7 @@ const sounds = {
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
-export default {
+const utils = {
   /**
    * 登录
    * @param {any} callback
@@ -65,19 +65,58 @@ export default {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
-  getQuery:
   /**
   * 获取浏览器公共参数
   * @param {any} name
   * @param {string} [url='']
   * @returns
   */
-  function (name, url = '') {
+  getQuery (name, url = '') {
     const queryUrlArr = url.match(/.*\?(\S+)$/)
     const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
     const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
     const search = queryUrl.match(regx)
     return (search && decodeURIComponent(search[2])) || null
+  },
+  /**
+   * 设置本地存储
+   * @param {any} [obj={}] 参数对象
+   * @param {string} [name='']
+   * @param {number} [expire=7 * 24 * 60 * 60 * 1000] 有效期 默认7天
+   */
+  setLocalStorge (obj = {}, name = '', expire) {
+    const val = utils.getLocaStorge(name) || {}
+    if (expire) {
+      obj.expire = Date.now() + expire
+    } else if (!val.expire) {
+      obj.expire = Date.now() + 7 * 24 * 60 * 60 * 1000
+    }
+    localStorage.setItem(`millionaire-${name}`, JSON.stringify({
+      ...val, ...obj
+    }))
+  },
+  /**
+   * 获取本地存储
+   * @param {string} [name='']
+   * @param {string} [key='']
+   * @returns
+   */
+  getLocaStorge (name = '', key = '') {
+    const localName = `millionaire-${name}`
+    const valStr = localStorage.getItem(localName)
+    if (valStr) {
+      let val = JSON.parse(valStr)
+      const {expire = 0} = val
+      if (expire < Date.now()) {
+        localStorage.removeItem(localName)
+        return null
+      }
+      if (key) {
+        val = val[key]
+      }
+      return val
+    }
+    return null
   },
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
@@ -339,6 +378,10 @@ export default {
     return str
   }
 }
+
+window.utils = utils
+
+export default utils
 
 /**
  * 计时器
