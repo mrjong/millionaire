@@ -87,7 +87,7 @@ export default {
   &__supa {
     width: 80%;
     position: relative;
-    margin: 0 auto;
+    margin: 50px auto;
     .bg-light{
       width: 100%;
       position: absolute;
@@ -102,7 +102,7 @@ export default {
       height: 324px;
       background: url(../assets/images/countdown-supa.png) no-repeat;
       background-size: cover;
-      margin: 30px auto 0;
+      margin: 45px auto 0;
     }
     .supa-desk {
       width: 100%;

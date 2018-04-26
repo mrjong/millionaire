@@ -157,11 +157,18 @@ export default {
     },
     submit () {
       this.isLoading = true
-      if (this.questionInfo.tel === '') {
+      if (this.questionInfo.author === '') {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_phone')
+        this.dialogInfo.htmlText = 'Please enter your name.'
+        this.showDialog = true
+        return false
+      } else if (this.questionInfo.tel === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_phone')
         this.dialogInfo.htmlText = 'Please enter your phone number'
         this.showDialog = true
+        return false
       } else if (this.questionInfo.title === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_question')
