@@ -17,7 +17,7 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import { _UPDATE } from '../store/type'
-import CountDownCompere from '../components/CountDownCompere'
+import CountDownCompere from '../components/CountDownCompere.vue'
 export default {
   name: 'CountDown',
   data () {
