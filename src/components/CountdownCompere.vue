@@ -19,7 +19,8 @@ export default {
       supaTimer: null,
       supaOrder: 1,
       compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
-      supaStyle: `background-position: 0% 0%;`
+      supaStyle: `background-position: 0% 0%;`,
+      timer: null
     }
   },
   computed: {
@@ -47,16 +48,16 @@ export default {
       if (list && list.length) {
         let count = 0
         const interval = this.hostIntervalTime
-        let timer = setInterval(() => {
-          if (++count < list.length) {
-            this.compereMsg = list[count]
-          } else {
-            clearInterval(timer)
-          }
+        this.timer = setInterval(() => {
+          count = (count + 1) % list.length
+          this.compereMsg = list[count]
         }, interval)
         this.compereMsg = list[count]
       }
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   watch: {
     hostMsgList (val) {

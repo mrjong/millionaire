@@ -11,7 +11,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -148,6 +148,7 @@ export default new Vuex.Store({
               isOnline,
               startTime,
               startTimeOffset,
+              hostMsgList,
               onlineAmount: chatRoomInfo.is || '',
               chatRoomId: chatRoomInfo.rn || '',
               imToken: chatRoomInfo.it || ''
@@ -158,15 +159,6 @@ export default new Vuex.Store({
             })
             // 如果已经开始
             if (isPlaying) {
-              // 如果已经开始串词
-              if (hostMsgList && !question) {
-                im.emitListener(MESSAGE_HOST, {
-                  content: {
-                    content: JSON.stringify(hostMsgList)
-                  }
-                })
-                utils.statistic('introduction_stage', 0)
-              }
               // 如果已经下发题目 开启观战模式
               if (question) {
                 // 更新问题信息
@@ -218,12 +210,6 @@ export default new Vuex.Store({
                     clearInterval(countDownTimer)
                     commit(type._UPDATE, {
                       startTimeOffset: 0
-                    })
-                    // 倒计时到了后直接开始展示串词
-                    im.emitListener(MESSAGE_HOST, {
-                      content: {
-                        content: JSON.stringify(hostMsgList)
-                      }
                     })
                   } else {
                     commit(type._UPDATE, {
