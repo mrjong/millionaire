@@ -69,7 +69,6 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 50px 29px 0px 44px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -78,36 +77,32 @@ export default {
     width: 100%;
     height: 200px;
     color: #fff;
-    font: 500 40px/48px 'Roboto', Arial, serif;;
-    margin: 0 10px 20px 0;
+    padding: 40px 40px 0;
+    font: 500 40px/48px 'Roboto', Arial, serif;
     position: relative;
-    overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   &__supa {
     width: 100%;
-    position: relative;
     .bg-light{
-      width: 100%;
-      position: absolute;
-      left:50%;
-      transform: translate(-50%,-15%);
-      z-index: 1;
-      animation: light 3s ease infinite
+      width: 90%;
+      margin: -70px auto 0;
+      transform-origin: center center;
+      animation: light 4s linear infinite
     }
     .countdown-supa {
       position: absolute;
       left:50%;
       top:60%;
-      transform: translate(-50%,30%);
+      transform: translate(-50%,-50%);
       z-index: 11;
       width: 232px;
       height: 324px;
       background: url(../assets/images/countdown-supa1.png) no-repeat;
       background-size: cover;
       margin: 0 auto;
-      animation: countdownAnimation 1s ease infinite
+      animation: countdownAnimation 1s  linear infinite
     }
     .supa-desk {
       width: 100%;
@@ -127,13 +122,17 @@ export default {
 }
 @keyframes light {
   0%{
-    opacity: 0.3;
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
   50%{
-    opacity: 1;
+    opacity: 0.3;
+    transform: scale(0.8) rotate(60deg);
   }
   100%{
-    opacity: 0.3;
+    opacity:1;
+    transform: scale(1) rotate(-60deg);
   }
 }
+
 </style>

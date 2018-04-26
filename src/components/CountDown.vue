@@ -79,10 +79,11 @@ export default {
         padding: 10px 0;
         color: #ffffff;
         text-align: center;
-        background-color: rgba(255, 255, 255, 0.2);
+        background: rgba(250,167,23, 0.95);
         border-radius: 26px;
         margin: 27px auto 0;
         font: 300 32px 'Roboto', Arial, serif;
+        box-shadow: 0px 1px 10px 0.5px #faa729;
       }
       &__time{
         font: 400 156px 'Roboto Condensed', Arial, serif;
