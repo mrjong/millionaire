@@ -157,6 +157,7 @@ export default {
     },
     submit () {
       this.isLoading = true
+      const phoneRule = /[0-9\-\+]{1,20}/
       if (this.questionInfo.author === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_phone')
@@ -167,6 +168,12 @@ export default {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_phone')
         this.dialogInfo.htmlText = 'Please enter your phone number'
+        this.showDialog = true
+        return false
+      } else if (!phoneRule.test(this.tel)) {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_phone')
+        this.dialogInfo.htmlText = 'Please enter right phone number '
         this.showDialog = true
         return false
       } else if (this.questionInfo.title === '') {
