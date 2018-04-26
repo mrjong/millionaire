@@ -10,7 +10,7 @@
         Follow Us</a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME" v-model="questionInfo.author">
           <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="frame">
