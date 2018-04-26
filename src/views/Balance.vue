@@ -17,10 +17,16 @@
     </div>
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__wrap__input">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Name" maxlength="100" v-model="name">
+      </p>
+      <p class="balance-wrap__operate__wrap__input">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Permanent Account Number" v-model="pan">
+      </p>
+      <p class="balance-wrap__operate__wrap__input">
         <input type="text" class="balance-wrap__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
-      <p class="balance-wrap__operate__tip">Please verify that your Paytm account is a valid account, and the payouts will be made in 15 days.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
+      <p class="balance-wrap__operate__tip">The payouts will be made in 15 days </p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
@@ -43,6 +49,8 @@ export default {
       // showLogin: true,
       showLogin: !this.$store.getters.isOnline && (+this.$store.getters.userInfo.clientBalance > 0),
       myPay: '',
+      name: '',
+      pan: '',
       markInfo: {
         showMark: false,
         htmlText: '',
@@ -72,9 +80,22 @@ export default {
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
+        const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
+        const nameRule = /^[a-zA-Z]{1,100}$/
+        const isNamePass = nameRule.test(this.name)
+        const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
+        if (!isNamePass) {
+          this.changeMarkInfo(true, false, 0, `Please enter the right name`)
+          return false
+        }
+        if (!isPass) {
+          this.changeMarkInfo(true, false, 0, `Please enter a right PAN ID`)
+          return false
+        }
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+          return false
         } else {
           this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
         }
@@ -89,7 +110,9 @@ export default {
         api.balanceApplication({
           amount: +this.userInfo.balance,
           email: '',
-          accountId: this.myPay
+          accountId: this.myPay,
+          name: this.name,
+          pan: this.pan
         })
           .then(({data}) => {
             console.log('提现申请后台返回结果如下')
@@ -164,14 +187,13 @@ export default {
   background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
   &__title {
     width: 100%;
     height: 54px;
-    margin: 24px 0 79px 0;
+    margin: 24px 0 60px 0;
     box-sizing: border-box;
     font: 500 28px 'Roboto', Arial, serif;
     color: #fff;
@@ -203,7 +225,7 @@ export default {
       min-height: 384px;
       background: #fff;
       border-radius: 24px;
-      padding: 64px;
+      padding: 44px;
       box-sizing: border-box;
       position: relative;
       color: #241262;
@@ -225,7 +247,7 @@ export default {
       }
       &__mybalance, &__totalbalance {
         font: 700 52px 'Roboto Condensed', Arial, serif;
-        margin: 20px 0 58px 0;
+        margin: 20px 0 40px 0;
       }
       &__totalbalance {
         margin: 20px 0 0px 0;
@@ -240,9 +262,8 @@ export default {
   &__operate {
     width: 100%;
     height: 314px;
-    margin-bottom: 85px;
     display: block;
-    overflow: hidden;
+    flex: 1;
     &__wrap__input {
       width: 100%;
       height: 94px;
@@ -251,6 +272,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-bottom: 18px;
     }
     &__input {
       display:inline-block;
@@ -270,21 +292,25 @@ export default {
     }
     &__input::-webkit-input-placeholder{
       width: 100%;
+      text-align: center;
     }
     &__input:-ms-input-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__tip {
-      width: 100%;
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
-      margin: 27px 0 39px 0;
+      text-align: center;
+      margin: 27px auto 35px;
     }
     &__btn {
       width: 100%;

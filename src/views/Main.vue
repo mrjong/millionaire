@@ -111,6 +111,7 @@ export default {
     &__top{
       width: 100%;
       display: flex;
+      align-items: center;
       padding: 25px 25px 0;
       min-height: 59px;
       position: relative;

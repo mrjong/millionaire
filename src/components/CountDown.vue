@@ -1,8 +1,8 @@
 <template>
   <div class="count-down-container">
     <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
-      <p class="count-down-container__module__text">Starting in</p>
-      <p class="count-down-container__module__time">{{countDown}}</p>
+      <p class="count-down-container__module__text">Starting in {{countDown}}</p>
+      <count-down-compere></count-down-compere>
     </div>
     <div class="count-down-container__animation" v-show = 'startTime <= 10 && startTime !== 0'>
       <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
@@ -13,10 +13,11 @@
     </div>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import { _UPDATE } from '../store/type'
+import CountDownCompere from './CountDownCompere.vue'
 export default {
   name: 'CountDown',
   data () {
@@ -52,6 +53,19 @@ export default {
         utils.playSound('countDown10-after')
       }
     }
+  },
+  components: {
+    CountDownCompere
+  },
+  watch: {
+    startTime: function (startTime) {
+      this.playingAudio(startTime)
+      if (startTime <= 10) {
+        this.$store.commit(_UPDATE, {
+          disableNetworkTip: true
+        })
+      }
+    }
   }
 }
 </script>
@@ -59,11 +73,16 @@ export default {
   .count-down-container{
     width: 100%;
     &__module{
-      padding: 270px 0;
-      color: #ffffff;
-      text-align: center;
       &__text{
+        width: 280px;
+        padding: 10px 0;
+        color: #ffffff;
+        text-align: center;
+        background: rgba(250,167,23, 0.95);
+        border-radius: 26px;
+        margin: 35px auto 0;
         font: 300 32px 'Roboto', Arial, serif;
+        box-shadow: 0px 1px 10px 0.5px #faa729;
       }
       &__time{
         font: 400 156px 'Roboto Condensed', Arial, serif;

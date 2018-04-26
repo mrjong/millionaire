@@ -10,8 +10,12 @@
         Follow Us</a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME" v-model="questionInfo.author">
           <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+        </div>
+        <div class="frame">
+          <input type="text" class="form__name base" maxlength="20" placeholder="YOUR PHONE NUMBER" v-model="questionInfo.tel">
+          <check-str-length :originalLength=20 :currentLength=questionInfo.tel.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
@@ -100,7 +104,8 @@ export default {
         'option1': '',
         'option2': '',
         'option3': '',
-        'correct': ''
+        'correct': '',
+        'tel': ''
       },
       showDialog: false,
       dialogInfo: {
@@ -152,7 +157,26 @@ export default {
     },
     submit () {
       this.isLoading = true
-      if (this.questionInfo.title === '') {
+      const phoneRule = /[0-9\-\+]{1,20}/
+      if (this.questionInfo.author === '') {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_phone')
+        this.dialogInfo.htmlText = 'Please enter your name.'
+        this.showDialog = true
+        return false
+      } else if (this.questionInfo.tel === '') {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_phone')
+        this.dialogInfo.htmlText = 'Please enter your phone number'
+        this.showDialog = true
+        return false
+      } else if (!phoneRule.test(this.tel)) {
+        this.isLoading = false
+        this.setQuestionBtnStatics('submit', 'no_phone')
+        this.dialogInfo.htmlText = 'Please enter right phone number '
+        this.showDialog = true
+        return false
+      } else if (this.questionInfo.title === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_question')
         this.dialogInfo.htmlText = 'Please complete the question'
@@ -502,7 +526,7 @@ export default {
     border-radius: 46px;
     background-color:#f4f3f7 ;
     border: 0;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     padding-left: 30px;
     color:#241262 ;
     font-size: 28px;

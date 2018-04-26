@@ -22,7 +22,8 @@ export const api = {
   addExtraLife: '/cmp/lc', // 首次登陆增加额外生命
   register: '/v2/user/register', // 手机号注册
   signInByPhone: '/v2/user/verifycode', // 手机号登陆
-  getPhoneNationCode: '/v2/user/nationcode' // 获取手机号国家码
+  getPhoneNationCode: '/v2/user/nationcode', // 获取手机号国家码
+  useRecoveryCard: '/cmp/rev/' // 使用复活卡
 }
 
 export const init = function (isRefreshToken) {
@@ -197,4 +198,17 @@ export const signInByPhone = function (code) {
 // 获取手机号国家码
 export const getPhoneNationCode = function () {
   return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
+}
+
+// 使用复活卡
+export const useRecoveryCard = function (id, index, type = 1) {
+  return axios.get(api.useRecoveryCard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      i: id,
+      s: index,
+      t: type
+    }
+  })
 }
