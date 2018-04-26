@@ -6,7 +6,7 @@
     </p>
     <div class="compere-container__supa">
        <img src="../assets/images/countdown-light.png" class="bg-light">
-       <div class="countdown-supa"></div>
+       <div class="countdown-supa" :style="supaStyle"></div>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
         if (this.supaOrder >= 5) {
           this.supaOrder = 0
         }
-        this.supaStyle = 'background-position: 0%' + (this.supaOrder * 24.95) + '%'
+        this.supaStyle = 'background-position: 0%' + (this.supaOrder *25.05) + '%'
         this.supaOrder++
       }, 800)
     },
@@ -85,40 +85,28 @@ export default {
     -moz-osx-font-smoothing: grayscale;
   }
   &__supa {
-    width: 100%;
+    width: 80%;
+    position: relative;
+    margin: 0 auto;
     .bg-light{
-      width: 90%;
+      width: 100%;
+      position: absolute;
       margin: -70px auto 0;
       transform-origin: center center;
-      animation: light 4s linear infinite
+      animation: light 3s linear infinite
     }
     .countdown-supa {
-      position: absolute;
-      left:50%;
-      top:60%;
-      transform: translate(-50%,-50%);
+      position: relative;
       z-index: 11;
       width: 232px;
       height: 324px;
-      background: url(../assets/images/countdown-supa1.png) no-repeat;
+      background: url(../assets/images/countdown-supa.png) no-repeat;
       background-size: cover;
-      margin: 0 auto;
-      animation: countdownAnimation 1s  linear infinite
+      margin: 30px auto 0;
     }
     .supa-desk {
       width: 100%;
     }
-  }
-}
-@keyframes countdownAnimation {
-  0%{
-    background-image: url(../assets/images/countdown-supa1.png);
-  }
-  10%{
-    background-image: url(../assets/images/countdown-supa2.png);
-  }
-  100%{
-    background-image: url(../assets/images/countdown-supa1.png);
   }
 }
 @keyframes light {
