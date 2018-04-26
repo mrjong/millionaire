@@ -91,15 +91,15 @@ export default {
       let result = {}
       let totalNum = 0
       let optionsNumber = ['A', 'B', 'C']
-      if (this.questionResult) {
-        for (let i in this.questionResult) {
-          totalNum += Number(this.questionResult[i]) || 0
+      if (this.question_result) {
+        for (let i in this.question_result) {
+          totalNum += Number(this.question_result[i]) || 0
         }
       }
       Array.prototype.slice.call(this.options).forEach((val, idx) => {
         result[optionsNumber[idx] + '. ' + val] = {
-          answerNum: (this.questionResult && this.questionResult[val]),
-          percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
+          answerNum: (this.question_result && this.question_result[val]),
+          percent: this.question_result && this.computePercent(+this.question_result[val], totalNum),
           isRight: this.correctAnswer && this.correctAnswer === val,
           answerText: val
         }
@@ -176,7 +176,7 @@ export default {
         this.isClick = false
         this.countdownStyle = ''
         circle.style.strokeDashoffset = 3.14 + 'rem'
-        this.percent = utils.computePercent(this.questionResult)
+        this.percent = utils.computePercent(this.question_result)
       }
     },
     setAllFontSize (textSize) {
@@ -270,6 +270,7 @@ export default {
 
         // 没有答题或者答错
         if (!isAnswered || !isCorrect) {
+          utils.playSound('failed')
           if (!isCorrect) {
             this.answerErrorType = 'incorrect'
           }
@@ -300,7 +301,7 @@ export default {
             } else {
               this.cancelUseRecoveryCard()
             }
-          }, 1000)
+          }, 1500)
         }
       }
     //  if (status === 7 && !this.watchingMode) {

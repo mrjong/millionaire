@@ -86,13 +86,16 @@ export default {
         const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
         if (!isNamePass) {
-          this.changeMarkInfo(true, false, 0, `Please enter the right NAME`)
+          this.changeMarkInfo(true, false, 0, `Please enter the right name`)
+          return false
         }
         if (!isPass) {
           this.changeMarkInfo(true, false, 0, `Please enter a right PAN ID`)
+          return false
         }
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+          return false
         } else {
           this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
         }
