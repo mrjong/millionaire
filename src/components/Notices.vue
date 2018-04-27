@@ -108,7 +108,6 @@ export default {
     width: 670px;
     height: 670px;
     margin: 26px;
-    background-color: rgba(0, 0, 0, 0);
     border: 1px solid #3e407d;
     border-radius: 20px;
     padding-bottom: 30px;
@@ -142,7 +141,7 @@ export default {
         .name {
           font: 700 20px 'Roboto Condensed', Arial, serif;
           max-width: 180px;
-          color: #000;
+          color: #fff;
         }
         .money {
           font: 400 20px/2.1 'Roboto Condensed', Arial, serif;

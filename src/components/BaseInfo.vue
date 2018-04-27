@@ -66,10 +66,11 @@ export default {
     position: relative;
     &__user{
       text-align: center;
-      transform: translate(0, -70px);
+      transform: translate(0, -50px);
+      margin-top: -20px;
       &__head{
-        width:160px;
-        height:160px;
+        width:150px;
+        height:150px;
         border-radius: 50%;
         background: no-repeat center;
         background-size: cover;

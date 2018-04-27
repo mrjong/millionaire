@@ -40,7 +40,46 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <how-play-card></how-play-card>
+    <div class="notice">
+      <notices></notices>
+    </div>
+    <div class="game-area">
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/">
+          <img src="../assets/images/game-icon-4.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Doodle%20Connect">
+          <img src="../assets/images/game-icon-2.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Casual%20Chess">
+          <img src="../assets/images/game-icon-3.png">
+        </a>
+      </div>
+    </div>
+    <div class="game-area">
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Eggs%20&%20cars">
+          <img src="../assets/images/game-icon-1.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Reflector">
+          <img src="../assets/images/game-icon-5.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view1.html?Sun%20Beams">
+          <img src="../assets/images/game-icon-6.png">
+        </a>
+      </div>
+    </div>
+    <router-link to="/rule">
+      <how-play-card></how-play-card>
+    </router-link>
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
@@ -69,6 +108,7 @@ import * as api from '../assets/js/api'
 import Living from '../components/Living'
 import ReviveGuide from '../components/ReviveGuide'
 import HowPlayCard from '../components/HowPlayCard'
+import Notices from '../components/Notices'
 export default {
   name: 'Await',
   data () {
@@ -258,7 +298,8 @@ export default {
     BalanceMark,
     Living,
     ReviveGuide,
-    HowPlayCard
+    HowPlayCard,
+    Notices
   },
   watch: {
     lives: function (val, oldVal) {
@@ -284,9 +325,11 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    background: url("../assets/images/await-bg.jpg") no-repeat top left;
+    background: url("../assets/images/await-bg.png") no-repeat top left;
     background-size: cover;
+    background-color: #0e0842;
     padding-bottom: 30px;
+    position: relative;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -529,6 +572,33 @@ export default {
       img{
         width: 120px;
         margin: 0 auto;
+      }
+    }
+    .notice{
+      width: 100%;
+      background: url("../assets/images/notice-bg.png") no-repeat center;
+      background-size: contain;
+    }
+    .footer-bg{
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .game-area{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 25px 0;
+      .game-icon{
+        flex: 1;
+        img{
+          width: 117px;
+          margin: 0 auto;
+        }
       }
     }
   }
