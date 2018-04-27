@@ -158,54 +158,33 @@ export default {
     submit () {
       this.isLoading = true
       const phoneRule = /[0-9\-\+]{1,20}/
-      console.log(phoneRule.test(this.tel))
       if (this.questionInfo.author === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_phone')
-        this.dialogInfo.htmlText = 'Please enter your name.'
-        this.showDialog = true
+        this.baseConfig('no_phone', 'Please enter your name.')
         return false
       } else if (this.questionInfo.tel === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_phone')
-        this.dialogInfo.htmlText = 'Please enter your phone number'
-        this.showDialog = true
+        this.baseConfig('no_phone', 'Please enter your phone number')
         return false
       } else if (!phoneRule.test(this.questionInfo.tel)) {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_phone')
-        this.dialogInfo.htmlText = 'Please enter right phone number '
-        this.showDialog = true
+        this.baseConfig('no_phone', 'Please enter right phone number')
         return false
       } else if (this.questionInfo.title === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_question')
-        this.dialogInfo.htmlText = 'Please complete the question'
-        this.showDialog = true
+        this.baseConfig('no_question', 'Please complete the question')
         return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_answer')
-        this.dialogInfo.htmlText = 'Please complete the answer'
-        this.showDialog = true
+        this.baseConfig('no_answer', 'Please complete the answer')
         return false
       }
       api.setQuestions(this.questionInfo).then(({data}) => {
         this.isLoading = false
-        console.log(data)
         if (data.result === 1) {
           this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
-          this.isLoading = false
-          this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
+          this.baseConfig('', 'Your Internet is unstable, please try it again.')
           return false
         }
       }).catch(() => {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'other_anomaly')
-        this.showDialog = true
+        this.baseConfig('other_anomaly')
         return false
       })
     },
@@ -232,6 +211,14 @@ export default {
         staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
       }
       utils.statistic('submit', 1, staticsObj, 'issue_page')
+    },
+    baseConfig (staticsType, hintType) {
+      this.isLoading = false
+      staticsType && this.setQuestionBtnStatics('submit', staticsType)
+      if (hintType) {
+        this.dialogInfo.htmlText = hintType
+      }
+      this.showDialog = true
     }
   },
   components: {
