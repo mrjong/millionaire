@@ -363,7 +363,7 @@ const utils = {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
+    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
   },
   /**
    * 生成指定长度的随机串

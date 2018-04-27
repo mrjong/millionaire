@@ -317,6 +317,7 @@ export default {
     }
     &__title{
       width: 400px;
+      height: 171px;
       margin: 0 auto;
       img{
         width: 100%;
