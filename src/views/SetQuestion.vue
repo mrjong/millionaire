@@ -156,6 +156,7 @@ export default {
       })
     },
     submit () {
+      /* eslint-disable no-useless-escape */
       this.isLoading = true
       const phoneRule = /[0-9\-\+]{1,20}/
       if (this.questionInfo.author === '') {
