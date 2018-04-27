@@ -158,6 +158,7 @@ export default {
     submit () {
       this.isLoading = true
       const phoneRule = /[0-9\-\+]{1,20}/
+      console.log(phoneRule.test(this.tel))
       if (this.questionInfo.author === '') {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_phone')
@@ -170,7 +171,7 @@ export default {
         this.dialogInfo.htmlText = 'Please enter your phone number'
         this.showDialog = true
         return false
-      } else if (!phoneRule.test(this.tel)) {
+      } else if (!phoneRule.test(this.questionInfo.tel)) {
         this.isLoading = false
         this.setQuestionBtnStatics('submit', 'no_phone')
         this.dialogInfo.htmlText = 'Please enter right phone number '

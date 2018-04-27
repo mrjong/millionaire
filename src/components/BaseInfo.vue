@@ -22,9 +22,6 @@
         </div>
       </router-link>
     </div>
-    <div class="apus-logo">
-    <img src="../assets/images/apus-logo.png" class="icon">
-    </div>
   </div>
 </template>
 
@@ -65,7 +62,7 @@ export default {
     border-radius: 24px;
     margin:70px auto 25px;
     padding: 0.5px;
-    padding-bottom: 70px;
+    padding-bottom: 40px;
     position: relative;
     &__user{
       text-align: center;
