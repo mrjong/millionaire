@@ -31,7 +31,7 @@
     <!-- 获胜者列表  -->
     <transition-group class="winner-list" name="winner-list" tag="div">
       <p class="winner ellipsis-1" v-for="(item, index) in list" :key="index">
-        {{item.content}} won {{currencyType}}<span style="font-family: 'Roboto Condensed', 'Roboto', Arial, serif;">{{item.award}}</span>
+        {{item.content}} {{currencyType}}<span style="font-family: 'Roboto Condensed', 'Roboto', Arial, serif;">{{item.award}}</span>
       </p>
     </transition-group>
   </div>
