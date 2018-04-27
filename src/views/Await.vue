@@ -41,7 +41,9 @@
       </div>
     </div>
     <div class="notice">
-      <notices></notices>
+      <router-link to="/rank">
+        <notices></notices>
+      </router-link>
     </div>
     <div class="game-area">
       <div class="game-icon">
@@ -83,6 +85,12 @@
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
+    </div>
+    <div class="ins">
+      <ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-4255098743133861"
+     data-ad-slot="9382446176"></ins>
     </div>
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
@@ -600,6 +608,11 @@ export default {
           margin: 0 auto;
         }
       }
+    }
+    .ins{
+      display: flex;
+      justify-content: center;
+      margin: 20px auto 0;
     }
   }
   @keyframes lives {
