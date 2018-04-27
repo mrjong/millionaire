@@ -1,4 +1,4 @@
-/* global BUILD_ENV */
+/* global BUILD_ENV VERSION */
 // BUILD_ENV webpack define
 import axios from 'axios'
 export const env = BUILD_ENV || 'prod'
@@ -29,5 +29,11 @@ export const appKey = imAppKey[env]
 export default axios.create({
   baseURL: host[env],
   withCredentials: env !== 'local',
-  timeout: 10000
+  timeout: 10000,
+  params: {
+    version: VERSION
+  },
+  data: {
+    version: VERSION
+  }
 })

@@ -44,7 +44,7 @@ import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
-import { register, signInByPhone, addExtraLife } from '../assets/js/api'
+import { register, signInByPhone } from '../assets/js/api'
 let timer = null
 export default {
   name: 'Login',
@@ -91,7 +91,6 @@ export default {
           const code = +data.error_code
           switch (code) {
             case 0: {
-              addExtraLife() // 检查首次登录增加复活卡
               // 若为等待状态，返回首页
               if (this.status === 1) {
                 this.$router.replace({path: '/'})

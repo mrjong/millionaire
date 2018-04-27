@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { api } from './api'
+import { api, addExtraLife } from './api'
 import { host, env } from './http'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -54,7 +54,10 @@ const utils = {
    * @param {any} callback
    */
   login (callback) {
-    window.top.loginCallback = callback
+    window.top.loginCallback = function () {
+      addExtraLife()
+      callback()
+    }
     if (njordGame) {
       const loginArgs = JSON.stringify({
         callbackMethod: 'loginSuccess()',
@@ -363,7 +366,7 @@ const utils = {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
+    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
   },
   /**
    * 生成指定长度的随机串
