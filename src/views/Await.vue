@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="await__title">
-      <img src="../assets/images/logo.png">
+      <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
     <base-info :baseInfo="userInfo"></base-info>
@@ -23,24 +23,77 @@
             <span class="extra-lives__icon"></span>
             <living class="invite-living" v-if="inviteLiving"></living>
           </div>
-          <span class="extra-lives__text">Extra Lives: {{lives}}</span>
+          <span class="extra-lives__text">EXTRA LIVES: {{lives}}</span>
         </div>
+        <div class="get-more-text" @click="toExtraLiveRules">Get More
+          <span class="get-more-text__icon iconfont icon-LIVINGyoujiantou"></span>
+        </div>
+      </div>
+      <div class="get-lives">
         <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
       </div>
-      <div class="get-lives" @click="toExtraLiveRules" ref="getLivesCard" v-if="!isSucceed">
-        <div class="get-lives__text">Get More</div>
-      </div>
-      <div class="share-success" ref="shareSuccessCard" v-else>
-        <div class="share-success__text">Share success</div>
+      <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
+        <p class="share-success__text">SUCCESS</p>
         <div class="share-success__base">
-          <living></living>
-          <span class="share-success__base__num">+1</span>
+          <img src="../assets/images/heart-light.png" class="heart">
         </div>
+        <p class="share-success__num">+1</p>
       </div>
     </div>
+    <div class="notice">
+      <router-link to="/rank">
+        <notices></notices>
+      </router-link>
+    </div>
+    <div class="game-area">
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/">
+          <img src="../assets/images/game-icon-4.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Doodle%20Connect">
+          <img src="../assets/images/game-icon-2.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Casual%20Chess">
+          <img src="../assets/images/game-icon-3.png">
+        </a>
+      </div>
+    </div>
+    <div class="game-area">
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Eggs%20&%20cars">
+          <img src="../assets/images/game-icon-1.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Reflector">
+          <img src="../assets/images/game-icon-5.png">
+        </a>
+      </div>
+      <div class="game-icon">
+        <a href="http://h5game.subcdn.com/03/game_view1.html?Sun%20Beams">
+          <img src="../assets/images/game-icon-6.png">
+        </a>
+      </div>
+    </div>
+    <router-link to="/rule">
+      <how-play-card></how-play-card>
+    </router-link>
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
+    </div>
+    <div class="ins">
+      <ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-4255098743133861"
+     data-ad-slot="9382446176"></ins>
+    </div>
+    <div class="apus-logo">
+    <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -62,6 +115,8 @@ import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
 import Living from '../components/Living'
 import ReviveGuide from '../components/ReviveGuide'
+import HowPlayCard from '../components/HowPlayCard'
+import Notices from '../components/Notices'
 export default {
   name: 'Await',
   data () {
@@ -115,20 +170,18 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
-    this.$nextTick(() => {
-      const bodys = document.getElementsByTagName('body')[0]
-      const bodyHeight = bodys.clientHeight
-      bodys.style.height = bodyHeight + 'px'
-    })
     if (localStorage.getItem('isFirstShare')) {
       let isFirst = localStorage.getItem('isFirstShare')
       let duration = new Date().getTime() - localStorage.getItem('firstTime')
-      if (duration > 86400000 || isFirst === 'true') {
+      if (isFirst === 'true') {
         this.isSucceed = true
         setTimeout(() => {
           this.isSucceed = false
         }, 3000)
         localStorage.setItem('isFirstShare', 'false')
+      }
+      if (duration > 86400000) {
+        localStorage.removeItem('isFirstShare')
       }
     }
     utils.statistic('wait_page', 0)
@@ -254,7 +307,9 @@ export default {
     BaseInfo,
     BalanceMark,
     Living,
-    ReviveGuide
+    ReviveGuide,
+    HowPlayCard,
+    Notices
   },
   watch: {
     lives: function (val, oldVal) {
@@ -279,9 +334,11 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    height: 100%;
-    background: url("../assets/images/await-bg.jpg") no-repeat top left;
+    background: url("../assets/images/await-bg.png") no-repeat top left;
     background-size: cover;
+    background-color: #0e0842;
+    padding-bottom: 30px;
+    position: relative;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -312,6 +369,7 @@ export default {
     }
     &__title{
       width: 400px;
+      height: 171px;
       margin: 0 auto;
       img{
         width: 100%;
@@ -319,9 +377,11 @@ export default {
     }
     &__btn{
       display: flex;
-      padding:0 25px 25px;
+      margin:0 25px 25px;
       justify-content: space-between;
-      .invitation-code, .get-lives, .share-success{
+      background-color: #fff;
+      border-radius: 24px;
+      .invitation-code, .get-lives{
         max-width: 48%;
         width: 322px;
         height: 160px;
@@ -335,11 +395,11 @@ export default {
           justify-content: center;
           color: #241262;
           height: 36px;
-          margin-bottom:18px;
+          margin:10px auto 18px;
           span{
             display: block;
-            height: 36px;
-            line-height: 36px;
+            height: 37px;
+            line-height: 37px;
           }
           .invite-living{
             position: absolute;
@@ -359,8 +419,21 @@ export default {
           &__text{
             font-size: 28px;
             margin: 0 0 0 12px;
+            color: #241262;
           }
         }
+         .get-more-text{
+            font-size: 28px;
+            margin: 0 0 0 33px;
+            color: #f4387c;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            &__icon{
+              color: #f4387c;
+              font-size: 20px;
+            }
+         }
         &__btn{
           width: 260px;
           height: 62px;
@@ -373,13 +446,43 @@ export default {
           margin: 0 auto;
         }
       }
+      .share-success{
+        width: 400px;
+        height: 400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 24px;
+        background-color:rgba(15, 26, 114, 0.8);
+        padding: 25px;
+        font-weight: 'Roboto';
+        &__text{
+          color:#fa74a5;
+          text-align: center;
+          font-size: 32px;
+          font-weight: bold;
+          transform: translateY(40px)
+        }
+        .heart{
+          width: 85%;
+          margin: 0 auto;
+        }
+        &__num{
+          color: #fff;
+          font-size:48px;
+          text-align: center;
+          font-weight: bold;
+          transform: translateY(-40px)
+        }
+      }
       .get-lives{
-        background: url("../assets/images/revive-card-before.png") no-repeat center;
-        background-size: cover;
+        display: flex;
         color: #fff;
         font-size: 28px;
         transition:opacity 300ms linear 2s;
         padding: 25px 30px;
+        align-items: center;
         .revive-rule{
           font-weight: 300;
           margin-top: 20px;
@@ -388,40 +491,6 @@ export default {
         }
         &__text{
           margin-bottom: 20px;
-        }
-      }
-      .share-success{
-        background: url("../assets/images/revive-card-after.png") no-repeat center;
-        background-size: cover;
-        color: #fff;
-        font-size: 28px;
-        opacity: 1;
-        transition:opacity 500ms linear 2s;
-        padding: 25px 30px;
-        &__base{
-          display: flex;
-          justify-content: center;
-          margin-top: 12px;
-          &__icon{
-            display: block;
-            width: 86px;
-            position: relative;
-            img{
-              width: 100%;
-            }
-            .top{
-              position: absolute;
-              top:0;
-              animation: lives 1.5s ease-in-out 0s infinite;
-            }
-          }
-          &__num{
-            height: 82px;
-            line-height: 82px;
-            text-align: right;
-            font-size: 54px;
-            margin-left: 30px;
-          }
         }
       }
     }
@@ -433,7 +502,7 @@ export default {
       font:32px 'Roboto Regular';
       border-radius: 46px;
       color: #fff;
-      margin:0 auto 30px ;
+      margin:0 auto;
       text-align: center;
       &__text{
         display: inline-block;
@@ -506,6 +575,46 @@ export default {
           }
         }
       }
+    }
+    .apus-logo{
+      width: 100%;
+      padding: 50px 0 0;
+      img{
+        width: 120px;
+        margin: 0 auto;
+      }
+    }
+    .notice{
+      width: 100%;
+      background: url("../assets/images/notice-bg.png") no-repeat center;
+      background-size: contain;
+    }
+    .footer-bg{
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .game-area{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 25px 0;
+      .game-icon{
+        flex: 1;
+        img{
+          width: 117px;
+          margin: 0 auto;
+        }
+      }
+    }
+    .ins{
+      display: flex;
+      justify-content: center;
+      margin: 20px auto 0;
     }
   }
   @keyframes lives {
