@@ -11,7 +11,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -26,7 +26,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: [], // 主持人消息列表
+    hostMsgList: ['Welcome to \'Go! Millionaire\' game! Answer 12 questions at 10 PM and get them all right to win real cash prize every day!', 'You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!'], // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -206,10 +206,16 @@ export default new Vuex.Store({
               if (isInRoom) {
                 clearInterval(countDownTimer)
                 countDownTimer = setInterval(() => {
-                  if (getters.startTimeOffset <= 0) {
+                  if (getters.startTimeOffset <= 1) {
                     clearInterval(countDownTimer)
                     commit(type._UPDATE, {
                       startTimeOffset: 0
+                    })
+                    // 倒计时到了后直接开始展示串词
+                    im.emitListener(MESSAGE_HOST, {
+                      content: {
+                        content: JSON.stringify(['Welcome to \'Go! Millionaire\' game! Answer 12 questions at 10 PM and get them all right to win real cash prize every day!', 'You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!'])
+                      }
                     })
                   } else {
                     commit(type._UPDATE, {
