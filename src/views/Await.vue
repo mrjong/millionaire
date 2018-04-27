@@ -173,12 +173,15 @@ export default {
     if (localStorage.getItem('isFirstShare')) {
       let isFirst = localStorage.getItem('isFirstShare')
       let duration = new Date().getTime() - localStorage.getItem('firstTime')
-      if (duration > 86400000 || isFirst === 'true') {
+      if (isFirst === 'true') {
         this.isSucceed = true
         setTimeout(() => {
           this.isSucceed = false
         }, 3000)
         localStorage.setItem('isFirstShare', 'false')
+      }
+      if (duration > 86400000 ) {
+        localStorage.removeItem('isFirstShare')
       }
     }
     utils.statistic('wait_page', 0)
@@ -424,11 +427,11 @@ export default {
          .get-more-text{
             font-size: 28px;
             margin: 0 0 0 33px;
-            color: #241262;
+            color: #f4387c;
             text-align: center;
             font-size: 32px;
             &__icon{
-              color: #241262;
+              color: #f4387c;
               font-size: 20px;
             }
          }
