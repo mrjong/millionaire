@@ -180,7 +180,7 @@ export default {
         }, 3000)
         localStorage.setItem('isFirstShare', 'false')
       }
-      if (duration > 86400000 ) {
+      if (duration > 86400000) {
         localStorage.removeItem('isFirstShare')
       }
     }
@@ -430,6 +430,7 @@ export default {
             color: #f4387c;
             text-align: center;
             font-size: 32px;
+            font-weight: bold;
             &__icon{
               color: #f4387c;
               font-size: 20px;
