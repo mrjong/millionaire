@@ -171,9 +171,26 @@ const utils = {
     for (let prop in params) {
       webParams[`web_${prop.replace(/_s|l$/g, '')}`] = params[prop]
     }
-    window.ares && window.ares.track(eventType, {
+
+    let h5EventType = eventType
+    // h5 事件类型映射
+    switch (eventType) {
+      case '67240565': {
+        h5EventType = '84043893'
+        break
+      }
+      case '67262581': {
+        h5EventType = '84044149'
+        break
+      }
+      case '67241845': {
+        h5EventType = '84043381'
+        break
+      }
+    }
+    window.ares && window.ares.track(h5EventType, {
       web_name: name,
-      web_from: from,
+      web_from_source: from,
       ...webParams
     })
   },
@@ -314,9 +331,15 @@ const utils = {
    * @param {any} name
    */
   stopSound (name) {
-    const sound = sounds[name].instance
-    !sound.paused && sound.pause()
-    sound.currentTime = 0
+    if (name) {
+      const sound = sounds[name].instance
+      !sound.paused && sound.pause()
+      sound.currentTime = 0
+    } else {
+      for (let name in sounds) {
+        utils.stopSound(name)
+      }
+    }
   },
   /**
    * 设置静音
