@@ -451,8 +451,8 @@ export default {
       .share-success{
         width: 400px;
         height: 400px;
-        position: absolute;
-        top: 20%;
+        position: fixed;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 24px;
