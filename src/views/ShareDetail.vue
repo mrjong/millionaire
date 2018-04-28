@@ -113,7 +113,6 @@ export default {
     },
     // 分享后的回调
     callbackFn (isSucceed, packageName) {
-      console.log('分享的回调' + isSucceed)
       this.reviveObj.isShare = false
       const sharepackageName = packageName === 'com.facebook.katana' ? 'facebook' : 'message'
       utils.statistic('millionaire', 3, {
@@ -121,7 +120,7 @@ export default {
         result_code_s: isSucceed ? '1' : '0'
       }, 'share-detail_page')
       if (isSucceed) {
-        if (localStorage.getItem('firstTime') === '' || (new Date().getTime() - localStorage.getItem('firstTime')) > 86400000) {
+        if (localStorage.getItem('firstTime') === '' || (new Date().getTime() - localStorage.getItem('firstTime')) > 86400000 || localStorage.getItem('isFirstShare') === '') {
           localStorage.setItem('isFirstShare', 'true')
         } else {
           localStorage.setItem('isFirstShare', 'false')
