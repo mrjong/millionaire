@@ -177,15 +177,14 @@ export default {
         this.isSucceed = true
         setTimeout(() => {
           this.isSucceed = false
+          localStorage.setItem('isFirstShare', 'false')
         }, 3000)
-        localStorage.setItem('isFirstShare', 'false')
       }
       if (duration > 86400000) {
         localStorage.removeItem('isFirstShare')
       }
     }
     utils.statistic('wait_page', 0)
-    console.log('初始化' + this.status)
   },
   methods: {
     // 按钮打点
@@ -336,9 +335,10 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    background: url("../assets/images/await-bg.png") no-repeat top left;
+    background-image: url("../assets/images/await-bg.png"), -webkit-linear-gradient(top,#0e0842,#1b208c);
+    background-position: top;
+    background-repeat: no-repeat;
     background-size: cover;
-    background-color: #0e0842;
     padding-bottom: 30px;
     position: relative;
     &__top{
@@ -452,7 +452,7 @@ export default {
         width: 400px;
         height: 400px;
         position: absolute;
-        top: 50%;
+        top: 20%;
         left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 24px;
@@ -618,6 +618,9 @@ export default {
       justify-content: center;
       margin: 20px auto 0;
     }
+  }
+  .await::before{
+    background:linear-gradient(red, blue)
   }
   @keyframes lives {
     0%{
