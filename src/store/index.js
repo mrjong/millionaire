@@ -358,6 +358,7 @@ export default new Vuex.Store({
           commit(type._UPDATE, {
             status: status._END
           })
+          utils.stopSound()
         }
       })
     },
@@ -374,6 +375,7 @@ export default new Vuex.Store({
           compereMsg: ''
         })
         RongIMClient.getInstance().disconnect()
+        utils.stopSound()
       })
     },
     /**

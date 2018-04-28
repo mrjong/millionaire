@@ -144,6 +144,7 @@ export default {
       } else if (status === 1) {
         this.$router.replace({path: '/'})
         im.stopPullMsg()
+        utils.stopSound()
       }
 
       if (status === 3) {
