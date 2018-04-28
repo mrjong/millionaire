@@ -331,9 +331,15 @@ const utils = {
    * @param {any} name
    */
   stopSound (name) {
-    const sound = sounds[name].instance
-    !sound.paused && sound.pause()
-    sound.currentTime = 0
+    if (name) {
+      const sound = sounds[name].instance
+      !sound.paused && sound.pause()
+      sound.currentTime = 0
+    } else {
+      for (let name in sounds) {
+        utils.stopSound(name)
+      }
+    }
   },
   /**
    * 设置静音

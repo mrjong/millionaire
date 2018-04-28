@@ -28,6 +28,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'BaseInfo',
   props: {
@@ -47,7 +48,14 @@ export default {
     login () {
       if (!this.isOnline) {
         utils.login(() => {
-          this.$emit('loginSuccess')
+          this.$store.commit(_UPDATE, {
+            isOnline: true
+          })
+          utils.isOnline = true
+          this.$store.dispatch(_INIT).then(() => {
+          }, (err) => {
+            console.log('点击头像登陆失败:', err)
+          })
         })
       }
     }
