@@ -96,6 +96,13 @@ export default {
     WinnersResult,
     Compere,
     BalanceMark
+  },
+  watch: {
+    status: function (status, oldStatus) {
+      if (status === 4) {
+        this.musicPlay = true
+      }
+    }
   }
 }
 </script>

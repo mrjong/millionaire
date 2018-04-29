@@ -86,12 +86,12 @@
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <div class="ins">
+    <!-- <div class="ins">
       <ins class="adsbygoogle"
      style="display:inline-block;width:300px;height:250px"
      data-ad-client="ca-pub-4255098743133861"
      data-ad-slot="9382446176"></ins>
-    </div>
+    </div> -->
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
@@ -212,7 +212,13 @@ export default {
     // 弹框ok
     okEvent (a, b) {
       if (this.isInputInvitation) {
+        console.log(b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code)
         if (!b) {
+          return false
+        } else if (b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code) {
+          console.log('fghhjklllkjuuhfdsss', b.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))
+          this.isInputInvitation = false
+          this.BobmParamesConfig('', 'You can not enter your own Referral Code.', false, true)
           return false
         } else {
           this.showDialog = false
