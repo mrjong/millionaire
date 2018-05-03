@@ -227,7 +227,7 @@ const utils = {
       callback(true, packageName)
       if (shareType === 'facebook') {
         setTimeout(() => {
-          const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          const href = `https://www.facebook.com/sharer?u=${shareLink}`
           window.location.href = href
         }, 5)
         window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
