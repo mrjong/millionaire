@@ -178,7 +178,7 @@
     </p>
     <div class="code">
       <p class="hint">My Referral Code: </p>
-      <p class="num" id="invitationCode"></p>
+      <p class="num invitationCode"></p>
     </div>
     <p class="text">
       Like us on Facebook to get more<br>
@@ -194,7 +194,7 @@
     </p>
     <div class="code">
         <p class="hint">My Referral Code: </p>
-        <p class="num" id="invitationCode"></p>
+        <p class="num invitationCode"></p>
     </div>
     <p class="btn like" onclick="toFb('share')">GET HINTS NOW</p>
     <p class="btn gp" onclick="toGp('share')">WIN CASH NOW</p>
@@ -231,8 +231,10 @@
   var packageName = getUrlParameter('packageName')
   var share = document.getElementsByClassName('share')[0]
   var invite = document.getElementsByClassName('invite')[0]
+  console.log(document.getElementsByClassName('invitationCode'))
   if (getUrlParameter('code')) {
-    document.getElementById('invitationCode').innerHTML = getUrlParameter('code')
+    document.getElementsByClassName('invitationCode')[0].innerHTML = getUrlParameter('code')
+    document.getElementsByClassName('invitationCode')[1].innerHTML = getUrlParameter('code')
   }
   if (type === 'share') {
     invite.style.display = 'block'
