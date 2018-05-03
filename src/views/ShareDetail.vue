@@ -9,26 +9,26 @@
     <div class="share-detail-content">
       <img src="../assets/images/share-live.png" class="share-lives">
       <p class="text">
-        You can use EXTRA LIVES when you answer incorrectly after logging in.It will be applied automatically once per game on any question.
+        You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game except the last question.
       </p>
       <p class="text">
         You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
       </p>
-      <p class="text">
+      <!-- <p class="text">
         SHARE for this game can also help you get one per day.
-      </p>
+      </p> -->
       <p class="code">
         My Referral Code:
         <span>{{code}}</span>
       </p>
       <div class="btn">
-        <p class="btn__share" @click="share('share')">
-          <span class="btn__share__icon iconfont icon-share"></span>
-          <span class="btn__share__text">Share</span>
-        </p>
         <p class="btn__invite" @click="share('invite')">
           <span class="btn__invite__icon"></span>
           <span class="btn__invite__text">Invite</span>
+        </p>
+        <p class="btn__share" @click="share('share')">
+          <span class="btn__share__icon iconfont icon-share"></span>
+          <span class="btn__share__text">Share</span>
         </p>
       </div>
     </div>
@@ -82,8 +82,8 @@ export default {
       utils.statistic(statisticName, 1)
       if (type === 'share') {
         // 调起分享弹框
-        this.reviveObj.title = 'Extra Life can be gained by SHARING'
-        this.reviveObj.hint = 'The first SHARE of this game will help you get one extra life per day.'
+        this.reviveObj.title = 'SHARE TO INVITE'
+        this.reviveObj.hint = 'Share now to invite a new user to use your referral code, you two will get extra life!'
         this.reviveObj.code = ''
       } else if (type === 'invite') {
         // 调起邀请弹框
@@ -267,10 +267,10 @@ export default {
     }
     &__share{
       background-color: #e03c79;
-      margin:40px 0 25px;
     }
     &__invite{
       background-color: #fda800;
+      margin: .4rem 0 .25rem;
       &__icon{
         width: 40px;
         height:43px;
