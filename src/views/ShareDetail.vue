@@ -107,7 +107,7 @@ export default {
         utils.share(
           this.callbackFn,
           val,
-          'I’m playing ‘Go! Millionaire’, sharing can help get extra life! Join us!',
+          'Hi, I’m playing ‘Go! Millionaire’, answer questions and win! Join us!',
           encodeURIComponent(`http://static.subcdn.com/share-success-test.html?code=${this.code}&type=share&packageName=${packageName}`))
       }
     },
