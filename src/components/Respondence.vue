@@ -115,6 +115,13 @@ export default {
   methods: {
     ...mapActions({}),
     answer (e) {
+      // 上报用户作答情况
+      utils.statistic('QUESTION', 1, {
+        id_s: `${this.index}`,
+        flag_s: `${this.watchingMode ? 1 : 0}`,
+        style_s: `${this.isOnline ? 1 : 0}`,
+        type_s: utils.pageType
+      })
       if (this.watchingMode || this.isClick) {
         this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
           htmlTitle: 'You\'ve been eliminated. ',
@@ -140,8 +147,21 @@ export default {
               index
             },
             'user-answer', 180000)
-          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
+          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
+            utils.statistic('QUESTION_RESULT', 1, {
+              id_s: `${this.index}`,
+              result_code_s: '1',
+              style_s: `${this.isOnline ? 1 : 0}`,
+              type_s: utils.pageType
+            })
+          }, (err) => {
             this.$emit('error', err)
+            utils.statistic('QUESTION_RESULT', 1, {
+              id_s: `${this.index}`,
+              result_code_s: '0',
+              style_s: `${this.isOnline ? 1 : 0}`,
+              type_s: utils.pageType
+            })
           })
           // this.game_answer.current_question_l = this.index
           // this.game_answer.cost_time_l = this.restTime

@@ -77,11 +77,11 @@ const actions = {
       if (content) {
         const question = JSON.parse(content)
         const {ji: id = '', js: index = 1, jc: contents = '', jo: options = [], restTime} = question
-        utils.statistic('QUESTION', 6, {
-          flag_s: `${id}`,
-          text_s: `${index}`,
-          action_s: `${rootGetters.userInfo.userName}`,
-          type_s: `${getters.watchingMode ? 1 : 0}`
+        utils.statistic('QUESTION', 0, {
+          flag_s: `${index}`,
+          text_s: `${rootGetters.isOnline ? 1 : 0}`,
+          style_s: `${getters.watchingMode ? 1 : 0}`,
+          type_s: utils.pageType
         })
         log({
           name: 'question',
@@ -205,10 +205,11 @@ const actions = {
         // 判断答案是否正确
         let isCorrect = md5Map[correctAnswer] === getters.userAnswer
 
-        utils.statistic('ANSWER', 6, {
-          flag_s: `${id}`,
-          action_s: `${rootGetters.userInfo.userName}`,
-          type_s: `${isCorrect ? 1 : 0}`
+        utils.statistic('ANSWER', 0, {
+          flag_s: `${getters.index}`,
+          text_s: `${getters.watchingMode ? 1 : 0}`,
+          style_s: `${isCorrect ? 1 : 0}`,
+          type_s: utils.pageType
         })
 
         // 服务端上报日志
