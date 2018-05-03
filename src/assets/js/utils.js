@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { api, addExtraLife } from './api'
+import { api } from './api'
 import { host, env } from './http'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -55,7 +55,6 @@ const utils = {
    */
   login (callback) {
     window.top.loginCallback = function () {
-      addExtraLife()
       callback()
     }
     if (njordGame) {

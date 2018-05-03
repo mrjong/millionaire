@@ -5,7 +5,7 @@ import * as status from '../../assets/js/status'
 import utils from '../../assets/js/utils'
 import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
-import { submitAnswer, log } from '../../assets/js/api'
+import { submitAnswer } from '../../assets/js/api'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -82,17 +82,6 @@ const actions = {
           text_s: `${rootGetters.isOnline ? 1 : 0}`,
           style_s: `${getters.watchingMode ? 1 : 0}`,
           type_s: utils.pageType
-        })
-        log({
-          name: 'question',
-          id,
-          index,
-          clientId: utils.clientId,
-          userName: rootGetters.userInfo.userName,
-          watchingMode: getters.watchingMode,
-          isOnline: rootGetters.isOnline,
-          ua: window.navigator.userAgent,
-          isPlaying: window.isPlaying
         })
         commit(type.QUESTION_UPDATE, {
           id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
@@ -210,19 +199,6 @@ const actions = {
           text_s: `${getters.watchingMode ? 1 : 0}`,
           style_s: `${isCorrect ? 1 : 0}`,
           type_s: utils.pageType
-        })
-
-        // 服务端上报日志
-        log({
-          name: 'answer',
-          id,
-          isCorrect,
-          userName: rootGetters.userInfo.userName,
-          clientId: utils.clientId,
-          watchingMode: getters.watchingMode,
-          isOnline: rootGetters.isOnline,
-          isAnswered: getters.isAnswered,
-          isPlaying: window.isPlaying
         })
 
         commit(type.QUESTION_UPDATE, {

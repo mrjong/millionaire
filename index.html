@@ -49,10 +49,6 @@
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = false
       }
-      log({
-        name: 'resume',
-        time: Date.now()
-      })
     }
     njordCallback.onPause = function () {
       isPlaying = false
@@ -60,29 +56,11 @@
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = true
       }
-      log({
-        name: 'pause',
-        time: Date.now()
-      })
     }
     function shareSuccess(isSucceed, packageName) {
       console.log('分享参数:', isSucceed, packageName)
       shareSuccessCallback && shareSuccessCallback(isSucceed, packageName)
       console.log('分享成功')
-    }
-
-    function log (params) {
-      var clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
-      var clientId = clientParams ? (clientParams.newClientId || clientParams.clientId) : ''
-      var xhr = new XMLHttpRequest()
-      xhr.open('POST', <%= htmlWebpackPlugin.options.host %> + '/cmp/l')
-      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-      xhr.send(JSON.stringify({
-        content: JSON.stringify({
-          clientId,
-          params: params
-        })
-      }))
     }
   </script>
   <script>
