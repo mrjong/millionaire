@@ -15,7 +15,7 @@ im.init()
 window.onload = function () {
   // 初始化打点
   utils.statistic('referrer', 0, {
-    style: window.top.njordGame ? 'app' : 'h5' // 页面类型
+    style_s: window.top.njordGame ? 'app' : 'h5' // 页面类型
   }, utils.getQuery('referrer'))
 }
 

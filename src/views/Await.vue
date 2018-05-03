@@ -47,34 +47,34 @@
     </div>
     <div class="game-area">
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/">
+        <a href="http://h5game.subcdn.com/03/" @click="btnStatistic('H5game_Box')">
           <img src="../assets/images/game-icon-4.png">
         </a>
       </div>
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/game_view.html?Doodle%20Connect">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Doodle%20Connect"  @click="btnStatistic('Doodle_Connect')">
           <img src="../assets/images/game-icon-2.png">
         </a>
       </div>
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/game_view.html?Casual%20Chess">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Casual%20Chess"  @click="btnStatistic('Casual_Chess')">
           <img src="../assets/images/game-icon-3.png">
         </a>
       </div>
     </div>
     <div class="game-area">
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/game_view.html?Eggs%20&%20cars">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Eggs%20&%20cars"  @click="btnStatistic('Eggs_cars')">
           <img src="../assets/images/game-icon-1.png">
         </a>
       </div>
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/game_view.html?Reflector">
+        <a href="http://h5game.subcdn.com/03/game_view.html?Reflector" @click="btnStatistic('Reflector')">
           <img src="../assets/images/game-icon-5.png">
         </a>
       </div>
       <div class="game-icon">
-        <a href="http://h5game.subcdn.com/03/game_view1.html?Sun%20Beams">
+        <a href="http://h5game.subcdn.com/03/game_view1.html?Sun%20Beams"  @click="btnStatistic('Sun_Beams')">
           <img src="../assets/images/game-icon-6.png">
         </a>
       </div>
@@ -189,6 +189,7 @@ export default {
   methods: {
     // 按钮打点
     btnStatistic (destination) {
+      console.log(destination)
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
     // facebook 点赞

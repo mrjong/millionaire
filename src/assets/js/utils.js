@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { api, addExtraLife } from './api'
+import { api } from './api'
 import { host, env } from './http'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -55,7 +55,6 @@ const utils = {
    */
   login (callback) {
     window.top.loginCallback = function () {
-      addExtraLife()
       callback()
     }
     if (njordGame) {
@@ -126,6 +125,7 @@ const utils = {
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false,
+  pageType: clientParams ? 'app' : 'h5',
   /**
    * 打点
    * @static
@@ -227,7 +227,7 @@ const utils = {
       callback(true, packageName)
       if (shareType === 'facebook') {
         setTimeout(() => {
-          const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(shareLink)}`
+          const href = `https://www.facebook.com/sharer?u=${shareLink}`
           window.location.href = href
         }, 5)
         window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
