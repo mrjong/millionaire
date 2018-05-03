@@ -6,7 +6,7 @@
       <p class="text text1">Sign up, answer questions at <span class="special">10 PM </span>everyday</p>
       <p class="text text2">Get 12 questions all right, win up to <span class="special">₹1,000,000!</span></p>
       <p class="text text3">Use
-        <span class="special">EXTRA LIFE </span>when answering incorrectly. You can get one after logging in.</p>
+        <span class="special">EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!</p>
     </div>
   </div>
 </template>
