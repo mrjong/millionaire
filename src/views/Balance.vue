@@ -82,6 +82,7 @@ export default {
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
         const nameRule = /^[a-zA-Z]{1,100}$/
+        // const nameRule = /^[a-zA-Z]+\s[a-zA-Z]+{1,100}$/
         const isNamePass = nameRule.test(this.name)
         const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
@@ -285,7 +286,8 @@ export default {
       outline: none;
       color: #241262;
       font: 300 36px 'Roboto', Arial, serif;
-      margin-left: 35px;
+      padding: 0 35px;
+      text-align: center;
     }
     &__input:focus {
       box-shadow: none;
