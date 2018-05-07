@@ -95,6 +95,7 @@
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
+    <!-- <feedback-btn></feedback-btn> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -117,6 +118,7 @@ import Living from '../components/Living'
 import ReviveGuide from '../components/ReviveGuide'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
+import FeedbackBtn from '../components/FeedbackBtn'
 export default {
   name: 'Await',
   data () {
@@ -316,7 +318,8 @@ export default {
     Living,
     ReviveGuide,
     HowPlayCard,
-    Notices
+    Notices,
+    FeedbackBtn
   },
   watch: {
     lives: function (val, oldVal) {
