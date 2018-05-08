@@ -219,7 +219,7 @@ const utils = {
         sharePackage: packageName,
         shareTitle: title,
         shareContent: content,
-        shareLink,
+        shareLink: `${host[env]}${api.sharePage}` + `?shareUrl=${encodeURIComponent(link)}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&title=${title}`,
         callbackMethod: 'shareSuccess'
       }))
     } else {
