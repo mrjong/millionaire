@@ -11,7 +11,7 @@
         <p class="balance-wrap__contain__wrap__mybalance">
           <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
         </p>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
+        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenue</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
     </div>

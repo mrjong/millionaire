@@ -2,8 +2,8 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { api } from './api'
-import { host, env } from './http'
+import { makeShortUrl } from './api'
+import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -208,33 +208,49 @@ const utils = {
    * @param {any} [link=window.location.href] 分享链接
    */
   share (callback, packageName, content, link = window.location.href) {
-    const shareType = packageName === 'com.facebook.katana' ? 'facebook' : 'messager'
-    const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
-    const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
-    const shareLink = `${host[env]}${api.sharePage}` + encodeURIComponent(`?shareUrl=${encodeURIComponent(link)}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&title=${title}`)
-    window.shareSuccessCallback = callback
-    if (window.njordGame) {
-      // 调用客户端分享
-      window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-        sharePackage: packageName,
-        shareTitle: title,
-        shareContent: content,
-        shareLink,
-        callbackMethod: 'shareSuccess'
-      }))
-    } else {
-      // h5 分享
+    const title = 'I\'m playing "Go! Millionaire", join us and win up to 1000000 at 10PM every day!'
+    const desp = 'Open the game link and use my referral code, let keep winning cash every day!'
+    const shareLink = `http://test-campaign-api.apuscn.com/v1/share?shareUrl=${encodeURIComponent(link)}`
+    const handler = function (shareLink, originUrl) {
+      window.shareSuccessCallback = callback
       callback(true, packageName)
-      if (shareType === 'facebook') {
-        setTimeout(() => {
-          const href = `https://www.facebook.com/sharer?u=${shareLink}`
-          window.location.href = href
-        }, 5)
-        window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(shareLink)}`)
-      } else {
-        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareLink)}`
+      switch (packageName) {
+        case FACEBOOK: {
+          setTimeout(() => {
+            const href = `https://www.facebook.com/sharer?u=${originUrl}`
+            window.location.href = href
+          }, 5)
+          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(originUrl)}`)
+          break
+        }
+        case MESSAGER: {
+          window.location.href = `fb-messenger://share/?link=${encodeURIComponent(originUrl)}`
+          break
+        }
+        case WHATSAPP: {
+          window.location.href = `whatsapp://send?text=${encodeURIComponent(shareLink)}`
+          break
+        }
+        case TWITTER: {
+          setTimeout(() => {
+            const href = `https://twitter.com/intent/tweet?text=${title + desp}&url=${shareLink}`
+            window.location.href = href
+          }, 5)
+          window.location.href = `twitter://post?message=${title + desp}&url=${encodeURIComponent(shareLink)}`
+        }
       }
     }
+    // 生成短链
+    makeShortUrl(shareLink).then(({data}) => {
+      if ((+data.error_code === 0) && data.data) {
+        const shortUrl = data.data
+        handler(shortUrl, shareLink)
+      } else {
+        handler(shareLink, shareLink)
+      }
+    }).catch(() => {
+      handler(shareLink, shareLink)
+    })
   },
   /**
    * 时间格式化
