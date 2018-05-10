@@ -29,12 +29,7 @@
       <button class="btn-login" @click="login">Sign up</button>
       <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
     </section>
-    <section class="country-list" v-show="showCountryList">
-      <div class="country-item" v-for="(item, index) in phoneNationCodeList" :key="index" @click="selectCountryCode(item)">
-        <span class="country-name">{{item[2] || ''}}</span>
-        <span class="country-code">+{{item[1] || ''}}</span>
-      </div>
-    </section>
+    <country-list v-model="showCountryList"></country-list>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -44,6 +39,7 @@ import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
+import CountryList from '../components/CountryList.vue'
 import { register, signInByPhone } from '../assets/js/api'
 let timer = null
 export default {
@@ -62,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['status', 'phoneNationCode', 'phoneNationCodeList'])
+    ...mapGetters(['status', 'phoneNationCode'])
   },
   methods: {
     back () {
@@ -206,7 +202,8 @@ export default {
     utils.statistic('login_page', 0)
   },
   components: {
-    loading
+    loading,
+    CountryList
   }
 }
 </script>
@@ -333,30 +330,6 @@ export default {
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    .country-list {
-      width: 100%;
-      max-height: 475px;
-      overflow: auto;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      background-color: rgba(255, 255, 255, .95);
-
-      .country-item {
-        width: 92.6%;
-        margin-left: 3.7%;
-        font: 400 32px/1.2 "Roboto", Arial, serif;
-        color: #260964;
-        padding: 28px 0;
-        position: relative;
-        border-bottom: 1px solid #dedae8;
-
-        .country-code {
-          float: right;
-        }
-      }
     }
   }
 </style>
