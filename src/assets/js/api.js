@@ -24,7 +24,8 @@ export const api = {
   signInByPhone: '/v2/user/verifycode', // 手机号登陆
   getPhoneNationCode: '/v2/user/nationcode', // 获取手机号国家码
   useRecoveryCard: '/cmp/rev/', // 使用复活卡
-  getWinnerList: '/cmp/bi/' // 获取winner列表
+  getWinnerList: '/cmp/bi/', // 获取winner列表,
+  makeShortUrl: '/v1/share/shortUrl' // 生成短链服务
 }
 
 export const init = function (isRefreshToken) {
@@ -217,4 +218,17 @@ export const useRecoveryCard = function (id, index, type = 1) {
 // 获取 winner 列表
 export const getWinnerList = function () {
   return axios.get(api.getWinnerList)
+}
+
+// 生成短链服务
+export const makeShortUrl = function (url) {
+  return axios.get(api.makeShortUrl, {
+    baseURL: 'http://test-campaign-api.apuscn.com',
+    withCredentials: false,
+    timeout: 1500,
+    params: {
+      s: 'millionaire',
+      l: url
+    }
+  })
 }

@@ -14,7 +14,8 @@ export const accountHost = {
   local: 'http://test-accounts.apuscn.com',
   dev: 'http://test-accounts.apuscn.com',
   test: 'http://test-account.apuscn.com',
-  check: 'http://account.apusapps.com'
+  check: 'http://account.apusapps.com',
+  prod: 'http://account.apusapps.com'
 }
 
 const imAppKey = {
