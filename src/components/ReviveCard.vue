@@ -1,7 +1,7 @@
 <template>
   <div class="invitation-mark"  v-if="reviveObj.isShare">
     <div class="invitation-bomb">
-      <span class="invitation-bomb__close iconfont icon-cuowu" @click="reviveObj.isShare =false"></span>
+      <span class="invitation-bomb__close iconfont icon-cuowu" @click="shareClose"></span>
       <p class="invitation-bomb__info">
         My Referral Code:
         <span>{{reviveObj.code}}</span>
@@ -60,6 +60,9 @@ export default {
       if (!isSucceed) {
         this.$emit('callbackFailed')
       }
+    },
+    shareClose () {
+      this.$emit('shareClose')
     }
   }
 }

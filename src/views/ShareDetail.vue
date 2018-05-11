@@ -25,7 +25,7 @@
         </p>
       </div>
     </div>
-    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed"></revive-card>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
     <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='okEvent'>
     </balance-mark>
   </div>
@@ -90,6 +90,9 @@ export default {
     callbackFailed () {
       this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
       this.showDialog = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
     }
   },
   components: {
