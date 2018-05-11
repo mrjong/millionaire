@@ -25,7 +25,9 @@ export const api = {
   getPhoneNationCode: '/v2/user/nationcode', // 获取手机号国家码
   useRecoveryCard: '/cmp/rev/', // 使用复活卡
   getWinnerList: '/cmp/bi/', // 获取winner列表,
-  makeShortUrl: '/cmp/sl/' // 生成短链服务
+  makeShortUrl: '/cmp/sl/', // 生成短链服务
+  balanceRecord: '/cmp/bl', // 提现记录
+  reminder: '/cmp/sub_remind/' // 订阅提醒
 }
 
 export const init = function (isRefreshToken) {
@@ -229,5 +231,23 @@ export const makeShortUrl = function (url) {
       s: 'millionaire',
       l: url
     }
+  })
+}
+// 提现记录
+export const balanceRecord = function (pageNo) {
+  return axios.post(api.balanceRecord, {
+    pageNo: pageNo,
+    pageSize: 10,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 订阅提醒
+export const Reminder = function (reminderOjb) {
+  return axios.post(api.reminder, {
+    ...reminderOjb,
+    app_id: utils.app_id,
+    client_id: utils.clientId
   })
 }

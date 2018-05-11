@@ -15,6 +15,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
+    <div class="await__reminder" @click="Reminder('set_reminder')">Set Reminder</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -86,16 +87,11 @@
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">Set Questions Myself</p>
     </div>
-    <!-- <div class="ins">
-      <ins class="adsbygoogle"
-     style="display:inline-block;width:300px;height:250px"
-     data-ad-client="ca-pub-4255098743133861"
-     data-ad-slot="9382446176"></ins>
-    </div> -->
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
-    <!-- <feedback-btn></feedback-btn> -->
+    <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
+     :isReminderPop=isReminderPop></reminder-bomb>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -119,6 +115,7 @@ import ReviveGuide from '../components/ReviveGuide'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import FeedbackBtn from '../components/FeedbackBtn'
+import ReminderBomb from '../components/ReminderBomb'
 export default {
   name: 'Await',
   data () {
@@ -135,7 +132,8 @@ export default {
       showDialog: false,
       isSucceed: false,
       logout: false,
-      inviteLiving: false
+      inviteLiving: false,
+      isReminderPop: false
     }
   },
   computed: {
@@ -191,7 +189,6 @@ export default {
   methods: {
     // 按钮打点
     btnStatistic (destination) {
-      console.log(destination)
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
     // facebook 点赞
@@ -308,6 +305,42 @@ export default {
           this.$router.push({path: path, query: {'code': this.code}})
         }
       })
+    },
+    // 开启游戏定时提醒
+    Reminder (val) {
+      this.btnStatistic(val)
+      this.isReminderPop = true
+    },
+    // 关闭游戏定时提醒弹框
+    ReminderClose () {
+      this.isReminderPop = false
+    },
+    ReminderOk (reminderObj) {
+      const phoneRule = /^[0-9]{6,15}$/
+      if (!phoneRule.test(reminderObj.phone)) {
+        // 提示错误，手机号错误
+        reminderObj.phone = ''
+        this.isReminderPop = false
+        this.BobmParamesConfig('', 'Please enter right phone number', false, true)
+        return false
+      } else {
+        // 请求接口
+        api.Reminder(reminderObj).then(({data}) => {
+          this.isReminderPop = false
+          console.log('定时提醒' + data)
+          if (data.result !== 1) {
+            utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'fail'}, 'wait_page')
+            if (data.code === 60001) {
+              this.BobmParamesConfig('', 'Your phone number already set  reminder. ', false, true)
+            } else {
+              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+            }
+          } else {
+            utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'success'}, 'wait_page')
+            this.BobmParamesConfig('', 'Congrats. You already set your reminder.', false, true)
+          }
+        }).catch()
+      }
     }
   },
   components: {
@@ -319,7 +352,8 @@ export default {
     ReviveGuide,
     HowPlayCard,
     Notices,
-    FeedbackBtn
+    FeedbackBtn,
+    ReminderBomb
   },
   watch: {
     lives: function (val, oldVal) {
@@ -380,12 +414,23 @@ export default {
       }
     }
     &__title{
-      width: 400px;
+      width: 300px;
       height: 171px;
       margin: 0 auto;
       img{
         width: 100%;
       }
+    }
+    &__reminder {
+      width: 253px;
+      height: 67px;
+      color: #fff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+      font-size: 32px;
+      line-height: 67px;
+      text-align: center;
+      margin: 40px auto;
+      border-radius: 46px;
     }
     &__btn{
       display: flex;

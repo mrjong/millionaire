@@ -47,7 +47,7 @@ export default {
     bottom: 0;
     left: 0;
     background-color: rgba(255, 255, 255, .95);
-
+    box-shadow: 1px 1px 30px 5px rgba(0, 0, 0, .5);
     .country-item {
       width: 92.6%;
       margin-left: 3.7%;

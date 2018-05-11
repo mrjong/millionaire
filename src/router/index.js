@@ -9,6 +9,7 @@ const Rule = () => import('@/views/Rule.vue')
 const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 const ShareDetail = () => import('@/views/ShareDetail.vue')
+const BalanceRecord = () => import('@/views/BalanceRecord.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -57,6 +58,11 @@ const router = new Router({
       path: '/share-detail',
       name: 'share-detail',
       component: ShareDetail
+    },
+    {
+      path: '/balance-record',
+      name: 'balance-record',
+      component: BalanceRecord
     }
   ]
 })
