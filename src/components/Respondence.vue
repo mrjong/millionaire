@@ -51,12 +51,14 @@
         <span class="iconfont icon-cuowu close" @click="extraLifeTip=false"></span>
       </section>
     </modal>
+    <fail-tip v-model="failTip"></fail-tip>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import Answer from '../components/Answer.vue'
+import FailTip from '../components/FailTip'
 import Modal from '../components/Modal.vue'
 import AnswerErrorTip from '../components/AnswerErrorTip.vue'
 import Viewing from '../components/Viewing.vue'
@@ -69,6 +71,7 @@ export default {
   data () {
     return {
       answerErrorTip: false,
+      failTip: false,
       extraLifeTip: false,
       answerErrorType: 'out',
       rangeValue: 10,
@@ -320,6 +323,7 @@ export default {
               }, 5000)
             } else {
               this.cancelUseRecoveryCard()
+              this.failTip = true
             }
           }, 1500)
         }
@@ -344,7 +348,8 @@ export default {
     Viewing,
     Living,
     Modal,
-    AnswerErrorTip
+    AnswerErrorTip,
+    FailTip
   }
 }
 </script>
