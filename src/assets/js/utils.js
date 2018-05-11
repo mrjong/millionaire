@@ -210,7 +210,6 @@ const utils = {
    */
   share (callback, packageName, content, link = window.location.href) {
     const title = 'I\'m playing "Go! Millionaire", join us and win up to 1000000 at 10PM every day!'
-    const desp = 'Open the game link and use my referral code, let\'s keep winning cash every day!'
     const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
@@ -234,10 +233,10 @@ const utils = {
         }
         case TWITTER: {
           setTimeout(() => {
-            const href = `https://twitter.com/intent/tweet?text=${title + ' ' + desp}&url=${shareLink}`
+            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
             window.location.href = href
           }, 5)
-          window.location.href = `twitter://post?message=${title + ' ' + desp}&url=${encodeURIComponent(shareLink)}`
+          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
         }
       }
     }

@@ -320,7 +320,7 @@ export default {
               }, 5000)
             } else {
               this.cancelUseRecoveryCard()
-              this.failTip = true
+              this.$emit('fail-tip')
             }
           }, 1500)
         }
