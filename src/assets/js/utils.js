@@ -2,7 +2,8 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { makeShortUrl } from './api'
+import { makeShortUrl, api } from './api'
+import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -210,7 +211,7 @@ const utils = {
   share (callback, packageName, content, link = window.location.href) {
     const title = 'I\'m playing "Go! Millionaire", join us and win up to 1000000 at 10PM every day!'
     const desp = 'Open the game link and use my referral code, let keep winning cash every day!'
-    const shareLink = `http://test-campaign-api.apuscn.com/v1/share?shareUrl=${encodeURIComponent(link)}`
+    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)
@@ -242,7 +243,7 @@ const utils = {
     }
     // 生成短链
     makeShortUrl(shareLink).then(({data}) => {
-      if ((+data.error_code === 0) && data.data) {
+      if ((+data.result === 1) && (+data.code === 0) && data.data) {
         const shortUrl = data.data
         handler(shortUrl, shareLink)
       } else {
