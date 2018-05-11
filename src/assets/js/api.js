@@ -18,13 +18,16 @@ export const api = {
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
   DailyShare: '/cmp/ds', // 每日分享
-  sharePage: '/cmp/res', // 分享中间页
+  sharePage: '/cmp/s', // 分享中间页
   addExtraLife: '/cmp/lc', // 首次登陆增加额外生命
   register: '/v2/user/register', // 手机号注册
   signInByPhone: '/v2/user/verifycode', // 手机号登陆
   getPhoneNationCode: '/v2/user/nationcode', // 获取手机号国家码
   useRecoveryCard: '/cmp/rev/', // 使用复活卡
-  getWinnerList: '/cmp/bi/' // 获取winner列表
+  getWinnerList: '/cmp/bi/', // 获取winner列表,
+  makeShortUrl: '/cmp/sl/', // 生成短链服务
+  balanceRecord: '/cmp/bl', // 提现记录
+  reminder: '/cmp/sub_remind/' // 订阅提醒
 }
 
 export const init = function (isRefreshToken) {
@@ -217,4 +220,34 @@ export const useRecoveryCard = function (id, index, type = 1) {
 // 获取 winner 列表
 export const getWinnerList = function () {
   return axios.get(api.getWinnerList)
+}
+
+// 生成短链服务
+export const makeShortUrl = function (url) {
+  return axios.get(api.makeShortUrl, {
+    withCredentials: false,
+    timeout: 1500,
+    params: {
+      s: 'millionaire',
+      l: url
+    }
+  })
+}
+// 提现记录
+export const balanceRecord = function (pageNo) {
+  return axios.post(api.balanceRecord, {
+    pageNo: pageNo,
+    pageSize: 10,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 订阅提醒
+export const Reminder = function (reminderOjb) {
+  return axios.post(api.reminder, {
+    ...reminderOjb,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
 }

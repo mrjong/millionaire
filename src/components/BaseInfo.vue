@@ -65,21 +65,20 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:70px auto 25px;
+    margin:0 auto 25px;
     padding: 0.5px;
     padding-bottom: 40px;
     position: relative;
     &__user{
       text-align: center;
-      transform: translate(0, -50px);
-      margin-top: -20px;
+      margin-bottom: 40px;
       &__head{
         width:150px;
         height:150px;
         border-radius: 50%;
         background: no-repeat center;
         background-size: cover;
-        margin: 0 auto;
+        margin: 30px auto 0;
       }
       &__name{
         color: #241262;

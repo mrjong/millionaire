@@ -3,17 +3,23 @@
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
+      <!-- <router-link to="/balance-record" @click="history" v-if="isOnline">
+        <p class="balance-wrap__title__history">History</p>
+      </router-link> -->
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
-        <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
-        </p>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenue</p>
+        <div class="balance-wrap__contain__wrap__mybalance">
+          <p class="balance-wrap__contain__wrap__symbol">
+            {{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}
+          </p>
+        </div>
+        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
+      <p class="balance-hint">(You can cash out with the minimum balance of ₹150)</p>
     </div>
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__wrap__input">
@@ -82,6 +88,7 @@ export default {
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
         const nameRule = /^[a-zA-Z]{1,100}$/
+        // const nameRule = /^[a-zA-Z]+\s[a-zA-Z]+{1,100}$/
         const isNamePass = nameRule.test(this.name)
         const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
@@ -170,6 +177,9 @@ export default {
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
+    },
+    history () {
+      utils.statistic('take_cash_page', 1, {to_destination_s: 'withdrawal_history'}, 'take_cash_page')
     }
   },
   components: {
@@ -213,6 +223,12 @@ export default {
       text-align: center;
       flex: 1;
       padding-right: 54px;
+      font-size: 36px;
+      font-family: 'Roboto', Arial, serif;
+    }
+    &__history{
+      color:#fff;
+      font-size: 28px;
     }
   }
   &__contain {
@@ -220,6 +236,13 @@ export default {
     height: 100%;
     flex: 1;
     min-height: 384px;
+    .balance-hint{
+        color: #fff;
+        font-family: 'Roboto', Arial, serif;
+        font-size: 24px;
+        margin: 15px auto 0;
+        text-align: center;
+      }
     &__wrap {
       width: 100%;
       min-height: 384px;
@@ -252,10 +275,24 @@ export default {
       &__totalbalance {
         margin: 20px 0 0px 0;
       }
+      &__mybalance{
+        display: flex;
+        justify-content: space-between;
+      }
       &__tip {
-        font: 300 26px 'Roboto', Arial, serif;
-        color: #7B7B7B;
-        margin-left: 22px;
+        width: 300px;
+        height: 55px;
+        font-size:28px;
+        font-family:  'Roboto', Arial, serif;
+        line-height: 55px;
+        text-align: center;
+        color: #241262;
+        border-radius: 26px;
+        box-shadow: 0 0 0 1px  rgba(36, 18, 98, 0.7);
+        span {
+          font-size:22px;
+          color: #241262;
+        }
       }
     }
   }
@@ -282,7 +319,8 @@ export default {
       outline: none;
       color: #241262;
       font: 300 36px 'Roboto', Arial, serif;
-      margin-left: 35px;
+      padding: 0 35px;
+      text-align: center;
     }
     &__input:focus {
       box-shadow: none;

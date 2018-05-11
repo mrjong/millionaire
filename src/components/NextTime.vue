@@ -82,7 +82,6 @@ export default {
     color: #ffffff;
     font-size: 28px;
     opacity: 0.95;
-    margin-top: 46.6px;
     display: flex;
     justify-content: center;
     &__time, &__money{
