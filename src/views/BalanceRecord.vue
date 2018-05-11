@@ -171,7 +171,7 @@ export default {
       height: 54px;
       line-height: 56px;
       padding-top: 5px;
-      font: 36px "Roboto-Medium";
+      font: 500 36px 'Roboto Condensed',Arial,serif;
       color: #241262;
       text-align: center;
     }
@@ -188,8 +188,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        border-bottom: 0.5px solid rgba(36, 18, 98, 0.5);
-        font-family: "Roboto";
+        border-bottom: 0.5px solid rgba(36, 18, 98, 0.3);
         padding: 20px 0;
         .item-info1, .item-info2{
           display: flex;
@@ -197,18 +196,21 @@ export default {
           justify-content: space-between;
           color:#241262;
           .big{
-            font-size: 48px;
+            font-size: 32px;
+            font-family: "Roboto",Arial,serif;
           }
           .small{
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 300;
+            font-family: "Roboto",Arial,serif;
           }
         }
         .hint{
-          font-size: 30px;
+          font-size: 20px;
           color: #ee2d7a;
           margin-top: 20px;
           font-weight: 300;
+          font-family: "Roboto",Arial,serif;
         }
         .success {
           color:#faab22;
@@ -232,7 +234,7 @@ export default {
       p{
         color: #241262;
         font-size: 28px;
-        font: 28px "Roboto";
+        font: 28px "Roboto",Arial,serif;
         margin-top: 40px;
       }
     }

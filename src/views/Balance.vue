@@ -3,9 +3,9 @@
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
-      <router-link to="/balance-record" @click="history" v-if="isOnline">
+      <!-- <router-link to="/balance-record" @click="history" v-if="isOnline">
         <p class="balance-wrap__title__history">History</p>
-      </router-link>
+      </router-link> -->
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
