@@ -25,7 +25,7 @@
         <label for="yes" class="iconfont" :class="{'selected icon-duigou': type}"></label>
         <input type="checkbox" id="yes" :checked=type v-model="type" name="option">
       </p>
-      <p class="">Remind me everyday.</p>
+      <p class="">Remind me everyday</p>
     </div>
     <p class="btn">
       <span class="btn__ok" @click="okEvent">OK</span>
