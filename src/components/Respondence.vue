@@ -304,7 +304,16 @@ export default {
             this.answerErrorTip = false
           }, 3000)
 
-          // 一秒后 满足复活卡使用条件 弹出使用复活卡弹窗
+          // 若无复活卡或使用次数已经到本场最大使用次数,则弹出错误提示
+          if (lives <= 0 || maxRecoveryCount <= 0) {
+            setTimeout(() => {
+              this.$emit('fail-tip')
+            }, 1000)
+            this.cancelUseRecoveryCard()
+            return false
+          }
+
+          // 满足复活卡使用条件 弹出使用复活卡弹窗
           setTimeout(() => {
             if (isOnline && (+index < questionCount) && (lives > 0) && (maxRecoveryCount > 0)) {
               this.extraLifeTip = true
@@ -320,7 +329,6 @@ export default {
               }, 5000)
             } else {
               this.cancelUseRecoveryCard()
-              this.$emit('fail-tip')
             }
           }, 1500)
         }
