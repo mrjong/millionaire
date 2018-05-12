@@ -13,7 +13,7 @@ const state = {
   contents: '', // 内容
   options: [], // 选项
   optionsMd5Map: {},
-  index: 0, // 序号
+  index: 1, // 序号
   watchingMode: false, // 是否观战模式
   isAnswered: false, // 是否作答
   isCorrect: true, // 作答是否正确

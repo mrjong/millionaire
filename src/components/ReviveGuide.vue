@@ -76,7 +76,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 111;
-    padding: 110px 40px 0;
+    padding: 80px 40px 10px;
     background-color: rgba(0, 0, 0, 0.9);
     &__close{
       position: absolute;
@@ -113,7 +113,7 @@ export default {
       .light{
         max-width: 70%;
         width: 600px;
-        margin: 50px auto 0;
+        margin: 30px auto 0;
       }
       .lives{
         width:186px;
@@ -133,7 +133,7 @@ export default {
       text-align: center;
       line-height: 94px;
       border-radius: 46px;
-      margin: 70px auto 0;
+      margin: 50px auto 0;
       display: flex;
       justify-content: center;
       &__icon{
@@ -159,7 +159,7 @@ export default {
   }
   @media screen and (max-width: 321px){
     .guide {
-      padding: 100px 40px 0;
+      padding: 60px 40px 10px;
       &__close{
         position: absolute;
         top: 24px;

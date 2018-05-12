@@ -1,0 +1,5 @@
+export const FACEBOOK = 'com.facebook.katana'
+export const MESSAGER = 'com.facebook.orca'
+export const WHATSAPP = 'com.whatsapp'
+export const TWITTER = 'com.twitter.android'
+export const INSTAGRAM = 'com.instagram.android'
