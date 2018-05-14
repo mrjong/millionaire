@@ -38,7 +38,7 @@ export default {
     return {
       showInviteTip: false,
       isClose: true,
-      failType: 'invite'
+      failType: 'feedback'
     }
   },
   props: {
@@ -48,18 +48,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['questionCount', 'index', 'code']),
+    ...mapGetters(['questionCount', 'index', 'code', 'watchingMode']),
     restCount () {
       return this.questionCount - this.index + 1
-    }
-  },
-  mounted () {
-    if (this.index === 1) {
-      this.failType = 'feedback'
-      console.log('failtype = feedback')
-    } else {
-      this.failType = 'invite'
-      console.log('failtype = invite')
     }
   },
   methods: {
@@ -115,9 +106,10 @@ export default {
     value (val) {
       this.isClose = !val
     },
-    index (index) {
-      // 不是第一题，答错提示类型更改为邀请好友
-      this.failType = index > 1 ? 'invite' : 'feedback'
+    index (val) {
+      if (val > 1 && !this.watchingMode) {
+        this.failType = 'invite'
+      }
     }
   }
 }
