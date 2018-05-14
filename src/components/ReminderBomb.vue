@@ -23,7 +23,7 @@
     <div class="is-reminder">
       <p class="checkbox">
         <label for="yes" class="iconfont" :class="{'selected icon-duigou': type}"></label>
-        <input type="checkbox" id="yes" :checked=type v-model="type" name="option">
+        <input type="checkbox" id="yes" v-model="type" name="option">
       </p>
       <p class="">Remind me everyday</p>
     </div>
