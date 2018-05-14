@@ -7,22 +7,25 @@
       <p class="record__top__title">Withdrawal History</p>
     </div>
     <div class="record__wrap" ref="recordWrap" :style="{height:recordWrapHeight + 'px'}">
-      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList != ''">
+      <div class="loading" v-if="loading">
+        <loading></loading>
+      </div>
+      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList != '' &&!loading">
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
             <span class="title big">Cash out</span>
-            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amount}}</span>
+            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
             <span class="time small">{{val.createTime}}</span>
             <span class="status small">{{val.state}}</span>
           </div>
           <p class="hint" v-if="val.state === 'Failed'">
-            Sorry,your apply for cashout was disapproved. Please check and submit again.
+            Sorry,your apply for cash out was failed. Please check and submit again.
           </p>
         </div>
       </div>
-      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else>
+      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList && !loading">
         <img src="../assets/images/no-history.png" class="no-list__img">
         <p>No Withdrawal History</p>
       </div>
@@ -30,9 +33,12 @@
   </div>
 </template>
 <script>
+import {throttle} from 'throttle-debounce'
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as api from '../assets/js/api'
+import loading from '../components/Loading'
+const domEvent = require('../assets/js/dom.js')
 export default {
   name: 'BalanceRecord',
   data () {
@@ -45,7 +51,8 @@ export default {
       start: '',
       move: '',
       end: '',
-      recordWrapHeight: 0
+      recordWrapHeight: 0,
+      loading: false
     }
   },
   computed: {
@@ -72,7 +79,9 @@ export default {
       if (this.hasmore === false) {
         return false
       }
+      this.loading = true
       api.balanceRecord(pageNo).then(({data}) => {
+        this.loading = false
         console.log('提现记录' + data)
         if (data.result === 0) {
           this.hasmore = data.data.hasmore
@@ -94,47 +103,55 @@ export default {
       let yEnd = 0
       let xStart = 0
       let xEnd = 0
-      document.addEventListener('touchstart', this.start = (e) => {
+      domEvent.on(document.body, 'touchstart', this.start = (e) => {
         e.stopPropagation()
         let touches = e.touches[0]
         yStart = touches.clientY
         xStart = touches.clientX
       })
-      document.addEventListener('touchmove', this.move = (e) => {
+      // domEvent.on(document.body, 'touchmove', this.move = (e) => {
+      //   e.stopPropagation()
+      //   let touches = e.touches[0]
+      //   yEnd = touches.clientY
+      //   xEnd = touches.clientX
+      //   console.log('下拉数据' + yEnd + xEnd)
+      // })
+      domEvent.on(document.body, 'touchmove', throttle(100, this.move = (e) => {
+        // console.log('11111111111111111111111')
         e.stopPropagation()
         let touches = e.touches[0]
         yEnd = touches.clientY
         xEnd = touches.clientX
-      })
-      document.addEventListener('touchend', this.end = (e) => {
         let recordListHeight = this.$refs.recordList.offsetHeight
-        let recordListScrollTop = this.$refs.recordList.scrollTop
+        let recordListScrollTop = this.$refs.recordWrap.scrollTop || 0
         if ((Math.abs(xEnd - xStart) < Math.abs(yEnd - yStart)) && (yEnd - yStart) < 0) {
-          console.log(yEnd - yStart)
-          if ((this.recordWrapHeight > recordListHeight || (recordListScrollTop + this.recordWrapHeight > recordListHeight))) {
+          if (recordListScrollTop + this.recordWrapHeight > recordListHeight) {
             this.getBalanceRecord(this.pageNo)
           }
         } else {
           return false
         }
-      })
+      }))
+      // domEvent.on(document.body, 'touchend', this.end)
     }
   },
   beforeDestroy () {
     if (this.start) {
-      document.removeEventListener('touchstart', this.start)
+      domEvent.off(document.body, 'touchstart', this.start)
       this.start = ''
     }
     if (this.move) {
-      document.removeEventListener('touchmove', this.move)
+      domEvent.off(document.body, 'touchmove', this.move)
       this.move = ''
     }
-    if (this.end) {
-      document.removeEventListener('touchend', this.end)
-      this.end = ''
-    }
+    // if (this.end) {
+    //   domEvent.off(document.body, 'touchend', this.end)
+    //   this.end = ''
+    // }
   },
-  components: {}
+  components: {
+    loading
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">

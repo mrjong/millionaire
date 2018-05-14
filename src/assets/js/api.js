@@ -1,4 +1,4 @@
-import axios, { accountHost, env } from './http'
+import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
 import md5 from 'md5'
 
@@ -18,7 +18,7 @@ export const api = {
   generateCode: '/cmp/gc', // 生成邀请码,
   VerificationCode: '/cmp/vc', // 相关码验证,
   DailyShare: '/cmp/ds', // 每日分享
-  sharePage: '/cmp/s', // 分享中间页
+  sharePage: '/cmp/res', // 分享中间页
   addExtraLife: '/cmp/lc', // 首次登陆增加额外生命
   register: '/v2/user/register', // 手机号注册
   signInByPhone: '/v2/user/verifycode', // 手机号登陆
@@ -250,4 +250,8 @@ export const Reminder = function (reminderOjb) {
     app_id: utils.app_id,
     client_id: utils.clientId
   })
+}
+
+export const getReportUrl = function () {
+  return reportHost[env]
 }

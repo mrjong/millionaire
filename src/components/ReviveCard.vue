@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 export default {
   name: 'ReviveCard',
@@ -49,10 +50,15 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      code: 'code'
+    })
+  },
   methods: {
     fbAndMess (val) {
       utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
-      utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'))
+      utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)
     },
     // 分享后的回调
     callbackFn (isSucceed, packageName) {
