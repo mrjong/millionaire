@@ -3,9 +3,9 @@
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
-      <!-- <router-link to="/balance-record" @click="history" v-if="isOnline">
+      <router-link to="/balance-record" @click="history" v-if="isOnline">
         <p class="balance-wrap__title__history">History</p>
-      </router-link> -->
+      </router-link>
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
@@ -32,7 +32,7 @@
         <input type="text" class="balance-wrap__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
-      <p class="balance-wrap__operate__tip">The payouts will be made in 15 days </p>
+      <p class="balance-wrap__operate__tip">The payouts will be made in 7 days after Approved</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
@@ -87,7 +87,7 @@ export default {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
-        const nameRule = /^[a-zA-Z]{1,100}$/
+        const nameRule = /^([A-Za-z]+\s?)*[A-Za-z]{1,100}$/
         // const nameRule = /^[a-zA-Z]+\s[a-zA-Z]+{1,100}$/
         const isNamePass = nameRule.test(this.name)
         const isPass = panRule.test(this.pan)
@@ -104,7 +104,7 @@ export default {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
           return false
         } else {
-          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
+          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>Do you want to cash out now?`)
         }
       }
     },

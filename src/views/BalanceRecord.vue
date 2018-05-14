@@ -7,7 +7,10 @@
       <p class="record__top__title">Withdrawal History</p>
     </div>
     <div class="record__wrap" ref="recordWrap" :style="{height:recordWrapHeight + 'px'}">
-      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList != ''">
+      <div class="loading" v-if="loading">
+        <loading></loading>
+      </div>
+      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList != '' &&!loading">
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
             <span class="title big">Cash out</span>
@@ -18,11 +21,11 @@
             <span class="status small">{{val.state}}</span>
           </div>
           <p class="hint" v-if="val.state === 'Failed'">
-            Sorry,your apply for cashout was disapproved. Please check and submit again.
+            Sorry,your apply for cash out was failed. Please check and submit again.
           </p>
         </div>
       </div>
-      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else>
+      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList && !loading">
         <img src="../assets/images/no-history.png" class="no-list__img">
         <p>No Withdrawal History</p>
       </div>
@@ -33,6 +36,7 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as api from '../assets/js/api'
+import loading from '../components/Loading'
 export default {
   name: 'BalanceRecord',
   data () {
@@ -45,7 +49,8 @@ export default {
       start: '',
       move: '',
       end: '',
-      recordWrapHeight: 0
+      recordWrapHeight: 0,
+      loading: false
     }
   },
   computed: {
@@ -72,7 +77,9 @@ export default {
       if (this.hasmore === false) {
         return false
       }
+      this.loading = true
       api.balanceRecord(pageNo).then(({data}) => {
+        this.loading = false
         console.log('提现记录' + data)
         if (data.result === 0) {
           this.hasmore = data.data.hasmore
@@ -134,7 +141,9 @@ export default {
       this.end = ''
     }
   },
-  components: {}
+  components: {
+    loading
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">
