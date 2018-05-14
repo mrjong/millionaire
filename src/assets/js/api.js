@@ -1,4 +1,4 @@
-import axios, { accountHost, env } from './http'
+import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
 import md5 from 'md5'
 
@@ -250,4 +250,8 @@ export const Reminder = function (reminderOjb) {
     app_id: utils.app_id,
     client_id: utils.clientId
   })
+}
+
+export const getReportUrl = function () {
+  return reportHost[env]
 }

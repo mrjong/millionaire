@@ -31,6 +31,7 @@ import {mapGetters} from 'vuex'
 import Modal from './Modal.vue'
 import ReviveCard from './ReviveCard.vue'
 import utils from '../assets/js/utils'
+import {getReportUrl} from '../assets/js/api'
 import * as type from '../store/type'
 export default {
   name: 'fail-tip',
@@ -93,9 +94,7 @@ export default {
       }
     },
     feedback () {
-      // 测试链接 https://goo.gl/forms/Raj3BeNmBjvuI5Ng2 ----测试问卷
-      // 正式链接 https://goo.gl/forms/cJWcOjqyVW2Pu2GA2---正式问卷
-      window.location.href = 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2'
+      window.location.href = getReportUrl()
     }
   },
   components: {
