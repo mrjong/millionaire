@@ -18,7 +18,7 @@
     </div>
     <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
-    <respondence @fail-tip="failTip = false" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
+    <respondence @fail-tip="failTip = true" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
