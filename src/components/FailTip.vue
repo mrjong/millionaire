@@ -114,6 +114,10 @@ export default {
   watch: {
     value (val) {
       this.isClose = !val
+    },
+    index (index) {
+      // 不是第一题，答错提示类型更改为邀请好友
+      this.failType = index > 1 ? 'invite' : 'feedback'
     }
   }
 }

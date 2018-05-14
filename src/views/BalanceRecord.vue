@@ -14,7 +14,7 @@
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
             <span class="title big">Cash out</span>
-            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amount}}</span>
+            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
             <span class="time small">{{val.createTime}}</span>
