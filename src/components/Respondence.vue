@@ -319,6 +319,7 @@ export default {
               this.extraLifeTip = true
               setTimeout(() => {
                 if (!this.extraLifeTip && !this.isUsedRecoveryCard) { // 关闭弹窗
+                  this.$emit('fail-tip')
                   this.cancelUseRecoveryCard()
                 } else if (this.extraLifeTip && !this.isUsedRecoveryCard) { // 五秒未操作
                   // 关闭提示 使用复活卡
