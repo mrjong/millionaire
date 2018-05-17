@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <keep-alive include="Main">
     <router-view/>
+    </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <!-- <div class="dialog-game" v-if="showGameDialog">
