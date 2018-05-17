@@ -2,16 +2,16 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <section class="fail-tip">
-        <img class="icon" src="../assets/images/icon-feedback.png" v-if="failType === 'feedback'">
+        <img class="icon" src="../assets/images/icon-feedback.png" v-if="index === 1">
         <img class="icon" src="../assets/images/icon-answer-fail.png" v-else>
         <span class="iconfont icon-cuowu close" @click="isClose=true"></span>
-        <p v-if="failType === 'feedback'">Unwilling to be ELIMINATED?</p>
+        <p v-if="index === 1">Unwilling to be ELIMINATED?</p>
         <p v-else>
           <span class="fail">Oops!</span>
           You failed on the {{formatIndex(index)}} question.
         </p>
         <div class="divorce"></div>
-        <section class="fail-note" v-if="failType === 'feedback'">
+        <section class="fail-note" v-if="index === 1">
           <p>Tell us the reason you failed on this question.Let's make this game better!</p>
         </section>
         <section class="fail-note" v-else>
@@ -19,7 +19,7 @@
           <p>There {{restCount > 1 ? 'are' : 'is'}} only {{restCount}} question{{restCount > 1 ? 's' : ''}} between you and a MILLION.</p>
           <p>Invite a new user to get a extra life</p>
         </section>
-        <button v-if="failType === 'feedback'" @click="feedback" class="btn-invite">JOIN NOW</button>
+        <button v-if="index === 1" @click="feedback" class="btn-invite">JOIN NOW</button>
         <button v-else @click="invite" class="btn-invite">Invite Now <img src="../assets/images/icon-add-extraLife.png"></button>
       </section>
     </modal>
@@ -38,18 +38,21 @@ export default {
   data () {
     return {
       showInviteTip: false,
-      isClose: true,
-      failType: 'feedback'
+      isClose: true
     }
   },
   props: {
     value: {
       type: Boolean,
       default: false
+    },
+    index: {
+      type: Number,
+      default: 1
     }
   },
   computed: {
-    ...mapGetters(['questionCount', 'index', 'code', 'watchingMode']),
+    ...mapGetters(['questionCount', 'code']),
     restCount () {
       return this.questionCount - this.index + 1
     }
@@ -106,11 +109,6 @@ export default {
   watch: {
     value (val) {
       this.isClose = !val
-    },
-    index (val) {
-      if (val > 1 && !this.watchingMode) {
-        this.failType = 'invite'
-      }
     }
   }
 }

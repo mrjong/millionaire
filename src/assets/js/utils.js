@@ -219,7 +219,7 @@ const utils = {
       switch (packageName) {
         case FACEBOOK: {
           setTimeout(() => {
-            const href = `https://www.facebook.com/sharer?u=${originUrl}`
+            const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(originUrl)}`
             window.location.href = href
           }, 5)
           window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(originUrl)}`)
@@ -312,7 +312,6 @@ const utils = {
         sound.loop = obj.loop
         sound.preload = 'true'
         sound.oncanplay = function () {
-          console.log(`${prop} 可以播放`)
           sound.oncanplay = null
         }
         sound.onerror = function () {
