@@ -222,7 +222,7 @@ const utils = {
             const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(originUrl)}`
             window.location.href = href
           }, 5)
-          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(originUrl)}`)
+          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURIComponent(encodeURIComponent(originUrl))}`)
           break
         }
         case MESSAGER: {
