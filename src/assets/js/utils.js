@@ -209,19 +209,20 @@ const utils = {
    * @param {any} [link=window.location.href] 分享链接
    */
   share (callback, packageName, content, link = window.location.href, code) {
-    const title = `I'm playing "Go! Millionaire", my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
+    /* eslint-disable no-useless-escape */
+    const title = `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
     const desp = `Open the game link and use my referral code ${code}, let keep winning cash every day!`
-    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${title}&desp=${desp}`
+    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}&desp=${encodeURIComponent(desp)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)
       switch (packageName) {
         case FACEBOOK: {
           setTimeout(() => {
-            const href = `https://www.facebook.com/sharer?u=${originUrl}`
+            const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(originUrl)}`
             window.location.href = href
           }, 5)
-          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURI(originUrl)}`)
+          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURIComponent(encodeURIComponent(originUrl))}`)
           break
         }
         case MESSAGER: {
@@ -242,7 +243,7 @@ const utils = {
       }
     }
     // 生成短链
-    makeShortUrl(shareLink).then(({data}) => {
+    makeShortUrl(encodeURIComponent(shareLink)).then(({data}) => {
       if ((+data.result === 1) && (+data.code === 0) && data.data) {
         const shortUrl = data.data
         handler(shortUrl, shareLink)
@@ -311,7 +312,6 @@ const utils = {
         sound.loop = obj.loop
         sound.preload = 'true'
         sound.oncanplay = function () {
-          console.log(`${prop} 可以播放`)
           sound.oncanplay = null
         }
         sound.onerror = function () {

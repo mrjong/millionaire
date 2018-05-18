@@ -18,6 +18,14 @@ export const accountHost = {
   prod: 'http://account.apusapps.com'
 }
 
+export const reportHost = {
+  local: 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2',
+  dev: 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2',
+  test: 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2',
+  check: 'https://goo.gl/forms/cJWcOjqyVW2Pu2GA2',
+  prod: 'https://goo.gl/forms/cJWcOjqyVW2Pu2GA2'
+}
+
 const imAppKey = {
   local: 'p5tvi9dsphpf4',
   dev: 'pvxdm17jp3vvr',

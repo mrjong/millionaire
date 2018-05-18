@@ -14,7 +14,7 @@
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
             <span class="title big">Cash out</span>
-            <span class="money big" :class="{success: val.state === 'Success'}">{{val.currency}}{{val.amountFmt}}</span>
+            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
             <span class="time small">{{val.createTime}}</span>
@@ -61,7 +61,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('withdrawal_history', 0, 'take_cash_page')
+    utils.statistic('withdrawal_history', 0, {}, 'take_cash_page')
     this.computedHeight()
   },
   methods: {

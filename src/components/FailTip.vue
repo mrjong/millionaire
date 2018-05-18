@@ -2,16 +2,16 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <section class="fail-tip">
-        <img class="icon" src="../assets/images/icon-feedback.png" v-if="failType === 'feedback'">
+        <img class="icon" src="../assets/images/icon-feedback.png" v-if="index === 1">
         <img class="icon" src="../assets/images/icon-answer-fail.png" v-else>
         <span class="iconfont icon-cuowu close" @click="isClose=true"></span>
-        <p v-if="failType === 'feedback'">Unwilling to be ELIMINATED?</p>
+        <p v-if="index === 1">Unwilling to be ELIMINATED?</p>
         <p v-else>
           <span class="fail">Oops!</span>
           You failed on the {{formatIndex(index)}} question.
         </p>
         <div class="divorce"></div>
-        <section class="fail-note" v-if="failType === 'feedback'">
+        <section class="fail-note" v-if="index === 1">
           <p>Tell us the reason you failed on this question.Let's make this game better!</p>
         </section>
         <section class="fail-note" v-else>
@@ -19,7 +19,7 @@
           <p>There {{restCount > 1 ? 'are' : 'is'}} only {{restCount}} question{{restCount > 1 ? 's' : ''}} between you and a MILLION.</p>
           <p>Invite a new user to get a extra life</p>
         </section>
-        <button v-if="failType === 'feedback'" @click="feedback" class="btn-invite">JOIN NOW</button>
+        <button v-if="index === 1" @click="feedback" class="btn-invite">JOIN NOW</button>
         <button v-else @click="invite" class="btn-invite">Invite Now <img src="../assets/images/icon-add-extraLife.png"></button>
       </section>
     </modal>
@@ -31,35 +31,30 @@ import {mapGetters} from 'vuex'
 import Modal from './Modal.vue'
 import ReviveCard from './ReviveCard.vue'
 import utils from '../assets/js/utils'
+import {getReportUrl} from '../assets/js/api'
 import * as type from '../store/type'
 export default {
   name: 'fail-tip',
   data () {
     return {
       showInviteTip: false,
-      isClose: true,
-      failType: 'invite'
+      isClose: true
     }
   },
   props: {
     value: {
       type: Boolean,
       default: false
+    },
+    index: {
+      type: Number,
+      default: 1
     }
   },
   computed: {
-    ...mapGetters(['questionCount', 'index', 'code']),
+    ...mapGetters(['questionCount', 'code']),
     restCount () {
       return this.questionCount - this.index + 1
-    }
-  },
-  mounted () {
-    if (this.index === 1) {
-      this.failType = 'feedback'
-      console.log('failtype = feedback')
-    } else {
-      this.failType = 'invite'
-      console.log('failtype = invite')
     }
   },
   methods: {
@@ -96,15 +91,15 @@ export default {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
           utils.statistic('game_page', 1, {'result_code_s': '1'}, 'pame_page')
-          this.$store.dispatch(type._INIT)
+          this.$store.dispatch(type._INIT).then(() => {
+            this.$router.go(-1)
+          })
           this.showInviteTip = true
         })
       }
     },
     feedback () {
-      // 测试链接 https://goo.gl/forms/Raj3BeNmBjvuI5Ng2 ----测试问卷
-      // 正式链接 https://goo.gl/forms/cJWcOjqyVW2Pu2GA2---正式问卷
-      window.location.href = 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2'
+      window.location.href = getReportUrl()
     }
   },
   components: {
@@ -114,10 +109,6 @@ export default {
   watch: {
     value (val) {
       this.isClose = !val
-    },
-    index (index) {
-      // 不是第一题，答错提示类型更改为邀请好友
-      this.failType = index > 1 ? 'invite' : 'feedback'
     }
   }
 }
