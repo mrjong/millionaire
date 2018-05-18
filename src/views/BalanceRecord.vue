@@ -61,7 +61,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('withdrawal_history', 0, 'take_cash_page')
+    utils.statistic('withdrawal_history', 0, {}, 'take_cash_page')
     this.computedHeight()
   },
   methods: {
