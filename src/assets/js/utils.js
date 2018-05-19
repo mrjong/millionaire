@@ -284,6 +284,32 @@ const utils = {
     }
     return ''
   },
+  /**
+   * 格式化题目序号
+   * @param {any} index 序号
+   * @returns
+   */
+  formatIndex (index) {
+    let result = index
+    switch (+index) {
+      case 1: {
+        result = '1st'
+        break
+      }
+      case 2: {
+        result = '2nd'
+        break
+      }
+      case 3: {
+        result = '3rd'
+        break
+      }
+      default: {
+        result = `${index}th`
+      }
+    }
+    return result
+  },
   computePercent (obj, val) {
     let total = 0
     for (let i in obj) {
