@@ -58,27 +58,7 @@ export default {
     }
   },
   methods: {
-    formatIndex (index) {
-      let result = index
-      switch (+index) {
-        case 1: {
-          result = '1st'
-          break
-        }
-        case 2: {
-          result = '2nd'
-          break
-        }
-        case 3: {
-          result = '3rd'
-          break
-        }
-        default: {
-          result = `${index}th`
-        }
-      }
-      return result
-    },
+    formatIndex: utils.formatIndex,
     invite () {
       this.isClose = true
       // 判断是否登录

@@ -25,9 +25,15 @@ function statisticEntry () {
 
 // 若在h5页面或无clientId 则生成clientId
 if (!utils.clientId) {
-  new Fingerprint2({excludeFlashFonts: true, excludeJsFonts: true}).get((result) => {
-    utils.clientId = result
-  })
+  const clientId = utils.getLocaStorge('', 'clientId')
+  if (clientId) {
+    utils.clientId = clientId
+  } else {
+    new Fingerprint2({excludeFlashFonts: true, excludeJsFonts: true}).get((result) => {
+      utils.clientId = result
+      utils.setLocalStorge({clientId: result})
+    })
+  }
 }
 // 读取声音
 utils.loadSounds()

@@ -61,7 +61,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('withdrawal_history', 0, 'take_cash_page')
+    utils.statistic('withdrawal_history', 0, {}, 'take_cash_page')
     this.computedHeight()
   },
   methods: {
@@ -122,14 +122,16 @@ export default {
         let touches = e.touches[0]
         yEnd = touches.clientY
         xEnd = touches.clientX
-        let recordListHeight = this.$refs.recordList.offsetHeight
-        let recordListScrollTop = this.$refs.recordWrap.scrollTop || 0
-        if ((Math.abs(xEnd - xStart) < Math.abs(yEnd - yStart)) && (yEnd - yStart) < 0) {
-          if (recordListScrollTop + this.recordWrapHeight > recordListHeight) {
-            this.getBalanceRecord(this.pageNo)
+        if (this.$refs.recordList) {
+          let recordListHeight = this.$refs.recordList.offsetHeight
+          let recordListScrollTop = this.$refs.recordWrap.scrollTop || 0
+          if ((Math.abs(xEnd - xStart) < Math.abs(yEnd - yStart)) && (yEnd - yStart) < 0) {
+            if (recordListScrollTop + this.recordWrapHeight > recordListHeight) {
+              this.getBalanceRecord(this.pageNo)
+            }
+          } else {
+            return false
           }
-        } else {
-          return false
         }
       }))
       // domEvent.on(document.body, 'touchend', this.end)
