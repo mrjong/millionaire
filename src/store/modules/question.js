@@ -84,7 +84,7 @@ const actions = {
           type_s: utils.pageType
         })
         commit(type.QUESTION_UPDATE, {
-          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
+          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime, isAnswered: false, userAnswer: ''
         })
         dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
         dispatch(type.QUESTION_START)
@@ -139,9 +139,15 @@ const actions = {
           }
           resolve()
         } else {
+          const index = +data.data
           switch (+data.code) {
             case 1005: {
               reject('Time is out, you can view only.')
+              break
+            }
+            case 1006:
+            case 1007: {
+              reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
               break
             }
             default: {
