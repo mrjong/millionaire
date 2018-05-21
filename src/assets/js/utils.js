@@ -5,6 +5,8 @@ import md5 from 'md5'
 import { makeShortUrl, api, logout } from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
+import {vm} from '../../main'
+import { _UPDATE } from '../../store/type'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -358,6 +360,19 @@ const utils = {
         }
         sound.onerror = function () {
           console.log(`${prop} 加载失败`)
+        }
+
+        if (prop === 'bg') {
+          sound.onplaying = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: true
+            })
+          }
+          sound.onpause = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: false
+            })
+          }
         }
         obj.instance = sound
         document.body.appendChild(sound)

@@ -63,7 +63,8 @@ export default new Vuex.Store({
     lives: 0,
     code: '',
     phoneNationCodeList: [], // 手机号国家码列表
-    phoneNationCode: {code: '91', country: 'India'} // 当前手机国家码
+    phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
+    isPlayingMusic: false // 是否在播放音乐
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -82,7 +83,8 @@ export default new Vuex.Store({
     lives: (state) => state.lives,
     code: (state) => state.code,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
-    phoneNationCode: (state) => state.phoneNationCode
+    phoneNationCode: (state) => state.phoneNationCode,
+    isPlayingMusic: (state) => state.isPlayingMusic
   },
   mutations: {
     /**

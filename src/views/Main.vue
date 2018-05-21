@@ -12,7 +12,7 @@
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
       <div class="main-container__top__music" @click="isPlay">
-        <img src="../assets/images/music-icon.png" v-if="!musicPlay">
+        <img src="../assets/images/music-icon.png" v-if="isPlayingMusic">
         <img src="../assets/images/music_close-icon.png" v-else>
       </div>
     </div>
@@ -51,8 +51,7 @@ export default {
         markType: 0,
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-      },
-      musicPlay: true
+      }
     }
   },
   computed: {
@@ -60,7 +59,8 @@ export default {
       onlineAmount: 'onlineAmount',
       status: 'status',
       questionStatus: 'question_status',
-      isWon: 'isWon'
+      isWon: 'isWon',
+      isPlayingMusic: 'isPlayingMusic'
     })
   },
   created () {
@@ -84,12 +84,10 @@ export default {
       }, 10000)
     },
     isPlay () {
-      if (this.musicPlay) {
+      if (!this.isPlayingMusic) {
         utils.playSound('bg')
-        this.musicPlay = false
       } else {
         utils.stopSound('bg')
-        this.musicPlay = true
       }
     },
     /*
