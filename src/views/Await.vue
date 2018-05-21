@@ -232,7 +232,10 @@ export default {
             result_code_s: data.result === 1 ? '1' : '0'
           }, 'wait_page')
           if (data.result === 1) {
-            this.$store.dispatch(type._INIT)
+            // 更新复活卡数量
+            this.$store.commit(type._UPDATE, {
+              lives: +data.data || 0
+            })
           } else {
             if (data.code === 404) {
               this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
