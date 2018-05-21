@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { makeShortUrl, api } from './api'
+import { makeShortUrl, api, logout } from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 const njordGame = window.top.njordGame
@@ -67,6 +67,22 @@ const utils = {
     } else {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
+  },
+  /**
+   * 退出登陆
+   */
+  logout (callback, errCallback) {
+    logout().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback()
+      } else {
+        errCallback(data.error_msg || '')
+        console.log('退出登陆失败', data.error_msg || '')
+      }
+    }, err => {
+      errCallback(err)
+      console.log('退出登陆出错', err)
+    })
   },
   /**
   * 获取浏览器公共参数
@@ -283,6 +299,32 @@ const utils = {
       timeObj.h = parseInt(timeSecond / 60 / 60 % 24)
     }
     return ''
+  },
+  /**
+   * 格式化题目序号
+   * @param {any} index 序号
+   * @returns
+   */
+  formatIndex (index) {
+    let result = index
+    switch (+index) {
+      case 1: {
+        result = '1st'
+        break
+      }
+      case 2: {
+        result = '2nd'
+        break
+      }
+      case 3: {
+        result = '3rd'
+        break
+      }
+      default: {
+        result = `${index}th`
+      }
+    }
+    return result
   },
   computePercent (obj, val) {
     let total = 0
