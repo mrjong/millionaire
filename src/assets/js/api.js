@@ -27,7 +27,8 @@ export const api = {
   getWinnerList: '/cmp/bi/', // 获取winner列表,
   makeShortUrl: '/cmp/sl/', // 生成短链服务
   balanceRecord: '/cmp/bl', // 提现记录
-  reminder: '/cmp/sub_remind/' // 订阅提醒
+  reminder: '/cmp/sub_remind/', // 订阅提醒
+  logout: '/v2/user/logout/'
 }
 
 export const init = function (isRefreshToken) {
@@ -138,7 +139,6 @@ export const generateCode = function () {
 }
 
 // 相关码验证
-
 export const VerificationCode = function (code) {
   return axios.post(api.VerificationCode, {
     code: code,
@@ -252,6 +252,16 @@ export const Reminder = function (reminderOjb) {
   })
 }
 
+// 获取调查问卷URL
 export const getReportUrl = function () {
   return reportHost[env]
+}
+
+// 退出登陆
+export const logout = function () {
+  return axios.post(api.logout, {
+    app_id: utils.app_id
+  }, {
+    baseURL: accountHost[env]
+  })
 }

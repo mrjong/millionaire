@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { makeShortUrl, api } from './api'
+import { makeShortUrl, api, logout } from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 const njordGame = window.top.njordGame
@@ -67,6 +67,22 @@ const utils = {
     } else {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
+  },
+  /**
+   * 退出登陆
+   */
+  logout (callback, errCallback) {
+    logout().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback()
+      } else {
+        errCallback(data.error_msg || '')
+        console.log('退出登陆失败', data.error_msg || '')
+      }
+    }, err => {
+      errCallback(err)
+      console.log('退出登陆出错', err)
+    })
   },
   /**
   * 获取浏览器公共参数
