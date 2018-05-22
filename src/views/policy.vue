@@ -1,9 +1,9 @@
 <template>
   <div class="policy">
-    <p class="header iconfont icon-cuowu" @click="close"></p>
+    <p class="header iconfont icon-close_big" @click="close"></p>
     <div class="content">
       <img src="../assets/images/await-logo.png" class="logo">
-      <p class="title">Go! Millionaire Agreement</p>
+      <p class="title">About 'Go! Millionaire'</p>
       <p class="paragraph1">Go! Millionaire is developed and serviced by APUS. We provide the following content and service:</p>
       <ul class="policy-list">
         <li v-for="(val, idx) in ruleList" :key="idx">{{val}}</li>
@@ -21,7 +21,7 @@
       <div class="agree">
         <p class="check-btn iconfont"
         :class="{'icon-juxing' :isAgree, 'icon-gouxuankuang': !isAgree}" @click="agreePolicy"></p>
-        <p class="text">I have read and agree to the above agreement</p>
+        <p class="text">I Have Read and Agree To The Above Agreement and Policy</p>
       </div>
       <div class="btn" @click="startNow">Enter</div>
       <img src="../assets/images/apus-logo-white.png" class="apus-logo">
@@ -38,7 +38,7 @@ export default {
     return {
       isAgree: false,
       ruleList: [
-        'Win 100,000 rupees per day',
+        'Win up to Rs 1,000,000',
         'Answer 12 questions to get bonus',
         'Invite friends to get extra lives',
         'Multiplayer Live Chat',
@@ -93,7 +93,7 @@ export default {
   .header {
     width: 54px;
     height: 54px;
-    background: #241262;
+    background: rgba(255,255,255,0.3);
     border-radius: 50%;
     position: fixed;
     top: 24px;
@@ -138,7 +138,7 @@ export default {
       }
       &__text{
         width: 100%;
-        height: 212px;
+        height: 250px;
         overflow-y:scroll;
         background-color: rgba(255, 255, 255, 0.3);
         color:#fff;

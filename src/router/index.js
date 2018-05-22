@@ -10,7 +10,7 @@ const Balance = () => import('@/views/Balance.vue')
 const Rank = () => import('@/views/Rank.vue')
 const ShareDetail = () => import('@/views/ShareDetail.vue')
 const BalanceRecord = () => import('@/views/BalanceRecord.vue')
-const Practice = () => import('@/views/Practice.vue')
+// const Practice = () => import('@/views/Practice.vue')
 const BalanceDetail = () => import('@/views/BalanceDetail.vue')
 const Policy = () => import('@/views/Policy.vue')
 const Contact = () => import('@/views/Contact.vue')
@@ -69,11 +69,11 @@ const router = new Router({
       name: 'balance-record',
       component: BalanceRecord
     },
-    {
-      path: '/practice',
-      name: 'practice',
-      component: Practice
-    },
+    // {
+    //   path: '/practice',
+    //   name: 'practice',
+    //   component: Practice
+    // },
     {
       path: '/balance-detail',
       name: 'balance-detail',

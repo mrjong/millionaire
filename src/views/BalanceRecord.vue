@@ -15,7 +15,7 @@
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
             <span class="title big" >{{recordType ? statusText[idx] : 'Cash out'}}</span>
-            <span class="money big" v-if="recordType" :class="{success: val.orderType === 9}">{{userInfo.currencyType}}{{val.amount}}</span>
+            <span class="money big" v-if="recordType" :class="{success: val.orderType === 9}">{{val.orderType === 5 ? '-' : '+'}}{{userInfo.currencyType}}{{val.amountFmt}}</span>
             <span class="money big" v-else :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
@@ -29,7 +29,7 @@
       </div>
       <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList.length === 0 && !loading">
         <img src="../assets/images/no-history.png" class="no-list__img">
-        <p>No Withdrawal History</p>
+        <p>{{recordType ? 'No Cash History' : 'No Withdrawal History'}}</p>
       </div>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
@@ -169,7 +169,11 @@ export default {
     },
     detele () {
       this.isClear = true
-      this.markInfo.htmlText = 'Are you sure you want to delele all the  withdrawal history?'
+      if (this.recordType) {
+        this.markInfo.htmlText = 'Are you sure you want to delete all the cash history?'
+      } else {
+        this.markInfo.htmlText = 'Are you sure you want to delete all the withdrawal history?'
+      }
       this.markInfo.okBtnText = 'OK'
       this.markInfo.showMark = true
     },
