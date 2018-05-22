@@ -36,6 +36,7 @@ import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
+import { _UPDATE } from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -86,8 +87,14 @@ export default {
     },
     isPlay () {
       if (!this.isPlayingMusic) {
+        this.$store.commit(_UPDATE, {
+          isPlayingMusic: true
+        })
         utils.playSound('bg')
       } else {
+        this.$store.commit(_UPDATE, {
+          isPlayingMusic: false
+        })
         utils.stopSound('bg')
       }
     },
