@@ -29,7 +29,11 @@ export const api = {
   balanceRecord: '/cmp/bl', // 提现记录
   reminder: '/cmp/sub_remind/', // 订阅提醒
   logout: '/v2/user/logout/', // 退出登陆
-  getPersonInfo: '/v2/user/getinfo' // 获取个人信息
+  getPersonInfo: '/v2/user/getinfo', // 获取个人信息
+  clearRecord: '/cmp/wc/', // 标记删除提现记录
+  submitAgreePolicy: '/cmp/sub_ag/', // 上报协议
+  queryAgreePolicy: '/cmp/ag/', // 查询是否同意协议
+  cashRecord: '/cmp/bfr/' // 余额记录
 }
 
 export const init = function (isRefreshToken) {
@@ -232,6 +236,17 @@ export const balanceRecord = function (pageNo) {
   })
 }
 
+// 余额记录
+
+export const cashRecord = function (pageNo) {
+  return axios.post(api.cashRecord, {
+    pageNo: pageNo,
+    pageSize: 10,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
 // 订阅提醒
 export const Reminder = function (reminderOjb) {
   return axios.post(api.reminder, {
@@ -262,4 +277,36 @@ export const logout = function () {
   }, {
     baseURL: accountHost[env]
   })
+}
+// 标记删除提现记录
+export const clearRecord = function (clearType) {
+  return axios.post(api.clearRecord, {
+    clearType: clearType,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 提交用户同意隐私协议
+
+export const submitAgreePolicy = function () {
+  return axios.post(api.submitAgreePolicy, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 查询用户是否同意协议
+
+export const queryAgreePolicy = function () {
+  return axios.get(api.queryAgreePolicy, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+export const getPolicyContent = function (policyUrl) {
+  return axios.get(policyUrl)
 }

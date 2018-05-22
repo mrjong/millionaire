@@ -27,6 +27,9 @@
       <!-- 错误信息 -->
       <p class="errorMsg">{{errorMsg}}</p>
       <button class="btn-login" @click="login">Sign up</button>
+      <p class="policy">
+        Notice: The mobile number will be provided to Tencent Cloud for receiving SMS verification code
+      </p>
       <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
     </section>
     <country-list v-model="showCountryList"></country-list>
@@ -54,7 +57,8 @@ export default {
       errorMsg: '  ',
       username: '',
       phoneNumber: '',
-      code: ''
+      code: '',
+      isAgree: true
     }
   },
   computed: {
@@ -81,6 +85,9 @@ export default {
      * 登录
      */
     login () {
+      if (!this.isAgree) {
+        return false
+      }
       if (this.loginValidate()) {
         this.loading = true
         signInByPhone(this.code).then(({data}) => {
@@ -196,6 +203,13 @@ export default {
           country: countryItem[2]
         }
       })
+    },
+    isAgreePolicy () {
+      if (this.isAgree) {
+        this.isAgree = false
+      } else {
+        this.isAgree = true
+      }
     }
   },
   mounted () {
@@ -321,6 +335,15 @@ export default {
         background-color: #f3a207;
         color: #fff;
         margin-top: 72px;
+      }
+      .policy {
+        margin-top: 35px;
+        color:#fff;
+        font-size:24px;
+        font-family: "Roboto";
+        font-weight: 300;
+        color:#efab33;
+        text-align: center;
       }
     }
 

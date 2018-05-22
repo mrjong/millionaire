@@ -51,20 +51,26 @@ export default {
     })
   },
   created () {
+    api.queryAgreePolicy().then(({data}) => {
+      if (data.result === 1 && data.data.agree) {
+        if (this.isOnline || utils.clientId) {
+          this.loading = true
+          this.$store.dispatch(type._INIT).then(() => {
+            setTimeout(() => {
+              this.loading = false
+            }, 500)
+            this.$statisticEntry()
+          }, (err) => {
+            this.loading = false
+            console.log(err)
+          })
+        }
+      } else {
+        this.$router.push({path: '/policy'})
+      }
+    })
     this.init()
     this.getPhoneNationCode()
-    if (this.isOnline || utils.clientId) {
-      this.loading = true
-      this.$store.dispatch(type._INIT).then(() => {
-        setTimeout(() => {
-          this.loading = false
-        }, 500)
-        this.$statisticEntry()
-      }, (err) => {
-        this.loading = false
-        console.log(err)
-      })
-    }
   },
   methods: {
     init () {

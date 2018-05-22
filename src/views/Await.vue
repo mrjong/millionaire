@@ -46,7 +46,7 @@
         <notices></notices>
       </router-link>
     </div>
-    <div class="game-area">
+    <!-- <div class="game-area">
       <div class="game-icon">
         <a href="http://h5game.subcdn.com/03/" @click="btnStatistic('H5game_Box')">
           <img src="../assets/images/game-icon-4.png">
@@ -79,7 +79,7 @@
           <img src="../assets/images/game-icon-6.png">
         </a>
       </div>
-    </div>
+    </div> -->
     <router-link to="/rule">
       <how-play-card></how-play-card>
     </router-link>
