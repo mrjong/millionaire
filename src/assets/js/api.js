@@ -28,7 +28,8 @@ export const api = {
   makeShortUrl: '/cmp/sl/', // 生成短链服务
   balanceRecord: '/cmp/bl', // 提现记录
   reminder: '/cmp/sub_remind/', // 订阅提醒
-  logout: '/v2/user/logout/'
+  logout: '/v2/user/logout/', // 退出登陆
+  getPersonInfo: '/v2/user/getinfo' // 获取个人信息
 }
 
 export const init = function (isRefreshToken) {
@@ -243,6 +244,15 @@ export const Reminder = function (reminderOjb) {
 // 获取调查问卷URL
 export const getReportUrl = function () {
   return reportHost[env]
+}
+
+// 获取个人资料
+export const getPersonInfo = function () {
+  return axios.post(api.getPersonInfo, {
+    app_id: utils.app_id
+  }, {
+    baseURL: accountHost[env]
+  })
 }
 
 // 退出登陆
