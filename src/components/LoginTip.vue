@@ -55,6 +55,7 @@ export default {
         this.sync()
         utils.statistic('login_page', 1, {'result_code_s': '1'}, 'login_page')
       })
+      this.$emit('loginTipClose')
     },
     close () {
       this.$emit('loginTipClose')
