@@ -11,7 +11,7 @@
       <p class="paragraph2">In order to have provide better game experience and protect your personal information, please read the following agreement carefully and thank you for your support:</p>
       <div class="service">
         <p class="service__title">Go! Millionaire Service Agreement</p>
-        <iframe class="service__text" src="http://static.subcdn.com/201805211500242f0dfc8e96.html"></iframe>
+        <div class="service__text" v-html="termsOfServiceContent"></div>
       </div>
       <div class="privacy">
         <p class="privacy__title">Go! Millionaire Privacy Agreement</p>
@@ -44,12 +44,16 @@ export default {
         'Multiplayer Live Chat',
         'Prizes more than Rs. 150 can be withdrawn'
       ],
-      policyContent: ''
+      policyContent: '',
+      termsOfServiceContent: ''
     }
   },
   mounted () {
-    api.getPolicyContent('http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html').then((data) => {
-      this.policyContent = data.request.responseText
+    api.getPolicyContent('privacy.html').then(({data}) => {
+      this.policyContent = data
+    })
+    api.getPolicyContent('termsOfService.html').then(({data}) => {
+      this.termsOfServiceContent = data
     })
   },
   methods: {

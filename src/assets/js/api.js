@@ -1,6 +1,9 @@
+/* global PUBLIC_URL */
 import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
 import md5 from 'md5'
+
+const publicUrl = PUBLIC_URL
 
 export const api = {
   init: '/cmp/ix/', // 初始化
@@ -307,6 +310,9 @@ export const queryAgreePolicy = function () {
   })
 }
 
-export const getPolicyContent = function (policyUrl) {
-  return axios.get(policyUrl)
+export const getPolicyContent = function (filename) {
+  return axios.get(`${publicUrl}/html/${filename}`, {
+    baseURL: window.location.origin,
+    withCredentials: false
+  })
 }
