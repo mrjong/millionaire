@@ -47,6 +47,20 @@ const http = axios.create({
   }
 })
 
+axios.interceptors.request.use((config) => {
+  if (config.baseURL === accountHost[env]) {
+    // 如果是账号域名,请求数据类型转换为formData
+    config.transformRequest = [[function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]]
+  }
+  return config
+})
+
 http.defaults.retry = 3 // 重试次数
 http.defaults.retryDelay = 500 // 重试延时
 

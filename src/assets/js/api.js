@@ -171,14 +171,6 @@ export const register = function (phoneNumber, phoneNationcode = '91') {
     mobile: phoneNumber,
     account_type: 8,
     cr: utils.generateRandomStr(16)
-  }, {
-    transformRequest: [function (data) {
-      const formData = new FormData()
-      for (let prop in data) {
-        formData.append(prop, data[prop])
-      }
-      return formData
-    }]
   })
 }
 
