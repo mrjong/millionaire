@@ -183,7 +183,7 @@ export default {
       if (this.isClear) {
         let clearType = (this.recordType ? 2 : 1)
         api.clearRecord(clearType).then(({data}) => {
-          if (data.result === 0) {
+          if (data.result === 0 && data.code === 0) {
             // 清空成功
             this.balanceRecordList = []
           } else {
