@@ -1,11 +1,16 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
 import {appKey} from './http'
+import {pollMsg} from './api'
 
 let keepLiveMessageTimer = null
 
 const im = {
-
+  pullMsgId: '', // 消息ID
+  pullMsgTimer: null, // 拉取消息定时器
+  pullMsgInterval: 1000, // 拉取消息间隔
+  pullMsgTimeoutCount: 0, // 拉去消息超时次数
+  isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
   listeners: {}, // 监听器,
@@ -22,7 +27,7 @@ const im = {
     },
     {
       messageName: 'PeopleMessage',
-      propertys: ['count'],
+      propertys: ['count', 'extra'],
       objectName: 'APUS:PeopleMsg'
     },
     {
@@ -82,9 +87,8 @@ const im = {
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
-      clearInterval(keepLiveMessageTimer)
       im.emitListener(type.NETWORK_UNAVAILABLE)
-      RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+      im.disconnect()
     })
 
     window.addEventListener('online', () => {
@@ -117,8 +121,7 @@ const im = {
             console.log('网络不可用')
             im.emitListener(type.NETWORK_UNAVAILABLE)
             setTimeout(() => {
-              clearInterval(keepLiveMessageTimer)
-              RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+              im.disconnect()
               im.connect(im.token)
             }, 500)
             break
@@ -128,34 +131,30 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
-        // console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            // console.warn(message.messageUId, message.sentTime, message.content.content)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
             break
           case type.MESSAGE_ANSWER:
-            this.emitListener(type.MESSAGE_ANSWER, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_HOST:
-            this.emitListener(type.MESSAGE_HOST, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_QUESTION:
-            this.emitListener(type.MESSAGE_QUESTION, message)
-            console.log(message.messageType, message.content)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_RESULT:
-            this.emitListener(type.MESSAGE_RESULT, message)
+            // 暂时使用轮询方案代替接收
             break
           case type.MESSAGE_END:
-            this.emitListener(type.MESSAGE_END, message)
+            // 暂时使用轮询方案代替接收
             break
           default:
             console.log('未知类型消息:', message)
@@ -169,13 +168,14 @@ const im = {
    * @param {any} token
    */
   connect (token) {
+    im.disconnect() // 先断开链接
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId, token)
         keepLiveMessageTimer = setInterval(() => {
           im.sendAliveMessage()
-        }, 1500)
+        }, 5000)
         im.emitListener(type.CONNECT_SUCCESS, userId)
       },
       onTokenIncorrect: () => {
@@ -214,7 +214,17 @@ const im = {
       }
     })
   },
-
+  /**
+   * 断开连接
+   */
+  disconnect () {
+    try {
+      clearInterval(keepLiveMessageTimer)
+      RongIMClient && RongIMClient.getInstance && RongIMClient.getInstance() && RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+    } catch (err) {
+      console.log('disconnect 失败：', err)
+    }
+  },
   /**
    * 重新连接
    */
@@ -241,6 +251,7 @@ const im = {
     }
     RongIMClient.reconnect(callback, config)
   },
+
   /**
    * 加入聊天室
    * @param {any} chatRoomId 聊天室ID
@@ -261,6 +272,113 @@ const im = {
   },
 
   /**
+   * 开始轮询消息
+   */
+  startPullMsg () {
+    clearInterval(im.pullMsgTimer)
+    im.pullMsgTimer = setInterval(im.pullMsg, 1000)
+  },
+
+  /**
+   * 拉取消息
+   */
+  pullMsg () {
+    pollMsg().then(({data}) => {
+      im.pullMsgTimeoutCount = 0
+      if (+data.result === 1 && +data.code === 0) {
+        im.isHandledMsg && im.pollMsgHandler(data.data)
+      } else {
+        console.log('拉去消息失败', data)
+      }
+    }).catch((error) => {
+      console.log(`拉取消息出错:`, error, new Date())
+      if (error.code === 'ECONNABORTED') {
+        im.pullMsgTimeoutCount = im.pullMsgTimeoutCount + 1
+      }
+      // 连续超时两次，提示网络错误
+      if (im.pullMsgTimeoutCount >= 2) {
+        im.emitListener(type.NETWORK_UNAVAILABLE)
+        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount * 15
+      }
+    })
+  },
+
+  /**
+   * 停止轮询消息
+   */
+  stopPullMsg () {
+    clearInterval(im.pullMsgTimer)
+  },
+
+  /**
+   * 轮询消息处理
+   */
+  pollMsgHandler (data = {}) {
+    im.isHandledMsg = false
+    const {i: msgId, t: msgType, d: msg = {}, l: validTime} = data
+    if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
+      switch (msgType) {
+        case 1: { // 串词消息
+          const {rs: hostMsgList, si: intervalTime} = msg
+          im.emitListener(type.MESSAGE_HOST, {
+            content: {
+              content: JSON.stringify(hostMsgList)
+            }
+          }, intervalTime)
+          break
+        }
+        case 2: { // 题目消息
+          const restTime = parseInt(validTime / 1000)
+          im.emitListener(type.MESSAGE_QUESTION, {
+            content: {
+              content: JSON.stringify({
+                ...msg,
+                restTime: restTime >= 10 ? 10 : restTime
+              })
+            }
+          })
+          break
+        }
+        case 3: { // 答案汇总消息
+          const question = {
+            id: msg.ji || '',
+            index: msg.js || 1,
+            contents: msg.jc || '',
+            options: msg.jo || ['', '', '']
+          }
+          const answer = {
+            i: msg.ji || '',
+            a: msg.ac || ''
+          }
+          const summary = msg.as || {}
+          im.emitListener(type.MESSAGE_ANSWER, {
+            content: {
+              answer: JSON.stringify(answer),
+              summary: JSON.stringify(summary),
+              question: JSON.stringify(question)
+            }
+          })
+          break
+        }
+        case 4: { // 比赛结果消息
+          im.emitListener(type.MESSAGE_RESULT, {
+            content: {
+              summary: JSON.stringify(msg)
+            }
+          })
+          break
+        }
+        case 5: { // 比赛结束消息
+          im.emitListener(type.MESSAGE_END, msg.t || 0)
+          break
+        }
+      }
+    }
+    im.pullMsgId = msgId
+    im.isHandledMsg = true
+  },
+
+  /**
    * 发送消息
    * @param {any} content 消息内容
    * @param {any} avatar 用户头像
@@ -274,7 +392,6 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-        im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
         let info = ''

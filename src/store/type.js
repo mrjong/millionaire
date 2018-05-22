@@ -15,6 +15,7 @@ export const _UPDATE_AMOUNT = '_UPDATE_AMOUNT'
 export const _SYNC_TIME = '_SYNC_TIME'
 export const _RECEIVE_RESULT = '_RECEIVE_RESULT'
 export const _INIT = '_INIT'
+export const _POLL_INIT = '_POLL_INIT'
 export const _END = '_END'
 export const _OPEN_DIALOG = '_OPEN_DIALOG'
 
@@ -27,6 +28,7 @@ export const QUESTION_GET = 'QUESTION_GET'
 export const QUESTION_START = 'QUESTION_START'
 export const QUESTION_SUBMIT = 'QUESTION_SUBMIT'
 export const QUESTION_RECEIVE_ANSWER = 'QUESTION_RECEIVE_ANSWER'
+export const QUESTION_SYNC_LOCAL_ANSWER = 'QUESTION_SYNC_LOCAL_ANSWER'
 export const QUESTION_YOU_WON = 'QUESTION_YOU_WIN'
 
 // 排行榜相关

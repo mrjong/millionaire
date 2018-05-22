@@ -10,28 +10,32 @@
         Follow Us</a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="30" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
-          <check-str-length :originalLength=30 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME" v-model="questionInfo.author">
+          <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+        </div>
+        <div class="frame">
+          <input type="text" class="form__name base" maxlength="20" placeholder="YOUR PHONE NUMBER" v-model="questionInfo.tel">
+          <check-str-length :originalLength=20 :currentLength=questionInfo.tel.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
             Tap to set your question now
           </p>
-          <textarea class="" maxlength="300" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
-          <check-str-length :originalLength=300 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
+          <textarea class="" maxlength="200" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
+          <check-str-length :originalLength=200 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="150" v-model="questionInfo.option1">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="150" v-model="questionInfo.option2">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
           <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="150" v-model="questionInfo.option3">
-          <check-str-length :originalLength=150 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
+          <check-str-length :originalLength=100 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="form__correct">
           <div class="form__correct__title">
@@ -100,7 +104,8 @@ export default {
         'option1': '',
         'option2': '',
         'option3': '',
-        'correct': ''
+        'correct': '',
+        'tel': ''
       },
       showDialog: false,
       dialogInfo: {
@@ -151,36 +156,36 @@ export default {
       })
     },
     submit () {
+      /* eslint-disable no-useless-escape */
       this.isLoading = true
-      if (this.questionInfo.title === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_question')
-        this.dialogInfo.htmlText = 'Please complete the question'
-        this.showDialog = true
+      const phoneRule = /^[\+\-0-9]{1,20}$/
+      if (this.questionInfo.author === '') {
+        this.baseConfig('no_phone', 'Please enter your name.')
+        return false
+      } else if (this.questionInfo.tel === '') {
+        this.baseConfig('no_phone', 'Please enter your phone number')
+        return false
+      } else if (!phoneRule.test(this.questionInfo.tel)) {
+        this.baseConfig('no_phone', 'Please enter right phone number')
+        return false
+      } else if (this.questionInfo.title === '') {
+        this.baseConfig('no_question', 'Please complete the question')
         return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_answer')
-        this.dialogInfo.htmlText = 'Please complete the answer'
-        this.showDialog = true
+        this.baseConfig('no_answer', 'Please complete the answer')
         return false
       }
       api.setQuestions(this.questionInfo).then(({data}) => {
         this.isLoading = false
-        console.log(data)
         if (data.result === 1) {
           this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
-          this.isLoading = false
-          this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
+          this.baseConfig('', 'Your Internet is unstable, please try it again.')
           return false
         }
       }).catch(() => {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'other_anomaly')
-        this.showDialog = true
+        this.baseConfig('other_anomaly')
         return false
       })
     },
@@ -202,11 +207,19 @@ export default {
     setQuestionBtnStatics (destination, result) {
       let staticsObj = {}
       if (result) {
-        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code_s': result}
+        staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination, 'result_code_s': `${result}`}
       } else {
         staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
       }
       utils.statistic('submit', 1, staticsObj, 'issue_page')
+    },
+    baseConfig (staticsType, hintType) {
+      this.isLoading = false
+      staticsType && this.setQuestionBtnStatics('submit', staticsType)
+      if (hintType) {
+        this.dialogInfo.htmlText = hintType
+      }
+      this.showDialog = true
     }
   },
   components: {
@@ -256,6 +269,7 @@ export default {
     }
     &__join{
       display: block;
+      max-width: 100%;
       width: 654px;
       height: 91px;
       line-height: 91px;
@@ -295,6 +309,7 @@ export default {
         }
       }
       &__question {
+        max-width: 100%;
         width:656px ;
         height: 334px;
         background: url("../assets/images/question-area-bg.png") no-repeat top left;
@@ -350,6 +365,7 @@ export default {
         }
       }
       &__correct{
+        max-width: 100% !important;
         width: 656px;
         height: 192px;
         background-color: #f4f3f7;
@@ -405,6 +421,7 @@ export default {
         }
       }
       &__submit{
+        max-width: 100%;
         width: 656px;
         height: 93px;
         line-height: 93px;
@@ -425,6 +442,7 @@ export default {
     justify-content: center;
     position: absolute;
     .bomb{
+      max-width: 90%;
       width: 620px;
       min-height: 1000px ;
       background: url("../assets/images/bomb-bg.jpg") no-repeat top center;
@@ -434,6 +452,7 @@ export default {
       position: relative;
       padding: 0 35px 80px 50px;
       &__logo{
+        max-width: 52%;
         width: 323px;
         position: absolute;
         top: -70px;
@@ -474,6 +493,7 @@ export default {
       }
       &__btn{
         display: flex;
+        max-width: 90%;
         width: 502px;
         height: 76px;
         background-color: #faa717;
@@ -489,12 +509,13 @@ export default {
     }
   }
   .base {
+    max-width: 100% !important;
     width:656px ;
     height: 93px;
     border-radius: 46px;
     background-color:#f4f3f7 ;
     border: 0;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     padding-left: 30px;
     color:#241262 ;
     font-size: 28px;

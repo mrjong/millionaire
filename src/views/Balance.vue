@@ -3,24 +3,36 @@
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
+      <router-link to="/balance-record" @click="history" v-if="isOnline">
+        <p class="balance-wrap__title__history">History</p>
+      </router-link>
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
          <img :src="userInfo.avatar" alt="" class="balance-wrap__contain__wrap__img">
         <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
-        <p class="balance-wrap__contain__wrap__mybalance">
-          <span class="balance-wrap__contain__wrap__symbol">{{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}</span><span class="balance-wrap__contain__wrap__tip">(You can cash out with the minimum balance of {{userInfo.currencyType}}{{withdraw}})</span>
-        </p>
+        <div class="balance-wrap__contain__wrap__mybalance">
+          <p class="balance-wrap__contain__wrap__symbol">
+            {{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}
+          </p>
+        </div>
         <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
+      <p class="balance-hint">(You can cash out with the minimum balance of ₹150)</p>
     </div>
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__wrap__input">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Name" maxlength="100" v-model="name">
+      </p>
+      <p class="balance-wrap__operate__wrap__input">
+        <input type="text" class="balance-wrap__operate__input" placeholder="Permanent Account Number" v-model="pan">
+      </p>
+      <p class="balance-wrap__operate__wrap__input">
         <input type="text" class="balance-wrap__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
-      <p class="balance-wrap__operate__tip">Please verify that your Paytm account is a valid account, and the payouts will be made in 15 days.</p>
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
+      <p class="balance-wrap__operate__tip">The payouts will be made in 7 days after Approved</p>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
@@ -43,6 +55,8 @@ export default {
       // showLogin: true,
       showLogin: !this.$store.getters.isOnline && (+this.$store.getters.userInfo.clientBalance > 0),
       myPay: '',
+      name: '',
+      pan: '',
       markInfo: {
         showMark: false,
         htmlText: '',
@@ -72,24 +86,43 @@ export default {
       } else {
         // const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.com)+$/
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
+        const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
+        const nameRule = /^([A-Za-z]+\s?)*[A-Za-z]{1,100}$/
+        // const nameRule = /^[a-zA-Z]+\s[a-zA-Z]+{1,100}$/
+        const isNamePass = nameRule.test(this.name)
+        const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
+        if (!isNamePass) {
+          this.changeMarkInfo(true, false, 0, `Please enter the right name`)
+          return false
+        }
+        if (!isPass) {
+          this.changeMarkInfo(true, false, 0, `Please enter a right PAN ID`)
+          return false
+        }
         if (!passRule) {
           this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+          return false
         } else {
-          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>.Do you want to cash out now?`)
+          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>Do you want to cash out now?`)
         }
       }
     },
     okEvent (info) {
       this.markInfo.showMark = false
       let takeCash = ''
+      console.log('mypay' + this.myPay)
+      console.log('name' + this.name)
+      console.log('pan' + this.pan)
       if (info) {
         // 提交表单
         this.showLoading = true
         api.balanceApplication({
           amount: +this.userInfo.balance,
           email: '',
-          accountId: this.myPay
+          accountId: this.myPay,
+          name: this.name,
+          pan: this.pan
         })
           .then(({data}) => {
             console.log('提现申请后台返回结果如下')
@@ -167,6 +200,9 @@ export default {
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
+    },
+    history () {
+      utils.statistic('take_cash_page', 1, {to_destination_s: 'withdrawal_history'}, 'take_cash_page')
     }
   },
   components: {
@@ -184,14 +220,13 @@ export default {
   background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
   &__title {
     width: 100%;
     height: 54px;
-    margin: 24px 0 79px 0;
+    margin: 24px 0 60px 0;
     box-sizing: border-box;
     font: 500 28px 'Roboto', Arial, serif;
     color: #fff;
@@ -211,6 +246,12 @@ export default {
       text-align: center;
       flex: 1;
       padding-right: 54px;
+      font-size: 36px;
+      font-family: 'Roboto', Arial, serif;
+    }
+    &__history{
+      color:#fff;
+      font-size: 28px;
     }
   }
   &__contain {
@@ -218,12 +259,19 @@ export default {
     height: 100%;
     flex: 1;
     min-height: 384px;
+    .balance-hint{
+        color: #fff;
+        font-family: 'Roboto', Arial, serif;
+        font-size: 24px;
+        margin: 15px auto 0;
+        text-align: center;
+      }
     &__wrap {
       width: 100%;
       min-height: 384px;
       background: #fff;
       border-radius: 24px;
-      padding: 64px;
+      padding: 44px;
       box-sizing: border-box;
       position: relative;
       color: #241262;
@@ -245,24 +293,37 @@ export default {
       }
       &__mybalance, &__totalbalance {
         font: 700 52px 'Roboto Condensed', Arial, serif;
-        margin: 20px 0 58px 0;
+        margin: 20px 0 40px 0;
       }
       &__totalbalance {
         margin: 20px 0 0px 0;
       }
+      &__mybalance{
+        display: flex;
+        justify-content: space-between;
+      }
       &__tip {
-        font: 300 26px 'Roboto', Arial, serif;
-        color: #7B7B7B;
-        margin-left: 22px;
+        width: 300px;
+        height: 55px;
+        font-size:28px;
+        font-family:  'Roboto', Arial, serif;
+        line-height: 55px;
+        text-align: center;
+        color: #241262;
+        border-radius: 26px;
+        box-shadow: 0 0 0 1px  rgba(36, 18, 98, 0.7);
+        span {
+          font-size:22px;
+          color: #241262;
+        }
       }
     }
   }
   &__operate {
     width: 100%;
     height: 314px;
-    margin-bottom: 85px;
     display: block;
-    overflow: hidden;
+    flex: 1;
     &__wrap__input {
       width: 100%;
       height: 94px;
@@ -271,6 +332,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-bottom: 18px;
     }
     &__input {
       display:inline-block;
@@ -280,7 +342,8 @@ export default {
       outline: none;
       color: #241262;
       font: 300 36px 'Roboto', Arial, serif;
-      margin-left: 35px;
+      padding: 0 35px;
+      text-align: center;
     }
     &__input:focus {
       box-shadow: none;
@@ -290,21 +353,25 @@ export default {
     }
     &__input::-webkit-input-placeholder{
       width: 100%;
+      text-align: center;
     }
     &__input:-ms-input-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__input::-moz-placeholder{
       color: #9F9EA1;
+      text-align: center;
     }
     &__tip {
-      width: 100%;
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
-      margin: 27px 0 39px 0;
+      text-align: center;
+      margin: 27px auto 35px;
     }
     &__btn {
       width: 100%;

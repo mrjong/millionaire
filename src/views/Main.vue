@@ -1,37 +1,49 @@
  <template>
   <div class="main-container">
     <div class="main-container__top">
+      <div class="main-container__top__back" @click="back">
+        <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
+      </div>
       <div class="main-container__top__online">
         <p class="main-container__top__online__icon icon-yonghu iconfont"></p>
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
-      <div class="main-container__top__logo">
+      <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
+      </div>
+      <div class="main-container__top__music" @click="isPlay">
+        <img src="../assets/images/music-icon.png" v-if="!musicPlay">
+        <img src="../assets/images/music_close-icon.png" v-else>
       </div>
     </div>
     <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
-    <respondence @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
+    <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
+    <fail-tip v-model="showFailTip" :index="index"></fail-tip>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import FailTip from '../components/FailTip'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
+import utils from '../assets/js/utils'
 export default {
   name: 'Main',
   data () {
     return {
       showLogin: false,
       showDialog: false,
+      showFailTip: false,
+      index: 1, // 题目序号
       dialogInfo: {
         htmlTitle: 'Failed to Submit',
         htmlText: '',
@@ -39,7 +51,8 @@ export default {
         markType: 0,
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-      }
+      },
+      musicPlay: true
     }
   },
   computed: {
@@ -50,10 +63,18 @@ export default {
       isWon: 'isWon'
     })
   },
+  created () {
+    if (this.status === 1) {
+      this.$router.replace({path: '/'})
+    }
+  },
   mounted () {},
   methods: {
     sure () {
       this.showDialog = false
+    },
+    back () {
+      this.$router.replace({path: '/'})
     },
     onError (err) {
       this.dialogInfo.htmlText = err
@@ -61,6 +82,22 @@ export default {
       setTimeout(() => {
         this.showDialog = false
       }, 1000)
+    },
+    isPlay () {
+      if (this.musicPlay) {
+        utils.playSound('bg')
+        this.musicPlay = false
+      } else {
+        utils.stopSound('bg')
+        this.musicPlay = true
+      }
+    },
+    /*
+    * 失败提示
+    */
+    failTip () {
+      this.index = this.$store.getters.index || 1
+      this.showFailTip = true
     }
   },
   components: {
@@ -69,7 +106,15 @@ export default {
     Respondence,
     WinnersResult,
     Compere,
-    BalanceMark
+    BalanceMark,
+    FailTip
+  },
+  watch: {
+    status: function (status, oldStatus) {
+      if (status === 4) {
+        this.musicPlay = true
+      }
+    }
   }
 }
 </script>
@@ -85,9 +130,22 @@ export default {
     &__top{
       width: 100%;
       display: flex;
+      align-items: center;
       padding: 25px 25px 0;
-      justify-content: space-between;
       min-height: 59px;
+      position: relative;
+      &__back{
+        width: 54px;
+        height: 54px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 26px;
+        line-height: 54px;
+        text-align: center;
+        margin-right: 15px;
+        &__icon {
+          font-size: 24px;
+        }
+      }
       &__online{
         padding: 0 18px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -96,6 +154,7 @@ export default {
         align-items: center;
         align-self: center;
         height: 52px;
+        position: relative;
         &__icon{
           width: 24px;
           height: 24px;
@@ -111,9 +170,27 @@ export default {
         }
       }
       &__logo{
-        align-self: center;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
         img{
           width: 135px;
+        }
+      }
+      &__music{
+        width: 54px;
+        height: 54px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 26px;
+        line-height: 54px;
+        text-align: center;
+        margin-right: 15px;
+        font-size: 24px;
+        position: absolute;
+        right:0;
+        img{
+          width: 60%;
+          margin: 10px auto 0;
         }
       }
     }

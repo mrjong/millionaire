@@ -49,8 +49,15 @@ const actions = {
   //   im.sendMessage(msgObj.msg, msgObj.img, msgObj.nickname)
   // },
   [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
-    im.addListener(listenerType.MESSAGE_HOST, (message) => {
+    im.addListener(listenerType.MESSAGE_HOST, (message, intervalTime) => {
       const msgList = (message.content && message.content.content) || ''
+      // 如果传入串词间隔时间，则更新串词间隔时间
+      if (intervalTime) {
+        commit(type._UPDATE, {
+          hostIntervalTime: intervalTime
+        })
+      }
+
       if (msgList) {
         const hostMsgList = JSON.parse(msgList) || []
         commit(type._UPDATE, {

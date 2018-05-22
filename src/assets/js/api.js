@@ -1,4 +1,4 @@
-import axios from './http'
+import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
 import md5 from 'md5'
 
@@ -13,7 +13,21 @@ export const api = {
   setQuestion: '/cmp/submit_question/', // 用户出题
   isSetQuestion: '/cmp/submit_flag/', // 是否出过题
   syncInfo: '/cmp/sc/', // 同步用户信息
-  log: '/cmp/l/' // 日志
+  log: '/cmp/l/', // 日志
+  pollMsg: '/cmp/q/', // 轮询消息
+  generateCode: '/cmp/gc', // 生成邀请码,
+  VerificationCode: '/cmp/vc', // 相关码验证,
+  DailyShare: '/cmp/ds', // 每日分享
+  sharePage: '/cmp/res', // 分享中间页
+  addExtraLife: '/cmp/lc', // 首次登陆增加额外生命
+  register: '/v2/user/register', // 手机号注册
+  signInByPhone: '/v2/user/verifycode', // 手机号登陆
+  getPhoneNationCode: '/v2/user/nationcode', // 获取手机号国家码
+  useRecoveryCard: '/cmp/rev/', // 使用复活卡
+  getWinnerList: '/cmp/bi/', // 获取winner列表,
+  makeShortUrl: '/cmp/sl/', // 生成短链服务
+  balanceRecord: '/cmp/bl', // 提现记录
+  reminder: '/cmp/sub_remind/' // 订阅提醒
 }
 
 export const init = function (isRefreshToken) {
@@ -95,6 +109,17 @@ export const syncInfo = function () {
   })
 }
 
+// 轮询消息
+export const pollMsg = function () {
+  return axios.get(api.pollMsg, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    },
+    timeout: 5000
+  })
+}
+
 // 日志
 export const log = function (content) {
   return axios.post(api.log, {
@@ -102,4 +127,131 @@ export const log = function (content) {
   }).then(() => {}).catch((err) => {
     console.log('日志上报出错：', err)
   })
+}
+
+// 生成邀请码
+export const generateCode = function () {
+  return axios.post(api.generateCode, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 相关码验证
+
+export const VerificationCode = function (code) {
+  return axios.post(api.VerificationCode, {
+    code: code,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 每日分享
+export const DailyShare = function () {
+  return axios.post(api.DailyShare, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 首次登陆增加额外生命
+export const addExtraLife = function () {
+  return axios.post(api.addExtraLife, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 手机号注册获取验证码
+export const register = function (phoneNumber, phoneNationcode = '91') {
+  return axios.post(`${accountHost[env]}${api.register}`, {
+    app_id: utils.app_id,
+    nationcode: phoneNationcode,
+    mobile: phoneNumber,
+    account_type: 8,
+    cr: utils.generateRandomStr(16)
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
+  })
+}
+
+// 手机号登陆
+export const signInByPhone = function (code) {
+  return axios.post(`${accountHost[env]}${api.signInByPhone}`, {
+    code,
+    app_id: utils.app_id,
+    account_type: 8
+  }, {
+    transformRequest: [function (data) {
+      const formData = new FormData()
+      for (let prop in data) {
+        formData.append(prop, data[prop])
+      }
+      return formData
+    }]
+  })
+}
+
+// 获取手机号国家码
+export const getPhoneNationCode = function () {
+  return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
+}
+
+// 使用复活卡
+export const useRecoveryCard = function (id, index, type = 1) {
+  return axios.get(api.useRecoveryCard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      i: id,
+      s: index,
+      t: type
+    }
+  })
+}
+
+// 获取 winner 列表
+export const getWinnerList = function () {
+  return axios.get(api.getWinnerList)
+}
+
+// 生成短链服务
+export const makeShortUrl = function (url) {
+  return axios.get(api.makeShortUrl, {
+    withCredentials: false,
+    timeout: 1500,
+    params: {
+      s: 'millionaire',
+      l: url
+    }
+  })
+}
+// 提现记录
+export const balanceRecord = function (pageNo) {
+  return axios.post(api.balanceRecord, {
+    pageNo: pageNo,
+    pageSize: 10,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 订阅提醒
+export const Reminder = function (reminderOjb) {
+  return axios.post(api.reminder, {
+    ...reminderOjb,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+export const getReportUrl = function () {
+  return reportHost[env]
 }

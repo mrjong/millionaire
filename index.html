@@ -3,11 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <title>millionaire</title>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="browsermode" content="application">
+  <meta name="x5-page-mode" content="app">
+  <meta name="full-screen" content="yes">
+  <title>Go! Millionaire</title>
+  <script src="http://static.subcdn.com/201803200926094de645fbfe.js"></script>
+  <script>new VConsole()</script>
   <script>
     var startTime = Date.now();
   </script>
   <script>
+    var isPlaying = true
     var njordGame = window.top.njordGame
     var playAudioCallback = null
     var resumeCallback = null
@@ -17,9 +25,6 @@
     var loginCallback = null
     window.onload = function () {
       var loadTime = Date.now() - startTime
-      statistic({
-        event_name: 'first_page_loading_time_cost'
-      })
       console.log('加载时间：', loadTime)
     }
     function isLogin () {
@@ -39,12 +44,14 @@
       playAudioCallback && playAudioCallback()
     }
     njordCallback.onResume = function () {
+      isPlaying = true
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = false
       }
     }
     njordCallback.onPause = function () {
+      isPlaying = false
       var sounds = document.getElementsByTagName('audio')
       for (var i = 0; i < sounds.length; i++) {
         sounds[i].muted = true
@@ -78,9 +85,43 @@
 <body>
 <div id="app"></div>
 <!-- built files will be auto injected -->
-<script src="http://static.subcdn.com/201803211329228c2a27e02a.js"></script>
-<script src="http://static.subcdn.com/201803211329214b9e1b491d.js"></script>
+<script>
+  (function (para, src) {
+    var t = 'script'
+    if (!window['ares'] && src) {
+      var h = document.getElementsByTagName('head');
+      var s = document.createElement(t);
+      s.type = 'text/javascript';s.src = src;
+      if (h && h[0]) {
+        var sc = h[0].getElementsByTagName(t);
+        if (sc && sc[0]) { h[0].insertBefore(s, sc[0]); }
+        else { h[0].appendChild(s);}
+      }
+      s.onload = s.onreadystatechange = function() {
+        var r = this.readyState
+        if (!r || r === 'loaded' || r === 'complete') {
+          if (window['ares']) {
+            ares.init(para); // 初始化
+            ares.quick('autoTrack')
+          }
+        }
+      };
+    }
+  })({
+    server_url: 'https://sh5.apusapps.com/v1/h5/w',
+    protocol_version: 1,
+    category: 'ares',
+    project: 'millionaire',
+    module: 'module'
+  }, 'http://static-dual.apusapps.com/common/fe/ares-1.0.2.min.js')
+</script>
+<script src="http://static.subcdn.com/2018032610330803481a4e48.js"></script>
+<script src="http://static.subcdn.com/201804031443217d6ef1012a.js"></script>
 <script src="http://static.subcdn.com/20180321132919bde55bdb2d.js"></script>
+<!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script> -->
 <!-- <link href='http://fonts.font.im/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'> -->
 </body>
 </html>

@@ -5,7 +5,7 @@
     :class="{'chat-msg-wrap-haswrap': showInput}">
     <div class="chat-msg-wrap" id='chatMsgWrap'>
         <div class="msg-container" id="scrollContainer" ref="scrollContainer">
-          <p class="msg-container__item" v-for="col in msgList" :key="col.msgId" v-if="msgList.length">
+          <p class="msg-container__item" v-for="(col) in msgList" :key="col.msgId" v-if="msgList.length">
             <span class="msg-container__item__wrap">
               <!-- <img class="msg-container__item__portrait" :src="col.img" alt=""> -->
               <span class="msg-container__item__nickname">{{col.nickname}}</span>
@@ -22,7 +22,7 @@
             type="text"
             @focus="focusEvent"
             @blur="blurEvent"
-            v-model.trim="myMessage">
+            v-model.trim="myMessage" @keyup.enter="sendMessage">
           <p class="msg-send-container__wrap__btn" @click="sendMessage">Send</p>
         </div>
         <label class="msg-send-container__icon" for="sendmessage" :class="{'msg-send-container__hide': showInput, 'msg-send-container__show': !showInput}">
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
 import {mapGetters} from 'vuex'
 // import * as type from '../store/type' // 【hack】 未用到 注释掉
 import * as listenerType from '../assets/js/listener-type' // 【hack】
@@ -48,7 +49,8 @@ export default {
       msgList: [], // 显示的消息列表
       myMessage: '', // 我发送的消息
       showInput: false, // 是否显示输入框
-      windowInnerHeight: 0 // 窗口高度
+      windowInnerHeight: 0, // 窗口高度
+      isSendMessageComplete: true // 消息是否发送完成
     }
   },
   computed: {
@@ -59,6 +61,9 @@ export default {
       status: 'status',
       questionStatus: 'question_status'
     })
+  },
+  created () {
+    this.sendMessage = throttle(this.sendMessage, 1500)
   },
   mounted () {
     // this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION) // 【hack】
@@ -74,6 +79,7 @@ export default {
       // 横屏切换为竖屏是 隐藏输入框 【hack】 什么鬼 maybe 用不上呢！！！
       window.addEventListener('resize', () => {
         if (this.windowInnerHeight < window.innerHeight) {
+          this.reSetMsgBot(true)
           this.showInput = false
         }
         this.windowInnerHeight = window.innerHeight
@@ -86,37 +92,53 @@ export default {
   methods: {
     // 1. 获取聊天列表 【hack】
     fetchChatList () {
-      const handler = (message) => {
-        const obj = {
-          img: message.content.user.avatar,
-          nickname: message.content.user.name,
-          msg: message.content.content,
-          msgId: message.messageId
-        }
-        let msgList = this.msgList || []
-        msgList.push(obj)
-        const len = msgList.length
-        if (len >= 50) {
-          msgList.splice(0, 36)
-        }
-        this.msgList = msgList
-        this.$nextTick(() => {
-          const scrollContainer = document.getElementById('scrollContainer')
-          if (scrollContainer) {
-            scrollContainer.scrollTop = 100000
-          }
-        })
-        // commit(type.CHAT_LIST_FETCH, obj)
+      im.addListener(listenerType.MESSAGE_NORMAL, this.messageHandler)
+    },
+    // 消息处理器
+    messageHandler (message) {
+      const obj = {
+        img: message.content.user.avatar,
+        nickname: message.content.user.name,
+        msg: message.content.content,
+        msgId: message.messageId
       }
-      im.addListener(listenerType.MESSAGE_NORMAL, handler)
-      im.addListener(listenerType.MESSAGE_SEND_SUCCESS, handler)
+      let msgList = this.msgList || []
+      msgList.push(obj)
+      const len = msgList.length
+      if (len >= 50) {
+        msgList.splice(0, 36)
+      }
+      this.msgList = msgList
+      this.$nextTick(() => {
+        const scrollContainer = document.getElementById('scrollContainer')
+        if (scrollContainer) {
+          scrollContainer.scrollTop = 100000
+        }
+      })
     },
     // 2. 发送消息 【hack】
     sendMessage () {
-      if (this.myMessage) {
+      if (this.myMessage && this.isSendMessageComplete) {
+        this.isSendMessageComplete = false
+        document.getElementById('sendmessage').blur()
         this.showInput = false
-        im.sendMessage(this.myMessage, this.userInfo.avatar, this.userInfo.userName)
+        const msg = this.myMessage
+        const nickname = this.userInfo.userName
+        const img = this.userInfo.avatar
         this.myMessage = ''
+        im.sendMessage(msg, img, nickname)
+        this.messageHandler({
+          content: {
+            user: {
+              avatar: img,
+              name: nickname
+            },
+            content: msg
+          },
+          messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
+        })
+        console.log('发送消息', msg, nickname, img)
+        this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
           fromSource = 'game_page'
@@ -221,6 +243,7 @@ export default {
   position: fixed;
   bottom: 35px;
   right: 30px;
+  z-index: 112;
   display: flex;
   justify-content: flex-end;
   &__icon {
