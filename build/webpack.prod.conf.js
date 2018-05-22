@@ -47,7 +47,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env,
       'IS_LOGIN': false,
       'BUILD_ENV': JSON.stringify(buildEnv || process.env.BUILD_ENV || 'prod'),
-      'VERSION': JSON.stringify(version)
+      'VERSION': JSON.stringify(version),
+      'PUBLIC_URL': JSON.stringify(config.build.assetsPublicPath + config.build.assetsSubDirectory)
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
