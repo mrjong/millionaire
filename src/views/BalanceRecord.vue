@@ -100,9 +100,9 @@ export default {
         api.cashRecord(pageNo).then(({data}) => {
           this.loading = false
           console.log(data)
-          if (data.result === 0) {
+          if (data.result === 1 && data.code === 0) {
             this.hasmore = data.data.hasmore
-            data.data.recordData.forEach((val, idx) => {
+            data.data.recordData && data.data.recordData.forEach((val, idx) => {
               this.statusText.push(val.orderType === 5 ? 'Withdraw Cash' : 'Win Cash')
               this.balanceRecordList.push(val)
             })
@@ -120,9 +120,9 @@ export default {
         api.balanceRecord(pageNo).then(({data}) => {
           this.loading = false
           console.log(data)
-          if (data.result === 0) {
+          if (data.result === 1 && data.code === 0) {
             this.hasmore = data.data.hasmore
-            data.data.recordData.forEach((val, idx) => {
+            data.data.recordData && data.data.recordData.forEach((val, idx) => {
               this.statusText.push((val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'success'))))
               val.state = (val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'Success')))
               this.balanceRecordList.push(val)
@@ -130,7 +130,7 @@ export default {
             this.pageNo += 1
           } else {
             // 请求失败
-            this.loading = false
+            this.loading = false && data.code === 0
           }
         }).catch((e) => {
           console.log(e)
@@ -183,7 +183,7 @@ export default {
       if (this.isClear) {
         let clearType = (this.recordType ? 2 : 1)
         api.clearRecord(clearType).then(({data}) => {
-          if (data.result === 0 && data.code === 0) {
+          if (data.result === 1 && data.code === 0) {
             // 清空成功
             this.balanceRecordList = []
           } else {

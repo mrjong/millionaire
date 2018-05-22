@@ -51,6 +51,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import * as type from '../store/type'
 import BalanceMark from '../components/BalanceMark'
 export default {
   name: 'Contact',
@@ -87,7 +88,7 @@ export default {
       if (val === 'balance-record') {
         this.$router.push({path: '/balance-record', query: {'type': 'cash'}})
       } else if (val === 'contact') {
-        this.$router.push({path: '/contact', query: ''})
+        this.$router.push({path: '/contact'})
       }
     },
     logOut () {
@@ -101,6 +102,7 @@ export default {
       this.showDialog = false
       if (this.isLogout) {
         utils.logout(() => {
+          this.$store.dispatch(type._INIT)
           this.$router.replace('/')
         }, () => {
           // 登出失败
