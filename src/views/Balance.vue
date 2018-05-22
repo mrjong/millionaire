@@ -24,6 +24,10 @@
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
     </div>
+    <p class="bottom-text">
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+    </p>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
@@ -121,13 +125,13 @@ export default {
     flex: 1;
     min-height: 384px;
     .balance-hint{
-        color: #fff;
-        font-family: 'Roboto', Arial, serif;
-        font-size: 24px;
-        margin: 30px auto 0;
-        text-align: center;
-        font-weight: 300;
-      }
+      color: #fff;
+      font-family: 'Roboto', Arial, serif;
+      font-size: 24px;
+      margin: 30px auto 0;
+      text-align: center;
+      font-weight: 300;
+    }
     &__wrap {
       width: 100%;
       min-height: 384px;
@@ -184,7 +188,7 @@ export default {
   &__operate {
     width: 100%;
     display: block;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
     &__tip {
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
@@ -200,6 +204,15 @@ export default {
       text-align: center;
       font: 300 36px/94px 'Roboto', Arial, serif;
     }
+  }
+}
+.bottom-text{
+  margin-bottom: 25px;
+  font: 200 24px 'Roboto', Arial, serif;
+  color: #fff;
+  text-align: center;
+  a{
+    color:#fff;
   }
 }
 </style>

@@ -28,9 +28,13 @@
       <p class="errorMsg">{{errorMsg}}</p>
       <button class="btn-login" @click="login">Sign up</button>
       <p class="policy">
-        Notice: The mobile number will be provided to Tencent Cloud for receiving SMS verification code
+        Notice: The mobile number will only be used to receive the SMS verification code from Tencent Cloud.
       </p>
       <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
+      <p class="bottom-text">
+        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+      </p>
     </section>
     <country-list v-model="showCountryList"></country-list>
     <loading v-if="loading"></loading>
@@ -266,7 +270,7 @@ export default {
     }
 
     .login {
-      margin-top: 35%;
+      margin-top: 20%;
       font: 400 28px 'Roboto', Arial, serif;
       color:#fff;
       flex: 1;
@@ -339,9 +343,7 @@ export default {
       .policy {
         margin-top: 35px;
         color:#fff;
-        font-size:24px;
-        font-family: "Roboto";
-        font-weight: 300;
+        font: 300 24px 'Roboto', Arial, serif;
         color:#efab33;
         text-align: center;
       }
@@ -350,9 +352,21 @@ export default {
     &__footer {
       width: 135px;
       position: absolute;
-      bottom: 40px;
+      bottom: 60px;
       left: 50%;
       transform: translateX(-50%);
     }
   }
+  .bottom-text{
+      width: 100%;
+      position: absolute;
+      bottom: 10px;
+      margin: 25px 0 20px;
+      font: 200 24px 'Roboto', Arial, serif;
+      color: #fff;
+      text-align: center;
+      a{
+        color:#fff;
+      }
+    }
 </style>

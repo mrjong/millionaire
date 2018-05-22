@@ -13,7 +13,10 @@
         {{val.text}}
       </p>
     </div>
-    <p class="bottom-text">Go!Millionaire Service Agreement &Go!Millionaire Privacy Agreement</p>
+    <p class="bottom-text">
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+    </p>
   </div>
 </template>
 
@@ -69,17 +72,17 @@ export default {
         }
         case 'twitter' : {
           setTimeout(() => {
-            const href = `twitter://follow?screen_name=GoMillionaireGO`
-            window.location.href = href
+            window.location.href = 'https://twitter.com/GoMillionaireGO'
           }, 5)
-          window.location.href = 'https://twitter.com/GoMillionaireGO'
+          window.location.href = `twitter://follow?screen_name=GoMillionaireGO`
           break
         }
         case 'ins' : {
           setTimeout(() => {
-            window.location.href = 'instagram://user?username=apusgomillionaire'
+            window.location.href = 'https://www.instagram.com/apusgomillionaire/'
           }, 5)
-          window.location.href = `https://www.instagram.com/apusgomillionaire/ `
+          window.location.href = 'instagram://user?username=apusgomillionaire'
+          console.log('sss')
         }
       }
     }
@@ -176,11 +179,15 @@ export default {
       }
     }
     .bottom-text{
+      width: 100%;
       position: absolute;
       bottom: 30px;
-      font: 200 20px 'Roboto', Arial, serif;
+      font: 200 24px 'Roboto', Arial, serif;
       color: #fff;
       text-align: center;
+      a{
+        color:#fff;
+      }
     }
   }
 </style>

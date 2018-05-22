@@ -16,11 +16,11 @@
       </p>
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
-        <span class="paytm__tip">Paytm Account</span>
+        <span class="paytm__tip">Phone Number</span>
         <span class="paytm__text">{{phone}}</span>
       </p>
       <p class="code">
-        <span class="code__icon iconfont icon-paytm"></span>
+        <span class="code__icon iconfont icon-yaoqingma"></span>
         <span class="code__tip">Referral Code</span>
         <span class="code__text">{{code}}</span>
       </p>
@@ -37,12 +37,13 @@
     </div>
     <div class="logout-btn" @click="logOut">Log Out</div>
     <p class="bottom-text">
-      <a href=''>Go!Millionaire Service Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Go!Millionaire Privacy Agreement</a>
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
     </p>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
-                  @okEvent='okEvent'>
+                  @okEvent='okEvent'
+                  @cancelEvent='cancelEvent'>
     </balance-mark>
   </div>
 </template>
@@ -60,6 +61,7 @@ export default {
       isLogout: false,
       dialogInfo: {
         htmlText: '',
+        markType: false,
         okBtnText: 'OK'
       },
       phone: ''
@@ -92,6 +94,7 @@ export default {
       // 退出登录
       this.isLogout = true
       this.showDialog = true
+      this.dialogInfo.markType = true
       this.dialogInfo.htmlText = 'Are you sure you want to log out?'
     },
     okEvent () {
@@ -105,6 +108,9 @@ export default {
           this.showDialog = true
         })
       }
+    },
+    cancelEvent () {
+      this.showDialog = false
     }
   },
   components: {
@@ -151,7 +157,7 @@ export default {
     &__head{
       width: 133px;
       height: 133px;
-      margin: 100px auto 46px;
+      margin: 80px auto 40px;
       img{
         width: 100%;
         border-radius: 50%;
@@ -219,11 +225,11 @@ export default {
       font:32px 'Roboto', Arial, serif;
       line-height: 93px;
       background-color: rgba(255, 255, 255, 0.5);
-      margin-top: 200px;
+      margin-top: 100px;
   }
     .bottom-text{
-      margin-top: 25px;
-      font: 200 20px 'Roboto', Arial, serif;
+      margin: 25px 0;
+      font: 200 24px 'Roboto', Arial, serif;
       color: #fff;
       text-align: center;
       a{

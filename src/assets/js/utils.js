@@ -2,7 +2,7 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { makeShortUrl, api, logout, getPersonInfo } from './api'
+import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy} from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
@@ -59,7 +59,12 @@ const utils = {
   login (callback) {
     window.top.loginCallback = function () {
       callback()
-      utils.getPersonInfo()
+      // 登录是否同意过协议
+      queryAgreePolicy().then(({data}) => {
+        if (data.result === 1 && !data.data.agree) {
+          vm.$router.replace('/policy')
+        }
+      })
     }
     if (njordGame) {
       const loginArgs = JSON.stringify({

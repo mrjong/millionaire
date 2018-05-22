@@ -18,12 +18,15 @@
       <p class="balance-detail__operate__wrap__input">
         <input type="text" class="balance-detail__operate__input" placeholder="Paytm Account" v-model="myPay">
       </p>
-      <p class="balance-detail__operate__wrap__hint">Notice: The info above will be submitted to paytm for cash out. Currently, only rupee withdrawals in India are supported. It is applied to account in India that supports Withdrawal of INR</p>
+      <p class="balance-detail__operate__wrap__hint">Notice: The info above will be submitted to paytm for cash out. Currently, only India rupee are available to be withdrawn in our game.</p>
     </div>
     <div>
       <p class="balance-detail__operate__btn" @click="cashOut">Cash Out</p>
-      <p class="balance-detail__operate__tip">The payouts will be made in 7 days after Approved</p>
     </div>
+    <p class="bottom-text">
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+    </p>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
   </div>
@@ -283,7 +286,17 @@ export default {
       background: rgba(250,167,23, 0.95);
       text-align: center;
       font: 300 36px/94px 'Roboto', Arial, serif;
+      margin-bottom: 50px;
     }
+  }
+}
+.bottom-text{
+  margin-bottom: 25px;
+  font: 200 24px 'Roboto', Arial, serif;
+  color: #fff;
+  text-align: center;
+  a{
+    color:#fff;
   }
 }
 </style>

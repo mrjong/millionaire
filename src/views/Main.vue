@@ -51,7 +51,8 @@ export default {
         markType: 0,
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-      }
+      },
+      musicPlay: true
     }
   },
   computed: {

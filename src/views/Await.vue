@@ -90,6 +90,10 @@
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
+    <p class="bottom-text">
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+    </p>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop=isReminderPop></reminder-bomb>
     <balance-mark v-if="showDialog"
@@ -680,6 +684,15 @@ export default {
   .await::before{
     background:linear-gradient(red, blue)
   }
+  .bottom-text{
+      margin: 25px 0;
+      font: 200 24px 'Roboto', Arial, serif;
+      color: #fff;
+      text-align: center;
+      a{
+        color:#fff;
+      }
+    }
   @keyframes lives {
     0%{
       transform: scale(1);
