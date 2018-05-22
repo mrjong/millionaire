@@ -384,6 +384,9 @@ const utils = {
    * @param {any} name
    */
   playSound (name) {
+    if (!vm.$store.getters.isPlayingMusic) {
+      return false
+    }
     this.stopSound(name)
     if (name) {
       const urls = sounds[name] && sounds[name].urls
