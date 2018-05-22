@@ -3,7 +3,7 @@
     <div class="base-info__user">
         <div class="base-info__user__head"
              :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login"></div>
-        <p class="base-info__user__name">{{baseInfo.userName}}</p>
+        <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
       <router-link to="/balance" class="balance-router" >
