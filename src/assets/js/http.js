@@ -47,16 +47,16 @@ const http = axios.create({
   }
 })
 
-axios.interceptors.request.use((config) => {
+http.interceptors.request.use((config) => {
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData
-    config.transformRequest = [[function (data) {
+    config.transformRequest = [function (data) {
       const formData = new FormData()
       for (let prop in data) {
         formData.append(prop, data[prop])
       }
       return formData
-    }]]
+    }]
   }
   return config
 })
@@ -65,12 +65,12 @@ http.defaults.retry = 3 // 重试次数
 http.defaults.retryDelay = 500 // 重试延时
 
 http.interceptors.response.use(undefined, (err) => {
-  if (/\/cmp\/q/.test(err.config.url)) { // 如果是轮询接口，直接返回
-    return Promise.reject(err)
-  }
   const config = err.config
   // 判断是否配置了重试
   if (!config || !config.retry) return Promise.reject(err)
+  if (/\/cmp\/q/.test(config.url)) { // 如果是轮询接口，直接返回
+    return Promise.reject(err)
+  }
 
   // 设置重置次数，默认为0
   config.__retryCount = config.__retryCount || 0

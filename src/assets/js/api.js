@@ -165,29 +165,25 @@ export const addExtraLife = function () {
 
 // 手机号注册获取验证码
 export const register = function (phoneNumber, phoneNationcode = '91') {
-  return axios.post(`${accountHost[env]}${api.register}`, {
+  return axios.post(api.register, {
     app_id: utils.app_id,
     nationcode: phoneNationcode,
     mobile: phoneNumber,
     account_type: 8,
     cr: utils.generateRandomStr(16)
+  }, {
+    baseURL: accountHost[env]
   })
 }
 
 // 手机号登陆
 export const signInByPhone = function (code) {
-  return axios.post(`${accountHost[env]}${api.signInByPhone}`, {
+  return axios.post(api.signInByPhone, {
     code,
     app_id: utils.app_id,
     account_type: 8
   }, {
-    transformRequest: [function (data) {
-      const formData = new FormData()
-      for (let prop in data) {
-        formData.append(prop, data[prop])
-      }
-      return formData
-    }]
+    baseURL: accountHost[env]
   })
 }
 
