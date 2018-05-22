@@ -57,6 +57,8 @@ export default {
             console.log('点击头像登陆失败:', err)
           })
         })
+      } else {
+        this.$router.push({path: '/user-center'})
       }
     }
   }

@@ -4,36 +4,40 @@
       <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
-      <p class="record__top__title">Withdrawal History</p>
+      <p class="record__top__title">{{recordType ? 'Cash History' : 'Withdrawal History'}}</p>
+      <p class="record__top__detele" @click="detele" v-if="balanceRecordList.length > 0">Delete all</p>
     </div>
     <div class="record__wrap" ref="recordWrap" :style="{height:recordWrapHeight + 'px'}">
       <div class="loading" v-if="loading">
         <loading></loading>
       </div>
-      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList != '' &&!loading">
+      <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList.length > 0 &&!loading">
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
-            <span class="title big">Cash out</span>
-            <span class="money big" :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
+            <span class="title big" >{{recordType ? statusText[idx] : 'Cash out'}}</span>
+            <span class="money big" v-if="recordType" :class="{success: val.orderType === 9}">{{val.orderType === 5 ? '-' : '+'}}{{userInfo.currencyType}}{{val.amountFmt}}</span>
+            <span class="money big" v-else :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
-            <span class="time small">{{val.createTime}}</span>
-            <span class="status small">{{val.state}}</span>
+            <span class="time small">{{recordType ? val.updateTime : val.createTime}}</span>
+            <span class="status small" v-if="!recordType">{{val.state}}</span>
           </div>
-          <p class="hint" v-if="val.state === 'Failed'">
+          <p class="hint" v-if="val.state === 'Failed' && !recordType">
             Sorry,your apply for cash out was failed. Please check and submit again.
           </p>
         </div>
       </div>
-      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList && !loading">
+      <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList.length === 0 && !loading">
         <img src="../assets/images/no-history.png" class="no-list__img">
-        <p>No Withdrawal History</p>
+        <p>{{recordType ? 'No Cash History' : 'No Withdrawal History'}}</p>
       </div>
     </div>
+    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
   </div>
 </template>
 <script>
 import {throttle} from 'throttle-debounce'
+import BalanceMark from '../components/BalanceMark'
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as api from '../assets/js/api'
@@ -52,7 +56,16 @@ export default {
       move: '',
       end: '',
       recordWrapHeight: 0,
-      loading: false
+      loading: false,
+      isClear: false,
+      recordType: '',
+      markInfo: {
+        showMark: false,
+        htmlText: '',
+        shouldSub: false,
+        markType: 1,
+        okBtnText: ''
+      }
     }
   },
   computed: {
@@ -61,6 +74,9 @@ export default {
     })
   },
   mounted () {
+    if (this.$route.query.type) {
+      this.recordType = this.$route.query.type
+    }
     utils.statistic('withdrawal_history', 0, {}, 'take_cash_page')
     this.computedHeight()
   },
@@ -80,23 +96,47 @@ export default {
         return false
       }
       this.loading = true
-      api.balanceRecord(pageNo).then(({data}) => {
-        this.loading = false
-        console.log('提现记录' + data)
-        if (data.result === 0) {
-          this.hasmore = data.data.hasmore
-          data.data.recordData.forEach((val, idx) => {
-            this.statusText.push((val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'success'))))
-            val.state = (val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'Success')))
-            this.balanceRecordList.push(val)
-          })
-          this.pageNo += 1
-        } else {
-          // 请求失败
-        }
-      }).catch((e) => {
-        console.log(e)
-      })
+      if (this.$route.query.type && this.$route.query.type === 'cash') {
+        api.cashRecord(pageNo).then(({data}) => {
+          this.loading = false
+          console.log(data)
+          if (data.result === 0) {
+            this.hasmore = data.data.hasmore
+            data.data.recordData.forEach((val, idx) => {
+              this.statusText.push(val.orderType === 5 ? 'Withdraw Cash' : 'Win Cash')
+              this.balanceRecordList.push(val)
+            })
+            this.pageNo += 1
+            console.log(this.balanceRecordList)
+          } else {
+            // 请求失败
+            this.loading = false
+          }
+        }).catch((e) => {
+          console.log(e)
+          this.loading = false
+        })
+      } else {
+        api.balanceRecord(pageNo).then(({data}) => {
+          this.loading = false
+          console.log(data)
+          if (data.result === 0) {
+            this.hasmore = data.data.hasmore
+            data.data.recordData.forEach((val, idx) => {
+              this.statusText.push((val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'success'))))
+              val.state = (val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'Success')))
+              this.balanceRecordList.push(val)
+            })
+            this.pageNo += 1
+          } else {
+            // 请求失败
+            this.loading = false
+          }
+        }).catch((e) => {
+          console.log(e)
+          this.loading = false
+        })
+      }
     },
     touch () {
       let yStart = 0
@@ -109,30 +149,52 @@ export default {
         yStart = touches.clientY
         xStart = touches.clientX
       })
-      // domEvent.on(document.body, 'touchmove', this.move = (e) => {
-      //   e.stopPropagation()
-      //   let touches = e.touches[0]
-      //   yEnd = touches.clientY
-      //   xEnd = touches.clientX
-      //   console.log('下拉数据' + yEnd + xEnd)
-      // })
       domEvent.on(document.body, 'touchmove', throttle(100, this.move = (e) => {
-        // console.log('11111111111111111111111')
         e.stopPropagation()
         let touches = e.touches[0]
         yEnd = touches.clientY
         xEnd = touches.clientX
-        let recordListHeight = this.$refs.recordList.offsetHeight
-        let recordListScrollTop = this.$refs.recordWrap.scrollTop || 0
-        if ((Math.abs(xEnd - xStart) < Math.abs(yEnd - yStart)) && (yEnd - yStart) < 0) {
-          if (recordListScrollTop + this.recordWrapHeight > recordListHeight) {
-            this.getBalanceRecord(this.pageNo)
+        if (this.$refs.recordList) {
+          let recordListHeight = this.$refs.recordList.offsetHeight
+          let recordListScrollTop = this.$refs.recordWrap.scrollTop || 0
+          if ((Math.abs(xEnd - xStart) < Math.abs(yEnd - yStart)) && (yEnd - yStart) < 0) {
+            if (recordListScrollTop + this.recordWrapHeight > recordListHeight) {
+              this.getBalanceRecord(this.pageNo)
+            }
+          } else {
+            return false
           }
-        } else {
-          return false
         }
       }))
-      // domEvent.on(document.body, 'touchend', this.end)
+    },
+    detele () {
+      this.isClear = true
+      if (this.recordType) {
+        this.markInfo.htmlText = 'Are you sure you want to delete all the cash history?'
+      } else {
+        this.markInfo.htmlText = 'Are you sure you want to delete all the withdrawal history?'
+      }
+      this.markInfo.okBtnText = 'OK'
+      this.markInfo.showMark = true
+    },
+    okEvent (info) {
+      this.markInfo.showMark = false
+      // 请求删除
+      if (this.isClear) {
+        let clearType = (this.recordType ? 2 : 1)
+        api.clearRecord(clearType).then(({data}) => {
+          if (data.result === 0) {
+            // 清空成功
+            this.balanceRecordList = []
+          } else {
+            // 清空失败
+            this.markInfo.htmlText = 'You failed to delete the Withdrawal History.'
+          }
+        }).catch((e) => {})
+      }
+    },
+    cancelEvent () {
+      this.markInfo.showMark = false
     }
   },
   beforeDestroy () {
@@ -144,13 +206,10 @@ export default {
       domEvent.off(document.body, 'touchmove', this.move)
       this.move = ''
     }
-    // if (this.end) {
-    //   domEvent.off(document.body, 'touchend', this.end)
-    //   this.end = ''
-    // }
   },
   components: {
-    loading
+    loading,
+    BalanceMark
   }
 }
 </script>
@@ -163,7 +222,6 @@ export default {
   color: #fff;
   background-color: #fff;
   &__top{
-    width: 100%;
     position: relative;
     padding: 24px 30px 0;
     .back{
@@ -183,6 +241,13 @@ export default {
         color: #fff;
         margin-left: -2px;
       }
+    }
+    &__detele{
+      position: absolute;
+      top: 36px;
+      right: 30px;
+      font: 28px 'Roboto',Arial,serif;
+      color: #241262;
     }
     &__title{
       height: 54px;
@@ -205,16 +270,19 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        border-bottom: 0.5px solid rgba(36, 18, 98, 0.3);
+        border-bottom: 1px solid rgba(38, 9, 100, 0.1);
         padding: 20px 0;
         .item-info1, .item-info2{
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           color:#241262;
+          .title{
+            font-family: "Roboto",Arial,serif;
+          }
           .big{
             font-size: 32px;
-            font-family: "Roboto",Arial,serif;
+            font-family: "Roboto Condensed",Arial,serif;
           }
           .small{
             font-size: 24px;

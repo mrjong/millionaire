@@ -2,9 +2,11 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import { makeShortUrl, api } from './api'
+import { makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy } from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
+import {vm} from '../../main'
+import { _UPDATE } from '../../store/type'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -57,6 +59,12 @@ const utils = {
   login (callback) {
     window.top.loginCallback = function () {
       callback()
+      // 登录是否同意过协议
+      queryAgreePolicy().then(({data}) => {
+        if (data.result === 1 && !data.data.agree) {
+          vm.$router.replace('/policy')
+        }
+      })
     }
     if (njordGame) {
       const loginArgs = JSON.stringify({
@@ -67,6 +75,38 @@ const utils = {
     } else {
       window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
+  },
+  /**
+   * 退出登陆
+   */
+  logout (callback, errCallback) {
+    logout().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback && callback()
+      } else {
+        errCallback && errCallback(data.error_msg || '')
+        console.log('退出登陆失败', data.error_msg || '')
+      }
+    }, err => {
+      errCallback && errCallback(err)
+      console.log('退出登陆出错', err)
+    })
+  },
+  /**
+   * 获取个人信息
+   */
+  getPersonInfo (callback, errCallback) {
+    getPersonInfo().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback && callback(data.data || {})
+      } else {
+        console.log('获取个人信息失败:', data.error_msg || '')
+        errCallback && errCallback(data.error_msg || '')
+      }
+    }, err => {
+      console.log('获取个人用户信息出错:', err)
+      errCallback && errCallback(err)
+    })
   },
   /**
   * 获取浏览器公共参数
@@ -284,6 +324,32 @@ const utils = {
     }
     return ''
   },
+  /**
+   * 格式化题目序号
+   * @param {any} index 序号
+   * @returns
+   */
+  formatIndex (index) {
+    let result = index
+    switch (+index) {
+      case 1: {
+        result = '1st'
+        break
+      }
+      case 2: {
+        result = '2nd'
+        break
+      }
+      case 3: {
+        result = '3rd'
+        break
+      }
+      default: {
+        result = `${index}th`
+      }
+    }
+    return result
+  },
   computePercent (obj, val) {
     let total = 0
     for (let i in obj) {
@@ -317,6 +383,19 @@ const utils = {
         sound.onerror = function () {
           console.log(`${prop} 加载失败`)
         }
+
+        if (prop === 'bg') {
+          sound.onplaying = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: true
+            })
+          }
+          sound.onpause = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: false
+            })
+          }
+        }
         obj.instance = sound
         document.body.appendChild(sound)
       }
@@ -327,6 +406,9 @@ const utils = {
    * @param {any} name
    */
   playSound (name) {
+    if (!vm.$store.getters.isPlayingMusic) {
+      return false
+    }
     this.stopSound(name)
     if (name) {
       const urls = sounds[name] && sounds[name].urls

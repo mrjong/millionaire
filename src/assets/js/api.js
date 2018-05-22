@@ -27,7 +27,13 @@ export const api = {
   getWinnerList: '/cmp/bi/', // 获取winner列表,
   makeShortUrl: '/cmp/sl/', // 生成短链服务
   balanceRecord: '/cmp/bl', // 提现记录
-  reminder: '/cmp/sub_remind/' // 订阅提醒
+  reminder: '/cmp/sub_remind/', // 订阅提醒
+  logout: '/v2/user/logout/', // 退出登陆
+  getPersonInfo: '/v2/user/getinfo', // 获取个人信息
+  clearRecord: '/cmp/wc/', // 标记删除提现记录
+  submitAgreePolicy: '/cmp/sub_ag/', // 上报协议
+  queryAgreePolicy: '/cmp/ag/', // 查询是否同意协议
+  cashRecord: '/cmp/bfr/' // 余额记录
 }
 
 export const init = function (isRefreshToken) {
@@ -138,7 +144,6 @@ export const generateCode = function () {
 }
 
 // 相关码验证
-
 export const VerificationCode = function (code) {
   return axios.post(api.VerificationCode, {
     code: code,
@@ -165,37 +170,25 @@ export const addExtraLife = function () {
 
 // 手机号注册获取验证码
 export const register = function (phoneNumber, phoneNationcode = '91') {
-  return axios.post(`${accountHost[env]}${api.register}`, {
+  return axios.post(api.register, {
     app_id: utils.app_id,
     nationcode: phoneNationcode,
     mobile: phoneNumber,
     account_type: 8,
     cr: utils.generateRandomStr(16)
   }, {
-    transformRequest: [function (data) {
-      const formData = new FormData()
-      for (let prop in data) {
-        formData.append(prop, data[prop])
-      }
-      return formData
-    }]
+    baseURL: accountHost[env]
   })
 }
 
 // 手机号登陆
 export const signInByPhone = function (code) {
-  return axios.post(`${accountHost[env]}${api.signInByPhone}`, {
+  return axios.post(api.signInByPhone, {
     code,
     app_id: utils.app_id,
     account_type: 8
   }, {
-    transformRequest: [function (data) {
-      const formData = new FormData()
-      for (let prop in data) {
-        formData.append(prop, data[prop])
-      }
-      return formData
-    }]
+    baseURL: accountHost[env]
   })
 }
 
@@ -243,6 +236,17 @@ export const balanceRecord = function (pageNo) {
   })
 }
 
+// 余额记录
+
+export const cashRecord = function (pageNo) {
+  return axios.post(api.cashRecord, {
+    pageNo: pageNo,
+    pageSize: 10,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
 // 订阅提醒
 export const Reminder = function (reminderOjb) {
   return axios.post(api.reminder, {
@@ -252,6 +256,57 @@ export const Reminder = function (reminderOjb) {
   })
 }
 
+// 获取调查问卷URL
 export const getReportUrl = function () {
   return reportHost[env]
+}
+
+// 获取个人资料
+export const getPersonInfo = function () {
+  return axios.post(api.getPersonInfo, {
+    app_id: utils.app_id
+  }, {
+    baseURL: accountHost[env]
+  })
+}
+
+// 退出登陆
+export const logout = function () {
+  return axios.post(api.logout, {
+    app_id: utils.app_id
+  }, {
+    baseURL: accountHost[env]
+  })
+}
+// 标记删除提现记录
+export const clearRecord = function (clearType) {
+  return axios.post(api.clearRecord, {
+    clearType: clearType,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 提交用户同意隐私协议
+
+export const submitAgreePolicy = function () {
+  return axios.post(api.submitAgreePolicy, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 查询用户是否同意协议
+
+export const queryAgreePolicy = function () {
+  return axios.get(api.queryAgreePolicy, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+export const getPolicyContent = function (policyUrl) {
+  return axios.get(policyUrl)
 }
