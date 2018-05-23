@@ -55,6 +55,7 @@ export default {
       if (data.result === 1 && data.data.agree) {
         if (this.isOnline || utils.clientId) {
           this.loading = true
+          utils.isShowGuide = true
           this.$store.dispatch(type._INIT).then(() => {
             setTimeout(() => {
               this.loading = false
@@ -66,6 +67,7 @@ export default {
           })
         }
       } else {
+        utils.isShowGuide = false
         this.$router.replace({path: '/policy'})
       }
     })

@@ -39,10 +39,12 @@ export default {
     if (localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = false
     } else {
-      setTimeout(() => {
-        this.FirstGuide = true
-        localStorage.setItem('NoFirstGuide', 'false')
-      }, 1000)
+      if (utils.isShowGuide) {
+        setTimeout(() => {
+          this.FirstGuide = true
+          localStorage.setItem('NoFirstGuide', 'false')
+        }, 1000)
+      }
     }
   },
   methods: {

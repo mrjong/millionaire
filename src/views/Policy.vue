@@ -23,7 +23,7 @@
         :class="{'icon-juxing' :isAgree, 'icon-gouxuankuang': !isAgree}" @click="agreePolicy"></p>
         <p class="text">I Have Read and Agree To The Above Agreement and Policy</p>
       </div>
-      <div class="btn" @click="startNow">Enter</div>
+      <div class="btn" :class="{'noenter' : !isAgree}" @click="startNow">Enter</div>
       <img src="../assets/images/apus-logo-white.png" class="apus-logo">
     </div>
   </div>
@@ -32,6 +32,7 @@
 <script>
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Policy',
   data () {
@@ -74,6 +75,7 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
+            utils.isShowGuide = true
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
           }
@@ -184,6 +186,10 @@ export default {
       font:32px 'Roboto', Arial, serif;
       line-height: 93px;
       box-shadow: 0 1px 15px 1px #fda9008f;
+    }
+    .noenter{
+      background-color: #d7d7d7;
+      box-shadow: 0 0 0 0 #d7d7d7;
     }
     .apus-logo{
       width: 133px;
