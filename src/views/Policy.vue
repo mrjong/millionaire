@@ -58,7 +58,9 @@ export default {
   },
   methods: {
     close () {
-      window.open('')
+      // window.open('')
+      // window.history.back(-1)
+      this.$router.push({path: '/blank'})
     },
     agreePolicy () {
       if (this.isAgree) {
