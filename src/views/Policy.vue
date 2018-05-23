@@ -32,7 +32,6 @@
 <script>
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
-import utils from '../assets/js/utils'
 export default {
   name: 'Policy',
   data () {
@@ -75,8 +74,6 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
-            utils.isShowGuide = true
-            utils.isQueryAgree = true
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
           }

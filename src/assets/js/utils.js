@@ -167,8 +167,6 @@ const utils = {
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false,
   pageType: clientParams ? 'app' : 'h5',
-  isShowGuide: true,
-  isQueryAgree: false,
   /**
    * 打点
    * @static

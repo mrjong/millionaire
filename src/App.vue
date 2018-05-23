@@ -14,6 +14,7 @@
         </div>
       </div>
     </div> -->
+    <revive-guide v-if="isAwaitState"></revive-guide>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -26,17 +27,19 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import im from './assets/js/im'
 import * as api from './assets/js/api'
-// import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
+import ReviveGuide from './components/ReviveGuide.vue'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
+import { _AWAIT } from './assets/js/status'
 export default {
   name: 'App',
   data () {
     return {
       loading: false,
       showLogin: false,
-      showGameDialog: true
+      showGameDialog: true,
+      isAwaitState: false // 初始化完成后是否仍为等待状态
     }
   },
   computed: {
@@ -55,21 +58,18 @@ export default {
       if (data.result === 1 && data.data.agree) {
         if (this.isOnline || utils.clientId) {
           this.loading = true
-          utils.isShowGuide = true
-          utils.isQueryAgree = true
           this.$store.dispatch(type._INIT).then(() => {
-            setTimeout(() => {
-              this.loading = false
-            }, 500)
-            this.$statisticEntry()
+            this.loading = false
+            this.$statisticEntry() // 入口打点
+            if (this.status === _AWAIT) { // 如果初始化后状态为AWAIT
+              this.isAwaitState = true
+            }
           }, (err) => {
             this.loading = false
             console.log(err)
           })
         }
       } else {
-        utils.isShowGuide = false
-        utils.isQueryAgree = false
         this.$router.replace({path: '/policy'})
       }
     })
@@ -148,7 +148,8 @@ export default {
   components: {
     loading,
     LoginTip,
-    BalanceMark
+    BalanceMark,
+    ReviveGuide
   },
   watch: {
     status: function (status, oldStatus) {
