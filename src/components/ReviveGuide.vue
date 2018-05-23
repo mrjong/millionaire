@@ -36,13 +36,13 @@ export default {
     })
   },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
-      this.FirstGuide = false
-    } else {
+    if (!localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
       if (utils.isShowGuide && utils.isQueryAgree) {
         this.FirstGuide = true
-        localStorage.setItem('NoFirstGuide', 'false')
+        localStorage.setItem('NoFirsstGuide', 'false')
       }
+    } else {
+      this.FirstGuide = false
     }
   },
   methods: {
