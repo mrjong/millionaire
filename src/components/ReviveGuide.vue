@@ -37,10 +37,8 @@ export default {
   },
   mounted () {
     if (!localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
-      if (utils.isShowGuide && utils.isQueryAgree) {
-        this.FirstGuide = true
-        localStorage.setItem('NoFirstGuide', 'false')
-      }
+      this.FirstGuide = true
+      localStorage.setItem('NoFirstGuide', 'false')
     } else {
       this.FirstGuide = false
     }
