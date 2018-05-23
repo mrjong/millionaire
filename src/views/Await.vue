@@ -102,7 +102,6 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
-    <revive-guide></revive-guide>
   </div>
 </template>
 <script>
@@ -115,7 +114,6 @@ import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
 import Living from '../components/Living'
-import ReviveGuide from '../components/ReviveGuide'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import FeedbackBtn from '../components/FeedbackBtn'
@@ -356,7 +354,6 @@ export default {
     BaseInfo,
     BalanceMark,
     Living,
-    ReviveGuide,
     HowPlayCard,
     Notices,
     FeedbackBtn,
@@ -373,7 +370,6 @@ export default {
       }
     },
     status: function (status, oldStatus) {
-      console.log('监听' + this.status)
       if (status === 2) {
         this.$router.replace({path: '/main'})
       } else {
