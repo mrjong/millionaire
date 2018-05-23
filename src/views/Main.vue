@@ -95,7 +95,7 @@ export default {
         this.$store.commit(_UPDATE, {
           isPlayingMusic: false
         })
-        utils.stopSound('bg')
+        utils.stopSound()
       }
     },
     /*
