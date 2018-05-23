@@ -36,6 +36,7 @@ import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
+import { _UPDATE } from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -51,7 +52,8 @@ export default {
         markType: 0,
         okBtnText: 'OK',
         hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-      }
+      },
+      musicPlay: true
     }
   },
   computed: {
@@ -85,9 +87,15 @@ export default {
     },
     isPlay () {
       if (!this.isPlayingMusic) {
+        this.$store.commit(_UPDATE, {
+          isPlayingMusic: true
+        })
         utils.playSound('bg')
       } else {
-        utils.stopSound('bg')
+        this.$store.commit(_UPDATE, {
+          isPlayingMusic: false
+        })
+        utils.stopSound()
       }
     },
     /*

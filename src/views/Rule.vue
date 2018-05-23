@@ -26,9 +26,10 @@
             <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
           </a>
         </div>
-        <a href="http://static.subcdn.com/20180321220447b3b994f975.html" class="terms">
-          Terms of Service
-        </a>
+        <p class="bottom-text">
+          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+        </p>
       </div>
     </div>
   </div>
@@ -223,4 +224,13 @@ export default {
 .terms::visited {
   color: #241262;
 }
+.bottom-text{
+    margin: 25px 0;
+    font: 200 24px 'Roboto', Arial, serif;
+    color: #241262;
+    text-align: center;
+    a{
+      color:#241262
+    }
+  }
 </style>
