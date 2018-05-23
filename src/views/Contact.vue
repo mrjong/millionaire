@@ -61,7 +61,7 @@ export default {
       console.log(val)
       switch (val) {
         case 'mail' :
-          window.location.href = 'mailto: gomillionaire@apusapps.com'
+          window.location.href = 'mailto:gomillionaire@apusapps.com'
           break
         case 'fb': {
           setTimeout(() => {
