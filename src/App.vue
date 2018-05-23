@@ -66,7 +66,7 @@ export default {
           })
         }
       } else {
-        this.$router.push({path: '/policy'})
+        this.$router.replace({path: '/policy'})
       }
     })
     this.init()
