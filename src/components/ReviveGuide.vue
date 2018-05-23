@@ -49,6 +49,7 @@ export default {
       if (utils.isOnline) {
         this.$router.push({path: '/share-detail'})
       } else {
+        this.isClose = true
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true
