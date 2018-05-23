@@ -75,9 +75,10 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
-            utils.isShowGuide = true
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
+            utils.isShowGuide = true
+            utils.isQueryAgree = true
           }
         })
       }
