@@ -14,6 +14,7 @@
         </div>
       </div>
     </div> -->
+    <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -26,9 +27,9 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import im from './assets/js/im'
 import * as api from './assets/js/api'
-// import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
+import ReviveGuide from './components/ReviveGuide.vue'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
 export default {
   name: 'App',
@@ -46,29 +47,34 @@ export default {
       watchingMode: 'watchingMode',
       questionStatus: 'question_status',
       showDialog: 'showDialog',
-      dialogInfo: 'dialogInfo'
+      dialogInfo: 'dialogInfo',
+      initialState: 'initialState'
     })
   },
   created () {
+    api.queryAgreePolicy().then(({data}) => {
+      if (data.result === 1 && data.data.agree) {
+        if (this.isOnline || utils.clientId) {
+          this.loading = true
+          this.$store.dispatch(type._INIT).then(() => {
+            this.loading = false
+            this.$statisticEntry() // 入口打点
+          }, (err) => {
+            this.loading = false
+            console.log(err)
+          })
+        }
+      } else {
+        this.$router.replace({path: '/policy'})
+      }
+    })
     this.init()
     this.getPhoneNationCode()
-    if (this.isOnline || utils.clientId) {
-      this.loading = true
-      this.$store.dispatch(type._INIT).then(() => {
-        setTimeout(() => {
-          this.loading = false
-        }, 500)
-        this.$statisticEntry()
-      }, (err) => {
-        this.loading = false
-        console.log(err)
-      })
-    }
   },
   methods: {
     init () {
       im.addListener(NETWORK_UNAVAILABLE, () => {
-        this.$store.dispatch(type._OPEN_DIALOG, {
+        !utils.disableNetworkTip && this.$store.dispatch(type._OPEN_DIALOG, {
           htmlTitle: 'Please check your internet connection.',
           htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
           shouldSub: false,
@@ -137,7 +143,8 @@ export default {
   components: {
     loading,
     LoginTip,
-    BalanceMark
+    BalanceMark,
+    ReviveGuide
   },
   watch: {
     status: function (status, oldStatus) {

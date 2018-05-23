@@ -64,7 +64,8 @@ export default new Vuex.Store({
     code: '',
     phoneNationCodeList: [], // 手机号国家码列表
     phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
-    isPlayingMusic: false // 是否在播放音乐
+    isPlayingMusic: false, // 是否在播放音乐
+    initialState: -1 // 初始化完成后的状态
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -84,7 +85,8 @@ export default new Vuex.Store({
     code: (state) => state.code,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
     phoneNationCode: (state) => state.phoneNationCode,
-    isPlayingMusic: (state) => state.isPlayingMusic
+    isPlayingMusic: (state) => state.isPlayingMusic,
+    initialState: (state) => state.initialState
   },
   mutations: {
     /**
@@ -256,6 +258,10 @@ export default new Vuex.Store({
               }
               im.connect(state.imToken)
             }
+            // 设置初始化状态
+            commit(type._UPDATE, {
+              initialState: getters.status
+            })
             resolve()
           } else {
             console.log('初始化失败:', data.msg)

@@ -36,11 +36,11 @@ export default {
     })
   },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
-      this.FirstGuide = false
-    } else {
+    if (!localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = true
       localStorage.setItem('NoFirstGuide', 'false')
+    } else {
+      this.FirstGuide = false
     }
   },
   methods: {
@@ -56,13 +56,6 @@ export default {
           this.$store.dispatch(type._INIT)
           this.$router.push({path: '/share-detail'})
         })
-      }
-    }
-  },
-  watch: {
-    status: function (status) {
-      if (status !== 1) {
-        this.FirstGuide = false
       }
     }
   }

@@ -46,7 +46,7 @@
         <notices></notices>
       </router-link>
     </div>
-    <div class="game-area">
+    <!-- <div class="game-area">
       <div class="game-icon">
         <a href="http://h5game.subcdn.com/03/" @click="btnStatistic('H5game_Box')">
           <img src="../assets/images/game-icon-4.png">
@@ -79,7 +79,7 @@
           <img src="../assets/images/game-icon-6.png">
         </a>
       </div>
-    </div>
+    </div> -->
     <router-link to="/rule">
       <how-play-card></how-play-card>
     </router-link>
@@ -90,6 +90,10 @@
     <div class="apus-logo">
     <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
+    <p class="bottom-text">
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
+      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+    </p>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop=isReminderPop></reminder-bomb>
     <balance-mark v-if="showDialog"
@@ -98,7 +102,6 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
-    <revive-guide></revive-guide>
   </div>
 </template>
 <script>
@@ -111,7 +114,6 @@ import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
 import Living from '../components/Living'
-import ReviveGuide from '../components/ReviveGuide'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import FeedbackBtn from '../components/FeedbackBtn'
@@ -233,8 +235,12 @@ export default {
           }, 'wait_page')
           if (data.result === 1) {
             // 更新复活卡数量
+            const {cn: lives = 0, lc: maxRecoveryCount = 0} = data.data || {}
             this.$store.commit(type._UPDATE, {
-              lives: +data.data || 0
+              lives
+            })
+            this.$store.commit(type.QUESTION_UPDATE, {
+              maxRecoveryCount
             })
           } else {
             if (data.code === 404) {
@@ -352,7 +358,6 @@ export default {
     BaseInfo,
     BalanceMark,
     Living,
-    ReviveGuide,
     HowPlayCard,
     Notices,
     FeedbackBtn,
@@ -679,6 +684,15 @@ export default {
   .await::before{
     background:linear-gradient(red, blue)
   }
+  .bottom-text{
+      margin: 25px 0;
+      font: 200 24px 'Roboto', Arial, serif;
+      color: #fff;
+      text-align: center;
+      a{
+        color:#fff;
+      }
+    }
   @keyframes lives {
     0%{
       transform: scale(1);
