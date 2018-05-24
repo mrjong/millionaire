@@ -4,11 +4,7 @@
     <div class="content">
       <img src="../assets/images/await-logo.png" class="logo">
       <p class="title">About 'Go! Millionaire'</p>
-      <p class="paragraph1">Go! Millionaire is developed and serviced by APUS. We provide the following content and service:</p>
-      <ul class="policy-list">
-        <li v-for="(val, idx) in ruleList" :key="idx">{{val}}</li>
-      </ul>
-      <p class="paragraph2">In order to have provide better game experience and protect your personal information, please read the following agreement carefully and thank you for your support:</p>
+      <p class="paragraph1">Go! Millionaire is developed and serviced by APUS.In order to provide better game experience and protect your personal data, please read the following agreements carefully:</p>
       <div class="service">
         <p class="service__title">Go! Millionaire Service Agreement</p>
         <div class="service__text" v-html="termsOfServiceContent"></div>
@@ -16,15 +12,13 @@
       <div class="privacy">
         <p class="privacy__title">Go! Millionaire Privacy Agreement</p>
         <div class="privacy__text" v-html="policyContent"></div>
-        <!-- <iframe class="privacy__text" src="http://static.subcdn.com/20180321220447b3b994f975.html"></iframe> -->
       </div>
       <div class="agree">
         <p class="check-btn iconfont"
         :class="{'icon-juxing' :isAgree, 'icon-gouxuankuang': !isAgree}" @click="agreePolicy"></p>
-        <p class="text">I Have Read and Agree To The Above Agreement and Policy</p>
+        <p class="text" @click="agreePolicy">I agree all the above agreements</p>
       </div>
       <div class="btn" :class="{'noenter' : !isAgree}" @click="startNow">Enter</div>
-      <img src="../assets/images/apus-logo-white.png" class="apus-logo">
     </div>
   </div>
 </template>
@@ -32,23 +26,18 @@
 <script>
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
+import utils from '../assets/js/utils'
 export default {
   name: 'Policy',
   data () {
     return {
       isAgree: false,
-      ruleList: [
-        'Win up to Rs 1,000,000',
-        'Answer 12 questions to get bonus',
-        'Invite friends to get extra lives',
-        'Multiplayer Live Chat',
-        'Prizes more than Rs. 150 can be withdrawn'
-      ],
       policyContent: '',
       termsOfServiceContent: ''
     }
   },
   mounted () {
+    utils.statistic('agreement_page', 0)
     api.getPolicyContent('privacy.html').then(({data}) => {
       this.policyContent = data
     })
@@ -58,9 +47,8 @@ export default {
   },
   methods: {
     close () {
-      // window.open('')
-      // window.history.back(-1)
-      this.$router.push({path: '/blank'})
+      utils.statistic('policy_back', 1)
+      this.$router.go(-1)
     },
     agreePolicy () {
       if (this.isAgree) {
@@ -76,8 +64,11 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
+            utils.statistic('agree_btn', 1, {result_code_s: '1'}, 'agreement_page')
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
+          } else {
+            utils.statistic('agree_btn', 1, {result_code_s: '0'}, 'agreement_page')
           }
         })
       }
@@ -93,50 +84,41 @@ export default {
   background-size: cover;
   overflow-y: scroll;
   .header {
-    width: 54px;
-    height: 54px;
+    width: 50px;
+    height: 50px;
     background: rgba(255,255,255,0.3);
     border-radius: 50%;
     position: fixed;
     top: 24px;
     right: 25px;
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
-    line-height: 54px;
+    line-height: 50px;
   }
   .content{
-    padding:0 90px;
+    padding:0 40px;
     .logo{
-      width:300px;
+      width:250px;
       margin: 0 auto;
-      padding-top:50px;
+      padding-top:40px;
     }
     .title {
       color: #fff;
       font: 400 36px/56px 'Roboto', Arial, serif;
       text-align: center;
-      margin:30px auto;
+      margin:20px auto;
     }
-    .paragraph1, .paragraph2 {
+    .paragraph1 {
       color: rgba(255,255,255, 0.8);
       font: 200 24px 'Roboto', Arial, serif;
       line-height:36px;
     }
-    .policy-list{
-      color:#fff;
-      list-style: disc;
-      margin: 20px 0 20px 25px ;
-      li {
-        font:24px 'Roboto', Arial, serif;
-        line-height: 36px;
-      }
-    }
     .privacy, .service{
       &__title{
-      color:#fff;
-      font: 400 24px 'Roboto', Arial, serif;
-      line-height:36px;
-      margin:25px 0;
+        color:#fff;
+        font: 400 24px 'Roboto', Arial, serif;
+        line-height:36px;
+        margin:25px 0;
       }
       &__text{
         width: 100%;
@@ -149,8 +131,7 @@ export default {
         padding: 20px;
       }
       &__text::-webkit-scrollbar {/*滚动条整体样式*/
-          width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
-          height: 4px;
+          width: 4px;
         }
       &__text::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
           border-radius: 5px;
@@ -163,7 +144,7 @@ export default {
     .agree {
       display: flex;
       align-items: center;
-      margin: 42px 0;
+      margin: 32px 0 20px 15px;
       color:#fff;
       .check-btn{
         font-size: 30px;
@@ -186,17 +167,14 @@ export default {
       font:32px 'Roboto', Arial, serif;
       line-height: 93px;
       box-shadow: 0 1px 15px 1px #fda9008f;
+      margin-bottom: 40px;
     }
     .noenter{
-      background-color: #d7d7d7;
-      box-shadow: 0 0 0 0 #d7d7d7;
-    }
-    .apus-logo{
-      width: 133px;
-      margin: 44px auto;
+        background-color: #d7d7d7;
+        box-shadow: 0 0 0 0 #d7d7d7;
+      }
     }
   }
-}
 
 .rule-item {
   width: 100%;
