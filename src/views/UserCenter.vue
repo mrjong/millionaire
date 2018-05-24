@@ -105,7 +105,7 @@ export default {
       this.showDialog = false
       if (this.isLogout) {
         utils.logout(() => {
-          utils.statistic('log_out', 1, {result_code_s: 1}, 'user_profile_page')
+          utils.statistic('log_out', 1, {result_code_s: '1'}, 'user_profile_page')
           api.queryAgreePolicy().then(({data}) => {
             if (data.result === 1 && data.data.agree) {
               this.$store.dispatch(type._INIT)
@@ -116,7 +116,7 @@ export default {
           })
         }, () => {
           // 登出失败
-          utils.statistic('log_out', 1, {result_code_s: 0}, 'user_profile_page')
+          utils.statistic('log_out', 1, {result_code_s: '0'}, 'user_profile_page')
           this.dialogInfo.htmlText = 'You failed to logout, please try again.'
           this.showDialog = true
         })
