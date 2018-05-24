@@ -45,10 +45,12 @@ export default {
   },
   methods: {
     toShareDetail () {
+      this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       if (utils.isOnline) {
         this.$router.push({path: '/share-detail'})
       } else {
+        this.isClose = true
         utils.login(() => {
           this.$store.commit(type._UPDATE, {isOnline: true})
           utils.isOnline = true

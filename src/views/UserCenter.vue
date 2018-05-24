@@ -53,6 +53,7 @@ import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import BalanceMark from '../components/BalanceMark'
+import * as api from '../assets/js/api'
 export default {
   name: 'Contact',
   data () {
@@ -78,7 +79,7 @@ export default {
     utils.getPersonInfo((data) => {
       this.phone = data.mobile
     })
-    utils.statistic('contact_page', 0)
+    utils.statistic('user_profile_page', 0, {}, 'wait_page')
   },
   methods: {
     back () {
@@ -86,8 +87,10 @@ export default {
     },
     jump (val) {
       if (val === 'balance-record') {
+        utils.statistic('cash_history', 1, {}, 'user_profile_page')
         this.$router.push({path: '/balance-record', query: {'type': 'cash'}})
       } else if (val === 'contact') {
+        utils.statistic('contact_us', 1, {}, 'user_profile_page')
         this.$router.push({path: '/contact'})
       }
     },
@@ -102,10 +105,18 @@ export default {
       this.showDialog = false
       if (this.isLogout) {
         utils.logout(() => {
-          this.$store.dispatch(type._INIT)
-          this.$router.replace('/')
+          utils.statistic('log_out', 1, {result_code_s: '1'}, 'user_profile_page')
+          api.queryAgreePolicy().then(({data}) => {
+            if (data.result === 1 && data.data.agree) {
+              this.$store.dispatch(type._INIT)
+              this.$router.replace('/')
+            } else {
+              this.$router.replace({path: '/policy'})
+            }
+          })
         }, () => {
           // 登出失败
+          utils.statistic('log_out', 1, {result_code_s: '0'}, 'user_profile_page')
           this.dialogInfo.htmlText = 'You failed to logout, please try again.'
           this.showDialog = true
         })
