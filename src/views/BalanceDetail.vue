@@ -64,7 +64,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('take_cash_detail_page', 0)
+    utils.statistic('cash__info__page', 0)
   },
   methods: {
     cashOut () {
@@ -134,14 +134,14 @@ export default {
                 }
               }
             }
-            utils.statistic('', 4, {
+            utils.statistic('', 1, {
               result_code_s: takeCash
             })
           }, (error) => {
             this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
             takeCash = 'network_error'
             console.log('提现失败:', error)
-            utils.statistic('', 4, {
+            utils.statistic('', 1, {
               result_code_s: takeCash
             })
           })

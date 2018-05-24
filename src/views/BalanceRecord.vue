@@ -76,8 +76,10 @@ export default {
   mounted () {
     if (this.$route.query.type) {
       this.recordType = this.$route.query.type
+      utils.statistic('cash_history_page', 0, {}, 'user_profile_page')
+    } else {
+      utils.statistic('withdrawal_history_page', 0, {}, 'take_cash_page')
     }
-    utils.statistic('withdrawal_history', 0, {}, 'take_cash_page')
     this.computedHeight()
   },
   methods: {
@@ -186,6 +188,7 @@ export default {
           if (data.result === 1 && data.code === 0) {
             // 清空成功
             this.balanceRecordList = []
+            utils.statistic('delete_all', 1, {}, clearType === 2 ? 'user_profile_page' : 'tack_cash_page')
           } else {
             // 清空失败
             this.markInfo.htmlText = 'You failed to delete the Withdrawal History.'

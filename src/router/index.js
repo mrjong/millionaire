@@ -15,7 +15,7 @@ const BalanceDetail = () => import('@/views/BalanceDetail.vue')
 const Policy = () => import('@/views/Policy.vue')
 const Contact = () => import('@/views/Contact.vue')
 const UserCenter = () => import('@/views/UserCenter.vue')
-const Blank = () => import('@/views/Blank.vue')
+// const Blank = () => import('@/views/Blank.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -94,12 +94,12 @@ const router = new Router({
       path: '/user-center',
       name: 'user-center',
       component: UserCenter
-    },
-    {
-      path: '/blank',
-      name: 'blank',
-      component: Blank
     }
+    // {
+    //   path: '/blank',
+    //   name: 'blank',
+    //   component: Blank
+    // }
   ]
 })
 

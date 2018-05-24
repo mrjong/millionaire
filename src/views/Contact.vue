@@ -58,7 +58,7 @@ export default {
     },
     contact (val) {
       // 跳转
-      console.log(val)
+      utils.statistic(val, 1, {}, 'contact_us')
       switch (val) {
         case 'mail' :
           window.location.href = 'mailto:gomillionaire@apusapps.com'
@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted () {
-    utils.statistic('contact_page', 0)
+    utils.statistic('contact_page', 0, 'user_profile_page')
   },
   components: {
     loading

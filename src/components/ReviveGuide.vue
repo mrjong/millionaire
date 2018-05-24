@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     toShareDetail () {
+      this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       if (utils.isOnline) {
         this.$router.push({path: '/share-detail'})

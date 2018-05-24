@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     cashOut () {
+      utils.statistic('take_cash_btn', 1, {to_destination_s: 'cash_info_page'})
       if (!utils.isOnline && +this.userInfo.clientBalance > 0) {
         this.showLogin = true
       } else {
