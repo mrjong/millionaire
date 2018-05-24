@@ -1,9 +1,7 @@
 <template>
   <div class="blank">
     <div class="content">
-      <router-link to="/policy">
-        <p class="back iconfont icon-fanhui"></p>
-      </router-link>
+      <p class="back iconfont icon-fanhui"></p>
       <img src="../assets/images/cry-supa.png" class="img">
       <p class="title">Oops!</p>
       <p class="hint">You should read and accept the  Agreement&Policy before you enter the game!</p>

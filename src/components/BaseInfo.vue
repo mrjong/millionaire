@@ -47,6 +47,11 @@ export default {
     },
     login () {
       if (!this.isOnline) {
+        if (utils.pageType === 'h5') {
+          utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
+        } else {
+          utils.statistic('wait_page', 1, {to_destination_s: 'loggin_page'}, 'wait_page')
+        }
         utils.login(() => {
           utils.isOnline = true
           this.$store.commit(_UPDATE, {
@@ -55,6 +60,7 @@ export default {
           this.$store.dispatch(_INIT)
         })
       } else {
+        utils.statistic('wait_page', 1, {to_destination_s: 'user_profile'}, 'wait_page')
         this.$router.push({path: '/user-center'})
       }
     }

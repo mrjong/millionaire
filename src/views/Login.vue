@@ -98,6 +98,7 @@ export default {
           const code = +data.error_code
           switch (code) {
             case 0: {
+              utils.statistic('send_code', 1, {result_code_s: '1'}, 'sign_up')
               // 若为等待状态，返回首页
               if (this.status === 1) {
                 this.$router.replace({path: '/'})
@@ -107,16 +108,19 @@ export default {
               break
             }
             case 20002: {
+              utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
               this.error('Wrong verification code, please try again.')
               break
             }
             default: {
+              utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
               this.error('Fail to verify the code, please try again. ')
               console.log('手机验证码验证失败:', data.error_msg)
             }
           }
           this.loading = false
         }, (err) => {
+          utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
           this.error('Fail to verify the code, please try again. ')
           console.log('手机验证码验证出错', err)
         })
@@ -153,6 +157,7 @@ export default {
      * 发送验证码
      */
     sendCode () {
+      utils.statistic('send_code', 1, {}, 'sign_up')
       const {phoneNationCode} = this
       if (this.sendCodeValidate()) {
         this.disableGetCode = true
