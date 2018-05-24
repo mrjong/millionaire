@@ -235,8 +235,12 @@ export default {
           }, 'wait_page')
           if (data.result === 1) {
             // 更新复活卡数量
+            const {cn: lives = 0, lc: maxRecoveryCount = 0} = data.data || {}
             this.$store.commit(type._UPDATE, {
-              lives: +data.data || 0
+              lives
+            })
+            this.$store.commit(type.QUESTION_UPDATE, {
+              maxRecoveryCount
             })
           } else {
             if (data.code === 404) {
