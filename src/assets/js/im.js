@@ -49,6 +49,11 @@ const im = {
       messageName: 'KeepLiveMessage',
       propertys: ['content'],
       objectName: 'APUS:KeepLiveMSg'
+    },
+    {
+      messageName: 'ExtraLifeMessage',
+      propertys: ['cardNumber', 'leftRecCount'],
+      objectName: 'APUS:RMsg'
     }
   ],
 
@@ -140,6 +145,9 @@ const im = {
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
+            break
+          case type.MESSAGE_EXTRA_LIFE:
+            this.emitListener(type.MESSAGE_EXTRA_LIFE, message)
             break
           case type.MESSAGE_ANSWER:
             // 暂时使用轮询方案代替接收

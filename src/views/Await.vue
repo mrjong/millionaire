@@ -95,7 +95,7 @@
       <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
     </p>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
-     :isReminderPop=isReminderPop></reminder-bomb>
+     :isReminderPop="isReminderPop"></reminder-bomb>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -305,8 +305,6 @@ export default {
     // login
     login (path) {
       utils.login(() => {
-        this.$store.commit(type._UPDATE, {isOnline: true})
-        utils.isOnline = true
         this.logout = false
         utils.statistic('wait_page', 1, {'result_code_s': '1'}, 'wait_page')
         this.$store.dispatch(type._INIT)

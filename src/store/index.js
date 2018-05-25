@@ -11,7 +11,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
+import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -145,6 +145,13 @@ export default new Vuex.Store({
               bonusAmount,
               currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
             })
+
+            // 如果有未登录态奖金未同步，则同步账户信息
+            if (getters.clientBalance > 0 && isOnline) {
+              utils.syncAccountInfo()
+            }
+
+            // 更新主页信息
             commit(type._UPDATE, {
               hostIntervalTime,
               lives,
@@ -276,6 +283,38 @@ export default new Vuex.Store({
           console.log('代码逻辑出错:' + err)
         })
       })
+    },
+    /**
+     * 初始化监听器
+     * @param {any} {dispatch}
+     */
+    [type._INIT_LISTENER] ({dispatch, commit}) {
+      // 添加网络状况监听器
+      im.addListener(NETWORK_UNAVAILABLE, () => {
+        !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'Please check your internet connection.',
+          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'OK'
+        })
+        utils.statistic('NETWORK_UNAVAILABLE', 6)
+      })
+      // 添加复活卡消息监听器
+      im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
+        const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
+        commit(type._UPDATE, {
+          lives
+        })
+        commit(type.QUESTION_UPDATE, {
+          maxRecoveryCount
+        })
+      })
+      dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+      dispatch(type.QUESTION_INIT)
+      dispatch(type._UPDATE_AMOUNT)
+      dispatch(type._RECEIVE_RESULT)
+      dispatch(type._END)
     },
     /**
      * 初始化轮询

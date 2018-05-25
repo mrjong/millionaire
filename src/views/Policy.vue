@@ -65,6 +65,7 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
+            utils.isAgreePolicy = true
             utils.statistic('agree_btn', 1, {result_code_s: '1'}, 'agreement_page')
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
