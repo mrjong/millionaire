@@ -1,7 +1,7 @@
 <template>
-  <div class="policy">
+  <div class="policy" ref=policyContainer>
     <p class="header iconfont icon-close_big" @click="close"></p>
-    <div class="content">
+    <div class="content" ref="policyContent">
       <img src="../assets/images/await-logo.png" class="logo">
       <p class="title">About 'Go! Millionaire'</p>
       <p class="paragraph1">Go! Millionaire is developed and serviced by APUS.In order to provide better game experience and protect your personal data, please read the following agreements carefully:</p>
@@ -18,7 +18,11 @@
         :class="{'icon-juxing' :isAgree, 'icon-gouxuankuang': !isAgree}" @click="agreePolicy"></p>
         <p class="text" @click="agreePolicy">I agree all the above agreements</p>
       </div>
-      <div class="btn" :class="{'noenter' : !isAgree}" @click="startNow">Enter</div>
+      <div class="btn" :class="{'noenter' : !isAgree}" ref="enter"  @click="startNow">Enter</div>
+      <div class="bottom-icon" @click="toBottom" v-if="isToBottom">
+        <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
+        <span class="living-icon iconfont icon-LIVINGyoujiantou right"></span>
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +37,8 @@ export default {
     return {
       isAgree: false,
       policyContent: '',
-      termsOfServiceContent: ''
+      termsOfServiceContent: '',
+      isToBottom: false
     }
   },
   mounted () {
@@ -43,6 +48,9 @@ export default {
     })
     api.getPolicyContent('termsOfService.html').then(({data}) => {
       this.termsOfServiceContent = data
+    })
+    this.$nextTick(() => {
+      this.getComputedHeight()
     })
   },
   methods: {
@@ -72,6 +80,29 @@ export default {
           }
         })
       }
+    },
+    getComputedHeight () {
+      let containerHeight = document.documentElement.clientHeight || document.body.clientHeight
+      let enterTop = this.$refs.enter.getBoundingClientRect().bottom
+      console.log(enterTop)
+      if (containerHeight < enterTop) {
+        this.isToBottom = true
+      } else {
+        this.isToBottom = false
+      }
+    },
+    toBottom () {
+      let containerHeight = document.documentElement.clientHeight || document.body.clientHeight
+      let contentHeight = this.$refs.policyContent.offsetHeight
+      let count = 0
+      const timer = setInterval(() => {
+        count += 15
+        this.$refs.policyContainer.scrollTo(0, count)
+        if (count >= contentHeight - containerHeight) {
+          this.isToBottom = false
+          clearInterval(timer)
+        }
+      }, 10)
     }
   }
 }
@@ -96,7 +127,8 @@ export default {
     line-height: 50px;
   }
   .content{
-    padding:0 40px;
+    box-sizing: border-box;
+    padding:0 40px 40px;
     .logo{
       width:250px;
       margin: 0 auto;
@@ -167,7 +199,6 @@ export default {
       font:32px 'Roboto', Arial, serif;
       line-height: 93px;
       box-shadow: 0 1px 15px 1px #fda9008f;
-      margin-bottom: 40px;
     }
     .noenter{
         background-color: #d7d7d7;
@@ -175,7 +206,35 @@ export default {
       }
     }
   }
-
+  .bottom-icon{
+    position: fixed;
+    bottom: 106px;
+    right: 26px;
+    width: 90px;
+    height: 90px;
+    background-color: #faa717;
+    box-shadow: 0 1px 10px 1px #faa717;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotateZ(90deg);
+    .living-icon{
+      color: #ffb227;
+      font-size: 36px;
+      align-self: center;
+      color:#fff;
+    }
+    .left{
+      opacity: 1;
+      letter-spacing: -15px;
+      animation: left 1s ease infinite;
+    }
+    .right{
+      opacity: 0.5;
+      animation: right 1s ease infinite;
+    }
+  }
 .rule-item {
   width: 100%;
   padding: 0 66px;
@@ -213,5 +272,26 @@ export default {
     text-align: center;
   }
 }
-
+  @keyframes right {
+    0%{
+      opacity: 0.5;
+    }
+    50%{
+      opacity: 1;
+    }
+    100%{
+       opacity: 0.5;
+    }
+  }
+   @keyframes left {
+    0%{
+      opacity: 1;
+    }
+    50%{
+      opacity: 0.5;
+    }
+    100%{
+       opacity:1;
+    }
+  }
 </style>
