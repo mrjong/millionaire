@@ -49,6 +49,7 @@ export default {
     close () {
       utils.statistic('policy_back', 1)
       this.$router.go(-1)
+      utils.closeWebiew()
     },
     agreePolicy () {
       if (this.isAgree) {

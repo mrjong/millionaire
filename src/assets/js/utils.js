@@ -168,6 +168,12 @@ const utils = {
   disableNetworkTip: false,
   pageType: clientParams ? 'app' : 'h5',
   /**
+   * 关闭客户端WebView
+   */
+  closeWebview () {
+    njordGame && njordGame.closePage && njordGame.closePage()
+  },
+  /**
    * 打点
    * @static
    * @memberof Utils
