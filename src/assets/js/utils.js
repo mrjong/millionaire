@@ -2,11 +2,12 @@
 // IS_LOGIN webpack define
 /* eslint-disable standard/no-callback-literal */
 import md5 from 'md5'
-import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy} from './api'
+import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
-import { _UPDATE } from '../../store/type'
+import { _UPDATE, HOME_UPDATE } from '../../store/type'
+import currency from './currency'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -56,13 +57,25 @@ const utils = {
    * 登录
    * @param {any} callback
    */
-  login (callback) {
+  login (callback, isSyncInfo = true) {
     window.top.loginCallback = function () {
-      callback()
+      // 更改在线状态
+      utils.isOnline = true
+      vm.$store.commit(_UPDATE, {
+        isOnline: true
+      })
+      isSyncInfo && utils.syncAccountInfo()
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
-        if (data.result === 1 && !data.data.agree) {
-          vm.$router.replace('/policy')
+        if (data.result === 1 && +data.code === 0) {
+          const {agree} = data.data || {}
+          if (!agree) {
+            vm.$router.replace('/policy')
+          } else {
+            utils.isAgreePolicy = true
+            vm.$router.replace({path: '/'})
+            callback()
+          }
         }
       })
     }
@@ -106,6 +119,37 @@ const utils = {
     }, err => {
       console.log('获取个人用户信息出错:', err)
       errCallback && errCallback(err)
+    })
+  },
+  /**
+   * 同步账户信息
+   */
+  syncAccountInfo () {
+    /* eslint-disable prefer-promise-reject-errors */
+    return new Promise((resolve, reject) => {
+      syncInfo().then(({data}) => {
+        console.log('同步返回数据：', data)
+        if (+data.result === 1 && +data.code === 0) {
+          const {ub: balance = 0, sub: balanceShow = '', cb: clientBalance = 0, scb: clientBalanceShow = '', ui: income = 0, sui: incomeShow = '', ur: rank = 0, uc: currencyType} = data.data || {}
+          vm.$store.commit(HOME_UPDATE, {
+            balance: +balance,
+            balanceShow,
+            clientBalance: +clientBalance,
+            clientBalanceShow,
+            income: +income,
+            incomeShow,
+            rank: +rank,
+            currencyType: currency[currencyType] ? currency[currencyType].symbol : '₹'
+          })
+          resolve()
+        } else {
+          console.log('同步个人账户失败:', data.msg || '')
+          reject(+data.code)
+        }
+      }, (err) => {
+        console.log('同步个人账户信息出错:', err)
+        reject(-1)
+      })
     })
   },
   /**
@@ -167,6 +211,13 @@ const utils = {
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false,
   pageType: clientParams ? 'app' : 'h5',
+  isAgreePolicy: false,
+  /**
+   * 关闭客户端WebView
+   */
+  closeWebview () {
+    njordGame && njordGame.closePage && njordGame.closePage()
+  },
   /**
    * 打点
    * @static
