@@ -51,7 +51,7 @@ const im = {
       objectName: 'APUS:KeepLiveMSg'
     },
     {
-      messageName: 'ExtraLifeMessage',
+      messageName: 'ResurrectionMessage',
       propertys: ['cardNumber', 'leftRecCount'],
       objectName: 'APUS:RMsg'
     }

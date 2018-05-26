@@ -12,7 +12,7 @@ export const MESSAGE_RESULT = 'SummaryMessage' // 推送游戏结果
 export const MESSAGE_END = 'GameEndMessage' // 游戏结束
 export const MESSAGE_SEND_SUCCESS = 'MESSAGE_SEND_SUCCESS' // 消息发送成功
 export const MESSAGE_SEND_FAIL = 'MESSAGE_SEND_FAIL' // 消息发送失败
-export const MESSAGE_EXTRA_LIFE = 'ExtraLifeMessage' // 复活卡相关信息
+export const MESSAGE_EXTRA_LIFE = 'ResurrectionMessage' // 复活卡相关信息
 
 // 连接状态类
 export const CONNECTED = RongIMLib.ConnectionStatus.CONNECTED
