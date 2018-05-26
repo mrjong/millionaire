@@ -52,8 +52,6 @@ export default {
       } else {
         this.isClose = true
         utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
           utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
           this.$store.dispatch(type._INIT)
           this.$router.push({path: '/share-detail'})

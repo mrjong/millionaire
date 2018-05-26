@@ -57,6 +57,7 @@ export default {
     close () {
       utils.statistic('policy_back', 1)
       this.$router.go(-1)
+      utils.closeWebview()
     },
     agreePolicy () {
       if (this.isAgree) {
@@ -72,6 +73,7 @@ export default {
       } else {
         api.submitAgreePolicy().then(({data}) => {
           if (data.result === 1) {
+            utils.isAgreePolicy = true
             utils.statistic('agree_btn', 1, {result_code_s: '1'}, 'agreement_page')
             this.$store.dispatch(type._INIT)
             this.$router.replace('/')
