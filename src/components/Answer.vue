@@ -2,11 +2,10 @@
   <div class="answer-container" @click="answer">
     <div class="answer-container__state"
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
-         :style="{width: questionStatus === 7 && percent + '%'}">
+         :style="{width: questionStatus === 7 ? percent + '%' : (questionStatus === 5 ? '100%' : '0')}">
     </div>
     <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
-      <p class="answer-container__base__text answerText"
-         ref="answerText"
+      <p class="answer-container__base__text answerText" ref="answerText"
          :class="{'font-white':(isAnswerWhite && questionStatus === 7) || (questionStatus === 5 && isClick && myChick)}">
         {{content}}
       </p>
@@ -80,21 +79,15 @@ export default {
     },
     setFontSize () { // 设置字符串size
       const baseWidth = this.$refs.baseContainer.offsetWidth
-      let resultWidth = 0
-      if (this.$refs.resultNum) {
-        resultWidth = this.$refs.resultNum.offsetWidth
-      }
+      let resultWidth = this.$refs.resultNum && this.$refs.resultNum.offsetWidth
       let fontWidth = 28
-      for (let i = fontWidth; i >= 10; i--) {
-        fontWidth = this.getFontWidth(this.content, `${i}px Roboto-Light`)
-        if (fontWidth / 2 + resultWidth - baseWidth / 2 < 70) {
-          this.$emit('setAllFontSize', i / 100)
-          this.changeFontColor(baseWidth, resultWidth, fontWidth)
-          return false
-        }
+      if (baseWidth - resultWidth <= this.getFontWidth(this.content, `${fontWidth}px Roboto-Light`)) {
+        fontWidth = 24
+        this.$emit('setAllFontSize', 0.24)
       }
+      baseWidth && this.changeFontColor(baseWidth, resultWidth, fontWidth)
     },
-    changeFontColor (baseWidth, resultWidth) {
+    changeFontColor (baseWidth, resultWidth) { // 改变字体颜色
       let answerNum = 0
       if (this.$refs.answerNum) {
         answerNum = this.$refs.answerNum.offsetWidth

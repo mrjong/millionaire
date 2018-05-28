@@ -1,5 +1,5 @@
 <template>
-  <div class="policy" ref=policyContainer>
+  <div class="policy" ref=policyContainer @scroll="scrollEnter">
     <p class="header iconfont icon-close_big" @click="close"></p>
     <div class="content" ref="policyContent">
       <img src="../assets/images/await-logo.png" class="logo">
@@ -50,7 +50,7 @@ export default {
       this.termsOfServiceContent = data
     })
     this.$nextTick(() => {
-      this.getComputedHeight()
+      this.scrollEnter()
     })
   },
   methods: {
@@ -83,11 +83,14 @@ export default {
         })
       }
     },
-    getComputedHeight () {
-      let containerHeight = document.documentElement.clientHeight || document.body.clientHeight
-      let enterTop = this.$refs.enter.getBoundingClientRect().bottom
-      console.log(enterTop)
-      if (containerHeight < enterTop) {
+    scrollEnter () {
+      let windowHeight = document.documentElement.clientHeight || document.body.clientHeight
+      let policyScrolTop = this.$refs.policyContainer.scrollTop
+      let policyContentHeight = this.$refs.policyContent.offsetHeight
+      let enterTop = policyContentHeight - policyScrolTop
+      console.log('enterTop' + enterTop)
+      console.log('windowHeight' + windowHeight)
+      if (windowHeight < enterTop) {
         this.isToBottom = true
       } else {
         this.isToBottom = false
