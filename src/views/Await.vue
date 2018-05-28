@@ -3,7 +3,8 @@
     <div class="await__top">
       <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"
-         @click="likeToFb('like_page')"></a>
+         @click="likeToFb('like_page')">
+      </a>
       <div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
