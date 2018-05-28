@@ -288,7 +288,7 @@ export default new Vuex.Store({
      * 初始化监听器
      * @param {any} {dispatch}
      */
-    [type._INIT_LISTENER] ({dispatch, commit}) {
+    [type._INIT_LISTENER] ({dispatch, commit, getters}) {
       // 添加网络状况监听器
       im.addListener(NETWORK_UNAVAILABLE, () => {
         !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
@@ -302,13 +302,13 @@ export default new Vuex.Store({
       })
       // 添加复活卡消息监听器
       im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
-        const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
-        commit(type._UPDATE, {
-          lives
-        })
-        commit(type.QUESTION_UPDATE, {
-          maxRecoveryCount
-        })
+        const {cardNumber: lives = 0} = message.content || {}
+        // 传入的复活卡数量大于本地数量时，更新复活卡数量
+        if (getters.lives < lives) {
+          commit(type._UPDATE, {
+            lives
+          })
+        }
       })
       dispatch(type.GET_COMPERE_MESSAGE_ACTION)
       dispatch(type.QUESTION_INIT)
