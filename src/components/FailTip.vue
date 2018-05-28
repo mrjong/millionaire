@@ -68,8 +68,6 @@ export default {
         }, 400)
       } else {
         utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
           utils.statistic('game_page', 1, {'result_code_s': '1'}, 'pame_page')
           this.$store.dispatch(type._INIT).then(() => {
             this.$router.go(-1)

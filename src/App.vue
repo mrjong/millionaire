@@ -4,16 +4,7 @@
       <router-view/>
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
-    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
-    <!-- <div class="dialog-game" v-if="showGameDialog">
-      <div class="con">
-        <img src="http://static.subcdn.com/201804042026229f4a3491a2.png" alt="">
-        <div class="contents">
-          <span class="iconfont icon-cuowu" style="font-size:0.28rem;color:#fff;margin-left:91.22%;margin-top:3.8%;display: inline-block;" @click="showGameDialog = false"></span>
-          <button class="btn-fb" @click="toFb"></button>
-        </div>
-      </div>
-    </div> -->
+    <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
   </div>
@@ -30,7 +21,6 @@ import * as api from './assets/js/api'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
-import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
 export default {
   name: 'App',
   data () {
@@ -54,6 +44,8 @@ export default {
   created () {
     api.queryAgreePolicy().then(({data}) => {
       if (data.result === 1 && data.data.agree) {
+        utils.isAgreePolicy = true
+        this.$router.replace({path: '/'})
         if (this.isOnline || utils.clientId) {
           this.loading = true
           this.$store.dispatch(type._INIT).then(() => {
@@ -73,21 +65,7 @@ export default {
   },
   methods: {
     init () {
-      im.addListener(NETWORK_UNAVAILABLE, () => {
-        !utils.disableNetworkTip && this.$store.dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'Please check your internet connection.',
-          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK'
-        })
-        utils.statistic('NETWORK_UNAVAILABLE', 6)
-      })
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
+      this.$store.dispatch(type._INIT_LISTENER)
     },
     /**
      * 关闭弹窗
@@ -189,15 +167,12 @@ export default {
             }
           })
       }
+    },
+    '$route' (route) {
+      if (route.path === '/policy' && utils.isAgreePolicy) {
+        this.$router.replace({path: '/'})
+      }
     }
-    // '$route' (route) {
-    //   // 路由变化切换状态
-    //   if (route.path !== '/main') {
-    //     this.$store.commit(type._UPDATE, {
-    //       status: _AWAIT
-    //     })
-    //   }
-    // }
   }
 }
 </script>
