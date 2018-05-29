@@ -44,7 +44,9 @@ export default {
   created () {
     api.queryAgreePolicy().then(({data}) => {
       if (data.result === 1 && data.data.agree) {
-        utils.isAgreePolicy = true
+        this.$store.commit(type._UPDATE, {
+          isAgreePolicy: true
+        })
         this.$router.replace({path: '/'})
         if (this.isOnline || utils.clientId) {
           this.loading = true
@@ -166,11 +168,6 @@ export default {
               })
             }
           })
-      }
-    },
-    '$route' (route) {
-      if (route.path === '/policy' && utils.isAgreePolicy) {
-        this.$router.replace({path: '/'})
       }
     }
   }

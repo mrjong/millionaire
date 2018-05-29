@@ -72,7 +72,9 @@ const utils = {
           if (!agree) {
             vm.$router.replace('/policy')
           } else {
-            utils.isAgreePolicy = true
+            vm.$store.commit(_UPDATE, {
+              isAgreePolicy: true
+            })
             vm.$router.replace({path: '/'})
             callback()
           }
@@ -211,7 +213,6 @@ const utils = {
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false,
   pageType: clientParams ? 'app' : 'h5',
-  isAgreePolicy: false,
   /**
    * 关闭客户端WebView
    */

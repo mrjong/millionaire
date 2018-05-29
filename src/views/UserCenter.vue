@@ -108,7 +108,9 @@ export default {
           utils.statistic('log_out', 1, {result_code_s: '1'}, 'user_profile_page')
           api.queryAgreePolicy().then(({data}) => {
             if (data.result === 1 && data.data.agree) {
-              utils.isAgreePolicy = true
+              this.$store.commit(type._UPDATE, {
+                isAgreePolicy: true
+              })
               this.$store.dispatch(type._INIT)
               this.$router.replace('/')
             } else {

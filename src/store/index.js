@@ -65,7 +65,8 @@ export default new Vuex.Store({
     phoneNationCodeList: [], // 手机号国家码列表
     phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     isPlayingMusic: false, // 是否在播放音乐
-    initialState: -1 // 初始化完成后的状态
+    initialState: -1, // 初始化完成后的状态
+    isAgreePolicy: false // 是否同意过协议
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -86,7 +87,8 @@ export default new Vuex.Store({
     phoneNationCodeList: (state) => state.phoneNationCodeList,
     phoneNationCode: (state) => state.phoneNationCode,
     isPlayingMusic: (state) => state.isPlayingMusic,
-    initialState: (state) => state.initialState
+    initialState: (state) => state.initialState,
+    isAgreePolicy: (state) => state.isAgreePolicy
   },
   mutations: {
     /**
