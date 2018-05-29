@@ -124,7 +124,7 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode, lc: maxRecoveryCount, i: raceId} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
@@ -166,8 +166,10 @@ export default new Vuex.Store({
               imToken: chatRoomInfo.it || ''
             })
             commit(type.QUESTION_UPDATE, {
+              isCanRecoveryLastQuestion: typeof isCanRecoveryLastQuestion === 'boolean' ? isCanRecoveryLastQuestion : false,
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true,
-              maxRecoveryCount: +maxRecoveryCount || 0
+              maxRecoveryCount: +maxRecoveryCount || 0,
+              count: +questionCount
             })
             // 如果已经开始
             if (isPlaying) {

@@ -24,7 +24,8 @@ const state = {
   restTime: 0, // 剩余时间
   isWon: false, // 是否展示you wonThe resurrection of card
   maxRecoveryCount: 0, // 最大复活次数
-  count: 12 // 问题数量
+  count: 12, // 问题数量
+  isCanRecoveryLastQuestion: false // 最后一题是否可以复活
 }
 
 const getters = {
@@ -44,7 +45,8 @@ const getters = {
   restTime: (state) => state.restTime,
   isWon: (state) => state.isWon,
   maxRecoveryCount: (state) => state.maxRecoveryCount,
-  questionCount: (state) => state.count
+  questionCount: (state) => state.count,
+  isCanRecoveryLastQuestion: (state) => state.isCanRecoveryLastQuestion
 }
 
 const mutations = {
