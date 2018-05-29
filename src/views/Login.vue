@@ -212,13 +212,6 @@ export default {
           country: countryItem[2]
         }
       })
-    },
-    isAgreePolicy () {
-      if (this.isAgree) {
-        this.isAgree = false
-      } else {
-        this.isAgree = true
-      }
     }
   },
   mounted () {

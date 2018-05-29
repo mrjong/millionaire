@@ -43,9 +43,21 @@ export default {
   },
   created () {
     api.queryAgreePolicy().then(({data}) => {
-      if (data.result === 1 && data.data.agree) {
-        utils.isAgreePolicy = true
-        this.$router.replace({path: '/'})
+      const {isEU = false} = data.data || {}
+      if (data.result === 1) {
+        if (isEU) {
+          this.$router.replace('/blank')
+        } else {
+          if (data.data.agree) {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: true
+            })
+          } else {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: false
+            })
+          }
+        }
         if (this.isOnline || utils.clientId) {
           this.loading = true
           this.$store.dispatch(type._INIT).then(() => {
@@ -57,7 +69,9 @@ export default {
           })
         }
       } else {
-        this.$router.replace({path: '/policy'})
+        this.$store.commit(type._UPDATE, {
+          isAgreePolicy: false
+        })
       }
     })
     this.init()
@@ -158,11 +172,6 @@ export default {
               })
             }
           })
-      }
-    },
-    '$route' (route) {
-      if (route.path === '/policy' && utils.isAgreePolicy) {
-        this.$router.replace({path: '/'})
       }
     }
   }
