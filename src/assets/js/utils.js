@@ -68,7 +68,7 @@ const utils = {
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
         if (data.result === 1 && +data.code === 0) {
-          const {agree, isEU} = data.data || {}
+          const {agree, isEU = false} = data.data || {}
           if (isEU) {
             vm.$router.replace({path: '/blank'})
           } else {

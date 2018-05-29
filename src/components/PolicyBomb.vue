@@ -4,8 +4,8 @@
     <div class="content">
       <span class="iconfont icon-laba horn"></span>
       In order to improve game experience and protect user data, please read the
-      <a href="http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html" class="policy-link" @click="reportPolicy">User Agreement </a> and
-      <a href="http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html" class="policy-link" @click="reportPolicy"> Privacy Policy </a>carefully before you start game！
+      <span class="policy-link" @click="reportPolicy('service')">User Agreement </span> and
+      <span class="policy-link" @click="reportPolicy('privacy')"> Privacy Policy </span>carefully before you start game!
     </div>
   </div>
 </template>
@@ -23,15 +23,24 @@ export default {
     }
   },
   methods: {
-    reportPolicy () {
+    reportPolicy (val) {
       api.submitAgreePolicy().then(({data}) => {
-        if (data.result === 1) {
+        if (data.result === 1 && data.code === 0) {
           this.$store.commit(type._UPDATE, {
             isAgreePolicy: true
           })
           utils.statistic('agreement_notice', 1, {result_code_s: '1'})
-          this.$store.dispatch(type._INIT)
+          this.$store.dispatch(type._INIT).then(() => {
+            if (val === 'service') {
+              window.location.href = 'http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'
+            } else if (val === 'privacy') {
+              window.location.href = 'http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'
+            }
+          })
         } else {
+          this.$store.commit(type._UPDATE, {
+            isAgreePolicy: false
+          })
           utils.statistic('agreement_notice', 1, {result_code_s: '0'})
         }
       })
@@ -57,16 +66,18 @@ export default {
       top: 25px;
       right: 25px;
       transform: translate(0,-50%);
+      font-size: 25px;
     }
     .content{
-      padding: 0 40px 0 70px;
+      padding: 0 50px 0 70px;
       color:#fff;
-      font:200 24px "Roboto";
+      font:200 24px 'Roboto', Arial, serif;
       position: relative;
       .horn{
         position: absolute;
         top: 5px;
         left: 25px;
+        font-size: 28px;
       }
       .policy-link{
         color:#f5b53d;
