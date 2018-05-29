@@ -7,6 +7,7 @@
     <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
+    <policy-bomb v-if="!isAgreePolicy"></policy-bomb>
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import * as api from './assets/js/api'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
+import PolicyBomb from './components/PolicyBomb'
 export default {
   name: 'App',
   data () {
@@ -38,16 +40,26 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState'
+      initialState: 'initialState',
+      isAgreePolicy: 'isAgreePolicy'
     })
   },
   created () {
     api.queryAgreePolicy().then(({data}) => {
-      if (data.result === 1 && data.data.agree) {
-        this.$store.commit(type._UPDATE, {
-          isAgreePolicy: true
-        })
-        this.$router.replace({path: '/'})
+      if (data.result === 1) {
+        if (data.data.isEU) {
+          this.$router.replace('/blank')
+        } else {
+          if (data.data.agree) {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: true
+            })
+          } else {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: false
+            })
+          }
+        }
         if (this.isOnline || utils.clientId) {
           this.loading = true
           this.$store.dispatch(type._INIT).then(() => {
@@ -59,7 +71,9 @@ export default {
           })
         }
       } else {
-        this.$router.replace({path: '/policy'})
+        this.$store.commit(type._UPDATE, {
+          isAgreePolicy: false
+        })
       }
     })
     this.init()
@@ -124,7 +138,8 @@ export default {
     loading,
     LoginTip,
     BalanceMark,
-    ReviveGuide
+    ReviveGuide,
+    PolicyBomb
   },
   watch: {
     status: function (status, oldStatus) {

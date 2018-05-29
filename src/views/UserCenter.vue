@@ -107,15 +107,27 @@ export default {
         utils.logout(() => {
           utils.statistic('log_out', 1, {result_code_s: '1'}, 'user_profile_page')
           api.queryAgreePolicy().then(({data}) => {
-            if (data.result === 1 && data.data.agree) {
-              this.$store.commit(type._UPDATE, {
-                isAgreePolicy: true
-              })
-              this.$store.dispatch(type._INIT)
-              this.$router.replace('/')
+            if (data.result === 1) {
+              if (data.data.isEU) {
+                this.$router.replace('/blank')
+              } else {
+                if (data.data.agree) {
+                  this.$store.commit(type._UPDATE, {
+                    isAgreePolicy: true
+                  })
+                } else {
+                  this.$store.commit(type._UPDATE, {
+                    isAgreePolicy: false
+                  })
+                }
+              }
             } else {
-              this.$router.replace({path: '/policy'})
+              this.$store.commit(type._UPDATE, {
+                isAgreePolicy: false
+              })
             }
+            this.$store.dispatch(type._INIT)
+            this.$router.replace('/')
           })
         }, () => {
           // 登出失败
