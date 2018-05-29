@@ -97,6 +97,7 @@
     </p>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
+    <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -119,12 +120,14 @@ import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import FeedbackBtn from '../components/FeedbackBtn'
 import ReminderBomb from '../components/ReminderBomb'
+import PolicyBomb from '../components/PolicyBomb'
 export default {
   name: 'Await',
   data () {
     return {
       isInvitation: false,
       isInputInvitation: false,
+      isWeb: utils.pageType,
       dialogInfo: {
         htmlTitle: '',
         htmlText: '',
@@ -145,7 +148,8 @@ export default {
       startTime: 'startTime',
       status: 'status',
       lives: 'lives',
-      code: 'code'
+      code: 'code',
+      isAgreePolicy: 'isAgreePolicy'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -360,7 +364,8 @@ export default {
     HowPlayCard,
     Notices,
     FeedbackBtn,
-    ReminderBomb
+    ReminderBomb,
+    PolicyBomb
   },
   watch: {
     lives: function (val, oldVal) {

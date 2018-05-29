@@ -68,13 +68,21 @@ const utils = {
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
         if (data.result === 1 && +data.code === 0) {
-          const {agree} = data.data || {}
-          if (!agree) {
-            vm.$router.replace('/policy')
+          const {agree, isEU = false} = data.data || {}
+          if (isEU) {
+            vm.$router.replace({path: '/blank'})
           } else {
-            utils.isAgreePolicy = true
-            vm.$router.replace({path: '/'})
-            callback()
+            if (!agree) {
+              vm.$store.commit(_UPDATE, {
+                isAgreePolicy: false
+              })
+            } else {
+              vm.$store.commit(_UPDATE, {
+                isAgreePolicy: true
+              })
+              vm.$router.replace({path: '/'})
+              callback()
+            }
           }
         }
       })
@@ -211,7 +219,6 @@ const utils = {
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false,
   pageType: clientParams ? 'app' : 'h5',
-  isAgreePolicy: false,
   /**
    * 关闭客户端WebView
    */

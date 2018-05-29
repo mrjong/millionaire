@@ -107,17 +107,33 @@ export default {
         utils.logout(() => {
           utils.statistic('log_out', 1, {result_code_s: '1'}, 'user_profile_page')
           api.queryAgreePolicy().then(({data}) => {
-            if (data.result === 1 && data.data.agree) {
-              utils.isAgreePolicy = true
-              this.$store.dispatch(type._INIT)
-              this.$router.replace('/')
+            const {isEU = false} = data.data || {}
+            if (data.result === 1) {
+              if (isEU) {
+                this.$router.replace('/blank')
+              } else {
+                if (data.data.agree) {
+                  this.$store.commit(type._UPDATE, {
+                    isAgreePolicy: true
+                  })
+                } else {
+                  this.$store.commit(type._UPDATE, {
+                    isAgreePolicy: false
+                  })
+                }
+              }
             } else {
-              this.$router.replace({path: '/policy'})
+              this.$store.commit(type._UPDATE, {
+                isAgreePolicy: false
+              })
             }
+            this.$store.dispatch(type._INIT)
+            this.$router.replace('/')
           })
         }, () => {
           // 登出失败
           utils.statistic('log_out', 1, {result_code_s: '0'}, 'user_profile_page')
+          this.isLogout = false
           this.dialogInfo.htmlText = 'You failed to logout, please try again.'
           this.showDialog = true
         })

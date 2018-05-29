@@ -1,14 +1,16 @@
 <template>
   <div class="blank">
     <div class="content">
-      <p class="back iconfont icon-fanhui"></p>
+      <p class="back iconfont icon-fanhui" @click="close"></p>
       <img src="../assets/images/cry-supa.png" class="img">
-      <p class="title">Oops!</p>
-      <p class="hint">You should read and accept the  Agreement&Policy before you enter the game!</p>
+      <p class="title">Sorry!</p>
+      <p class="hint">Currently, we don't provide any game service in EU, and it is only available in India.</p>
     </div>
   </div>
 </template>
 <script>
+import utils from '../assets/js/utils'
+import * as type from '../store/type'
 export default {
   name: 'blank',
   data () {
@@ -16,6 +18,16 @@ export default {
     }
   },
   mounted () {
+    this.$store.commit(type._UPDATE, {
+      isAgreePolicy: true
+    })
+  },
+  methods: {
+    close () {
+      utils.statistic('blank_page', 1)
+      this.$router.go(-1)
+      utils.closeWebview()
+    }
   }
 }
 </script>

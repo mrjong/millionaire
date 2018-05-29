@@ -12,10 +12,11 @@ const ShareDetail = () => import('@/views/ShareDetail.vue')
 const BalanceRecord = () => import('@/views/BalanceRecord.vue')
 // const Practice = () => import('@/views/Practice.vue')
 const BalanceDetail = () => import('@/views/BalanceDetail.vue')
-const Policy = () => import('@/views/Policy.vue')
+// const Policy = () => import('@/views/Policy.vue')
 const Contact = () => import('@/views/Contact.vue')
 const UserCenter = () => import('@/views/UserCenter.vue')
-// const Blank = () => import('@/views/Blank.vue')
+const Blank = () => import('@/views/Blank.vue')
+// const SamllAwait = () => import('@/views/SmallAwait.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -80,11 +81,11 @@ const router = new Router({
       name: 'balance-detail',
       component: BalanceDetail
     },
-    {
-      path: '/policy',
-      name: 'policy',
-      component: Policy
-    },
+    // {
+    //   path: '/policy',
+    //   name: 'policy',
+    //   component: Policy
+    // },
     {
       path: '/contact',
       name: 'contact',
@@ -94,11 +95,16 @@ const router = new Router({
       path: '/user-center',
       name: 'user-center',
       component: UserCenter
+    },
+    {
+      path: '/blank',
+      name: 'blank',
+      component: Blank
     }
     // {
-    //   path: '/blank',
-    //   name: 'blank',
-    //   component: Blank
+    //   path: '/small-await',
+    //   name: 'small-await',
+    //   component: SamllAwait
     // }
   ]
 })
