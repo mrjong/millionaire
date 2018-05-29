@@ -147,6 +147,7 @@ const im = {
             this.emitListener(type.MESSAGE_AMOUNT, message)
             break
           case type.MESSAGE_EXTRA_LIFE:
+            console.log('复活卡消息', message)
             this.emitListener(type.MESSAGE_EXTRA_LIFE, message)
             break
           case type.MESSAGE_ANSWER:

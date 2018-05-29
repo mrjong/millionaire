@@ -42,12 +42,19 @@ export default {
     } else {
       this.FirstGuide = false
     }
+    // 显示之后禁止屏幕滚动
+    if (this.FirstGuide) {
+      this.freeze()
+    } else {
+      this.restore()
+    }
   },
   methods: {
     toShareDetail () {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       if (utils.isOnline) {
+        this.isClose = true
         this.$router.push({path: '/share-detail'})
       } else {
         this.isClose = true
@@ -56,6 +63,25 @@ export default {
           this.$store.dispatch(type._INIT)
           this.$router.push({path: '/share-detail'})
         })
+      }
+    },
+    freeze () {
+      document.querySelector('#app').style.overflow = 'hidden'
+      document.body.addEventListener('touchmove', this.preventDefault)
+    },
+    restore () {
+      document.querySelector('#app').style.overflow = 'visible'
+      document.body.removeEventListener('touchmove', this.preventDefault)
+    },
+    preventDefault (event) {
+      event.preventDefault()
+    }
+  },
+  watch: {
+    // 关闭之后恢复屏幕滚动
+    isClose (val) {
+      if (val) {
+        this.restore()
       }
     }
   }
