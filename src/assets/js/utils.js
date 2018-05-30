@@ -219,7 +219,6 @@ const utils = {
   isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
   disableNetworkTip: false, // 是否禁用网络状况提示
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
-  isAgreePolicy: false, // 是否同意协议
   raceId: '', // 本场比赛ID
   /**
    * 关闭客户端WebView
