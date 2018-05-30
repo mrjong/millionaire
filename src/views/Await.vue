@@ -177,19 +177,13 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
-    if (localStorage.getItem('isFirstShare')) {
-      let isFirst = localStorage.getItem('isFirstShare')
-      let duration = new Date().getTime() - localStorage.getItem('firstTime')
-      if (isFirst === 'true') {
-        this.isSucceed = true
-        setTimeout(() => {
-          this.isSucceed = false
-          localStorage.setItem('isFirstShare', 'false')
-        }, 3000)
-      }
-      if (duration > 86400000) {
-        localStorage.removeItem('isFirstShare')
-      }
+    const isFirst = utils.storage.get('millionaire-isFirstShare')
+    if (isFirst) {
+      this.isSucceed = true
+      setTimeout(() => {
+        this.isSucceed = false
+        utils('millionaire-isFirstShare', false)
+      }, 3000)
     }
     utils.statistic('wait_page', 0)
   },

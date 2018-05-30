@@ -101,11 +101,9 @@ export default {
      * 获取手机号国家码
      */
     getPhoneNationCode () {
-      const phoneNationCodeStr = localStorage.getItem('millionaire-phoneNationCode')
-      let phoneNationCodes = null
+      let phoneNationCodes = utils.storage.get('millionaire-phoneNationCode')
       // 从本地获取
-      if (phoneNationCodeStr) {
-        phoneNationCodes = JSON.parse(phoneNationCodeStr)
+      if (phoneNationCodes) {
         const {phoneNationCode, phoneNationCodeList} = phoneNationCodes
         this.$store.commit(type._UPDATE, {
           phoneNationCodeList,
@@ -122,10 +120,10 @@ export default {
                 phoneNationCodeList,
                 phoneNationCode
               })
-              localStorage.setItem('millionaire-phoneNationCode', JSON.stringify({
+              utils.storage.set('millionaire-phoneNationCode', {
                 phoneNationCode,
                 phoneNationCodeList
-              }))
+              })
             }
           }
         })

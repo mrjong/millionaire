@@ -224,7 +224,7 @@ const actions = {
    */
   [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
     // 从本地获取用户作答情况
-    const userAnswerInfo = utils.getLocaStorge('user-answer')
+    const userAnswerInfo = utils.storage.get('millionaire-user-answer')
     if (userAnswerInfo) {
       const {id, index, isAnswered, userAnswer} = userAnswerInfo
       // 若本地存储的答案信息与当前题目一致，则同步答案信息

@@ -134,13 +134,12 @@ export default {
           const {id, index} = this
           this.$store.commit(type.QUESTION_UPDATE, userAnswerInfo)
           // 作答情况存储在本地
-          utils.setLocalStorge(
+          utils.storage.set('millionaire-user-answer',
             {
               ...userAnswerInfo,
               id,
               index
-            },
-            'user-answer', 180000)
+            }, 180000)
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
             utils.statistic('QUESTION_RESULT', 1, {
               id_s: `${this.index}`,

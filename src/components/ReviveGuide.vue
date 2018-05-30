@@ -36,9 +36,9 @@ export default {
     })
   },
   mounted () {
-    if (!localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
+    if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = true
-      localStorage.setItem('NoFirstGuide', 'false')
+      utils.storage.set('millionaire-NoFirstGuide', true)
     } else {
       this.FirstGuide = false
     }
