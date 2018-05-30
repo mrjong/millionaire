@@ -77,16 +77,10 @@ export default {
       countdownStyle: 'color: #fff;',
       isLiving: false,
       isUsedRecoveryCard: false // 是否使用过复活卡
-      // game_answer: {
-      //   current_question_l: 0,
-      //   cost_time_l: 0,
-      //   question_id_l: 0,
-      //   resule_code_s: ''
-      // }
     }
   },
   computed: {
-    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives']),
+    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion']),
     totalResult: function () {
       let result = {}
       let totalNum = 0
@@ -273,7 +267,7 @@ export default {
       this.countDown(status)
 
       if (status === 7) {
-        const {isCorrect, watchingMode, isAnswered, maxRecoveryCount, isOnline, index, questionCount, lives} = this
+        const {isCorrect, watchingMode, isAnswered, maxRecoveryCount, isOnline, index, questionCount, lives, isCanRecoveryLastQuestion} = this
 
         // 如果已经观战 直接退出
         if (watchingMode) {
@@ -315,7 +309,10 @@ export default {
 
           // 满足复活卡使用条件 弹出使用复活卡弹窗
           setTimeout(() => {
-            if (isOnline && (+index < questionCount) && (lives > 0) && (maxRecoveryCount > 0)) {
+            if (isOnline && (lives > 0) && (maxRecoveryCount > 0)) {
+              if (+index === questionCount && !isCanRecoveryLastQuestion) { // 如果是最后一题且最后一题不可使用复活卡，则取消使用复活卡
+                this.cancelUseRecoveryCard()
+              }
               this.extraLifeTip = true
               setTimeout(() => {
                 if (!this.extraLifeTip && !this.isUsedRecoveryCard) { // 关闭弹窗
