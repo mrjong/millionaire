@@ -220,6 +220,7 @@ const utils = {
   disableNetworkTip: false, // 是否禁用网络状况提示
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
   raceId: '', // 本场比赛ID
+  actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
   /**
    * 关闭客户端WebView
    */
