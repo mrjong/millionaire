@@ -377,7 +377,7 @@ export default new Vuex.Store({
         const resultStr = message.content && message.content.summary
         if (resultStr) {
           const result = JSON.parse(resultStr)
-          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
+          const {c: isFinish = false, tb: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
           let winnersMap = winners.map((winner) => {
             const obj = {}
             obj.userId = winner.i
