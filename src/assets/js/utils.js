@@ -65,6 +65,7 @@ const utils = {
         isOnline: true
       })
       isSyncInfo && utils.syncAccountInfo()
+      callback()
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
         if (data.result === 1 && +data.code === 0) {
@@ -81,7 +82,6 @@ const utils = {
                 isAgreePolicy: true
               })
               vm.$router.replace({path: '/'})
-              callback()
             }
           }
         }
