@@ -233,7 +233,7 @@ export default new Vuex.Store({
                     // 倒计时到了后直接开始展示串词
                     im.emitListener(MESSAGE_HOST, {
                       content: {
-                        content: JSON.stringify(['Welcome to \'Go! Millionaire\' game! Answer 12 questions at 10 PM and get them all right to win real cash prize every day!', 'You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!'])
+                        content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
                       }
                     })
                   } else {
