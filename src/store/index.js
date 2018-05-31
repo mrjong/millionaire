@@ -310,11 +310,17 @@ export default new Vuex.Store({
       })
       // 添加复活卡消息监听器
       im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
-        const {cardNumber: lives = 0} = message.content || {}
+        const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
         // 传入的复活卡数量大于本地数量时，更新复活卡数量
         if (getters.lives < lives) {
           commit(type._UPDATE, {
             lives
+          })
+        }
+        // 传入的复活次数大于本地复活次数时，更新复活次数
+        if (getters.maxRecoveryCount < maxRecoveryCount) {
+          commit(type.QUESTION_UPDATE, {
+            maxRecoveryCount
           })
         }
       })
