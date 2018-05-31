@@ -2,7 +2,7 @@
   <div>
     <div class='no-winner-result' v-if='!respondence.winners.length'>
       <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
-      <p class= 'no-winner-result__bonus'>{{respondence.bonusAmount}}</p>
+      <p class= 'no-winner-result__bonus'>{{currencyType}}{{respondence.bonusAmount}}</p>
       <p class='no-winner-result__tip'>Prize rolls over to next game</p>
     </div>
     <div class="has-winner-result" v-else>
@@ -79,6 +79,7 @@ export default {
     &__bonus {
         margin-bottom: 32px;
         font: 700 114px 'Roboto Condensed', Arial, serif;
+        color:#fbc222;
     }
     &__tip {
         font: 300 28px 'Roboto';

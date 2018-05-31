@@ -40,6 +40,7 @@ export default {
     z-index: 1111;
     display: flex;
     justify-content: center;
+    align-items: center;
     &__img{
       width: 80px;
       height: 80px;
