@@ -62,6 +62,7 @@ export default new Vuex.Store({
     },
     lives: 0,
     code: '',
+    gameType: 3,
     phoneNationCodeList: [], // 手机号国家码列表
     phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     isPlayingMusic: false, // 是否在播放音乐
@@ -84,6 +85,7 @@ export default new Vuex.Store({
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
     code: (state) => state.code,
+    gameType: (state) => state.gameType,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
     phoneNationCode: (state) => state.phoneNationCode,
     isPlayingMusic: (state) => state.isPlayingMusic,
@@ -126,7 +128,7 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
@@ -159,6 +161,7 @@ export default new Vuex.Store({
               hostIntervalTime,
               lives,
               code,
+              gameType,
               isOnline,
               startTime,
               startTimeOffset,

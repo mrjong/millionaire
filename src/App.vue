@@ -42,7 +42,9 @@ export default {
     })
   },
   created () {
+    this.loading = true
     api.queryAgreePolicy().then(({data}) => {
+      this.loading = false
       const {isEU = false} = data.data || {}
       if (data.result === 1) {
         if (isEU) {

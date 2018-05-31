@@ -4,7 +4,10 @@
     <p class="compere-container__text">
        {{compereMsg}}
     </p>
-    <div class="compere-container__supa">
+    <div class="compere-container__notice" v-if="gameType === 3">
+      <img src="../assets/images/small-awiat-title.png">
+    </div>
+    <div class="compere-container__supa" v-else>
        <p class="supa" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div>
@@ -23,10 +26,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['hostIntervalTime', 'hostMsgList'])
+    ...mapGetters(['hostIntervalTime', 'hostMsgList', 'gameType'])
   },
   mounted () {
-    this.changeSupa()
+    console.log('game' + this.gameType)
+    this.gameType !== 3 && this.changeSupa()
     this.rollingMsg()
   },
   methods: {
@@ -69,7 +73,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 150px 29px 0px 44px;
+  padding: 100px 29px 0px 44px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -85,6 +89,12 @@ export default {
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  &__notice{
+    width: 100%;
+    img{
+      width: 100%;
+    }
   }
   &__supa {
     width: 211px;
