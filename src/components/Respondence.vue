@@ -312,6 +312,7 @@ export default {
             if (isOnline && (lives > 0) && (maxRecoveryCount > 0)) {
               if (+index === questionCount && !isCanRecoveryLastQuestion) { // 如果是最后一题且最后一题不可使用复活卡，则取消使用复活卡
                 this.cancelUseRecoveryCard()
+                return false
               }
               this.extraLifeTip = true
               setTimeout(() => {
