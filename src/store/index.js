@@ -62,6 +62,7 @@ export default new Vuex.Store({
     },
     lives: 0,
     code: '',
+    gameType: 3,
     phoneNationCodeList: [], // 手机号国家码列表
     phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     isPlayingMusic: false, // 是否在播放音乐
@@ -84,6 +85,7 @@ export default new Vuex.Store({
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
     code: (state) => state.code,
+    gameType: (state) => state.gameType,
     phoneNationCodeList: (state) => state.phoneNationCodeList,
     phoneNationCode: (state) => state.phoneNationCode,
     isPlayingMusic: (state) => state.isPlayingMusic,
@@ -126,11 +128,12 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode, lc: maxRecoveryCount} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
             utils.isOnline = isOnline
+            utils.raceId = raceId // 更新比赛ID
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
@@ -158,6 +161,7 @@ export default new Vuex.Store({
               hostIntervalTime,
               lives,
               code,
+              gameType,
               isOnline,
               startTime,
               startTimeOffset,
@@ -167,8 +171,10 @@ export default new Vuex.Store({
               imToken: chatRoomInfo.it || ''
             })
             commit(type.QUESTION_UPDATE, {
+              isCanRecoveryLastQuestion: typeof isCanRecoveryLastQuestion === 'boolean' ? isCanRecoveryLastQuestion : false,
               watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true,
-              maxRecoveryCount: +maxRecoveryCount || 0
+              maxRecoveryCount: +maxRecoveryCount || 0,
+              count: +questionCount
             })
             // 如果已经开始
             if (isPlaying) {
@@ -304,11 +310,17 @@ export default new Vuex.Store({
       })
       // 添加复活卡消息监听器
       im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
-        const {cardNumber: lives = 0} = message.content || {}
+        const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
         // 传入的复活卡数量大于本地数量时，更新复活卡数量
         if (getters.lives < lives) {
           commit(type._UPDATE, {
             lives
+          })
+        }
+        // 传入的复活次数大于本地复活次数时，更新复活次数
+        if (getters.maxRecoveryCount < maxRecoveryCount) {
+          commit(type.QUESTION_UPDATE, {
+            maxRecoveryCount
           })
         }
       })
@@ -371,7 +383,7 @@ export default new Vuex.Store({
         const resultStr = message.content && message.content.summary
         if (resultStr) {
           const result = JSON.parse(resultStr)
-          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
+          const {c: isFinish = false, tb: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
           let winnersMap = winners.map((winner) => {
             const obj = {}
             obj.userId = winner.i

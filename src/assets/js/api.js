@@ -72,7 +72,8 @@ export const submitAnswer = function (id, answer, index) {
       a: md5(answer),
       s: index,
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      race_id: utils.raceId
     }
   })
 }
@@ -90,8 +91,16 @@ export const balanceApplication = (valOption) => {
   const fetchObj = Object.assign({}, baseOption, valOption)
   return axios.post(`${api.balanceApplication}`, fetchObj)
 }
+
+// 用户是否赢得奖金
 export const ifSelfWon = () => {
-  return axios.get(`${api.isWon}?app_id=${utils.app_id}&client_id=${utils.clientId}`)
+  return axios.get(api.isWon, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      race_id: utils.raceId
+    }
+  })
 }
 
 // 用户出题
@@ -123,7 +132,8 @@ export const pollMsg = function () {
   return axios.get(api.pollMsg, {
     params: {
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      race_id: utils.raceId
     },
     timeout: 5000
   })
@@ -206,6 +216,7 @@ export const useRecoveryCard = function (id, index, type = 1) {
     params: {
       app_id: utils.app_id,
       client_id: utils.clientId,
+      race_id: utils.raceId,
       i: id,
       s: index,
       t: type
@@ -310,6 +321,7 @@ export const queryAgreePolicy = function () {
   })
 }
 
+// 获取协议内容
 export const getPolicyContent = function (filename) {
   return axios.get(`${publicUrl}/html/${filename}`, {
     baseURL: window.location.origin,
