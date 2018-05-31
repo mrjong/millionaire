@@ -79,6 +79,7 @@ export default {
     &__bonus {
         margin-bottom: 32px;
         font: 700 114px 'Roboto Condensed', Arial, serif;
+        color:#fbc222;
     }
     &__tip {
         font: 300 28px 'Roboto';
