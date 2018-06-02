@@ -64,7 +64,8 @@ export default {
       code: '',
       isAgree: true,
       isInputting: false, // 是否正在输入
-      windowInnerHeight: 0
+      windowInnerHeight: 0,
+      timeOffset: 0
     }
   },
   computed: {
@@ -74,12 +75,18 @@ export default {
     utils.statistic('login_page', 0)
     this.windowInnerHeight = window.innerHeight
     window.addEventListener('resize', () => {
+      if (Date.now() - this.timeOffset < 500) {
+        this.timeOffset = Date.now()
+        return false
+      }
       if (this.windowInnerHeight < window.innerHeight) {
         this.isInputting = false
       } else {
         this.isInputting = true
       }
+      console.log(this.windowInnerHeight, window.innerHeight, this.isInputting)
       this.windowInnerHeight = window.innerHeight
+      this.timeOffset = Date.now()
     })
   },
   methods: {
@@ -379,6 +386,6 @@ export default {
       }
   }
   .hide {
-    z-index: -1;
+    visibility: hidden;
   }
 </style>
