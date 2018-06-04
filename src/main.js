@@ -36,12 +36,6 @@ if (!utils.clientId) {
   }
 }
 
-window.addEventListener('pageshow', function (e) {
-  if (e.persisted || (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2)) {
-    window.location.reload()
-  }
-})
-
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
