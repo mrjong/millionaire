@@ -41,8 +41,16 @@ export default {
       initialState: 'initialState'
     })
   },
+  beforeCreate () {
+    if (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2) {
+      window.location.reload()
+    }
+    console.log('​beforeCreate -> window.performance.navigation.type', window.performance.navigation.type)
+  },
   created () {
+    this.loading = true
     api.queryAgreePolicy().then(({data}) => {
+      this.loading = false
       const {isEU = false} = data.data || {}
       if (data.result === 1) {
         if (isEU) {
@@ -76,6 +84,9 @@ export default {
     })
     this.init()
     this.getPhoneNationCode()
+  },
+  mounted () {
+    console.log('mounted')
   },
   methods: {
     init () {

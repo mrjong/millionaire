@@ -4,14 +4,14 @@
          :class="{'finish-right': questionStatus === 7 && isRight, 'finish-wrong': questionStatus === 7 && !isRight, 'hover': questionStatus === 5 && isClick && myChick}"
          :style="{width: questionStatus === 7 ? percent + '%' : (questionStatus === 5 ? '100%' : '0')}">
     </div>
-    <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite}">
+    <div class="answer-container__base" ref="baseContainer" :class="{'font-white': isAllWhite && questionStatus === 7}">
       <p class="answer-container__base__text answerText" ref="answerText"
          :class="{'font-white':(isAnswerWhite && questionStatus === 7) || (questionStatus === 5 && isClick && myChick)}">
         {{content}}
       </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num" ref="answerNum"
-           :class="{'font-white': isResultWhite}">{{result}}</p>
+           :class="{'font-white': isResultWhite || isAllWhite}">{{result}}</p>
         <span class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
            ref="resultIcon"
            :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></span>

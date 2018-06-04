@@ -132,6 +132,7 @@ export default {
       .light{
         max-width: 70%;
         width: 600px;
+        min-height: 400px;
         margin: 30px auto 0;
       }
       .lives{
@@ -180,18 +181,23 @@ export default {
     .guide {
       padding: 60px 40px 10px;
       &__close{
-        position: absolute;
-        top: 24px;
-        right: 24px;;
-        width: 50px;
-        height: 50px;
         font-size: 22px;
-        line-height: 50px;
       }
       &__text{
         font-size: 28px;
         line-height: 45px;
         margin-bottom: 10px;
+      }
+      &__img{
+        .light{
+          max-width: 60%;
+          width:500px;
+          min-height: 300px;
+          margin: 0 auto;
+        }
+        .lives{
+          width:140px;
+        }
       }
       &__btn{
         font-size: 30px;
@@ -204,24 +210,6 @@ export default {
         font-size: 56px;
         margin: 0 0 35px;
         line-height: 70px;
-      }
-    }
-  }
-  @media screen and (max-width: 321px){
-    .guide {
-      padding: 100px 40px 0;
-      &__text{
-        font-size: 30px;
-        margin-bottom: 10px;
-      }
-      &__btn{
-        font-size: 30px;
-        width: 600px;
-        margin: 30px auto 0;
-      }
-      .important{
-        font-size: 56px;
-        margin: 0 0 35px;
       }
     }
   }

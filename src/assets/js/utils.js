@@ -69,6 +69,7 @@ const utils = {
         isOnline: true
       })
       isSyncInfo && utils.syncAccountInfo()
+      callback()
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
         if (data.result === 1 && +data.code === 0) {
@@ -85,7 +86,6 @@ const utils = {
                 isAgreePolicy: true
               })
               vm.$router.replace({path: '/'})
-              callback()
             }
           }
         }
@@ -185,6 +185,7 @@ const utils = {
   disableNetworkTip: false, // 是否禁用网络状况提示
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
   raceId: '', // 本场比赛ID
+  actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
   /**
    * 关闭客户端WebView
    */
