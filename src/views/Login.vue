@@ -79,7 +79,7 @@ export default {
         this.timeOffset = Date.now()
         return false
       }
-      if (this.windowInnerHeight < window.innerHeight) {
+      if (window.innerHeight - this.windowInnerHeight >= 150) {
         this.isInputting = false
       } else {
         this.isInputting = true
