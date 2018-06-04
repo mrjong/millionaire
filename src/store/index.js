@@ -152,7 +152,7 @@ export default new Vuex.Store({
             })
 
             // 如果有未登录态奖金未同步，则同步账户信息
-            if (getters.clientBalance > 0 && isOnline) {
+            if (getters.userInfo.clientBalance > 0 && isOnline) {
               utils.syncAccountInfo()
             }
 

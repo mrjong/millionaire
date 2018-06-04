@@ -30,8 +30,8 @@
       <p class="policy">
         Notice: The mobile number will only be used to receive the SMS verification code from Tencent Cloud.
       </p>
-      <img src="../assets/images/apus-logo-white.png" class="login-container__footer">
-      <p class="bottom-text">
+      <img src="../assets/images/apus-logo-white.png" :class="['login-container__footer', {hide: isInputting}]">
+      <p :class="['bottom-text', {hide: isInputting}]">
         <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
         <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
       </p>
@@ -62,11 +62,32 @@ export default {
       username: '',
       phoneNumber: '',
       code: '',
-      isAgree: true
+      isAgree: true,
+      isInputting: false, // 是否正在输入
+      windowInnerHeight: 0,
+      timeOffset: 0
     }
   },
   computed: {
     ...mapGetters(['status', 'phoneNationCode'])
+  },
+  mounted () {
+    utils.statistic('login_page', 0)
+    this.windowInnerHeight = window.innerHeight
+    window.addEventListener('resize', () => {
+      if (Date.now() - this.timeOffset < 500) {
+        this.timeOffset = Date.now()
+        return false
+      }
+      if (window.innerHeight - this.windowInnerHeight >= 150) {
+        this.isInputting = false
+      } else {
+        this.isInputting = true
+      }
+      console.log(this.windowInnerHeight, window.innerHeight, this.isInputting)
+      this.windowInnerHeight = window.innerHeight
+      this.timeOffset = Date.now()
+    })
   },
   methods: {
     back () {
@@ -214,9 +235,6 @@ export default {
       })
     }
   },
-  mounted () {
-    utils.statistic('login_page', 0)
-  },
   components: {
     loading,
     CountryList
@@ -350,7 +368,7 @@ export default {
     &__footer {
       width: 135px;
       position: absolute;
-      bottom: 60px;
+      bottom: 70px;
       left: 50%;
       transform: translateX(-50%);
     }
@@ -359,12 +377,15 @@ export default {
       width: 100%;
       position: absolute;
       bottom: 10px;
-      margin: 25px 0 20px;
+      margin: 25px 0 15px;
       font: 200 24px 'Roboto', Arial, serif;
       color: #fff;
       text-align: center;
       a{
         color:#fff;
       }
-    }
+  }
+  .hide {
+    visibility: hidden;
+  }
 </style>

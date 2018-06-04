@@ -25,16 +25,23 @@ function statisticEntry () {
 
 // 若在h5页面或无clientId 则生成clientId
 if (!utils.clientId) {
-  const clientId = utils.getLocaStorge('', 'clientId')
+  const clientId = utils.storage.get('millionaire-clientId')
   if (clientId) {
     utils.clientId = clientId
   } else {
     new Fingerprint2({excludeFlashFonts: true, excludeJsFonts: true}).get((result) => {
       utils.clientId = result
-      utils.setLocalStorge({clientId: result})
+      utils.storage.set('millionaire-clientId', result)
     })
   }
 }
+
+window.addEventListener('pageshow', function (e) {
+  if (e.persisted || (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2)) {
+    window.location.reload()
+  }
+})
+
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
