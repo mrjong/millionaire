@@ -122,7 +122,7 @@ export default {
     }
   },
   mounted () {
-    this.isPop = localStorage.getItem('isPop')
+    this.isPop = utils.storage.get('millionaire-isPop')
     if (this.$route.query.close) {
       this.isPop = this.$route.query.close
       utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'issue_success_page')
@@ -194,7 +194,7 @@ export default {
     },
     isShowBomb () {
       this.isPop = true
-      localStorage.setItem('isPop', true)
+      utils.storage.set('millionaire-isPop', true)
     },
     join () {
       this.setQuestionBtnStatics('join_group')

@@ -129,8 +129,7 @@ export default {
       &__btn {
         width: 100%;
         height: 77px;
-        display: flex;
-        justify-content: space-around;
+        text-align: center;
         margin-top: 25px;
         span {
           display: inline-block;
