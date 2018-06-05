@@ -67,11 +67,9 @@ export default {
     },
     freeze () {
       document.querySelector('#app').style.overflow = 'hidden'
-      document.body.addEventListener('touchmove', this.preventDefault)
     },
     restore () {
       document.querySelector('#app').style.overflow = 'visible'
-      document.body.removeEventListener('touchmove', this.preventDefault)
     },
     preventDefault (event) {
       event.preventDefault()
