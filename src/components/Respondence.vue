@@ -301,8 +301,8 @@ export default {
           if (lives <= 0 || maxRecoveryCount <= 0) {
             setTimeout(() => {
               this.$emit('fail-tip')
+              this.cancelUseRecoveryCard()
             }, 1000)
-            this.cancelUseRecoveryCard()
             return false
           }
 
