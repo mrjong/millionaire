@@ -9,9 +9,7 @@
     <div class="national-code" @click.stop="showCountryList = !showCountryList">
       <span class="iconfont icon-guojia code-icon"></span>
       <span class="iconfont icon-LIVINGyoujiantou drop-down"></span>
-      <input type="text"
-          :value="`${phoneNationCode.country} + ${phoneNationCode.code}`"
-          class="invitation">
+      <p class="invitation">{{phoneNationCode.country}}{{ ' +' + phoneNationCode.code}}</p>
     </div>
     <div class="phone">
       <span class="iconfont icon-shouji phone-icon"></span>
@@ -49,9 +47,9 @@ export default {
       reminderObj: {
         nation_code: '',
         phone: '',
-        type: true
+        type: false
       },
-      type: true,
+      type: false,
       isReminderMark: true,
       showCountryList: false
     }

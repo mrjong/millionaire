@@ -4,13 +4,13 @@
     <p class="compere-container__text">
        {{compereMsg}}
     </p>
-    <div class="compere-container__notice" v-if="gameType === 3">
+    <div class="compere-container__notice">
       <img src="../assets/images/small-awiat-title.png">
     </div>
-    <div class="compere-container__supa" v-else>
+    <!-- <div class="compere-container__supa">
        <p class="supa" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

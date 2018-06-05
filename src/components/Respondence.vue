@@ -168,7 +168,11 @@ export default {
     computePercent (val, totalNum) {
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
-        return 10 + percent
+        if (percent >= 7) {
+          return 5 + percent
+        } else {
+          return 10
+        }
       }
       return percent
     },
@@ -301,8 +305,8 @@ export default {
           if (lives <= 0 || maxRecoveryCount <= 0) {
             setTimeout(() => {
               this.$emit('fail-tip')
+              this.cancelUseRecoveryCard()
             }, 1000)
-            this.cancelUseRecoveryCard()
             return false
           }
 
@@ -395,7 +399,7 @@ export default {
       height: 100%;
       top: 0;
       left: 0;
-      background-color: rgba(68, 68, 68, 0.8);
+      background-color: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: center;
