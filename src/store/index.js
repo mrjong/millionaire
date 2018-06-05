@@ -11,6 +11,7 @@ import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import currency from '../assets/js/currency'
+import throttle from 'lodash.throttle'
 import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
@@ -298,7 +299,7 @@ export default new Vuex.Store({
      */
     [type._INIT_LISTENER] ({dispatch, commit, getters}) {
       // 添加网络状况监听器
-      im.addListener(NETWORK_UNAVAILABLE, () => {
+      im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
         !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
           htmlTitle: 'Please check your internet connection.',
           htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
@@ -307,7 +308,7 @@ export default new Vuex.Store({
           okBtnText: 'OK'
         })
         utils.statistic('NETWORK_UNAVAILABLE', 6)
-      })
+      }, 30000))
       // 添加复活卡消息监听器
       im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
         const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
