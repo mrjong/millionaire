@@ -2,6 +2,9 @@
 import * as type from './listener-type'
 import {appKey} from './http'
 import {pollMsg} from './api'
+import utils from './utils'
+import {vm} from '../../main'
+import throttle from 'lodash.throttle'
 
 let keepLiveMessageTimer = null
 
@@ -9,7 +12,6 @@ const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
-  pullMsgTimeoutCount: 0, // 拉去消息超时次数
   isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
@@ -285,7 +287,7 @@ const im = {
    */
   startPullMsg () {
     clearInterval(im.pullMsgTimer)
-    im.pullMsgTimer = setInterval(im.pullMsg, 1000)
+    im.pullMsgTimer = setInterval(im.pullMsg, 2000)
   },
 
   /**
@@ -293,7 +295,6 @@ const im = {
    */
   pullMsg () {
     pollMsg().then(({data}) => {
-      im.pullMsgTimeoutCount = 0
       if (+data.result === 1 && +data.code === 0) {
         im.isHandledMsg && im.pollMsgHandler(data.data)
       } else {
@@ -301,17 +302,21 @@ const im = {
       }
     }).catch((error) => {
       console.log(`拉取消息出错:`, error, new Date())
-      if (error.code === 'ECONNABORTED') {
-        im.pullMsgTimeoutCount = im.pullMsgTimeoutCount + 1
-      }
-      // 连续超时两次，提示网络错误
-      if (im.pullMsgTimeoutCount >= 2) {
+      if (error.code === 'ECONNABORTED') { // 拉取超时
         im.emitListener(type.NETWORK_UNAVAILABLE)
-        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount * 15
+        im.timeoutStatistic()
       }
     })
   },
-
+  /**
+   * 超时统计
+   */
+  timeoutStatistic: throttle(() => {
+    utils.statistic('TIMEOUT', 0, {
+      style_s: utils.clientId,
+      text_s: vm.$store.getters.userInfo.userId
+    }, vm.$store.getters.userInfo.userName)
+  }, 5000),
   /**
    * 停止轮询消息
    */
