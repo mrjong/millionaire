@@ -64,7 +64,9 @@ export default {
   },
   mounted () {
     if (this.questionStatus === 7) {
-      this.setFontSize()
+      this.$nextTick(() => {
+        this.setFontSize()
+      })
     }
   },
   methods: {
@@ -113,7 +115,9 @@ export default {
   watch: {
     questionStatus: function (questionStatus) {
       if (questionStatus === 7) {
-        this.setFontSize()
+        this.$nextTick(() => {
+          this.setFontSize()
+        })
       }
     }
   }
