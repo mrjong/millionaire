@@ -75,6 +75,7 @@ export default {
     margin:0 auto 25px;
     padding: 0.5px;
     padding-bottom: 40px;
+    padding-top:30px;
     position: relative;
     &__user{
       text-align: center;
@@ -85,7 +86,7 @@ export default {
         border-radius: 50%;
         background: no-repeat center;
         background-size: cover;
-        margin: 30px auto 0;
+        margin: 0 auto;
       }
       &__name{
         color: #241262;
