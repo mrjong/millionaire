@@ -5,6 +5,7 @@ import {pollMsg} from './api'
 import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
+import { _INIT } from '../../store/type'
 
 let keepLiveMessageTimer = null
 
@@ -285,9 +286,9 @@ const im = {
   /**
    * 开始轮询消息
    */
-  startPullMsg () {
+  startPullMsg (interval = 2000) {
     clearInterval(im.pullMsgTimer)
-    im.pullMsgTimer = setInterval(im.pullMsg, 2000)
+    im.pullMsgTimer = setInterval(im.pullMsg, interval)
   },
 
   /**
@@ -329,7 +330,7 @@ const im = {
    */
   pollMsgHandler (data = {}) {
     im.isHandledMsg = false
-    const {i: msgId, t: msgType, d: msg = {}, l: validTime} = data
+    const {i: msgId, t: msgType, d: msg = {}, l: validTime = 0} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
       switch (msgType) {
         case 1: { // 串词消息
@@ -386,7 +387,20 @@ const im = {
           im.emitListener(type.MESSAGE_END, msg.t || 0)
           break
         }
+        case 6: { // 非比赛消息
+          vm.$store.dispatch(_INIT)
+          im.stopPullMsg()
+        }
       }
+    }
+    if (validTime >= 30000) { // 根据消息剩余有效时间判断轮询间隔时间
+      im.startPullMsg(10000)
+    } else if (validTime >= 10000) {
+      im.startPullMsg(5000)
+    } else if (validTime >= 5000) {
+      im.startPullMsg(3000)
+    } else {
+      im.startPullMsg(1500)
     }
     im.pullMsgId = msgId
     im.isHandledMsg = true
