@@ -72,7 +72,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 100px 29px 0px 44px;
+  padding: 100px 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -82,7 +82,7 @@ export default {
     height: 200px;
     color: #fed331;
     font: 500 40px/48px 'Roboto', Arial, serif;;
-    margin: 0 10px 20px 0;
+    padding: 0 30px 0 44px;
     position: relative;
     overflow: hidden;
     font-smoothing: antialiased;
