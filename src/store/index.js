@@ -129,12 +129,14 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion, qs: questions = [], cs: resultHostMsgList = []} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
             utils.isOnline = isOnline
             utils.raceId = raceId // 更新比赛ID
+            utils.storage.set('millionaire-qs', questions) // 缓存题目信息
+            utils.storage.set('millionaire-cs', resultHostMsgList) // 缓存结束串词
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',

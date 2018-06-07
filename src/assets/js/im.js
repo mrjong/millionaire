@@ -323,6 +323,8 @@ const im = {
    */
   stopPullMsg () {
     clearInterval(im.pullMsgTimer)
+    im.pullMsgId = ''
+    im.isHandledMsg = true
   },
 
   /**
@@ -330,11 +332,24 @@ const im = {
    */
   pollMsgHandler (data = {}) {
     im.isHandledMsg = false
-    const {i: msgId, t: msgType, d: msg = {}, l: validTime = 0} = data
+    const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
+      const questions = utils.storage.get('millionaire-qs')
+      const index = msg || 0
+      const currentQuestion = questions[+index - 1] || {}
       switch (msgType) {
         case 1: { // 串词消息
-          const {rs: hostMsgList, si: intervalTime} = msg
+          const resultHostMsgList = utils.storage.get('millionaire-cs') || [] // 从本地缓存中取出结束串词
+          const {si: intervalTime} = msg || {}
+          im.emitListener(type.MESSAGE_HOST, {
+            content: {
+              content: JSON.stringify(resultHostMsgList)
+            }
+          }, intervalTime)
+          break
+        }
+        case 7: { // 题目串词消息
+          const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
           im.emitListener(type.MESSAGE_HOST, {
             content: {
               content: JSON.stringify(hostMsgList)
@@ -347,7 +362,7 @@ const im = {
           im.emitListener(type.MESSAGE_QUESTION, {
             content: {
               content: JSON.stringify({
-                ...msg,
+                ...currentQuestion,
                 restTime: restTime >= 10 ? 10 : restTime
               })
             }
@@ -355,22 +370,14 @@ const im = {
           break
         }
         case 3: { // 答案汇总消息
-          const question = {
-            id: msg.ji || '',
-            index: msg.js || 1,
-            contents: msg.jc || '',
-            options: msg.jo || ['', '', '']
-          }
           const answer = {
-            i: msg.ji || '',
             a: msg.ac || ''
           }
           const summary = msg.as || {}
           im.emitListener(type.MESSAGE_ANSWER, {
             content: {
               answer: JSON.stringify(answer),
-              summary: JSON.stringify(summary),
-              question: JSON.stringify(question)
+              summary: JSON.stringify(summary)
             }
           })
           break
@@ -383,13 +390,15 @@ const im = {
           })
           break
         }
-        case 5: { // 比赛结束消息
-          im.emitListener(type.MESSAGE_END, msg.t || 0)
-          break
-        }
-        case 6: { // 非比赛消息
-          vm.$store.dispatch(_INIT)
+        case 5: { // 比赛结束消息 重新初始化直接退出
+          im.emitListener(type.MESSAGE_END)
           im.stopPullMsg()
+          return
+        }
+        case 6: { // 非比赛消息 重新初始化直接退出
+          im.stopPullMsg()
+          vm.$store.dispatch(_INIT)
+          return
         }
       }
     }
