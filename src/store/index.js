@@ -233,12 +233,14 @@ export default new Vuex.Store({
                     commit(type._UPDATE, {
                       startTimeOffset: 0
                     })
-                    // 倒计时到了后直接开始展示串词
-                    im.emitListener(MESSAGE_HOST, {
-                      content: {
-                        content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
-                      }
-                    })
+                    // 倒计时结束后 比赛未开始展示串词
+                    if (getters.status === status._AWAIT || getters.status === status._READY) {
+                      im.emitListener(MESSAGE_HOST, {
+                        content: {
+                          content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
+                        }
+                      })
+                    }
                   } else {
                     commit(type._UPDATE, {
                       startTimeOffset: getters.startTimeOffset - 1

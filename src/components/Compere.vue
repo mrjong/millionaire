@@ -20,6 +20,7 @@ export default {
   data () {
     return {
       supaTimer: null,
+      msgTimer: null,
       supaOrder: 1,
       compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
       supaStyle: `background-position: 0% 0%;`
@@ -29,7 +30,6 @@ export default {
     ...mapGetters(['hostIntervalTime', 'hostMsgList', 'gameType'])
   },
   mounted () {
-    console.log('game' + this.gameType)
     this.gameType !== 3 && this.changeSupa()
     this.rollingMsg()
   },
@@ -47,20 +47,24 @@ export default {
     },
     // 2. 轮播消息
     rollingMsg () {
+      clearInterval(this.msgTimer)
       const list = this.hostMsgList
       if (list && list.length) {
         let count = 0
         const interval = this.hostIntervalTime
-        let timer = setInterval(() => {
+        this.msgTimer = setInterval(() => {
           if (++count < list.length) {
             this.compereMsg = list[count]
           } else {
-            clearInterval(timer)
+            clearInterval(this.msgTimer)
           }
         }, interval)
         this.compereMsg = list[count]
       }
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.msgTimer)
   },
   watch: {
     hostMsgList (val) {
