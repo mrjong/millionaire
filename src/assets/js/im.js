@@ -370,6 +370,14 @@ const im = {
           break
         }
         case 3: { // 答案汇总消息
+          const currentIndex = msg.js || 1
+          const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = questions[currentIndex - 1] || {}
+          const question = {
+            id,
+            index,
+            contents,
+            options
+          }
           const answer = {
             a: msg.ac || ''
           }
@@ -377,7 +385,8 @@ const im = {
           im.emitListener(type.MESSAGE_ANSWER, {
             content: {
               answer: JSON.stringify(answer),
-              summary: JSON.stringify(summary)
+              summary: JSON.stringify(summary),
+              question: JSON.stringify(question)
             }
           })
           break
@@ -409,7 +418,7 @@ const im = {
     } else if (validTime >= 5000) {
       im.startPullMsg(3000)
     } else {
-      im.startPullMsg(1500)
+      im.startPullMsg()
     }
     im.pullMsgId = msgId
     im.isHandledMsg = true

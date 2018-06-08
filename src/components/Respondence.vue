@@ -139,7 +139,7 @@ export default {
               ...userAnswerInfo,
               id,
               index
-            }, 180000)
+            }, Date.now() + 180000)
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
             utils.statistic('QUESTION_RESULT', 1, {
               id_s: `${this.index}`,
@@ -344,6 +344,12 @@ export default {
     },
     isAnswered: function (val) {
       this.isClick = val
+    },
+    status (val) {
+      // 当主状态变为等待状态或者倒计时，重置答题状态
+      if (val === 1 || val === 2) {
+        this.resetState()
+      }
     }
   },
   components: {
