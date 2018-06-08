@@ -186,6 +186,11 @@ export default {
             }
           })
       }
+    },
+    '$route' (route) {
+      if (route.path === '/main' && this.status === 1) {
+        this.$router.replace({path: '/'})
+      }
     }
   }
 }
