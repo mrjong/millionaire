@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted () {
-    utils.statistic('contact_page', 0, 'user_profile_page')
+    utils.statistic('contact_page', 0, {}, 'user_profile_page')
   },
   components: {
     loading

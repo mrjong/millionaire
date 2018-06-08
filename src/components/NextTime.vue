@@ -143,6 +143,11 @@ export default {
     }
   }
   @media screen and (max-width: 321px){
+    .hint{
+      &__line{
+        width: 3px;
+      }
+    }
   }
   @keyframes right {
     0%{

@@ -4,13 +4,13 @@
     <p class="compere-container__text">
        {{compereMsg}}
     </p>
-    <div class="compere-container__notice" v-if="gameType === 3">
+    <div class="compere-container__notice">
       <img src="../assets/images/small-awiat-title.png">
     </div>
-    <div class="compere-container__supa" v-else>
+    <!-- <div class="compere-container__supa">
        <p class="supa" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -77,7 +77,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 100px 29px 0px 44px;
+  padding: 100px 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -87,7 +87,7 @@ export default {
     height: 200px;
     color: #fed331;
     font: 500 40px/48px 'Roboto', Arial, serif;;
-    margin: 0 10px 20px 0;
+    padding: 0 30px 0 44px;
     position: relative;
     overflow: hidden;
     font-smoothing: antialiased;

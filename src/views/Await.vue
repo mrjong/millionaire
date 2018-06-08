@@ -679,9 +679,6 @@ export default {
       margin: 20px auto 0;
     }
   }
-  .await::before{
-    background:linear-gradient(red, blue)
-  }
   .bottom-text{
       margin: 25px 0;
       font: 200 24px 'Roboto', Arial, serif;
@@ -691,6 +688,13 @@ export default {
         color:#fff;
       }
     }
+  @media screen and (max-width: 321px) {
+    .await {
+      &__reminder {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
   @keyframes lives {
     0%{
       transform: scale(1);
