@@ -43,9 +43,6 @@ export default {
   name: 'ChatRoom',
   data () {
     return {
-      // msgLen: 10, 【hack】 未用到 注释掉
-      // chatRoomId: 'room10', 【hack】 未用到 注释掉
-      // pageHeight: null, 【hack】 未用到 注释掉
       msgList: [], // 显示的消息列表
       myMessage: '', // 我发送的消息
       showInput: false, // 是否显示输入框
@@ -55,8 +52,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // chatRoomState: 'chatRoomState', // 【hack】 未用到 注释掉
-      // msgList: 'msgList', // 【hack】 未用到 注释掉
       userInfo: 'userInfo',
       status: 'status',
       questionStatus: 'question_status'
@@ -149,28 +144,6 @@ export default {
         utils.statistic('speaking', 3, {}, fromSource)
       }
     },
-    // 2. 发送消息 删掉 去store 里面发消息【hack】
-    // sendMessage1 () {
-    //   if (this.myMessage) {
-    //     this.showInput = false
-    //     this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
-    //       msgObj: {
-    //         img: this.userInfo.avatar,
-    //         msg: this.myMessage,
-    //         nickname: this.userInfo.userName
-    //       }
-    //     })
-    //     this.myMessage = ''
-    //     let fromSource = ''
-    //     if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
-    //       fromSource = 'game_page'
-    //     }
-    //     if (+this.status === 2) { // 倒计时页
-    //       fromSource = 'countdown_page'
-    //     }
-    //     utils.statistic('speaking', 3, {}, fromSource)
-    //   }
-    // },
     // 3. 输入框 获得焦点时 【hack】 增加注释
     focusEvent (e) {
       this.showInput = true
@@ -193,24 +166,13 @@ export default {
         msgContainer && (msgContainer.style.bottom = bottomPosition)
       })
     }
-    // 没用到 注释掉吧 【hack】
-    // setMsgOuterHeight () {
-    //   setTimeout(() => {
-    //     const chatMsgWrap = document.getElementById('msgContainer')
-    //     const scrollContainer = document.getElementById('chatMsgWrap')
-    //     const _H = chatMsgWrap.offsetHeight
-    //     scrollContainer.style.height = _H + 'px'
-    //   }, 0)
-    // }
   },
   watch: {
-    // 【hack】 移入 fetchChatList () 中
-    // msgList: function () {
-    //   this.$nextTick(() => {
-    //     const scrollContainer = document.getElementById('scrollContainer')
-    //     scrollContainer.scrollTop = 100000
-    //   })
-    // }
+    status (val) {
+      if (val === 1) {
+        this.msgList = []
+      }
+    }
   }
 
 }

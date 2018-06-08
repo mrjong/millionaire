@@ -1,7 +1,6 @@
 /* global RongIMClient */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import chatRoom from './modules/chatRoom'
 import question from './modules/question'
 import rank from './modules/rank'
 import home from './modules/home'
@@ -129,12 +128,14 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion} = info
+            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, t: gameType = 2, v: watchingMode, lc: maxRecoveryCount, i: raceId, qc: questionCount = 0, lr: isCanRecoveryLastQuestion, qs: questions = [], cs: resultHostMsgList = []} = info
             const startTime = +info.sr || -1
             const startTimeOffset = +info.ls || 0
             const isOnline = 'm' in userInfo ? !userInfo.m : false // 是否登陆
             utils.isOnline = isOnline
             utils.raceId = raceId // 更新比赛ID
+            utils.storage.set('millionaire-qs', questions) // 缓存题目信息
+            utils.storage.set('millionaire-cs', resultHostMsgList) // 缓存结束串词
             // 更新首页信息
             commit(type.HOME_UPDATE, {
               userId: userInfo.ud || '',
@@ -231,12 +232,14 @@ export default new Vuex.Store({
                     commit(type._UPDATE, {
                       startTimeOffset: 0
                     })
-                    // 倒计时到了后直接开始展示串词
-                    im.emitListener(MESSAGE_HOST, {
-                      content: {
-                        content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
-                      }
-                    })
+                    // 倒计时结束后 比赛未开始展示串词
+                    if (getters.status === status._AWAIT || getters.status === status._READY) {
+                      im.emitListener(MESSAGE_HOST, {
+                        content: {
+                          content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
+                        }
+                      })
+                    }
                   } else {
                     commit(type._UPDATE, {
                       startTimeOffset: getters.startTimeOffset - 1
@@ -431,13 +434,35 @@ export default new Vuex.Store({
     [type._END] ({dispatch, commit}) {
       im.addListener(MESSAGE_END, (message) => {
         dispatch(type._INIT)
-        // 清空聊天室
-        commit(type.CHAT_UPDATE, {
-          msgList: [],
-          compereMsg: ''
-        })
         RongIMClient.getInstance().disconnect()
         utils.stopSound()
+      })
+    },
+    /**
+     * 接收串词消息
+     * @param {*} {commit}
+     */
+    [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
+      im.addListener(MESSAGE_HOST, (message, intervalTime) => {
+        const msgList = (message.content && message.content.content) || ''
+        // 如果传入串词间隔时间，则更新串词间隔时间
+        if (intervalTime) {
+          commit(type._UPDATE, {
+            hostIntervalTime: intervalTime
+          })
+        }
+        if (msgList) {
+          const hostMsgList = JSON.parse(msgList) || []
+          commit(type._UPDATE, {
+            hostMsgList
+          })
+        }
+        commit(type.QUESTION_UPDATE, {
+          status: status.QUESTION_AWAIT
+        })
+        commit(type._UPDATE, {
+          status: status._PLAYING
+        })
       })
     },
     /**
@@ -450,7 +475,6 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    chatRoom,
     question,
     rank,
     home

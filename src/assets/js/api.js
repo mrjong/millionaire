@@ -42,7 +42,8 @@ export const api = {
 export const init = function (isRefreshToken) {
   const params = {
     app_id: utils.app_id,
-    client_id: utils.clientId
+    client_id: utils.clientId,
+    f: true
   }
   // 是否刷新token
   if (isRefreshToken) {

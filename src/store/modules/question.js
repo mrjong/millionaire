@@ -197,7 +197,7 @@ const actions = {
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
-        const {i: id, a: correctAnswer} = answer
+        const {a: correctAnswer} = answer
 
         // 判断答案是否正确
         let isCorrect = md5Map[correctAnswer] === getters.userAnswer
@@ -210,7 +210,7 @@ const actions = {
         })
 
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
+          correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END

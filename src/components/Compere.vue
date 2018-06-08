@@ -20,6 +20,7 @@ export default {
   data () {
     return {
       supaTimer: null,
+      msgTimer: null,
       supaOrder: 1,
       compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
       supaStyle: `background-position: 0% 0%;`
@@ -46,20 +47,24 @@ export default {
     },
     // 2. 轮播消息
     rollingMsg () {
+      clearInterval(this.msgTimer)
       const list = this.hostMsgList
       if (list && list.length) {
         let count = 0
         const interval = this.hostIntervalTime
-        let timer = setInterval(() => {
+        this.msgTimer = setInterval(() => {
           if (++count < list.length) {
             this.compereMsg = list[count]
           } else {
-            clearInterval(timer)
+            clearInterval(this.msgTimer)
           }
         }, interval)
         this.compereMsg = list[count]
       }
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.msgTimer)
   },
   watch: {
     hostMsgList (val) {
@@ -72,7 +77,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 100px 29px 0px 44px;
+  padding: 100px 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -82,7 +87,7 @@ export default {
     height: 200px;
     color: #fed331;
     font: 500 40px/48px 'Roboto', Arial, serif;;
-    margin: 0 10px 20px 0;
+    padding: 0 30px 0 44px;
     position: relative;
     overflow: hidden;
     font-smoothing: antialiased;
