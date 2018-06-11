@@ -61,7 +61,7 @@ export default {
       this.loading = true
       utils.syncAccountInfo().then(() => {
         this.loading = false
-        this.$emit('loginTipClose')
+        this.close()
       }, (errorCode) => {
         switch (errorCode) {
           case 3134: {

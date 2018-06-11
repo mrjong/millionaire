@@ -38,7 +38,7 @@ export const appKey = imAppKey[env]
 const http = axios.create({
   baseURL: host[env],
   withCredentials: env !== 'local',
-  timeout: 10000,
+  timeout: 8000,
   params: {
     version: VERSION
   },
@@ -48,6 +48,9 @@ const http = axios.create({
 })
 
 http.interceptors.request.use((config) => {
+  const {params = {}, data = {}} = config
+  config.params = {...params, timestamp: Date.now()}
+  config.data = {...data, timestamp: Date.now()}
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData
     config.transformRequest = [function (data) {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <keep-alive include="Main">
-    <router-view/>
+      <router-view/>
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
@@ -162,8 +162,16 @@ export default {
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
+        // 启用网络状况提示
+        this.$store.commit(type._UPDATE, {
+          disableNetworkTip: false
+        })
       } else {
         utils.playSound('bg')
+        // 禁止网络状况提示
+        this.$store.commit(type._UPDATE, {
+          disableNetworkTip: true
+        })
       }
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
@@ -177,6 +185,11 @@ export default {
               })
             }
           })
+      }
+    },
+    '$route' (route) {
+      if (route.path === '/main' && this.status === 1) {
+        this.$router.replace({path: '/'})
       }
     }
   }

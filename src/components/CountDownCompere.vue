@@ -44,6 +44,7 @@ export default {
     },
     // 2. 轮播消息
     rollingMsg () {
+      clearInterval(this.timer)
       const list = this.hostMsgList
       if (list && list.length) {
         let count = 0
