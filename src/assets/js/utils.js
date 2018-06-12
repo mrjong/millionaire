@@ -17,37 +17,37 @@ storage.addPlugin(expirePlugin)
 
 const sounds = {
   'countDown10-before': {
-    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
+    urls: ['//static.apusapps.com/countDown10-before.mp3', '//static.apusapps.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
+    urls: ['//static.apusapps.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
+    urls: ['//static.apusapps.com/20180314200629b0edee0942.ogg', '//static.apusapps.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
+    urls: ['//static.apusapps.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
+    urls: ['//static.apusapps.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
+    urls: ['//static.apusapps.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
+    urls: ['//static.apusapps.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
