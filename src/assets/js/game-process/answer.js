@@ -1,17 +1,8 @@
-import { PROCESS_ANSWER } from '../status.js'
-
 /**
  * 游戏进度-题目答案
  */
 const answerProcess = {
   data: {
-    currentState: PROCESS_ANSWER, // 当前进度
-    currentIndex: 1, // 当前题目序号
-    beginHostMsgList: [], // 开场串词
-    questions: [], // 题目
-    resultHostMsgList: [], // 结束串词
-    valideTime: 0, // 有效时间
-    offlineMode: false // 是否开启离线模式
   },
   $store: null,
   /**

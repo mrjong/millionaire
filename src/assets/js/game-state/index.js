@@ -7,6 +7,8 @@ import countDownState from './state-countDown.js'
 import playingState from './state-playing.js'
 import endState from './state-end.js'
 import { CONNECT_SUCCESS, INVALID_TOKEN } from '../listener-type.js'
+import gameProcess from '../game-process'
+import { PROCESS_QUESTION } from '../status.js'
 
 const gameState = {
   data: {},
@@ -110,10 +112,12 @@ const gameState = {
     this.update()
     const {s: isPlaying, r: isInRoom} = this.data
     if (isPlaying) {
+      gameProcess.init(this.data, this.$store, PROCESS_QUESTION)
       this.playingState.run()
     } else {
       // 是否进入倒计时
       if (isInRoom) {
+        gameProcess.init(this.data, this.$store)
         this.countDownState.run()
       } else {
         this.awaitState.run()

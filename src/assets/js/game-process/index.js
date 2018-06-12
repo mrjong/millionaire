@@ -1,4 +1,4 @@
-import { PROCESS_COUNT_DOWN } from '../status'
+import { PROCESS_COUNT_DOWN, PROCESS_ANSWER, PROCESS_QUESTION, PROCESS_QUESTION_HOSTMSG, PROCESS_RESULT, PROCESS_RESULT_HOSTMSG } from '../status'
 import countDownProcess from './count-down'
 import answerProcess from './answer.js'
 import questionMsgProcess from './question-hostMsg.js'
@@ -17,8 +17,13 @@ const gameProcess = {
     beginHostMsgList: [], // 开场串词
     questions: [], // 题目
     resultHostMsgList: [], // 结束串词
+    hostMsgInterval: 4000, // 串词展示时间
+    firstQuestionInterval: 30000, // 第一题开始前等待时间
+    questionShowTime: 13000, // 题目展示时间
+    answerShowTime: 10000, // 答案展示时间
     valideTime: 0, // 有效时间
-    offlineMode: false // 是否开启离线模式
+    offlineMode: false, // 是否开启离线模式
+    heartBeatInterval: 1000
   },
   $store: null,
   /**
@@ -26,20 +31,23 @@ const gameProcess = {
    * @param {*} data
    * @param {*} $store
    */
-  init (data, $store) {
-    this.update(data)
-    this.$store = $store
-    // 从本地同步进度信息
-    const questions = utils.storage.get('millionaire-qs') || []
-    const beginHostMsgList = utils.storage.get('millionaire-rs') || []
-    const resultHostMsgList = utils.storage.get('millionaire-cs') || []
-    const cachedProcess = utils.storage.get('millionaire-process')
-    this.update(cachedProcess)
+  init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
+    const {ri: gameInfo = {}} = data
+    const {qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000} = gameInfo
     this.update({
+      currentState: initialState,
       questions,
       beginHostMsgList,
-      resultHostMsgList
+      resultHostMsgList,
+      hostMsgInterval,
+      firstQuestionInterval,
+      questionShowTime,
+      answerShowTime
     })
+    this.$store = $store
+    // 从本地同步进度信息
+    const cachedProcess = utils.storage.get('millionaire-process') || {}
+    this.update(cachedProcess)
     countDownProcess.init(this.data, $store)
     answerProcess.init(this.data, $store)
     questionProcess.init(this.data, $store)
@@ -68,6 +76,32 @@ const gameProcess = {
    * 运行进度
    */
   run () {
+    switch (this.data.currentState) {
+      case PROCESS_COUNT_DOWN: {
+        countDownProcess.run()
+        break
+      }
+      case PROCESS_ANSWER: {
+        answerProcess.run()
+        break
+      }
+      case PROCESS_QUESTION: {
+        questionProcess.run()
+        break
+      }
+      case PROCESS_QUESTION_HOSTMSG: {
+        questionMsgProcess.run()
+        break
+      }
+      case PROCESS_RESULT: {
+        resultProcess.run()
+        break
+      }
+      case PROCESS_RESULT_HOSTMSG: {
+        resultMsgProcess.run()
+        break
+      }
+    }
   }
 }
 

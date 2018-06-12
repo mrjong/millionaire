@@ -585,7 +585,7 @@ class Timer {
           offset: this.offset
         })
         // 如果剩余时间小于间隔
-        if (this.offset < interval) {
+        if (this.offset <= interval) {
           this.stop()
           setTimeout(() => {
             this.endCallback && this.endCallback()

@@ -4,8 +4,9 @@
 import im from '../im.js'
 import { MESSAGE_HOST } from '../listener-type'
 import { _UPDATE, _SYNC_TIME } from '../../../store/type.js'
-import { _READY, _AWAIT } from '../status'
+import { _READY } from '../status'
 import utils from '../utils.js'
+import countDownProcess from '../game-process/count-down.js'
 
 const countDownState = {
   data: {},
@@ -24,27 +25,6 @@ const countDownState = {
    * 更新信息
    */
   update () {
-    clearInterval(this.countDownTimer)
-    this.countDownTimer = setInterval(() => {
-      if (this.$store.getters.startTimeOffset <= 1) {
-        clearInterval(this.countDownTimer)
-        this.$store.commit(_UPDATE, {
-          startTimeOffset: 0
-        })
-        // 倒计时结束后 比赛未开始展示串词
-        if (this.$store.getters.status === _AWAIT || this.$store.getters.status === _READY) {
-          im.emitListener(MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
-            }
-          })
-        }
-      } else {
-        this.$store.commit(_UPDATE, {
-          startTimeOffset: this.$store.getters.startTimeOffset - 1
-        })
-      }
-    }, 1000)
   },
   /**
    * 运行状态
@@ -52,6 +32,7 @@ const countDownState = {
   run () {
     const beginHostMsgList = utils.storage.get('millionaire-rs')
     this.update()
+    countDownProcess.run()
     // 播放开场串词
     im.emitListener(MESSAGE_HOST, {
       content: {
