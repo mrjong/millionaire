@@ -208,7 +208,10 @@ export const signInByPhone = function (code) {
 
 // 获取手机号国家码
 export const getPhoneNationCode = function () {
-  return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
+  return axios.post(api.getPhoneNationCode, {
+  }, {
+    baseURL: accountHost[env]
+  })
 }
 
 // 使用复活卡
