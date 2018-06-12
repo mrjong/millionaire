@@ -333,7 +333,7 @@ const im = {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
-      const questions = utils.storage.get('millionaire-qs')
+      const questions = utils.storage.get('millionaire-qs') || []
       const index = msg || 0
       const currentQuestion = questions[+index - 1] || {}
       switch (msgType) {

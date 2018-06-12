@@ -53,11 +53,8 @@ export default {
         let count = 0
         const interval = this.hostIntervalTime
         this.msgTimer = setInterval(() => {
-          if (++count < list.length) {
-            this.compereMsg = list[count]
-          } else {
-            clearInterval(this.msgTimer)
-          }
+          count = (count + 1) % list.length
+          this.compereMsg = list[count]
         }, interval)
         this.compereMsg = list[count]
       }
