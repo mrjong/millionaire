@@ -19,6 +19,24 @@ window.onload = function () {
   }, utils.getQuery('referrer'))
 }
 
+window.addEventListener('beforeinstallprompt', function (event) {
+  // 统计用户的选择
+  event.userChoice.then((choiceResult) => {
+    console.log(choiceResult.outcome) // 为 dismissed 或 accepted
+    if (choiceResult.outcome === 'accepted') {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '1'
+      })
+      console.log('User accepted home screen install')
+    } else {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '0'
+      })
+      console.log('User canceled home screen install')
+    }
+  })
+})
+
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
 }
@@ -53,6 +71,12 @@ router.beforeEach((to, from, next) => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(registration => {
+      registration.onupdatefound = () => {
+        console.log('onupdatefound')
+        registration.update().then(() => setTimeout(() => {
+          window.location.reload()
+        }, 500))
+      }
       console.log('Service Worker registered: ', registration)
     }).catch(registrationError => {
       console.log('Service Worker failed: ', registrationError)
