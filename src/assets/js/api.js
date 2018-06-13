@@ -1,7 +1,6 @@
 /* global PUBLIC_URL */
 import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
-import md5 from 'md5'
 
 const publicUrl = PUBLIC_URL
 
@@ -65,16 +64,14 @@ export const getRankInfo = function (type) {
   })
 }
 
-// id为题目ID answer为答案内容
-export const submitAnswer = function (id, answer, index) {
-  return axios.get(api.submitAnswer, {
+// uncommittedAnswers 为未提交的答案数组
+export const submitAnswer = function (uncommittedAnswers = []) {
+  return axios.post(api.submitAnswer, {
     params: {
-      i: id,
-      a: md5(answer),
-      s: index,
+      i: utils.raceId,
+      as: uncommittedAnswers,
       app_id: utils.app_id,
-      client_id: utils.clientId,
-      race_id: utils.raceId
+      client_id: utils.clientId
     }
   })
 }

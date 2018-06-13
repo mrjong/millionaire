@@ -30,6 +30,7 @@ const awaitState = {
     this.update()
     gameProcess.stop()
     utils.storage.remove('millionaire-process') // 删除缓存的比赛信息
+    utils.storage.remove('millionaire-uncommittedAnswers') // 删除未提交的答案信息
     this.$store.dispatch(_POLL_INIT)
     this.$store.commit(_UPDATE, {
       status: _AWAIT

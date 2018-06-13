@@ -6,6 +6,7 @@ import utils from '../../assets/js/utils'
 import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
 import { submitAnswer } from '../../assets/js/api'
+import md5 from 'md5'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -129,13 +130,22 @@ const actions = {
    * @param {any} {getters}
    */
   [type.QUESTION_SUBMIT] ({commit, getters}) {
+    // 取出未提交成功的答案一起提交
+    const uncommittedAnswers = utils.storage.get('millionaire-uncommittedAnswers') || []
     const {id, userAnswer, index} = getters
+    uncommittedAnswers.push({
+      i: id,
+      s: index,
+      a: md5(userAnswer)
+    })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(id, userAnswer, index).then(({data}) => {
+      submitAnswer(uncommittedAnswers).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
             case 0: {
+              // 提交成功后删除未提交的答案
+              utils.storage.remove('millionaire-uncommittedAnswers')
               break
             }
           }
@@ -143,29 +153,21 @@ const actions = {
         } else {
           const index = +data.data
           switch (+data.code) {
-            case 1005: {
-              reject('Time is out, you can view only.')
-              break
-            }
-            case 1006:
             case 1007: {
               reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
               break
             }
             default: {
-              reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+              utils.storage.set('millionaire-uncommittedAnswers', uncommittedAnswers)
             }
           }
-          commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
           console.log('答案提交失败:', id, data.msg)
         }
       }, (err) => {
-        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
-        })
+        utils.storage.set('millionaire-uncommittedAnswers', uncommittedAnswers)
         console.log('答案提交错误:', err)
       }).catch((err) => {
         console.log('代码逻辑出错：' + err)

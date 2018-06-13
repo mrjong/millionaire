@@ -63,7 +63,7 @@ const countDownProcess = {
   heartbeat (cb, heartBeatInterval) {
     const {validTime, firstQuestionInterval} = this.data
     const interval = heartBeatInterval || this.data.heartBeatInterval || 1000
-    this.timer && this.timer.stop()
+    this.stop()
     this.timer = utils.Timer(interval, validTime + firstQuestionInterval)
     this.timer.addCompleteListener(() => {
       const validTime = this.data.validTime - interval
@@ -99,9 +99,6 @@ const countDownProcess = {
    */
   stop () {
     this.timer && this.timer.stop()
-    this.update({
-      validTime: 0
-    })
   }
 }
 

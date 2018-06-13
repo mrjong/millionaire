@@ -30,6 +30,7 @@ const countDownState = {
    * 运行状态
    */
   run () {
+    utils.storage.remove('millionaire-uncommittedAnswers') // 删除未提交的答案信息
     const beginHostMsgList = utils.storage.get('millionaire-rs')
     this.update()
     countDownProcess.run()
