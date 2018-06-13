@@ -97,7 +97,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: false,
-      swDest: './static/sw.js'
+      swDest: './sw.js'
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),

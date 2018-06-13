@@ -52,10 +52,10 @@ router.beforeEach((to, from, next) => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./static/sw.js').then(registration => {
-      console.log('SW registered: ', registration)
+    navigator.serviceWorker.register('./sw.js').then(registration => {
+      console.log('Service Worker registered: ', registration)
     }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError)
+      console.log('Service Worker failed: ', registrationError)
     })
   })
 }
