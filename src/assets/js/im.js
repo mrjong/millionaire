@@ -6,6 +6,8 @@ import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
 import { _INIT } from '../../store/type'
+import gameProcess from './game-process'
+import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION } from './status'
 
 let keepLiveMessageTimer = null
 
@@ -333,61 +335,85 @@ const im = {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
-      const questions = utils.storage.get('millionaire-qs') || []
-      const index = msg || 0
-      const currentQuestion = questions[+index - 1] || {}
+      // const questions = utils.storage.get('millionaire-qs') || []
+      // const index = msg || 0
+      // const currentQuestion = questions[+index - 1] || {}
       switch (msgType) {
         case 1: { // 串词消息
-          const resultHostMsgList = utils.storage.get('millionaire-cs') || [] // 从本地缓存中取出结束串词
           const {si: intervalTime} = msg || {}
-          im.emitListener(type.MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(resultHostMsgList)
-            }
-          }, intervalTime)
+          gameProcess.update({
+            currentState: PROCESS_RESULT_HOSTMSG,
+            validTime,
+            hostMsgInterval: intervalTime
+          })
+          gameProcess.run()
+          // const resultHostMsgList = utils.storage.get('millionaire-cs') || [] // 从本地缓存中取出结束串词
+          // const {si: intervalTime} = msg || {}
+          // im.emitListener(type.MESSAGE_HOST, {
+          //   content: {
+          //     content: JSON.stringify(resultHostMsgList)
+          //   }
+          // }, intervalTime)
           break
         }
         case 7: { // 题目串词消息
-          const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
-          im.emitListener(type.MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(hostMsgList)
-            }
-          }, intervalTime)
+          gameProcess.update({
+            currentState: PROCESS_QUESTION_HOSTMSG,
+            validTime
+          })
+          gameProcess.run()
+          // const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
+          // im.emitListener(type.MESSAGE_HOST, {
+          //   content: {
+          //     content: JSON.stringify(hostMsgList)
+          //   }
+          // }, intervalTime)
           break
         }
         case 2: { // 题目消息
-          const restTime = parseInt(validTime / 1000)
-          im.emitListener(type.MESSAGE_QUESTION, {
-            content: {
-              content: JSON.stringify({
-                ...currentQuestion,
-                restTime: restTime >= 10 ? 10 : restTime
-              })
-            }
+          gameProcess.update({
+            currentState: PROCESS_QUESTION,
+            validTime
           })
+          gameProcess.run()
+          // const restTime = parseInt(validTime / 1000)
+          // im.emitListener(type.MESSAGE_QUESTION, {
+          //   content: {
+          //     content: JSON.stringify({
+          //       ...currentQuestion,
+          //       restTime: restTime >= 10 ? 10 : restTime
+          //     })
+          //   }
+          // })
           break
         }
         case 3: { // 答案汇总消息
           const currentIndex = msg.js || 1
-          const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = questions[currentIndex - 1] || {}
-          const question = {
-            id,
-            index,
-            contents,
-            options
-          }
-          const answer = {
-            a: msg.ac || ''
-          }
-          const summary = msg.as || {}
-          im.emitListener(type.MESSAGE_ANSWER, {
-            content: {
-              answer: JSON.stringify(answer),
-              summary: JSON.stringify(summary),
-              question: JSON.stringify(question)
-            }
+          gameProcess.update({
+            currentState: PROCESS_QUESTION_HOSTMSG,
+            currentIndex,
+            validTime
           })
+          gameProcess.run()
+          // const currentIndex = msg.js || 1
+          // const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = questions[currentIndex - 1] || {}
+          // const question = {
+          //   id,
+          //   index,
+          //   contents,
+          //   options
+          // }
+          // const answer = {
+          //   a: msg.ac || ''
+          // }
+          // const summary = msg.as || {}
+          // im.emitListener(type.MESSAGE_ANSWER, {
+          //   content: {
+          //     answer: JSON.stringify(answer),
+          //     summary: JSON.stringify(summary),
+          //     question: JSON.stringify(question)
+          //   }
+          // })
           break
         }
         case 4: { // 比赛结果消息

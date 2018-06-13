@@ -121,6 +121,7 @@ export default new Vuex.Store({
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
+          console.log('初始化')
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
             gameState.init(info, {commit, dispatch, getters})
@@ -181,6 +182,7 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._POLL_INIT] ({dispatch, getters}) {
+      console.log('轮询')
       setTimeout(() => {
         dispatch(type._INIT)
       }, getters.syncIntervalTime)

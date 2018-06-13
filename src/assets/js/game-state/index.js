@@ -27,6 +27,7 @@ const gameState = {
     this.countDownState.init(data, $store)
     this.playingState.init(data, $store)
     this.endState.init(data, $store)
+    this.update()
   },
   /**
    * 更新信息

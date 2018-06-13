@@ -73,6 +73,10 @@ const countDownProcess = {
       cb && cb()
     })
     this.timer.addEndListener(() => {
+      this.update({
+        validTime: 0
+      })
+      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       // 离线模式开启，直接进入下一进度
       if (this.data.offlineMode) {
         this.next()
