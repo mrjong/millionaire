@@ -5,6 +5,7 @@
 import { _UPDATE, _INIT } from '../../../store/type.js'
 import { _END } from '../status'
 import utils from '../utils.js'
+import gameProcess from '../game-process/index.js'
 
 const awaitState = {
   data: {},
@@ -23,6 +24,7 @@ const awaitState = {
    */
   update () {
     // 清楚本地存储的比赛信息
+    gameProcess.stop()
     utils.storage.remove('millionaire-process')
   },
   /**

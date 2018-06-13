@@ -12,6 +12,7 @@ const answerProcess = {
   data: {
   },
   $store: null,
+  timer: null,
   /**
    * 初始化
    * @param {*} data
@@ -35,7 +36,7 @@ const answerProcess = {
     this.update(...data, {
       currentState: PROCESS_ANSWER
     })
-    const {validTime, questions = [], currentIndex = 1, answerShowTime = 10000} = this.data
+    const {validTime, questions = [], currentIndex = 1, answerShowTime = 10000, answerSummary, offlineMode} = this.data
     const currentQuestion = questions[currentIndex - 1] || {}
     const {ji: id = '', js: index = 1, jc: contents = '', jo: options = [], ja: correctAnswer} = currentQuestion
     if (validTime <= 0) {
@@ -52,11 +53,17 @@ const answerProcess = {
     const answer = {
       a: correctAnswer || ''
     }
-    const summary = {}
-    // TODO: 改为接口拉取结果
-    const optionsMd5Map = this.$store.getters.optionsMd5Map
-    for (let prop of optionsMd5Map) {
-      summary[prop] = 0
+    let summary = answerSummary
+    if (!summary) {
+      summary = {}
+      const optionsMd5Map = this.$store.getters.optionsMd5Map
+      for (let prop in optionsMd5Map) {
+        summary[prop] = 0
+      }
+    }
+
+    if (offlineMode) {
+      // TODO: 接口拉取结果
     }
     im.emitListener(MESSAGE_ANSWER, {
       content: {
@@ -76,8 +83,9 @@ const answerProcess = {
     this.timer && this.timer.stop()
     this.timer = utils.Timer(interval, validTime)
     this.timer.addCompleteListener(() => {
+      const validTime = this.data.validTime - interval
       this.update({
-        validTime: this.data.validTime - interval
+        validTime: validTime > 0 ? validTime : 0
       })
       utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       cb && cb()
@@ -102,13 +110,24 @@ const answerProcess = {
     if (currentIndex < questions.length) {
       questionProcess.run({
         currentIndex: currentIndex + 1,
-        validTime: 0
+        validTime: 0,
+        answerSummary: null
       })
     } else {
       resultMsgProcess.run({
-        validTime: 0
+        validTime: 0,
+        answerSummary: null
       })
     }
+  },
+  /**
+   * 停止
+   */
+  stop () {
+    this.timer && this.timer.stop()
+    this.update({
+      validTime: 0
+    })
   }
 }
 

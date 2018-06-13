@@ -7,7 +7,7 @@ import {vm} from '../../main'
 import throttle from 'lodash.throttle'
 import { _INIT } from '../../store/type'
 import gameProcess from './game-process'
-import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION } from './status'
+import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
 let keepLiveMessageTimer = null
 
@@ -334,16 +334,17 @@ const im = {
   pollMsgHandler (data = {}) {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
+    const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+    gameProcess.update({...cachedGameProcessData, validTime})
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
       // const questions = utils.storage.get('millionaire-qs') || []
-      // const index = msg || 0
+      const currentIndex = msg || 1
       // const currentQuestion = questions[+index - 1] || {}
       switch (msgType) {
         case 1: { // 串词消息
           const {si: intervalTime} = msg || {}
           gameProcess.update({
             currentState: PROCESS_RESULT_HOSTMSG,
-            validTime,
             hostMsgInterval: intervalTime
           })
           gameProcess.run()
@@ -359,7 +360,7 @@ const im = {
         case 7: { // 题目串词消息
           gameProcess.update({
             currentState: PROCESS_QUESTION_HOSTMSG,
-            validTime
+            currentIndex
           })
           gameProcess.run()
           // const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
@@ -373,7 +374,7 @@ const im = {
         case 2: { // 题目消息
           gameProcess.update({
             currentState: PROCESS_QUESTION,
-            validTime
+            currentIndex
           })
           gameProcess.run()
           // const restTime = parseInt(validTime / 1000)
@@ -390,9 +391,9 @@ const im = {
         case 3: { // 答案汇总消息
           const currentIndex = msg.js || 1
           gameProcess.update({
-            currentState: PROCESS_QUESTION_HOSTMSG,
-            currentIndex,
-            validTime
+            currentState: PROCESS_ANSWER,
+            answerSummary: msg.as || {},
+            currentIndex
           })
           gameProcess.run()
           // const currentIndex = msg.js || 1
@@ -417,11 +418,11 @@ const im = {
           break
         }
         case 4: { // 比赛结果消息
-          im.emitListener(type.MESSAGE_RESULT, {
-            content: {
-              summary: JSON.stringify(msg)
-            }
+          gameProcess.update({
+            currentState: PROCESS_RESULT,
+            result: msg
           })
+          gameProcess.run()
           break
         }
         case 5: { // 比赛结束消息 重新初始化直接退出

@@ -11,6 +11,7 @@ const questionProcess = {
   data: {
   },
   $store: null,
+  timer: null,
   /**
    * 初始化
    * @param {*} data
@@ -32,7 +33,8 @@ const questionProcess = {
    */
   run (data = {}) {
     this.update(...data, {
-      currentState: PROCESS_QUESTION
+      currentState: PROCESS_QUESTION,
+      answerSummary: null
     })
     const {validTime, questions = [], currentIndex = 1, questionShowTime = 13000} = this.data
     const currentQuestion = questions[currentIndex - 1] || {}
@@ -68,8 +70,9 @@ const questionProcess = {
       cb && cb()
     })
     this.timer.addEndListener(() => {
+      const validTime = this.data.validTime - interval
       this.update({
-        validTime: 0
+        validTime: validTime > 0 ? validTime : 0
       })
       utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       // 离线模式开启，直接进入下一进度
@@ -84,6 +87,15 @@ const questionProcess = {
    */
   next () {
     questionMsgProcess.run({
+      validTime: 0
+    })
+  },
+  /**
+   * 停止
+   */
+  stop () {
+    this.timer && this.timer.stop()
+    this.update({
       validTime: 0
     })
   }

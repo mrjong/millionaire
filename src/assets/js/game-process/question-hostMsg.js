@@ -10,6 +10,7 @@ const questionMsgProcess = {
   data: {
   },
   $store: null,
+  timer: null,
   /**
    * 初始化
    * @param {*} data
@@ -38,7 +39,7 @@ const questionMsgProcess = {
     const {si: intervalTime = 5000, jd: hostMsgList = []} = currentQuestion
     if (validTime <= 0) {
       this.update({
-        validTime: intervalTime ** hostMsgList.length
+        validTime: intervalTime * hostMsgList.length
       })
     }
     im.emitListener(MESSAGE_HOST, {
@@ -57,8 +58,9 @@ const questionMsgProcess = {
     this.timer && this.timer.stop()
     this.timer = utils.Timer(interval, validTime)
     this.timer.addCompleteListener(() => {
+      const validTime = this.data.validTime - interval
       this.update({
-        validTime: this.data.validTime - interval
+        validTime: validTime > 0 ? validTime : 0
       })
       utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       cb && cb()
@@ -80,6 +82,15 @@ const questionMsgProcess = {
    */
   next () {
     answerProcess.run({
+      validTime: 0
+    })
+  },
+  /**
+   * 停止
+   */
+  stop () {
+    this.timer && this.timer.stop()
+    this.update({
       validTime: 0
     })
   }

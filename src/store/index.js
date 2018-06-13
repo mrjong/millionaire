@@ -25,7 +25,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: ['Welcome to \'Go! Millionaire\' game! Answer 12 questions at 10 PM and get them all right to win real cash prize every day!', 'You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!'], // 主持人消息列表
+    hostMsgList: [`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`], // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -121,7 +121,6 @@ export default new Vuex.Store({
       })
       return new Promise((resolve, reject) => {
         init(isRefreshToken).then(({data}) => {
-          console.log('初始化')
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
             gameState.init(info, {commit, dispatch, getters})
@@ -182,7 +181,6 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._POLL_INIT] ({dispatch, getters}) {
-      console.log('轮询')
       setTimeout(() => {
         dispatch(type._INIT)
       }, getters.syncIntervalTime)

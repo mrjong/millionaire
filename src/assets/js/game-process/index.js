@@ -12,6 +12,7 @@ import utils from '../utils'
  */
 const gameProcess = {
   data: {
+    id: '',
     currentState: PROCESS_COUNT_DOWN, // 当前进度
     currentIndex: 1, // 当前题目序号
     beginHostMsgList: [], // 开场串词
@@ -23,7 +24,9 @@ const gameProcess = {
     answerShowTime: 10000, // 答案展示时间
     validTime: 0, // 有效时间
     offlineMode: false, // 是否开启离线模式
-    heartBeatInterval: 1000
+    heartBeatInterval: 1000, // 心跳时间
+    answerSummary: null, // 比赛结果汇总
+    result: {} // 比赛结果
   },
   $store: null,
   /**
@@ -33,9 +36,14 @@ const gameProcess = {
    */
   init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
     const {ri: gameInfo = {}} = data
-    const {qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000} = gameInfo
+    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000} = gameInfo
     this.update({
+      id,
       currentState: initialState,
+      currentIndex: 1,
+      validTime: 0,
+      offlineMode: false,
+      heartBeatInterval: 1000,
       questions,
       beginHostMsgList,
       resultHostMsgList,
@@ -46,8 +54,13 @@ const gameProcess = {
     })
     this.$store = $store
     // 从本地同步进度信息
-    const cachedProcess = utils.storage.get('millionaire-process') || {}
-    this.update(cachedProcess)
+    const cachedProcess = utils.storage.get('millionaire-process')
+    if (cachedProcess && cachedProcess.id === id) {
+      this.update(cachedProcess)
+    } else {
+      this.stop()
+      utils.storage.remove('millionaire-process')
+    }
     countDownProcess.init(this.data, $store)
     answerProcess.init(this.data, $store)
     questionProcess.init(this.data, $store)
@@ -63,8 +76,8 @@ const gameProcess = {
    * 更新
    * @param {*} data
    */
-  update (data) {
-    this.data = Object.assign(this.data, data)
+  update (data = {}) {
+    this.data = {...this.data, ...data}
     countDownProcess.update(this.data)
     answerProcess.update(this.data)
     questionProcess.update(this.data)
@@ -76,6 +89,7 @@ const gameProcess = {
    * 运行进度
    */
   run () {
+    this.stop()
     switch (this.data.currentState) {
       case PROCESS_COUNT_DOWN: {
         countDownProcess.run()
@@ -102,6 +116,45 @@ const gameProcess = {
         break
       }
     }
+  },
+  next () {
+    switch (this.data.currentState) {
+      case PROCESS_COUNT_DOWN: {
+        countDownProcess.next()
+        break
+      }
+      case PROCESS_ANSWER: {
+        answerProcess.next()
+        break
+      }
+      case PROCESS_QUESTION: {
+        questionProcess.next()
+        break
+      }
+      case PROCESS_QUESTION_HOSTMSG: {
+        questionMsgProcess.next()
+        break
+      }
+      case PROCESS_RESULT: {
+        resultProcess.next()
+        break
+      }
+      case PROCESS_RESULT_HOSTMSG: {
+        resultMsgProcess.next()
+        break
+      }
+    }
+  },
+  /**
+   * 停止
+   */
+  stop () {
+    countDownProcess.stop()
+    answerProcess.stop()
+    questionProcess.stop()
+    questionMsgProcess.stop()
+    resultMsgProcess.stop()
+    resultProcess.stop()
   }
 }
 

@@ -66,8 +66,9 @@ const countDownProcess = {
     this.timer && this.timer.stop()
     this.timer = utils.Timer(interval, validTime + firstQuestionInterval)
     this.timer.addCompleteListener(() => {
+      const validTime = this.data.validTime - interval
       this.update({
-        validTime: this.data.validTime - interval
+        validTime: validTime > 0 ? validTime : 0
       })
       utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       cb && cb()
@@ -90,6 +91,15 @@ const countDownProcess = {
   next () {
     questionProcess.run({
       currentIndex: 1,
+      validTime: 0
+    })
+  },
+  /**
+   * 停止
+   */
+  stop () {
+    this.timer && this.timer.stop()
+    this.update({
       validTime: 0
     })
   }
