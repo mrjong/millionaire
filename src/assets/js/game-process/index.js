@@ -21,7 +21,7 @@ const gameProcess = {
     firstQuestionInterval: 30000, // 第一题开始前等待时间
     questionShowTime: 13000, // 题目展示时间
     answerShowTime: 10000, // 答案展示时间
-    valideTime: 0, // 有效时间
+    validTime: 0, // 有效时间
     offlineMode: false, // 是否开启离线模式
     heartBeatInterval: 1000
   },

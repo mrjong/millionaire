@@ -4,6 +4,7 @@
 /* global RongIMClient */
 import { _UPDATE, _INIT } from '../../../store/type.js'
 import { _END } from '../status'
+import utils from '../utils.js'
 
 const awaitState = {
   data: {},
@@ -21,6 +22,8 @@ const awaitState = {
    * 更新信息
    */
   update () {
+    // 清楚本地存储的比赛信息
+    utils.storage.remove('millionaire-process')
   },
   /**
    * 运行状态

@@ -34,12 +34,11 @@ const countDownProcess = {
   run () {
     this.update({
       currentState: PROCESS_COUNT_DOWN,
-      valideTime: this.$store.getters.startTimeOffset
+      validTime: this.$store.getters.startTimeOffset * 1000
     })
     // 开启心跳
     this.heartbeat(() => {
       if (this.$store.getters.startTimeOffset <= 1) {
-        clearInterval(this.countDownTimer)
         this.$store.commit(_UPDATE, {
           startTimeOffset: 0
         })
@@ -62,13 +61,13 @@ const countDownProcess = {
    * 心跳
    */
   heartbeat (cb, heartBeatInterval) {
-    const {valideTime, firstQuestionInterval} = this.data
+    const {validTime, firstQuestionInterval} = this.data
     const interval = heartBeatInterval || this.data.heartBeatInterval || 1000
     this.timer && this.timer.stop()
-    this.timer = utils.Timer(interval, valideTime + firstQuestionInterval)
+    this.timer = utils.Timer(interval, validTime + firstQuestionInterval)
     this.timer.addCompleteListener(() => {
       this.update({
-        valideTime: this.data.valideTime - interval
+        validTime: this.data.validTime - interval
       })
       utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
       cb && cb()
@@ -79,13 +78,15 @@ const countDownProcess = {
         this.next()
       }
     })
+    this.timer.start()
   },
   /**
    * 进入下一进度
    */
   next () {
     questionProcess.run({
-      currentIndex: 1
+      currentIndex: 1,
+      validTime: 0
     })
   }
 }
