@@ -4,6 +4,8 @@ import im from '../im'
 import utils from '../utils'
 import questionProcess from './question'
 import resultMsgProcess from './result-hostMsg'
+import { getAnswerSummary } from '../api'
+import { QUESTION_UPDATE } from '../../../store/type'
 
 /**
  * 游戏进度-题目答案
@@ -55,16 +57,25 @@ const answerProcess = {
       a: correctAnswer || ''
     }
     let summary = answerSummary
+    const optionsMd5Map = this.$store.getters.optionsMd5Map
     if (!summary) {
       summary = {}
-      const optionsMd5Map = this.$store.getters.optionsMd5Map
       for (let prop in optionsMd5Map) {
         summary[prop] = 0
       }
     }
-
+    // 如果离线模式开启 使用接口拉取答案统计结果
     if (offlineMode) {
-      // TODO: 接口拉取结果
+      getAnswerSummary(currentIndex).then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          const resultMd5 = data.data || summary
+          this.$store.commit(QUESTION_UPDATE, {
+            result: utils.parseMd5(resultMd5, optionsMd5Map)
+          })
+        }
+      }).catch((err) => {
+        console.log('获取答案汇总结果出错：', err)
+      })
     }
     im.emitListener(MESSAGE_ANSWER, {
       content: {
