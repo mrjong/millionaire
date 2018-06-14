@@ -61,7 +61,7 @@ const answerProcess = {
     if (!summary) {
       summary = {}
       for (let prop in optionsMd5Map) {
-        summary[prop] = 0
+        summary[prop] = -1
       }
     }
     // 如果离线模式开启 使用接口拉取答案统计结果

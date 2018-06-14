@@ -153,6 +153,13 @@ const actions = {
         } else {
           const index = +data.data
           switch (+data.code) {
+            case 1005: {
+              reject('Game time out, you are eliminated. Please check your internet.')
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
+              break
+            }
             case 1006:
             case 1007: {
               reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)

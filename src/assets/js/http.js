@@ -95,7 +95,10 @@ http.interceptors.response.use(undefined, (err) => {
   })
   // 重新发起axios请求
   return backoff.then(() => {
-    return http(config)
+    return http({
+      ...config,
+      data: JSON.parse(config.data || JSON.stringify({}))
+    })
   })
 })
 
