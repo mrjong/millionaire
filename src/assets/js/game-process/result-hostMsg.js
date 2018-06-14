@@ -48,6 +48,7 @@ const resultMsgProcess = {
       }
     }, hostMsgInterval)
     this.heartbeat()
+    im.startPullMsg() // 恢复正常轮询
   },
   /**
    * 心跳

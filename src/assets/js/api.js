@@ -73,7 +73,8 @@ export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = 
     client_id: utils.clientId
   }, {
     retry: isLastQuestion ? 100 : 3,
-    retryDelay: isLastQuestion ? 3000 : 500
+    retryDelay: isLastQuestion ? 2000 : 500,
+    timeout: 3000
   })
 }
 

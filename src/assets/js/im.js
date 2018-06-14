@@ -325,6 +325,7 @@ const im = {
           } else {
             gameProcess.next()
           }
+          im.startPullMsg(10000)
           im.pullMsgErrorCount = -999999
         }
       }

@@ -69,6 +69,7 @@ http.defaults.retryDelay = 500 // 重试延时
 
 http.interceptors.response.use(undefined, (err) => {
   const config = err.config
+  console.log('config', config)
   // 判断是否配置了重试
   if (!config || !config.retry) return Promise.reject(err)
   if (/\/cmp\/q/.test(config.url)) { // 如果是轮询接口，直接返回
