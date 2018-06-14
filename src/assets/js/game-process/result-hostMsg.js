@@ -63,14 +63,14 @@ const resultMsgProcess = {
       this.update({
         validTime: validTime > 0 ? validTime : 0
       })
-      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
+      this.cacheProcessInfo()
       cb && cb()
     })
     this.timer.addEndListener(() => {
       this.update({
         validTime: 0
       })
-      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
+      this.cacheProcessInfo()
     })
     this.timer.start()
   },
@@ -84,6 +84,12 @@ const resultMsgProcess = {
    */
   stop () {
     this.timer && this.timer.stop()
+  },
+  /**
+   * 缓存进度信息
+   */
+  cacheProcessInfo () {
+    utils.storage.set('millionaire-process', {...this.data, watchingMode: this.$store.getters.watchingMode})
   }
 }
 

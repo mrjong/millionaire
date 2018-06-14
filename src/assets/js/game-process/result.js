@@ -56,7 +56,7 @@ const resultProcess = {
       this.update({
         validTime: this.data.validTime - interval
       })
-      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
+      this.cacheProcessInfo()
       cb && cb()
     })
     this.timer.addEndListener(() => {
@@ -75,6 +75,12 @@ const resultProcess = {
    */
   stop () {
     this.timer && this.timer.stop()
+  },
+  /**
+   * 缓存进度信息
+   */
+  cacheProcessInfo () {
+    utils.storage.set('millionaire-process', {...this.data, watchingMode: this.$store.getters.watchingMode})
   }
 }
 

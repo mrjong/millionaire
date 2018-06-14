@@ -64,7 +64,7 @@ http.interceptors.request.use((config) => {
   return config
 })
 
-http.defaults.retry = 3 // 重试次数
+http.defaults.retry = 2 // 重试次数
 http.defaults.retryDelay = 500 // 重试延时
 
 http.interceptors.response.use(undefined, (err) => {

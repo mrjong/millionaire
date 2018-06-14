@@ -74,7 +74,7 @@ export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = 
   }, {
     retry: isLastQuestion ? 100 : 3,
     retryDelay: isLastQuestion ? 2000 : 500,
-    timeout: 3000
+    timeout: 5000
   })
 }
 
@@ -135,7 +135,7 @@ export const pollMsg = function () {
       client_id: utils.clientId,
       race_id: utils.raceId
     },
-    timeout: 3500
+    timeout: 5000
   })
 }
 

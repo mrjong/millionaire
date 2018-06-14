@@ -70,14 +70,14 @@ const countDownProcess = {
       this.update({
         validTime: validTime > 0 ? validTime : 0
       })
-      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
+      this.cacheProcessInfo()
       cb && cb()
     })
     this.timer.addEndListener(() => {
       this.update({
         validTime: 0
       })
-      utils.storage.set('millionaire-process', this.data, Date.now() + 180000)
+      this.cacheProcessInfo()
       // 离线模式开启，直接进入下一进度
       if (this.data.offlineMode) {
         this.next()
@@ -99,6 +99,12 @@ const countDownProcess = {
    */
   stop () {
     this.timer && this.timer.stop()
+  },
+  /**
+   * 缓存进度信息
+   */
+  cacheProcessInfo () {
+    utils.storage.set('millionaire-process', {...this.data, watchingMode: this.$store.getters.watchingMode})
   }
 }
 

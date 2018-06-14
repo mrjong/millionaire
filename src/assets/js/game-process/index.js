@@ -26,7 +26,8 @@ const gameProcess = {
     offlineMode: false, // 是否开启离线模式
     heartBeatInterval: 1000, // 心跳时间
     answerSummary: null, // 比赛结果汇总
-    result: {} // 比赛结果
+    result: {}, // 比赛结果
+    watchingMode: false // 是否为观战模式
   },
   $store: null,
   /**

@@ -97,11 +97,18 @@ const gameState = {
    * 更新问题信息
    */
   update_question () {
-    const {ri: gameInfo = {}, v: watchingMode, lc: maxRecoveryCount} = this.data
-    const {lr: isCanRecoveryLastQuestion, qc: questionCount = 0} = gameInfo
+    let watchingMode = false
+    const {ri: gameInfo = {}, v: initialWatchingMode, lc: maxRecoveryCount} = this.data
+    const {lr: isCanRecoveryLastQuestion, qc: questionCount = 0, i: id} = gameInfo
+    const {offlineMode = false, watchingMode: cachedWatchingMode = true, id: cachedRaceId} = utils.storage.get('millionaire-process') || {}
+    if (offlineMode && cachedRaceId === id) { // 若离线模式开启，则忽略传入的观战模式
+      watchingMode = !!cachedWatchingMode
+    } else {
+      watchingMode = typeof initialWatchingMode === 'boolean' ? initialWatchingMode : true
+    }
     this.$store.commit(QUESTION_UPDATE, {
+      watchingMode,
       isCanRecoveryLastQuestion: typeof isCanRecoveryLastQuestion === 'boolean' ? isCanRecoveryLastQuestion : false,
-      watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true,
       maxRecoveryCount: +maxRecoveryCount || 0,
       count: +questionCount
     })
