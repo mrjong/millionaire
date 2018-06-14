@@ -32,7 +32,8 @@ const resultProcess = {
    * 运行进度
    */
   run (data = {}) {
-    this.update(...data, {
+    this.update({
+      ...data,
       currentState: PROCESS_RESULT
     })
     const {result = {}} = this.data

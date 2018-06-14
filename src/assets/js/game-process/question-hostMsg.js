@@ -31,7 +31,8 @@ const questionMsgProcess = {
    * 运行进度
    */
   run (data = {}) {
-    this.update(...data, {
+    this.update({
+      ...data,
       currentState: PROCESS_QUESTION_HOSTMSG
     })
     const {validTime, questions = [], currentIndex = 1} = this.data
@@ -81,8 +82,10 @@ const questionMsgProcess = {
    * 进入下一进度
    */
   next () {
+    const {currentIndex = 1} = this.data
     answerProcess.run({
-      validTime: 0
+      validTime: 0,
+      currentIndex
     })
   },
   /**

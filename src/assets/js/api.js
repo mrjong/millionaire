@@ -64,15 +64,16 @@ export const getRankInfo = function (type) {
   })
 }
 
-// uncommittedAnswers 为未提交的答案数组
-export const submitAnswer = function (uncommittedAnswers = []) {
+// 提交答案 uncommittedAnswers 为未提交的答案数组 isLastQuestion 为是否是最后一题
+export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false) {
   return axios.post(api.submitAnswer, {
-    params: {
-      i: utils.raceId,
-      as: uncommittedAnswers,
-      app_id: utils.app_id,
-      client_id: utils.clientId
-    }
+    i: utils.raceId,
+    as: uncommittedAnswers,
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  }, {
+    retry: isLastQuestion ? 100 : 3,
+    retryDelay: isLastQuestion ? 3000 : 500
   })
 }
 
@@ -133,7 +134,7 @@ export const pollMsg = function () {
       client_id: utils.clientId,
       race_id: utils.raceId
     },
-    timeout: 5000
+    timeout: 3500
   })
 }
 

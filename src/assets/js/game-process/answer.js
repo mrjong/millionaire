@@ -33,7 +33,8 @@ const answerProcess = {
    * 运行进度
    */
   run (data = {}) {
-    this.update(...data, {
+    this.update({
+      ...data,
       currentState: PROCESS_ANSWER
     })
     const {validTime, questions = [], currentIndex = 1, answerShowTime = 10000, answerSummary, offlineMode} = this.data
@@ -116,7 +117,8 @@ const answerProcess = {
     } else {
       resultMsgProcess.run({
         validTime: 0,
-        answerSummary: null
+        answerSummary: null,
+        currentIndex
       })
     }
   },

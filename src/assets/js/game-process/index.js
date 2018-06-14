@@ -118,6 +118,7 @@ const gameProcess = {
     }
   },
   next () {
+    this.stop()
     switch (this.data.currentState) {
       case PROCESS_COUNT_DOWN: {
         countDownProcess.next()

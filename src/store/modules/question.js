@@ -132,7 +132,7 @@ const actions = {
   [type.QUESTION_SUBMIT] ({commit, getters}) {
     // 取出未提交成功的答案一起提交
     const uncommittedAnswers = utils.storage.get('millionaire-uncommittedAnswers') || []
-    const {id, userAnswer, index} = getters
+    const {id, userAnswer, index, questionCount} = getters
     uncommittedAnswers.push({
       i: id,
       s: index,
@@ -140,7 +140,7 @@ const actions = {
     })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(uncommittedAnswers).then(({data}) => {
+      submitAnswer(uncommittedAnswers, index === questionCount).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
             case 0: {
@@ -153,6 +153,7 @@ const actions = {
         } else {
           const index = +data.data
           switch (+data.code) {
+            case 1006:
             case 1007: {
               reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
               commit(type.QUESTION_UPDATE, {

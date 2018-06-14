@@ -15,6 +15,8 @@ const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
+  pullMsgErrorCount: 0, // 拉取消息错误次数
+  maxpullMsgErrorCount: 2, // 拉取消息最大错误次数
   isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
@@ -308,6 +310,24 @@ const im = {
         im.emitListener(type.NETWORK_UNAVAILABLE)
         im.timeoutStatistic()
       }
+      // 判断是否进入观战模式
+      const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+      if (!cachedGameProcessData.offlineMode) { // 未开启观战模式
+        im.pullMsgErrorCount++
+        if (im.pullMsgErrorCount >= im.maxpullMsgErrorCount) { // 异常次数超过上限
+          const {validTime = 0} = cachedGameProcessData
+          gameProcess.update({
+            ...cachedGameProcessData,
+            offlineMode: true
+          })
+          if (validTime > 0) { // 若当前进度剩余时间大于0 直接开始运行 否则运行下一进度
+            gameProcess.run()
+          } else {
+            gameProcess.next()
+          }
+          im.pullMsgErrorCount = -999999
+        }
+      }
     })
   },
   /**
@@ -335,6 +355,11 @@ const im = {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
     const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+    if (cachedGameProcessData.offlineMode) {
+      im.pullMsgId = ''
+      im.isHandledMsg = true
+      return
+    }
     gameProcess.update({...cachedGameProcessData, validTime})
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
       // const questions = utils.storage.get('millionaire-qs') || []

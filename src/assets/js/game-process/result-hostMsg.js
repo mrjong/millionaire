@@ -2,7 +2,6 @@ import { PROCESS_RESULT_HOSTMSG } from '../status'
 import { MESSAGE_HOST } from '../listener-type'
 import im from '../im'
 import utils from '../utils'
-import resultProcess from './result'
 
 /**
  * 游戏进度-结束串词
@@ -32,8 +31,10 @@ const resultMsgProcess = {
    * 运行进度
    */
   run (data = {}) {
-    this.update(...data, {
-      currentState: PROCESS_RESULT_HOSTMSG
+    this.update({
+      ...data,
+      currentState: PROCESS_RESULT_HOSTMSG,
+      offlineMode: false
     })
     const {validTime, resultHostMsgList = [], hostMsgInterval = 4000} = this.data
     if (validTime <= 0) {
@@ -76,9 +77,6 @@ const resultMsgProcess = {
    * 进入下一进度
    */
   next () {
-    resultProcess.run({
-      validTime: 0
-    })
   },
   /**
    * 停止
