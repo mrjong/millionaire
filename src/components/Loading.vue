@@ -1,6 +1,8 @@
 <template>
   <div class="loading" :style="{height: actualHeight}">
-    <img src="../assets/images/loading.png" class="loading__img">
+    <div  class="loading__img">
+      <img src="../assets/images/loading.png">
+    </div>
   </div>
 </template>
 
@@ -38,11 +40,15 @@ export default {
     z-index: 1111;
     display: flex;
     justify-content: center;
-    z-index: 111;
+    align-items: center;
     &__img{
       width: 80px;
+      height: 80px;
       align-self: center;
-      animation:rotating 1s linear infinite
+      animation:rotating 1s linear infinite;
+      img{
+        width: 100%;
+      }
     }
   }
   @keyframes rotating{

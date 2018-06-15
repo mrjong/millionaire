@@ -2,6 +2,12 @@
 import * as type from './listener-type'
 import {appKey} from './http'
 import {pollMsg} from './api'
+import utils from './utils'
+import {vm} from '../../main'
+import throttle from 'lodash.throttle'
+import { _INIT } from '../../store/type'
+import gameProcess from './game-process'
+import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
 let keepLiveMessageTimer = null
 
@@ -9,7 +15,8 @@ const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
-  pullMsgTimeoutCount: 0, // 拉去消息超时次数
+  pullMsgErrorCount: 0, // 拉取消息错误次数
+  maxpullMsgErrorCount: 2, // 拉取消息最大错误次数
   isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
@@ -27,7 +34,7 @@ const im = {
     },
     {
       messageName: 'PeopleMessage',
-      propertys: ['count'],
+      propertys: ['count', 'extra'],
       objectName: 'APUS:PeopleMsg'
     },
     {
@@ -49,6 +56,11 @@ const im = {
       messageName: 'KeepLiveMessage',
       propertys: ['content'],
       objectName: 'APUS:KeepLiveMSg'
+    },
+    {
+      messageName: 'ResurrectionMessage',
+      propertys: ['cardNumber', 'leftRecCount'],
+      objectName: 'APUS:RMsg'
     }
   ],
 
@@ -87,9 +99,8 @@ const im = {
     window.addEventListener('offline', () => {
       im.isSupportOnlineEvent = true
       console.log('断开连接:')
-      clearInterval(keepLiveMessageTimer)
       im.emitListener(type.NETWORK_UNAVAILABLE)
-      RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+      im.disconnect()
     })
 
     window.addEventListener('online', () => {
@@ -122,8 +133,7 @@ const im = {
             console.log('网络不可用')
             im.emitListener(type.NETWORK_UNAVAILABLE)
             setTimeout(() => {
-              clearInterval(keepLiveMessageTimer)
-              RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+              im.disconnect()
               im.connect(im.token)
             }, 500)
             break
@@ -133,16 +143,18 @@ const im = {
     RongIMClient.setOnReceiveMessageListener({
       // 接收到的消息
       onReceived: (message) => {
-        // console.log(message.messageType, message.content)
         // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
             this.emitListener(type.MESSAGE_NORMAL, message)
-            // console.warn(message.messageUId, message.sentTime, message.content.content)
+            console.warn(message.messageUId, message.sentTime, message.content.content)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
+            break
+          case type.MESSAGE_EXTRA_LIFE:
+            this.emitListener(type.MESSAGE_EXTRA_LIFE, message)
             break
           case type.MESSAGE_ANSWER:
             // 暂时使用轮询方案代替接收
@@ -171,6 +183,7 @@ const im = {
    * @param {any} token
    */
   connect (token) {
+    im.disconnect() // 先断开链接
     this.token = token
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
@@ -216,7 +229,17 @@ const im = {
       }
     })
   },
-
+  /**
+   * 断开连接
+   */
+  disconnect () {
+    try {
+      clearInterval(keepLiveMessageTimer)
+      RongIMClient && RongIMClient.getInstance && RongIMClient.getInstance() && RongIMClient.getInstance().disconnect && RongIMClient.getInstance().disconnect()
+    } catch (err) {
+      console.log('disconnect 失败：', err)
+    }
+  },
   /**
    * 重新连接
    */
@@ -266,9 +289,9 @@ const im = {
   /**
    * 开始轮询消息
    */
-  startPullMsg () {
+  startPullMsg (interval = 2000) {
     clearInterval(im.pullMsgTimer)
-    im.pullMsgTimer = setInterval(im.pullMsg, 1000)
+    im.pullMsgTimer = setInterval(im.pullMsg, interval)
   },
 
   /**
@@ -276,7 +299,6 @@ const im = {
    */
   pullMsg () {
     pollMsg().then(({data}) => {
-      im.pullMsgTimeoutCount = 0
       if (+data.result === 1 && +data.code === 0) {
         im.isHandledMsg && im.pollMsgHandler(data.data)
       } else {
@@ -284,22 +306,52 @@ const im = {
       }
     }).catch((error) => {
       console.log(`拉取消息出错:`, error, new Date())
-      if (error.code === 'ECONNABORTED') {
-        im.pullMsgTimeoutCount = im.pullMsgTimeoutCount + 1
-      }
-      // 连续超时两次，提示网络错误
-      if (im.pullMsgTimeoutCount >= 2) {
+      if (error.code === 'ECONNABORTED') { // 拉取超时
         im.emitListener(type.NETWORK_UNAVAILABLE)
-        im.pullMsgTimeoutCount = -im.pullMsgTimeoutCount
+        im.timeoutStatistic()
+      }
+      // 判断是否进入观战模式
+      const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+      if (!cachedGameProcessData.offlineMode) { // 未开启观战模式
+        im.pullMsgErrorCount++
+        if (im.pullMsgErrorCount >= im.maxpullMsgErrorCount) { // 异常次数超过上限
+          const {validTime = 0} = cachedGameProcessData
+          gameProcess.update({
+            ...cachedGameProcessData,
+            offlineMode: true
+          })
+          gameProcess.cacheProcessInfo()
+          if (validTime > 0) { // 若当前进度剩余时间大于0 直接开始运行 否则运行下一进度
+            gameProcess.run()
+          } else {
+            gameProcess.next()
+          }
+          // 如果当前状态不是结果也不是结果串词 停止轮询
+          const {currentState} = cachedGameProcessData
+          if (currentState !== PROCESS_RESULT_HOSTMSG && currentState !== PROCESS_RESULT) {
+            im.stopPullMsg()
+          }
+          im.pullMsgErrorCount = 0
+        }
       }
     })
   },
-
+  /**
+   * 超时统计
+   */
+  timeoutStatistic: throttle(() => {
+    utils.statistic('TIMEOUT', 0, {
+      style_s: utils.clientId,
+      text_s: vm.$store.getters.userInfo.userId
+    }, vm.$store.getters.userInfo.userName)
+  }, 5000),
   /**
    * 停止轮询消息
    */
   stopPullMsg () {
     clearInterval(im.pullMsgTimer)
+    im.pullMsgId = ''
+    im.isHandledMsg = true
   },
 
   /**
@@ -307,64 +359,80 @@ const im = {
    */
   pollMsgHandler (data = {}) {
     im.isHandledMsg = false
-    const {i: msgId, t: msgType, d: msg = {}, l: validTime} = data
+    const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
+    const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+    if (cachedGameProcessData.offlineMode) {
+      im.pullMsgId = ''
+      im.isHandledMsg = true
+      return
+    }
+    gameProcess.update({...cachedGameProcessData, validTime})
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
+      const currentIndex = msg || 1
       switch (msgType) {
         case 1: { // 串词消息
-          const {rs: hostMsgList, si: intervalTime} = msg
-          im.emitListener(type.MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(hostMsgList)
-            }
-          }, intervalTime)
+          const {si: intervalTime} = msg || {}
+          gameProcess.update({
+            currentState: PROCESS_RESULT_HOSTMSG,
+            hostMsgInterval: intervalTime
+          })
+          gameProcess.run()
+          break
+        }
+        case 7: { // 题目串词消息
+          gameProcess.update({
+            currentState: PROCESS_QUESTION_HOSTMSG,
+            currentIndex
+          })
+          gameProcess.run()
           break
         }
         case 2: { // 题目消息
-          const restTime = parseInt(validTime / 1000)
-          im.emitListener(type.MESSAGE_QUESTION, {
-            content: {
-              content: JSON.stringify({
-                ...msg,
-                restTime: restTime >= 10 ? 10 : restTime
-              })
-            }
+          gameProcess.update({
+            currentState: PROCESS_QUESTION,
+            currentIndex
           })
+          gameProcess.run()
           break
         }
         case 3: { // 答案汇总消息
-          const question = {
-            id: msg.ji || '',
-            index: msg.js || 1,
-            contents: msg.jc || '',
-            options: msg.jo || ['', '', '']
-          }
-          const answer = {
-            i: msg.ji || '',
-            a: msg.ac || ''
-          }
-          const summary = msg.as || {}
-          im.emitListener(type.MESSAGE_ANSWER, {
-            content: {
-              answer: JSON.stringify(answer),
-              summary: JSON.stringify(summary),
-              question: JSON.stringify(question)
-            }
+          const currentIndex = msg.js || 1
+          gameProcess.update({
+            currentState: PROCESS_ANSWER,
+            answerSummary: msg.as || {},
+            currentIndex
           })
+          gameProcess.run()
           break
         }
         case 4: { // 比赛结果消息
-          im.emitListener(type.MESSAGE_RESULT, {
-            content: {
-              summary: JSON.stringify(msg)
-            }
+          gameProcess.update({
+            currentState: PROCESS_RESULT,
+            result: msg
           })
+          gameProcess.run()
           break
         }
-        case 5: { // 比赛结束消息
-          im.emitListener(type.MESSAGE_END, msg.t || 0)
-          break
+        case 5: { // 比赛结束消息 重新初始化直接退出
+          im.emitListener(type.MESSAGE_END)
+          im.stopPullMsg()
+          return
+        }
+        case 6: { // 非比赛消息 重新初始化直接退出
+          im.stopPullMsg()
+          vm.$store.dispatch(_INIT)
+          return
         }
       }
+    }
+    if (validTime >= 30000) { // 根据消息剩余有效时间判断轮询间隔时间
+      im.startPullMsg(10000)
+    } else if (validTime >= 10000) {
+      im.startPullMsg(5000)
+    } else if (validTime >= 5000) {
+      im.startPullMsg(3000)
+    } else {
+      im.startPullMsg()
     }
     im.pullMsgId = msgId
     im.isHandledMsg = true
@@ -384,7 +452,6 @@ const im = {
     RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
       onSuccess: (message) => {
         message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-        im.emitListener(type.MESSAGE_SEND_SUCCESS, message)
       },
       onError: (errorCode, message) => {
         let info = ''

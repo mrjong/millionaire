@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
 import {mapGetters} from 'vuex'
 // import * as type from '../store/type' // 【hack】 未用到 注释掉
 import * as listenerType from '../assets/js/listener-type' // 【hack】
@@ -42,23 +43,22 @@ export default {
   name: 'ChatRoom',
   data () {
     return {
-      // msgLen: 10, 【hack】 未用到 注释掉
-      // chatRoomId: 'room10', 【hack】 未用到 注释掉
-      // pageHeight: null, 【hack】 未用到 注释掉
       msgList: [], // 显示的消息列表
       myMessage: '', // 我发送的消息
       showInput: false, // 是否显示输入框
-      windowInnerHeight: 0 // 窗口高度
+      windowInnerHeight: 0, // 窗口高度
+      isSendMessageComplete: true // 消息是否发送完成
     }
   },
   computed: {
     ...mapGetters({
-      // chatRoomState: 'chatRoomState', // 【hack】 未用到 注释掉
-      // msgList: 'msgList', // 【hack】 未用到 注释掉
       userInfo: 'userInfo',
       status: 'status',
       questionStatus: 'question_status'
     })
+  },
+  created () {
+    this.sendMessage = throttle(this.sendMessage, 1500)
   },
   mounted () {
     // this.$store.dispatch(type.CHAT_LIST_FETCH_ACTION) // 【hack】
@@ -74,6 +74,7 @@ export default {
       // 横屏切换为竖屏是 隐藏输入框 【hack】 什么鬼 maybe 用不上呢！！！
       window.addEventListener('resize', () => {
         if (this.windowInnerHeight < window.innerHeight) {
+          this.reSetMsgBot(true)
           this.showInput = false
         }
         this.windowInnerHeight = window.innerHeight
@@ -112,12 +113,14 @@ export default {
     },
     // 2. 发送消息 【hack】
     sendMessage () {
-      if (this.myMessage) {
+      if (this.myMessage && this.isSendMessageComplete) {
+        this.isSendMessageComplete = false
         document.getElementById('sendmessage').blur()
         this.showInput = false
         const msg = this.myMessage
         const nickname = this.userInfo.userName
         const img = this.userInfo.avatar
+        this.myMessage = ''
         im.sendMessage(msg, img, nickname)
         this.messageHandler({
           content: {
@@ -129,7 +132,8 @@ export default {
           },
           messageId: `${Date.now()}${parseInt(Math.random() * 10000)}`
         })
-        this.myMessage = ''
+        console.log('发送消息', msg, nickname, img)
+        this.isSendMessageComplete = true
         let fromSource = ''
         if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
           fromSource = 'game_page'
@@ -140,28 +144,6 @@ export default {
         utils.statistic('speaking', 3, {}, fromSource)
       }
     },
-    // 2. 发送消息 删掉 去store 里面发消息【hack】
-    // sendMessage1 () {
-    //   if (this.myMessage) {
-    //     this.showInput = false
-    //     this.$store.dispatch(type.CHAT_SEND_MSG_ACTION, {
-    //       msgObj: {
-    //         img: this.userInfo.avatar,
-    //         msg: this.myMessage,
-    //         nickname: this.userInfo.userName
-    //       }
-    //     })
-    //     this.myMessage = ''
-    //     let fromSource = ''
-    //     if (+this.status === 3 && +this.questionStatus !== 8) { // 答题页面
-    //       fromSource = 'game_page'
-    //     }
-    //     if (+this.status === 2) { // 倒计时页
-    //       fromSource = 'countdown_page'
-    //     }
-    //     utils.statistic('speaking', 3, {}, fromSource)
-    //   }
-    // },
     // 3. 输入框 获得焦点时 【hack】 增加注释
     focusEvent (e) {
       this.showInput = true
@@ -184,24 +166,13 @@ export default {
         msgContainer && (msgContainer.style.bottom = bottomPosition)
       })
     }
-    // 没用到 注释掉吧 【hack】
-    // setMsgOuterHeight () {
-    //   setTimeout(() => {
-    //     const chatMsgWrap = document.getElementById('msgContainer')
-    //     const scrollContainer = document.getElementById('chatMsgWrap')
-    //     const _H = chatMsgWrap.offsetHeight
-    //     scrollContainer.style.height = _H + 'px'
-    //   }, 0)
-    // }
   },
   watch: {
-    // 【hack】 移入 fetchChatList () 中
-    // msgList: function () {
-    //   this.$nextTick(() => {
-    //     const scrollContainer = document.getElementById('scrollContainer')
-    //     scrollContainer.scrollTop = 100000
-    //   })
-    // }
+    status (val) {
+      if (val === 1) {
+        this.msgList = []
+      }
+    }
   }
 
 }
@@ -234,6 +205,7 @@ export default {
   position: fixed;
   bottom: 35px;
   right: 30px;
+  z-index: 112;
   display: flex;
   justify-content: flex-end;
   &__icon {

@@ -36,33 +36,53 @@ export default {
     })
   },
   mounted () {
-    if (localStorage.getItem('NoFirstGuide') && this.status === 1) {
-      this.FirstGuide = false
-    } else {
+    if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = true
-      localStorage.setItem('NoFirstGuide', 'false')
+      utils.storage.set('millionaire-NoFirstGuide', true)
+    } else {
+      this.FirstGuide = false
+    }
+    // 显示之后禁止屏幕滚动
+    if (this.FirstGuide) {
+      this.freeze()
+    } else {
+      this.restore()
     }
   },
   methods: {
     toShareDetail () {
+      this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       if (utils.isOnline) {
+        this.isClose = true
         this.$router.push({path: '/share-detail'})
       } else {
+        this.isClose = true
         utils.login(() => {
-          this.$store.commit(type._UPDATE, {isOnline: true})
-          utils.isOnline = true
           utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
           this.$store.dispatch(type._INIT)
           this.$router.push({path: '/share-detail'})
         })
       }
+    },
+    freeze () {
+      document.querySelector('#app').style.overflow = 'hidden'
+    },
+    restore () {
+      document.querySelector('#app').style.overflow = 'visible'
+    },
+    preventDefault (event) {
+      event.preventDefault()
     }
   },
+  destroyed () {
+    this.restore()
+  },
   watch: {
-    status: function (status) {
-      if (status !== 1) {
-        this.FirstGuide = false
+    // 关闭之后恢复屏幕滚动
+    isClose (val) {
+      if (val) {
+        this.restore()
       }
     }
   }
@@ -71,14 +91,14 @@ export default {
 <style scoped lang="less" type="text/less">
   .guide {
     width: 100%;
-    height: 100%;
-    position: fixed;
+    min-height: 100%;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 111;
-    padding: 120px 40px 0;
+    padding: 80px 40px 50px;
     background-color: rgba(0, 0, 0, 0.9);
-    z-index: 111;
+    overflow: auto;
     &__close{
       position: absolute;
       top: 24px;
@@ -95,7 +115,7 @@ export default {
     }
     &__text{
       color: #fff;
-      font-size: 33px;
+      font-size: 30px;
       line-height: 45px;
       margin-bottom: 20px;
       .dot{
@@ -114,7 +134,8 @@ export default {
       .light{
         max-width: 70%;
         width: 600px;
-        margin: 50px auto 0;
+        min-height: 400px;
+        margin: 30px auto 0;
       }
       .lives{
         width:186px;
@@ -134,7 +155,7 @@ export default {
       text-align: center;
       line-height: 94px;
       border-radius: 46px;
-      margin: 100px auto 0;
+      margin: 50px auto 0;
       display: flex;
       justify-content: center;
       &__icon{
@@ -160,20 +181,25 @@ export default {
   }
   @media screen and (max-width: 321px){
     .guide {
-      padding: 100px 40px 0;
+      padding: 60px 40px 10px;
       &__close{
-        position: absolute;
-        top: 24px;
-        right: 24px;;
-        width: 50px;
-        height: 50px;
         font-size: 22px;
-        line-height: 50px;
       }
       &__text{
-        font-size: 30px;
+        font-size: 28px;
         line-height: 45px;
         margin-bottom: 10px;
+      }
+      &__img{
+        .light{
+          max-width: 60%;
+          width:500px;
+          min-height: 300px;
+          margin: 0 auto;
+        }
+        .lives{
+          width:140px;
+        }
       }
       &__btn{
         font-size: 30px;

@@ -10,8 +10,12 @@
         Follow Us</a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME  (optional)" v-model="questionInfo.author">
+          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME" v-model="questionInfo.author">
           <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
+        </div>
+        <div class="frame">
+          <input type="text" class="form__name base" maxlength="20" placeholder="YOUR PHONE NUMBER" v-model="questionInfo.tel">
+          <check-str-length :originalLength=20 :currentLength=questionInfo.tel.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
@@ -100,7 +104,8 @@ export default {
         'option1': '',
         'option2': '',
         'option3': '',
-        'correct': ''
+        'correct': '',
+        'tel': ''
       },
       showDialog: false,
       dialogInfo: {
@@ -117,7 +122,7 @@ export default {
     }
   },
   mounted () {
-    this.isPop = localStorage.getItem('isPop')
+    this.isPop = utils.storage.get('millionaire-isPop')
     if (this.$route.query.close) {
       this.isPop = this.$route.query.close
       utils.statistic('issue_page', 0, {'flag_s': !this.isPop}, 'issue_success_page')
@@ -151,36 +156,36 @@ export default {
       })
     },
     submit () {
+      /* eslint-disable no-useless-escape */
       this.isLoading = true
-      if (this.questionInfo.title === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_question')
-        this.dialogInfo.htmlText = 'Please complete the question'
-        this.showDialog = true
+      const phoneRule = /^[\+\-0-9]{1,20}$/
+      if (this.questionInfo.author === '') {
+        this.baseConfig('no_phone', 'Please enter your name.')
+        return false
+      } else if (this.questionInfo.tel === '') {
+        this.baseConfig('no_phone', 'Please enter your phone number')
+        return false
+      } else if (!phoneRule.test(this.questionInfo.tel)) {
+        this.baseConfig('no_phone', 'Please enter right phone number')
+        return false
+      } else if (this.questionInfo.title === '') {
+        this.baseConfig('no_question', 'Please complete the question')
         return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'no_answer')
-        this.dialogInfo.htmlText = 'Please complete the answer'
-        this.showDialog = true
+        this.baseConfig('no_answer', 'Please complete the answer')
         return false
       }
       api.setQuestions(this.questionInfo).then(({data}) => {
         this.isLoading = false
-        console.log(data)
         if (data.result === 1) {
           this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
-          this.isLoading = false
-          this.showDialog = true
-          this.dialogInfo.htmlText = 'Your Internet is unstable, please try it again.'
+          this.baseConfig('', 'Your Internet is unstable, please try it again.')
           return false
         }
       }).catch(() => {
-        this.isLoading = false
-        this.setQuestionBtnStatics('submit', 'other_anomaly')
-        this.showDialog = true
+        this.baseConfig('other_anomaly')
         return false
       })
     },
@@ -189,7 +194,7 @@ export default {
     },
     isShowBomb () {
       this.isPop = true
-      localStorage.setItem('isPop', true)
+      utils.storage.set('millionaire-isPop', true)
     },
     join () {
       this.setQuestionBtnStatics('join_group')
@@ -207,6 +212,14 @@ export default {
         staticsObj = {'flag_s': !this.isPop, 'to_destination_s': destination}
       }
       utils.statistic('submit', 1, staticsObj, 'issue_page')
+    },
+    baseConfig (staticsType, hintType) {
+      this.isLoading = false
+      staticsType && this.setQuestionBtnStatics('submit', staticsType)
+      if (hintType) {
+        this.dialogInfo.htmlText = hintType
+      }
+      this.showDialog = true
     }
   },
   components: {
@@ -502,7 +515,7 @@ export default {
     border-radius: 46px;
     background-color:#f4f3f7 ;
     border: 0;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     padding-left: 30px;
     color:#241262 ;
     font-size: 28px;

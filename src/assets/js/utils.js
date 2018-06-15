@@ -1,44 +1,53 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
+/* eslint-disable standard/no-callback-literal */
+import storage from 'store'
+import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
-import { api } from './api'
-import { host, env } from './http'
+import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
+import {host, env} from './http'
+import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
+import {vm} from '../../main'
+import { _UPDATE, HOME_UPDATE } from '../../store/type'
+import currency from './currency'
 const njordGame = window.top.njordGame
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
+storage.addPlugin(expirePlugin)
+
 const sounds = {
   'countDown10-before': {
-    url: 'http://static.subcdn.com/countDown10-before.mp3',
+    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    url: 'http://static.subcdn.com/countDown10-after.mp3',
+    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    url: 'http://static.subcdn.com/20180314200629b0edee0942.ogg',
+    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    url: 'http://static.subcdn.com/5s-countdown.mp3',
+    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    url: 'http://static.subcdn.com/20180313173916879991205a.mp3',
+    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    url: 'http://static.subcdn.com/2018031317404850dad39593.mp3',
+    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    url: 'http://static.subcdn.com/201803131742354229751a36.mp3',
+    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
@@ -47,43 +56,142 @@ const sounds = {
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
 
-console.log(clientParams)
-const getQuery =
-/**
-* 获取浏览器公共参数
-* @param {any} name
-* @param {string} [url='']
-* @returns
-*/
-function (name, url = '') {
-  const queryUrlArr = url.match(/.*\?(\S+)$/)
-  const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
-  const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
-  const search = queryUrl.match(regx)
-  return (search && decodeURIComponent(search[2])) || null
-}
-
-export default {
+const utils = {
   /**
    * 登录
    * @param {any} callback
    */
-  login (callback) {
+  login (callback, isSyncInfo = true) {
+    window.top.loginCallback = function () {
+      // 更改在线状态
+      utils.isOnline = true
+      vm.$store.commit(_UPDATE, {
+        isOnline: true
+      })
+      isSyncInfo && utils.syncAccountInfo()
+      callback()
+      // 登录是否同意过协议
+      queryAgreePolicy().then(({data}) => {
+        if (data.result === 1 && +data.code === 0) {
+          const {agree, isEU = false} = data.data || {}
+          if (isEU) {
+            vm.$router.replace({path: '/blank'})
+          } else {
+            if (!agree) {
+              vm.$store.commit(_UPDATE, {
+                isAgreePolicy: false
+              })
+            } else {
+              vm.$store.commit(_UPDATE, {
+                isAgreePolicy: true
+              })
+              vm.$router.replace({path: '/'})
+            }
+          }
+        }
+      })
+    }
     if (njordGame) {
-      window.top.loginCallback = callback
       const loginArgs = JSON.stringify({
         callbackMethod: 'loginSuccess()',
         from_source: 'million_aire'
       })
       njordGame.login && njordGame.login(loginArgs)
+    } else {
+      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
     }
   },
-
-  app_id: clientParams ? clientParams.appId : (getQuery('appId') || '100110002'),
-  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : 'da8b8fdef4913be60044726055514db0',
+  /**
+   * 退出登陆
+   */
+  logout (callback, errCallback) {
+    logout().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback && callback()
+      } else {
+        errCallback && errCallback(data.error_msg || '')
+        console.log('退出登陆失败', data.error_msg || '')
+      }
+    }, err => {
+      errCallback && errCallback(err)
+      console.log('退出登陆出错', err)
+    })
+  },
+  /**
+   * 获取个人信息
+   */
+  getPersonInfo (callback, errCallback) {
+    getPersonInfo().then(({data}) => {
+      if (+data.error_code === 0) {
+        callback && callback(data.data || {})
+      } else {
+        console.log('获取个人信息失败:', data.error_msg || '')
+        errCallback && errCallback(data.error_msg || '')
+      }
+    }, err => {
+      console.log('获取个人用户信息出错:', err)
+      errCallback && errCallback(err)
+    })
+  },
+  /**
+   * 同步账户信息
+   */
+  syncAccountInfo () {
+    /* eslint-disable prefer-promise-reject-errors */
+    return new Promise((resolve, reject) => {
+      syncInfo().then(({data}) => {
+        console.log('同步返回数据：', data)
+        if (+data.result === 1 && +data.code === 0) {
+          const {ub: balance = 0, sub: balanceShow = '', cb: clientBalance = 0, scb: clientBalanceShow = '', ui: income = 0, sui: incomeShow = '', ur: rank = 0, uc: currencyType} = data.data || {}
+          vm.$store.commit(HOME_UPDATE, {
+            balance: +balance,
+            balanceShow,
+            clientBalance: +clientBalance,
+            clientBalanceShow,
+            income: +income,
+            incomeShow,
+            rank: +rank,
+            currencyType: currency[currencyType] ? currency[currencyType].symbol : '₹'
+          })
+          resolve()
+        } else {
+          console.log('同步个人账户失败:', data.msg || '')
+          reject(+data.code)
+        }
+      }, (err) => {
+        console.log('同步个人账户信息出错:', err)
+        reject(-1)
+      })
+    })
+  },
+  /**
+  * 获取浏览器公共参数
+  * @param {any} name
+  * @param {string} [url='']
+  * @returns
+  */
+  getQuery (name, url = '') {
+    const queryUrlArr = url.match(/.*\?(\S+)$/)
+    const queryUrl = queryUrlArr ? queryUrlArr[1] : window.location.search.slice(1)
+    const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
+    const search = queryUrl.match(regx)
+    return (search && decodeURIComponent(search[2])) || null
+  },
+  storage,
+  app_id: clientParams ? clientParams.appId : '100110002',
+  clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
-  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN,
-
+  isOnline: clientParams ? !!clientParams.isLogin : IS_LOGIN, // 是否在线
+  disableNetworkTip: false, // 是否禁用网络状况提示
+  pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
+  raceId: '', // 本场比赛ID
+  actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
+  /**
+   * 关闭客户端WebView
+   */
+  closeWebview () {
+    njordGame && njordGame.closePage && njordGame.closePage()
+  },
   /**
    * 打点
    * @static
@@ -122,7 +230,35 @@ export default {
         ...params
       }
     }
+    // 客户端打点
     njordGame && njordGame.logStatistic && njordGame.logStatistic(JSON.stringify(args))
+    // h5 打点
+    const webParams = {}
+    for (let prop in params) {
+      webParams[`web_${prop.replace(/_s|l$/g, '')}`] = params[prop]
+    }
+
+    let h5EventType = eventType
+    // h5 事件类型映射
+    switch (eventType) {
+      case '67240565': {
+        h5EventType = '84043893'
+        break
+      }
+      case '67262581': {
+        h5EventType = '84044149'
+        break
+      }
+      case '67241845': {
+        h5EventType = '84043381'
+        break
+      }
+    }
+    window.ares && window.ares.track(h5EventType, {
+      web_name: name,
+      web_from_source: from,
+      ...webParams
+    })
   },
   /**
    * 计时器
@@ -130,18 +266,58 @@ export default {
   Timer (interval, endTime, completeCallback, endCallback) {
     return new Timer(interval, endTime, completeCallback, endCallback)
   },
-  share (callback, packageName, content, link = window.location.href) {
-    const title = 'Play ‘Go! Millionaire’, answer questions every day, win up to ₹1,000,000!'
-    const imgUrl = 'http://static.activities.apuslauncher.com/upload/broswer/201803162236010485c4bc4a.jpg'
-    const shareLink = `${host[env]}${api.sharePage}?title=${title}&desp=${content}&imgUrl=${encodeURIComponent(imgUrl)}&shareUrl=${encodeURIComponent(link)}`
-    window.shareSuccessCallback = callback
-    window.njordInvite && window.njordInvite.share && window.njordInvite.share(JSON.stringify({
-      sharePackage: packageName,
-      shareTitle: title,
-      shareContent: content,
-      shareLink,
-      callbackMethod: 'shareSuccess'
-    }))
+  /**
+   * 分享
+   * @param {any} callback 回调函数
+   * @param {any} packageName 分享包名
+   * @param {any} content 分享内容
+   * @param {any} [link=window.location.href] 分享链接
+   */
+  share (callback, packageName, content, link = window.location.href, code) {
+    /* eslint-disable no-useless-escape */
+    const title = `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
+    const desp = `Open the game link and use my referral code ${code}, let keep winning cash every day!`
+    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}&desp=${encodeURIComponent(desp)}`
+    const handler = function (shareLink, originUrl) {
+      window.shareSuccessCallback = callback
+      callback(true, packageName)
+      switch (packageName) {
+        case FACEBOOK: {
+          setTimeout(() => {
+            const href = `https://www.facebook.com/sharer?u=${encodeURIComponent(originUrl)}`
+            window.location.href = href
+          }, 5)
+          window.location.href = `fb://facewebmodal/f?href=` + encodeURIComponent(`https://www.facebook.com/dialog/share?href=${encodeURIComponent(encodeURIComponent(originUrl))}`)
+          break
+        }
+        case MESSAGER: {
+          window.location.href = `fb-messenger://share/?link=${encodeURIComponent(originUrl)}`
+          break
+        }
+        case WHATSAPP: {
+          window.location.href = `whatsapp://send?text=${encodeURIComponent(shareLink)}`
+          break
+        }
+        case TWITTER: {
+          setTimeout(() => {
+            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
+            window.location.href = href
+          }, 5)
+          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
+        }
+      }
+    }
+    // 生成短链
+    makeShortUrl(encodeURIComponent(shareLink)).then(({data}) => {
+      if ((+data.result === 1) && (+data.code === 0) && data.data) {
+        const shortUrl = data.data
+        handler(shortUrl, shareLink)
+      } else {
+        handler(shareLink, shareLink)
+      }
+    }).catch(() => {
+      handler(shareLink, shareLink)
+    })
   },
   /**
    * 时间格式化
@@ -173,6 +349,32 @@ export default {
     }
     return ''
   },
+  /**
+   * 格式化题目序号
+   * @param {any} index 序号
+   * @returns
+   */
+  formatIndex (index) {
+    let result = index
+    switch (+index) {
+      case 1: {
+        result = '1st'
+        break
+      }
+      case 2: {
+        result = '2nd'
+        break
+      }
+      case 3: {
+        result = '3rd'
+        break
+      }
+      default: {
+        result = `${index}th`
+      }
+    }
+    return result
+  },
   computePercent (obj, val) {
     let total = 0
     for (let i in obj) {
@@ -190,18 +392,34 @@ export default {
   loadSounds () {
     for (let prop in sounds) {
       const obj = sounds[prop]
-      const url = obj.url
-      if (url) {
+      const urls = obj.urls
+      if (urls && urls.length) {
         const sound = document.createElement('audio')
-        sound.src = url
+        urls.forEach((url) => {
+          const source = document.createElement('source')
+          source.src = url
+          sound.appendChild(source)
+        })
         sound.loop = obj.loop
         sound.preload = 'true'
         sound.oncanplay = function () {
-          console.log(`${prop} 可以播放`)
           sound.oncanplay = null
         }
         sound.onerror = function () {
           console.log(`${prop} 加载失败`)
+        }
+
+        if (prop === 'bg') {
+          sound.onplaying = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: true
+            })
+          }
+          sound.onpause = function () {
+            vm.$store.commit(_UPDATE, {
+              isPlayingMusic: false
+            })
+          }
         }
         obj.instance = sound
         document.body.appendChild(sound)
@@ -213,10 +431,13 @@ export default {
    * @param {any} name
    */
   playSound (name) {
+    if (!vm.$store.getters.isPlayingMusic) {
+      return false
+    }
     this.stopSound(name)
     if (name) {
-      const url = sounds[name] && sounds[name].url
-      if (url) {
+      const urls = sounds[name] && sounds[name].urls
+      if (urls.length) {
         const sound = sounds[name].instance
         window.playAudioCallback = () => {
           sound.play()
@@ -234,9 +455,15 @@ export default {
    * @param {any} name
    */
   stopSound (name) {
-    const sound = sounds[name].instance
-    !sound.paused && sound.pause()
-    sound.currentTime = 0
+    if (name) {
+      const sound = sounds[name].instance
+      !sound.paused && sound.pause()
+      sound.currentTime = 0
+    } else {
+      for (let name in sounds) {
+        utils.stopSound(name)
+      }
+    }
   },
   /**
    * 设置静音
@@ -286,9 +513,25 @@ export default {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1532330666785144' : 'https://m.facebook.com/APUS-Browser-1532330666785144')
+    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
+  },
+  /**
+   * 生成指定长度的随机串
+   * @param {any} len
+   */
+  generateRandomStr (len) {
+    let str = ''
+    while (len > 0) {
+      str = str + String.fromCharCode(parseInt(Math.random() * 58) + 65)
+      len--
+    }
+    return str
   }
 }
+
+window.utils = utils
+
+export default utils
 
 /**
  * 计时器
@@ -331,18 +574,19 @@ class Timer {
     }
     this.timer = setInterval(() => {
       if (this.offset > 0) {
-        const date = new Date(this.offset)
+        const {offset} = this
+        const date = new Date(offset)
         this.completeCallback && this.completeCallback({
           year: date.getUTCFullYear() - 1970,
           month: date.getUTCMonth(),
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(this.offset / 1000) % 60,
-          offset: this.offset
+          seconds: Math.round(offset / 1000) % 60,
+          offset
         })
         // 如果剩余时间小于间隔
-        if (this.offset < interval) {
+        if (offset <= interval) {
           this.stop()
           setTimeout(() => {
             this.endCallback && this.endCallback()

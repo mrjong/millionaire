@@ -5,7 +5,8 @@ import * as status from '../../assets/js/status'
 import utils from '../../assets/js/utils'
 import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
-import { submitAnswer, log } from '../../assets/js/api'
+import { submitAnswer } from '../../assets/js/api'
+import md5 from 'md5'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -13,17 +14,19 @@ const state = {
   contents: '', // 内容
   options: [], // 选项
   optionsMd5Map: {},
-  index: 0, // 序号
+  index: 1, // 序号
   watchingMode: false, // 是否观战模式
   isAnswered: false, // 是否作答
-  isCorrect: false, // 作答是否正确
+  isCorrect: true, // 作答是否正确
   correctAnswer: '', // 正确答案
   userAnswer: '', // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
   restTime: 0, // 剩余时间
   isWon: false, // 是否展示you wonThe resurrection of card
-  isUsedRecoveryCard: false // 是否使用过复活卡
+  maxRecoveryCount: 0, // 最大复活次数
+  count: 12, // 问题数量
+  isCanRecoveryLastQuestion: false // 最后一题是否可以复活
 }
 
 const getters = {
@@ -42,7 +45,9 @@ const getters = {
   time: (state) => state.time,
   restTime: (state) => state.restTime,
   isWon: (state) => state.isWon,
-  isUsedRecoveryCard: (state) => state.isUsedRecoveryCard
+  maxRecoveryCount: (state) => state.maxRecoveryCount,
+  questionCount: (state) => state.count,
+  isCanRecoveryLastQuestion: (state) => state.isCanRecoveryLastQuestion
 }
 
 const mutations = {
@@ -75,24 +80,14 @@ const actions = {
       if (content) {
         const question = JSON.parse(content)
         const {ji: id = '', js: index = 1, jc: contents = '', jo: options = [], restTime} = question
-        utils.statistic('QUESTION', 6, {
-          flag_s: `${id}`,
-          text_s: `${index}`,
-          action_s: `${rootGetters.userInfo.userName}`,
-          type_s: `${getters.watchingMode ? 1 : 0}`
-        })
-        log({
-          name: 'question',
-          id,
-          index,
-          clientId: utils.clientId,
-          userName: rootGetters.userInfo.userName,
-          watchingMode: getters.watchingMode,
-          isOnline: rootGetters.isOnline,
-          ua: window.navigator.userAgent
+        utils.statistic('QUESTION', 0, {
+          flag_s: `${index}`,
+          text_s: `${rootGetters.isOnline ? 1 : 0}`,
+          style_s: `${getters.watchingMode ? 1 : 0}`,
+          type_s: utils.pageType
         })
         commit(type.QUESTION_UPDATE, {
-          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime
+          id, index, contents, options, optionsMd5Map: utils.generateMd5Map(options), restTime, isAnswered: false, userAnswer: ''
         })
         dispatch(type.QUESTION_SYNC_LOCAL_ANSWER)
         dispatch(type.QUESTION_START)
@@ -117,25 +112,6 @@ const actions = {
       commit(type.QUESTION_UPDATE, {
         restTime: 0
       })
-      if (!getters.isAnswered) {
-        // 若没有答题，弹窗提示
-        !getters.watchingMode && dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'You\'ve been eliminated. ',
-          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK'
-        })
-
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
-        })
-
-        utils.statistic('NOT_ANSWER', 6, {
-          action_s: `${rootGetters.userInfo.userName}`,
-          text_s: `${getters.index}`
-        })
-      }
     })
     timer.start()
     // 答题开始
@@ -154,42 +130,64 @@ const actions = {
    * @param {any} {getters}
    */
   [type.QUESTION_SUBMIT] ({commit, getters}) {
-    const {id, userAnswer, index} = getters
+    // 取出未提交成功的答案一起提交
+    let {id: raceId, uncommittedAnswers} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+    const {id, userAnswer, index, questionCount} = getters
+    if (raceId !== utils.raceId) { // 必须为当前比赛
+      uncommittedAnswers = []
+      utils.storage.remove('millionaire-uncommittedAnswers')
+    }
+    uncommittedAnswers.push({
+      i: id,
+      s: index,
+      a: md5(userAnswer)
+    })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(id, userAnswer, index).then(({data}) => {
+      submitAnswer(uncommittedAnswers, index === questionCount).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
-            case 1007: {
-              commit(type.QUESTION_UPDATE, {
-                isUsedRecoveryCard: true
-              })
-              utils.statistic('extra_life', 6, {
-                action_s: `${getters.index}`
-              })
+            case 0: {
+              // 提交成功后删除未提交的答案
+              utils.storage.remove('millionaire-uncommittedAnswers')
               break
             }
           }
           resolve()
         } else {
+          const index = +data.data
           switch (+data.code) {
             case 1005: {
-              reject('Time is out, you can view only.')
+              reject({
+                htmlTitle: 'Game over',
+                htmlText: 'Sorry for that you are already eliminated. Please check your internet connection.'
+              })
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
+              break
+            }
+            case 1006:
+            case 1007: {
+              reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
               break
             }
             default: {
-              reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+              utils.storage.set('millionaire-uncommittedAnswers', {
+                id: utils.raceId,
+                uncommittedAnswers
+              })
             }
           }
-          commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
           console.log('答案提交失败:', id, data.msg)
         }
       }, (err) => {
-        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
+        utils.storage.set('millionaire-uncommittedAnswers', {
+          id: utils.raceId,
+          uncommittedAnswers
         })
         console.log('答案提交错误:', err)
       }).catch((err) => {
@@ -222,52 +220,20 @@ const actions = {
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
-        const {i: id, a: correctAnswer} = answer
+        const {a: correctAnswer} = answer
 
         // 判断答案是否正确
         let isCorrect = md5Map[correctAnswer] === getters.userAnswer
 
-        utils.statistic('ANSWER', 6, {
-          flag_s: `${id}`,
-          action_s: `${rootGetters.userInfo.userName}`,
-          type_s: `${isCorrect ? 1 : 0}`
+        utils.statistic('ANSWER', 0, {
+          flag_s: `${getters.index}`,
+          text_s: `${getters.watchingMode ? 1 : 0}`,
+          style_s: `${isCorrect ? 1 : 0}`,
+          type_s: utils.pageType
         })
 
-        // 根据答案是否正确播放提示音
-        if (isCorrect && !getters.watchingMode) {
-          utils.playSound('succeed')
-        } else if (!isCorrect && !getters.watchingMode) {
-          // 如果使用了复活卡
-          if (getters.isUsedRecoveryCard) {
-            isCorrect = true
-          } else {
-            utils.playSound('failed')
-            dispatch(type._OPEN_DIALOG, {
-              htmlTitle: 'You\'ve been eliminated. ',
-              htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
-              shouldSub: false,
-              markType: 0,
-              okBtnText: 'OK'
-            })
-          }
-        }
-
-        // 服务端上报日志
-        log({
-          name: 'answer',
-          id,
-          isCorrect,
-          userName: rootGetters.userInfo.userName,
-          clientId: utils.clientId,
-          watchingMode: getters.watchingMode,
-          isOnline: rootGetters.isOnline,
-          isAnswered: getters.isAnswered
-        })
-
-        // 更新观战模式
-        const watchingMode = getters.watchingMode ? true : !isCorrect
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), watchingMode, restTime: 0, isAnswered: false
+          correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -281,19 +247,15 @@ const actions = {
    */
   [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
     // 从本地获取用户作答情况
-    const userAnswerInfoStr = localStorage.getItem('millionaire_user_answer')
-    if (userAnswerInfoStr) {
-      const userAnswerInfo = JSON.parse(userAnswerInfoStr)
-      const {expire, id, index, isAnswered, userAnswer} = userAnswerInfo
-      // 若本地存储的答案信息与当前题目一致，则同步答案信息
-      if (expire > Date.now() && id === getters.id && index === getters.index) {
-        commit(type.QUESTION_UPDATE, {
-          id,
-          index,
-          isAnswered,
-          userAnswer
-        })
-      }
+    const {id, index, isAnswered, userAnswer, raceId} = utils.storage.get('millionaire-user-answer') || {}
+    // 若本地存储的答案信息与当前题目一致，则同步答案信息
+    if (raceId === utils.raceId && id === getters.id && index === getters.index) {
+      commit(type.QUESTION_UPDATE, {
+        id,
+        index,
+        isAnswered,
+        userAnswer
+      })
     }
   },
   [type.QUESTION_YOU_WON] ({commit}, question) {

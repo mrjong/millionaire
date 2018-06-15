@@ -36,63 +36,64 @@
         Note: Extra Lives could be used twice per game, except on the last question.
       </p>
     </div>
+    <!-- 答错或未答提示 -->
+    <answer-error-tip v-model="answerErrorTip" :type="answerErrorType"></answer-error-tip>
+    <!-- 使用复活卡提示 -->
+    <modal v-model="extraLifeTip">
+      <section class="tip-extra-life">
+        <img src="../assets/images/heart-light.png" alt="" class="heart-light">
+        <p class="tip-text">You have an  Extra Life!</p>
+        <div class="useExtraLife" @click="useRecoveryCard">
+          <section class="useExtraLife_wrapper" v-if="extraLifeTip"></section>
+          <p>Using Extra Life in 5</p>
+        </div>
+        <p class="useExtraLife-not" @click="extraLifeTip=false">Not now</p>
+        <span class="iconfont icon-cuowu close" @click="extraLifeTip=false"></span>
+      </section>
+    </modal>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import Answer from '../components/Answer.vue'
+import Modal from '../components/Modal.vue'
+import AnswerErrorTip from '../components/AnswerErrorTip.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import Living from '../components/Living'
+import { useRecoveryCard } from '../assets/js/api'
 export default {
   name: 'Respondence',
   data () {
     return {
+      answerErrorTip: false,
+      extraLifeTip: false,
+      answerErrorType: 'out',
       rangeValue: 10,
       isClick: false,
       fontSize: 28,
       countdownStyle: 'color: #fff;',
-      isLiving: false
-      // game_answer: {
-      //   current_question_l: 0,
-      //   cost_time_l: 0,
-      //   question_id_l: 0,
-      //   resule_code_s: ''
-      // }
+      isLiving: false,
+      isUsedRecoveryCard: false // 是否使用过复活卡
     }
   },
   computed: {
-    ...mapGetters({
-      question_status: 'question_status',
-      watchingMode: 'watchingMode',
-      contents: 'contents',
-      index: 'index',
-      isAnswered: 'isAnswered',
-      isCorrect: 'isCorrect',
-      correctAnswer: 'correctAnswer',
-      userAnswer: 'userAnswer',
-      time: 'time',
-      restTime: 'restTime',
-      options: 'options',
-      questionResult: 'question_result',
-      id: 'id',
-      isUsedRecoveryCard: 'isUsedRecoveryCard'
-    }),
+    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion']),
     totalResult: function () {
       let result = {}
       let totalNum = 0
       let optionsNumber = ['A', 'B', 'C']
-      if (this.questionResult) {
-        for (let i in this.questionResult) {
-          totalNum += Number(this.questionResult[i]) || 0
+      if (this.question_result) {
+        for (let i in this.question_result) {
+          totalNum += Number(this.question_result[i]) || 0
         }
       }
       Array.prototype.slice.call(this.options).forEach((val, idx) => {
         result[optionsNumber[idx] + '. ' + val] = {
-          answerNum: (this.questionResult && this.questionResult[val]),
-          percent: this.questionResult && this.computePercent(+this.questionResult[val], totalNum),
+          answerNum: (this.question_result && this.question_result[val]),
+          percent: this.question_result && this.computePercent(+this.question_result[val], totalNum),
           isRight: this.correctAnswer && this.correctAnswer === val,
           answerText: val
         }
@@ -108,6 +109,13 @@ export default {
   methods: {
     ...mapActions({}),
     answer (e) {
+      // 上报用户作答情况
+      utils.statistic('QUESTION', 1, {
+        id_s: `${this.index}`,
+        flag_s: `${this.watchingMode ? 1 : 0}`,
+        style_s: `${this.isOnline ? 1 : 0}`,
+        type_s: utils.pageType
+      })
       if (this.watchingMode || this.isClick) {
         this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
           htmlTitle: 'You\'ve been eliminated. ',
@@ -123,11 +131,31 @@ export default {
           // 可以点击
           this.isClick = true
           const userAnswerInfo = {userAnswer: e, isAnswered: true}
+          const {id, index} = this
           this.$store.commit(type.QUESTION_UPDATE, userAnswerInfo)
           // 作答情况存储在本地
-          localStorage.setItem('millionaire_user_answer', JSON.stringify({...userAnswerInfo, id: this.id, index: this.index, expire: Date.now() + 180000}))
-          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {}, (err) => {
+          utils.storage.set('millionaire-user-answer',
+            {
+              ...userAnswerInfo,
+              id,
+              index,
+              raceId: utils.raceId
+            })
+          this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
+            utils.statistic('QUESTION_RESULT', 1, {
+              id_s: `${this.index}`,
+              result_code_s: '1',
+              style_s: `${this.isOnline ? 1 : 0}`,
+              type_s: utils.pageType
+            })
+          }, (err) => {
             this.$emit('error', err)
+            utils.statistic('QUESTION_RESULT', 1, {
+              id_s: `${this.index}`,
+              result_code_s: '0',
+              style_s: `${this.isOnline ? 1 : 0}`,
+              type_s: utils.pageType
+            })
           })
           // this.game_answer.current_question_l = this.index
           // this.game_answer.cost_time_l = this.restTime
@@ -141,7 +169,11 @@ export default {
     computePercent (val, totalNum) {
       let percent = (val / totalNum) * 100
       if (percent < 10 && percent > 0) {
-        return 10 + percent
+        if (percent >= 7) {
+          return 5 + percent
+        } else {
+          return 10
+        }
       }
       return percent
     },
@@ -162,7 +194,7 @@ export default {
         this.isClick = false
         this.countdownStyle = ''
         circle.style.strokeDashoffset = 3.14 + 'rem'
-        this.percent = utils.computePercent(this.questionResult)
+        this.percent = utils.computePercent(this.question_result)
       }
     },
     setAllFontSize (textSize) {
@@ -174,23 +206,150 @@ export default {
       iconAll.forEach((val) => {
         val.style.fontSize = this.fontSize - 0.1 + 'rem'
       })
+    },
+    /**
+     * 使用复活卡
+     */
+    useRecoveryCard () {
+      this.isUsedRecoveryCard = true
+      this.extraLifeTip = false
+      const {id, index, isAnswered} = this
+      console.log('使用复活卡时题目信息：', id, index, isAnswered)
+      let recoveryType = isAnswered ? 1 : 2 // 复活类型 1 答错复活 2 未答复活
+      useRecoveryCard(id, index, recoveryType).then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          // 更新复活卡数量与复活次数
+          const {cardNumber = 0, reviveTimes = 0} = data.data || {}
+          this.$store.commit(type.QUESTION_UPDATE, {
+            isCorrect: true,
+            maxRecoveryCount: reviveTimes
+          })
+          this.$store.commit(type._UPDATE, {
+            lives: cardNumber
+          })
+          this.isLiving = true
+          utils.playSound('succeed')
+          setTimeout(() => {
+            this.isLiving = false
+          }, 3000)
+        } else {
+          this.cancelUseRecoveryCard()
+          this.failedUseRecoveryCardTip()
+          console.log('复活卡使用失败:', data.msg)
+        }
+      }, (err) => {
+        this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
+        console.log('复活卡使用出错:', err)
+      }).catch((err) => {
+        this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
+        console.log('复活卡使用代码逻辑出错:', err)
+      })
+    },
+    /**
+     * 重置问题状态
+     */
+    resetState () {
+      this.$store.commit(type.QUESTION_UPDATE, {
+        isAnswered: false
+      })
+      this.isUsedRecoveryCard = false
+      this.answerErrorTip = false
+      this.extraLifeTip = false
+    },
+    /**
+     * 取消使用复活卡
+     */
+    cancelUseRecoveryCard () {
+      const {watchingMode, isCorrect, isAnswered} = this.$store.getters
+      this.$store.commit(type.QUESTION_UPDATE, {
+        watchingMode: watchingMode ? true : (!isAnswered || !isCorrect)
+      })
+      this.resetState()
+    },
+    /**
+     * 使用复活卡失败提示
+     */
+    failedUseRecoveryCardTip () {
+      this.$store.dispatch(type._OPEN_DIALOG, {
+        htmlTitle: 'Extra Lives Use Failed',
+        htmlText: 'Your internet connection is disconnected or your request of server is timeout. Please check your internet connection.',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
+      })
     }
   },
   watch: {
     question_status: function (status) {
       this.countDown(status)
 
-      // 复活成功显示复活动画
-      if (status === 7 && this.isUsedRecoveryCard) {
-        console.log('复活成功')
-        this.isLiving = true
-        utils.playSound('succeed')
-        setTimeout(() => {
-          this.isLiving = false
-        }, 3000)
-        this.$store.commit(type.QUESTION_UPDATE, {
-          isUsedRecoveryCard: false
-        })
+      if (status === 7) {
+        const {isCorrect, watchingMode, isAnswered, maxRecoveryCount, isOnline, index, questionCount, lives, isCanRecoveryLastQuestion} = this
+
+        // 如果已经观战 直接退出
+        if (watchingMode) {
+          this.resetState()
+          return false
+        }
+
+        // 答案正确播放提示音
+        if (isCorrect && !watchingMode) {
+          utils.playSound('succeed')
+          this.resetState()
+          return false
+        }
+
+        // 没有答题或者答错
+        if (!isAnswered || !isCorrect) {
+          utils.playSound('failed')
+          if (!isCorrect) {
+            this.answerErrorType = 'incorrect'
+          }
+
+          if (!isAnswered) {
+            this.answerErrorType = 'out'
+          }
+          // 显示错误提示，三秒后消失
+          this.answerErrorTip = true
+          setTimeout(() => {
+            this.answerErrorTip = false
+          }, 3000)
+
+          // 若无复活卡或使用次数已经到本场最大使用次数,则弹出错误提示
+          if (lives <= 0 || maxRecoveryCount <= 0) {
+            setTimeout(() => {
+              this.$emit('fail-tip')
+              this.cancelUseRecoveryCard()
+            }, 1000)
+            return false
+          }
+
+          // 满足复活卡使用条件 弹出使用复活卡弹窗
+          setTimeout(() => {
+            if (isOnline && (lives > 0) && (maxRecoveryCount > 0)) {
+              if (+index === questionCount && !isCanRecoveryLastQuestion) { // 如果是最后一题且最后一题不可使用复活卡，则取消使用复活卡
+                this.cancelUseRecoveryCard()
+                return false
+              }
+              this.extraLifeTip = true
+              setTimeout(() => {
+                if (!this.extraLifeTip && !this.isUsedRecoveryCard) { // 关闭弹窗
+                  this.$emit('fail-tip')
+                  this.cancelUseRecoveryCard()
+                } else if (this.extraLifeTip && !this.isUsedRecoveryCard) { // 五秒未操作
+                  // 关闭提示 使用复活卡
+                  this.extraLifeTip = false
+                  this.useRecoveryCard()
+                }
+                this.resetState()
+              }, 5000)
+            } else {
+              this.cancelUseRecoveryCard()
+            }
+          }, 1500)
+        }
       }
     //  if (status === 7 && !this.watchingMode) {
     //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
@@ -205,12 +364,20 @@ export default {
     },
     isAnswered: function (val) {
       this.isClick = val
+    },
+    status (val) {
+      // 当主状态变为等待状态或者倒计时，重置答题状态
+      if (val === 1 || val === 2) {
+        this.resetState()
+      }
     }
   },
   components: {
     Answer,
     Viewing,
-    Living
+    Living,
+    Modal,
+    AnswerErrorTip
   }
 }
 </script>
@@ -254,10 +421,11 @@ export default {
       height: 100%;
       top: 0;
       left: 0;
-      background-color: rgba(68, 68, 68, 0.8);
+      background-color: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      z-index: 1111;
       .living-bg{
         width: 500px;
         height: 500px;
@@ -288,6 +456,80 @@ export default {
         text-align: center;
         margin: 0 auto;
       }
+    }
+
+    .tip-extra-life {
+      width: 546px;
+      height: 697px;
+      background-color: #fff;
+      border-radius: 24px;
+      font: 400 24px 'Roboto', Arial, serif;
+      text-align: center;
+      position: relative;
+
+      .heart-light {
+        width: 316px;
+        margin: 57px auto 33px;
+      }
+
+      .tip-text {
+        margin: 0 auto;
+        color: #260964;
+        font: 500 36px 'Roboto', Arial, serif;
+      }
+
+      .useExtraLife {
+        width: 403px;
+        margin: 60px auto 0;
+        height: 74px;
+        border-radius: 41.3px;
+        background-color: #f93a82;
+        position: relative;
+
+        &_wrapper {
+          width: 0;
+          height: 100%;
+          background-color: #e31869;
+          border-radius: 41.3px;
+          animation: useExtraLifeWrapper 5s linear;
+        }
+
+        p {
+          width: 100%;
+          color: #fff;
+          line-height: 74px;
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+        }
+      }
+
+      .useExtraLife-not {
+        width: 200px;
+        height: 100px;
+        margin: 0 auto 0;
+        color: #7d6ba2;
+        line-height: 100px;
+      }
+
+      .close {
+        color: #513a83;
+        position: absolute;
+        right: 27px;
+        top: 27px;
+        font-size: 24px;
+      }
+    }
+  }
+
+  @keyframes useExtraLifeWrapper {
+    0% {
+      width: 13%;
+    }
+
+    100% {
+      width: 100%;
     }
   }
   #circleProcess {

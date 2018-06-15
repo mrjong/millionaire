@@ -1,22 +1,21 @@
-/* global RongIMClient */
+/* global */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import chatRoom from './modules/chatRoom'
 import question from './modules/question'
 import rank from './modules/rank'
 import home from './modules/home'
 import * as type from './type'
 import utils from '../assets/js/utils'
+import gameState from '../assets/js/game-state'
 import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
-import currency from '../assets/js/currency'
-import {CONNECT_SUCCESS, MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, INVALID_TOKEN, MESSAGE_HOST} from '../assets/js/listener-type'
+import throttle from 'lodash.throttle'
+import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 let syncTimer = null
-let countDownTimer = null
 let initTimer = null
 export default new Vuex.Store({
   state: {
@@ -26,7 +25,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: [], // 主持人消息列表
+    hostMsgList: [`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`], // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -41,13 +40,7 @@ export default new Vuex.Store({
     result: {
       isFinish: true,
       bonusAmount: 0,
-      winners: [
-        // {
-        //   name: 'wei',
-        //   bonusAmount: 1000,
-        //   avatar: 'http://static.activities.apuslauncher.com/upload/fe/201802261449450cd917f56e.jpg'
-        // }
-      ],
+      winners: [],
       winnerAmount: 0 // 获胜者数量
     }, // 游戏结果
     isRefreshedToken: false, // 是否已经刷新过token,
@@ -58,11 +51,17 @@ export default new Vuex.Store({
       shouldSub: false,
       markType: 0,
       okBtnText: 'OK',
-      hintImg: './static/images/tip-fail.png'
+      hintImg: './static/images/tip-fail.png',
+      lastTime: 3000
     },
     lives: 0,
     code: '',
-    disableNetworkTip: false // 是否禁止网络状况提示
+    gameType: 3,
+    phoneNationCodeList: [], // 手机号国家码列表
+    phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
+    isPlayingMusic: false, // 是否在播放音乐
+    initialState: -1, // 初始化完成后的状态
+    isAgreePolicy: true // 是否同意过协议
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -73,6 +72,8 @@ export default new Vuex.Store({
     status: (state) => state.status,
     result: (state) => state.result,
     onlineAmount: (state) => state.onlineAmount,
+    chatRoomId: (state) => state.chatRoomId,
+    imToken: (state) => state.imToken,
     readyTime: (state) => state.readyTime,
     syncIntervalTime: (state) => state.syncIntervalTime,
     isRefreshedToken: (state) => state.isRefreshedToken,
@@ -80,7 +81,12 @@ export default new Vuex.Store({
     dialogInfo: (state) => state.dialogInfo,
     lives: (state) => state.lives,
     code: (state) => state.code,
-    disableNetworkTip: (state) => state.disableNetworkTip
+    gameType: (state) => state.gameType,
+    phoneNationCodeList: (state) => state.phoneNationCodeList,
+    phoneNationCode: (state) => state.phoneNationCode,
+    isPlayingMusic: (state) => state.isPlayingMusic,
+    initialState: (state) => state.initialState,
+    isAgreePolicy: (state) => state.isAgreePolicy
   },
   mutations: {
     /**
@@ -99,9 +105,21 @@ export default new Vuex.Store({
     [type._OPEN_DIALOG] (state, dialogInfo) {
       state.dialogInfo = Object.assign(state.dialogInfo, dialogInfo)
       state.showDialog = true
-      setTimeout(() => {
-        state.showDialog = false
-      }, 3000)
+    },
+    /**
+     * 关闭弹窗
+     */
+    [type._CLOSE_DIALOG] (state) {
+      state.showDialog = false
+      state.dialogInfo = {
+        htmlTitle: '',
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK',
+        hintImg: './static/images/tip-fail.png',
+        lastTime: 3000
+      }
     }
   },
   actions: {
@@ -109,7 +127,7 @@ export default new Vuex.Store({
      * 初始化
      * @param {any} {commit, dispatch, state}
      */
-    [type._INIT] ({commit, dispatch, state, getters}, isRefreshToken = false) {
+    [type._INIT] ({commit, dispatch, getters}, isRefreshToken = false) {
       clearInterval(initTimer)
       commit(type._UPDATE, {
         isRefreshedToken: isRefreshToken
@@ -118,144 +136,8 @@ export default new Vuex.Store({
         init(isRefreshToken).then(({data}) => {
           if (+data.result === 1 && +data.code === 0) {
             const info = (data && data.data) || {}
-            const {s: isPlaying, r: isInRoom, u: userInfo = {}, ua: accountInfo = {}, rb: bonusAmount = '0', m: chatRoomInfo = {}, cr: currencyType = 'INR', j: question, a: answer, si: hostIntervalTime = 3000, rs: hostMsgList, cn: lives, cd: code, v: watchingMode} = info
-            const startTime = +info.sr || -1
-            const startTimeOffset = +info.ls || 0
-            // 更新首页信息
-            commit(type.HOME_UPDATE, {
-              userId: userInfo.ud || '',
-              supaId: userInfo.us || '',
-              avatar: userInfo.up || '',
-              userName: userInfo.un || '',
-              balance: +accountInfo.ub || 0,
-              balanceShow: accountInfo.sub || '',
-              clientBalance: +accountInfo.cb || 0,
-              clientBalanceShow: accountInfo.scb || '',
-              income: +accountInfo.ui || 0,
-              incomeShow: accountInfo.sui || '',
-              rank: +accountInfo.ur || 0,
-              bonusAmount,
-              currencyType: currency[currencyType] ? currency[currencyType].symbol : '$'
-            })
-            commit(type._UPDATE, {
-              startTime,
-              startTimeOffset,
-              onlineAmount: +chatRoomInfo.ic || 0,
-              chatRoomId: chatRoomInfo.rn || '',
-              imToken: chatRoomInfo.it || '',
-              hostIntervalTime,
-              lives,
-              code
-            })
-            commit(type.QUESTION_UPDATE, {
-              watchingMode: typeof watchingMode === 'boolean' ? watchingMode : true
-            })
-            // 如果已经开始
-            if (isPlaying) {
-              // 如果已经开始串词
-              if (hostMsgList && !question) {
-                im.emitListener(MESSAGE_HOST, {
-                  content: {
-                    content: JSON.stringify(hostMsgList)
-                  }
-                })
-                utils.statistic('introduction_stage', 0)
-              }
-              // 如果已经下发题目 开启观战模式
-              if (question) {
-                // 更新问题信息
-                const options = question.jo || ['', '', '']
-                const optionsMd5Map = utils.generateMd5Map(options)
-                commit(type.QUESTION_UPDATE, {
-                  id: question.ji || '',
-                  index: +question.js || 0,
-                  contents: question.jc || '',
-                  options,
-                  optionsMd5Map
-                })
-                commit(type.QUESTION_UPDATE, {
-                  status: status.QUESTION_ANSWERING
-                })
-              }
-              // 如果有答案直接进入答案页面
-              if (answer) {
-                const md5Map = getters.optionsMd5Map
-                commit(type.QUESTION_UPDATE, {
-                  correctAnswer: md5Map[answer.ac] || '',
-                  result: utils.parseMd5(answer.as, md5Map) || {}
-                })
-                commit(type.QUESTION_UPDATE, {
-                  status: status.QUESTION_END
-                })
-              }
-
-              if (getters.watchingMode) {
-                dispatch(type._OPEN_DIALOG, {
-                  htmlTitle: 'You are late.',
-                  htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
-                  shouldSub: false,
-                  markType: 0,
-                  okBtnText: 'OK'
-                })
-              }
-
-              // 更新当前状态
-              commit(type._UPDATE, {
-                status: status._PLAYING
-              })
-            } else {
-              // 是否进入倒计时
-              if (isInRoom) {
-                clearInterval(countDownTimer)
-                countDownTimer = setInterval(() => {
-                  if (getters.startTimeOffset <= 0) {
-                    clearInterval(countDownTimer)
-                    commit(type._UPDATE, {
-                      startTimeOffset: 0
-                    })
-                    // 倒计时到了后直接开始展示串词
-                    im.emitListener(MESSAGE_HOST, {
-                      content: {
-                        content: JSON.stringify(hostMsgList)
-                      }
-                    })
-                  } else {
-                    commit(type._UPDATE, {
-                      startTimeOffset: getters.startTimeOffset - 1
-                    })
-                  }
-                }, 1000)
-                commit(type._UPDATE, {
-                  status: status._READY
-                })
-                // 开始同步时间
-                dispatch(type._SYNC_TIME)
-              } else {
-                // 切换至等待状态
-                commit(type._UPDATE, {
-                  status: status._AWAIT
-                })
-                dispatch(type._POLL_INIT)
-              }
-            }
-            // 如果聊天室开启，进入聊天室
-            if (isInRoom) {
-              im.startPullMsg()
-              im.addListener(CONNECT_SUCCESS, (imUserId) => {
-                commit(type.HOME_UPDATE, {
-                  imUserId
-                })
-                im.joinChatRoom(state.chatRoomId)
-              })
-              // 若token过期，且没有刷新过token 重新初始化刷新token
-              if (!getters.isRefreshedToken) {
-                im.addListener(INVALID_TOKEN, () => {
-                  dispatch(type._INIT, true)
-                  im.removeLister(INVALID_TOKEN)
-                })
-              }
-              im.connect(state.imToken)
-            }
+            gameState.init(info, {commit, dispatch, getters})
+            gameState.run()
             resolve()
           } else {
             console.log('初始化失败:', data.msg)
@@ -266,10 +148,46 @@ export default new Vuex.Store({
           console.log('初始化接口出错', err)
           reject(err)
           dispatch(type._POLL_INIT)
-        }).catch((err) => {
-          console.log('代码逻辑出错:' + err)
         })
       })
+    },
+    /**
+     * 初始化监听器
+     * @param {any} {dispatch}
+     */
+    [type._INIT_LISTENER] ({dispatch, commit, getters}) {
+      // 添加网络状况监听器
+      im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
+        !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
+          htmlTitle: 'Please check your internet connection.',
+          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+          shouldSub: false,
+          markType: 0,
+          okBtnText: 'OK'
+        })
+        utils.statistic('NETWORK_UNAVAILABLE', 6)
+      }, 30000))
+      // 添加复活卡消息监听器
+      im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
+        const {cardNumber: lives = 0, leftRecCount: maxRecoveryCount = 0} = message.content || {}
+        // 传入的复活卡数量大于本地数量时，更新复活卡数量
+        if (getters.lives < lives) {
+          commit(type._UPDATE, {
+            lives
+          })
+        }
+        // 传入的复活次数大于本地复活次数时，更新复活次数
+        if (getters.maxRecoveryCount < maxRecoveryCount) {
+          commit(type.QUESTION_UPDATE, {
+            maxRecoveryCount
+          })
+        }
+      })
+      dispatch(type.GET_COMPERE_MESSAGE_ACTION)
+      dispatch(type.QUESTION_INIT)
+      dispatch(type._UPDATE_AMOUNT)
+      dispatch(type._RECEIVE_RESULT)
+      dispatch(type._END)
     },
     /**
      * 初始化轮询
@@ -277,7 +195,7 @@ export default new Vuex.Store({
      */
     [type._POLL_INIT] ({dispatch, getters}) {
       setTimeout(() => {
-        dispatch(type._INIT)
+        getters.status === status._AWAIT && dispatch(type._INIT)
       }, getters.syncIntervalTime)
     },
     /**
@@ -309,7 +227,7 @@ export default new Vuex.Store({
      */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
-        const count = +(message.content && message.content.count)
+        const count = (message.content && message.content.extra) || 0
         commit(type._UPDATE, {
           onlineAmount: count
         })
@@ -324,7 +242,7 @@ export default new Vuex.Store({
         const resultStr = message.content && message.content.summary
         if (resultStr) {
           const result = JSON.parse(resultStr)
-          const {c: isFinish = false, td: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
+          const {c: isFinish = false, tb: bonusAmount = 0, ws: winners = [], s: winnerAmount = 0} = result
           let winnersMap = winners.map((winner) => {
             const obj = {}
             obj.userId = winner.i
@@ -360,6 +278,7 @@ export default new Vuex.Store({
           commit(type._UPDATE, {
             status: status._END
           })
+          utils.stopSound()
         }
       })
     },
@@ -369,13 +288,34 @@ export default new Vuex.Store({
      */
     [type._END] ({dispatch, commit}) {
       im.addListener(MESSAGE_END, (message) => {
-        dispatch(type._INIT)
-        // 清空聊天室
-        commit(type.CHAT_UPDATE, {
-          msgList: [],
-          compereMsg: ''
+        gameState.endState.run()
+      })
+    },
+    /**
+     * 接收串词消息
+     * @param {*} {commit}
+     */
+    [type.GET_COMPERE_MESSAGE_ACTION] ({commit}) {
+      im.addListener(MESSAGE_HOST, (message, intervalTime) => {
+        const msgList = (message.content && message.content.content) || ''
+        // 如果传入串词间隔时间，则更新串词间隔时间
+        if (intervalTime) {
+          commit(type._UPDATE, {
+            hostIntervalTime: intervalTime
+          })
+        }
+        if (msgList) {
+          const hostMsgList = JSON.parse(msgList) || []
+          commit(type._UPDATE, {
+            hostMsgList
+          })
+        }
+        commit(type.QUESTION_UPDATE, {
+          status: status.QUESTION_AWAIT
         })
-        RongIMClient.getInstance().disconnect()
+        commit(type._UPDATE, {
+          status: status._PLAYING
+        })
       })
     },
     /**
@@ -383,12 +323,14 @@ export default new Vuex.Store({
      * @param {any} {commit, getters, state}
      * @param {any} dialogInfo 弹窗信息
      */
-    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo) {
+    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo = {}) {
       commit(type._OPEN_DIALOG, dialogInfo)
+      setTimeout(() => {
+        commit(type._CLOSE_DIALOG)
+      }, getters.dialogInfo.lastTime || 3000)
     }
   },
   modules: {
-    chatRoom,
     question,
     rank,
     home

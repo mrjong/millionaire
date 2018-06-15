@@ -45,7 +45,7 @@
       font-size: 15px;
       text-align: center;
       line-height: 24px;
-      margin: 18px 0;
+      margin: 15px 0;
       padding: 0 20px;
     }
     .code{
@@ -54,7 +54,7 @@
       border: 1px solid #fff;
       border-radius: 10px;
       box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.3);
-      margin: 0 auto 45px;
+      margin: 0 auto 20px;
     }
     .hint, .num{
       text-align: center;
@@ -82,7 +82,7 @@
       box-shadow: -1px 1px 10px 1px rgba(253, 168, 0, 0.35);
     }
     .invite-text{
-      margin: 80px auto 25px;
+      margin: 0 auto 25px;
     }
     @media screen and (max-width: 321px) {
       .logo{
@@ -94,12 +94,12 @@
       .text{
         font-size: 14px;
         line-height: 22px;
-        margin: 15px 0;
+        margin: 10px 0;
       }
       .code{
         width: 170px;
         height: 65px;
-        margin: 0 auto 35px;
+        margin: 0 auto 15px;
       }
       .num{
         font-size: 16px;
@@ -178,13 +178,13 @@
     </p>
     <div class="code">
       <p class="hint">My Referral Code: </p>
-      <p class="num" id="invitationCode"></p>
+      <p class="num invitationCode"></p>
     </div>
     <p class="text">
       Like us on Facebook to get more<br>
       referral codes and win! Up to ₹1,000,000!!!
     </p>
-    <p class="btn like" onclick="toFb('invite')">Like APUS Browser</p>
+    <p class="btn like" onclick="toFb('invite')">Like Go!Millionaire</p>
   </div>
   <div class="invite">
     <p class="text invite-text">
@@ -192,6 +192,10 @@
       for us to win up to ₹1,000,000!<br>
       Share to get an extra life and WIN!
     </p>
+    <div class="code">
+        <p class="hint">My Referral Code: </p>
+        <p class="num invitationCode"></p>
+    </div>
     <p class="btn like" onclick="toFb('share')">GET HINTS NOW</p>
     <p class="btn gp" onclick="toGp('share')">WIN CASH NOW</p>
   </div>
@@ -219,16 +223,18 @@
   function toFb (type) {
     ga('send', 'event', 'link', 'click', 'millionaire-fb-' + type)
     setTimeout(function () {
-      window.location.href = 'https://m.facebook.com/APUS-Browser-1532330666785144'
+      window.location.href = 'https://www.facebook.com/GoMillionaire-1814960232131059/'
     },5)
-    window.location.href = 'fb://page/1532330666785144'
+    window.location.href = 'fb://page/1814960232131059'
   }
   var type = getUrlParameter('type')
   var packageName = getUrlParameter('packageName')
   var share = document.getElementsByClassName('share')[0]
   var invite = document.getElementsByClassName('invite')[0]
+  console.log(document.getElementsByClassName('invitationCode'))
   if (getUrlParameter('code')) {
-    document.getElementById('invitationCode').innerHTML = getUrlParameter('code')
+    document.getElementsByClassName('invitationCode')[0].innerHTML = getUrlParameter('code')
+    document.getElementsByClassName('invitationCode')[1].innerHTML = getUrlParameter('code')
   }
   if (type === 'share') {
     invite.style.display = 'block'

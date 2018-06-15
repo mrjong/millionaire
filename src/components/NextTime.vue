@@ -6,7 +6,7 @@
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
       <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
-        <span class="living-text">LIVING</span>
+        <p class="living-text">LIVING</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
           <span class="living-icon iconfont icon-LIVINGyoujiantou right"></span>
@@ -55,11 +55,10 @@ export default {
     })
   },
   mounted () {
-    console.log('nextTime-status' + this.status)
-    if (this.status === 1) {
-      this.isPlaying = false
-    } else {
+    if (this.$route.path === '/' && this.status !== 1) {
       this.isPlaying = true
+    } else {
+      this.isPlaying = false
     }
   },
   methods: {
@@ -69,10 +68,10 @@ export default {
   },
   watch: {
     status: function (status) {
-      if (status === 1) {
-        this.isPlaying = false
-      } else {
+      if (this.$route.path === '/' && status !== 1) {
         this.isPlaying = true
+      } else {
+        this.isPlaying = false
       }
     }
   }
@@ -83,7 +82,6 @@ export default {
     color: #ffffff;
     font-size: 28px;
     opacity: 0.95;
-    margin-top: 46.6px;
     display: flex;
     justify-content: center;
     &__time, &__money{
@@ -110,22 +108,21 @@ export default {
         border-radius: 46px;
         box-shadow:0 0 0 2px #ffb227;
         color:#ffb227;
-        line-height: 50px;
         margin: 30px auto 0;
-        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         .living-text{
+          height: 55px;
           font-size: 28px;
-          margin-left: 10px;
-        }
-        .game-playing{
-          position: absolute;
-          top: 0;
-          right: 30px;
+          line-height: 60px;
+          align-self: center;
         }
         .living-icon{
           letter-spacing: -20px;
           color: #ffb227;
           font-size: 26px;
+          align-self: center;
         }
         .left{
           opacity: 1;
@@ -146,16 +143,10 @@ export default {
     }
   }
   @media screen and (max-width: 321px){
-  }
-  @keyframes playing {
-    0%{
-      right:25px;
-    }
-    50%{
-      right: 30px;
-    }
-    100%{
-      right: 25px;
+    .hint{
+      &__line{
+        width: 3px;
+      }
     }
   }
   @keyframes right {

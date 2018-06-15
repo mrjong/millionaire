@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive include="Main">
+      <router-view/>
+    </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
-    <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
+    <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
+    <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -15,16 +18,16 @@ import loading from './components/Loading.vue'
 import utils from './assets/js/utils'
 import im from './assets/js/im'
 import * as api from './assets/js/api'
-import {_AWAIT} from './assets/js/status'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
-import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
+import ReviveGuide from './components/ReviveGuide.vue'
 export default {
   name: 'App',
   data () {
     return {
       loading: false,
-      showLogin: false
+      showLogin: false,
+      showGameDialog: true
     }
   },
   computed: {
@@ -35,43 +38,59 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      disableNetworkTip: 'disableNetworkTip'
+      initialState: 'initialState'
     })
   },
-  created () {
-    this.init()
-    if (this.isOnline || utils.clientId) {
-      this.loading = true
-      this.$store.dispatch(type._INIT).then(() => {
-        setTimeout(() => {
-          this.loading = false
-        }, 500)
-        this.$statisticEntry()
-      }, (err) => {
-        this.$router.replace({path: '/login'})
-        this.loading = false
-        console.log(err)
-      })
+  beforeCreate () {
+    if (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2) {
+      window.location.reload()
     }
+  },
+  created () {
+    this.loading = true
+    api.queryAgreePolicy().then(({data}) => {
+      this.loading = false
+      const {isEU = false} = data.data || {}
+      if (data.result === 1) {
+        if (isEU) {
+          this.$router.replace('/blank')
+        } else {
+          if (data.data.agree) {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: true
+            })
+          } else {
+            this.$store.commit(type._UPDATE, {
+              isAgreePolicy: false
+            })
+          }
+        }
+        if (this.isOnline || utils.clientId) {
+          this.loading = true
+          this.$store.dispatch(type._INIT).then(() => {
+            this.loading = false
+            this.$statisticEntry() // 入口打点
+          }, (err) => {
+            this.loading = false
+            console.log(err)
+          })
+        }
+      } else {
+        this.$store.commit(type._UPDATE, {
+          isAgreePolicy: false
+        })
+      }
+    })
+    this.init()
+    this.getPhoneNationCode()
   },
   methods: {
     init () {
-      im.addListener(NETWORK_UNAVAILABLE, () => {
-        this.$store.dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'Please check your internet connection.',
-          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK'
-        })
-        utils.statistic('NETWORK_UNAVAILABLE', 6)
-      })
-      this.$store.dispatch(type.GET_COMPERE_MESSAGE_ACTION)
-      this.$store.dispatch(type.QUESTION_INIT)
-      this.$store.dispatch(type._UPDATE_AMOUNT)
-      this.$store.dispatch(type._RECEIVE_RESULT)
-      this.$store.dispatch(type._END)
+      this.$store.dispatch(type._INIT_LISTENER)
     },
+    /**
+     * 关闭弹窗
+     */
     closeDialog () {
       this.$store.commit(type._UPDATE, {
         showDialog: false,
@@ -84,22 +103,54 @@ export default {
           hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
         }
       })
+    },
+    /**
+     * 获取手机号国家码
+     */
+    getPhoneNationCode () {
+      let phoneNationCodes = utils.storage.get('millionaire-phoneNationCode')
+      // 从本地获取
+      if (phoneNationCodes) {
+        const {phoneNationCode, phoneNationCodeList} = phoneNationCodes
+        this.$store.commit(type._UPDATE, {
+          phoneNationCodeList,
+          phoneNationCode
+        })
+      } else {
+        api.getPhoneNationCode().then(({data}) => {
+          const code = +data.error_code
+          switch (code) {
+            case 0: {
+              const phoneNationCode = (data.data && data.data.default) || {code: '91', country: 'India'}
+              const phoneNationCodeList = (data.data && data.data.codes) || []
+              this.$store.commit(type._UPDATE, {
+                phoneNationCodeList,
+                phoneNationCode
+              })
+              utils.storage.set('millionaire-phoneNationCode', {
+                phoneNationCode,
+                phoneNationCodeList
+              })
+            }
+          }
+        })
+      }
     }
   },
   components: {
     loading,
     LoginTip,
-    BalanceMark
+    BalanceMark,
+    ReviveGuide
   },
   watch: {
     status: function (status, oldStatus) {
-      if (status !== 1) {
-        // this.$router.replace({path: '/main'})
-        utils.setGameState(true)
-      } else {
-        // this.$router.replace({path: '/'})
-        utils.setGameState(false)
+      if (status !== 1 && oldStatus === 1) {
+        this.$router.push({path: '/main'})
+      } else if (status === 1) {
+        this.$router.replace({path: '/'})
         im.stopPullMsg()
+        utils.stopSound()
       }
 
       if (status === 3) {
@@ -137,18 +188,15 @@ export default {
       }
     },
     '$route' (route) {
-      // 路由变化切换状态
-      if (route.path !== '/main') {
-        this.$store.commit(type._UPDATE, {
-          status: _AWAIT
-        })
+      if (route.path === '/main' && this.status === 1) {
+        this.$router.replace({path: '/'})
       }
     }
   }
 }
 </script>
 
-<style>
+<style lang="less" type="text/less">
   @import "assets/css/iconfont/iconfont.css";
   html,body,#app{
     width:100%;
@@ -189,5 +237,47 @@ export default {
   font-weight: 700;
   src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/201803201601353e1f01c5c2.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+.dialog-game {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  .con {
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    img {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .contents {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      button {
+        width: 320px;
+        height: 85px;
+        border: none;
+        margin-left: 22.8%;
+        margin-top: 102.91%;
+        border-radius: 1rem;
+        background: rgba(0,0,0,0);
+        padding: 0;
+        outline: none;
+      }
+    }
+  }
 }
 </style>

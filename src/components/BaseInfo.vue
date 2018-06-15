@@ -2,8 +2,8 @@
   <div class="base-info">
     <div class="base-info__user">
         <div class="base-info__user__head"
-             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}"></div>
-        <p class="base-info__user__name">{{baseInfo.userName}}</p>
+             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login"></div>
+        <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
       <router-link to="/balance" class="balance-router" >
@@ -22,15 +22,13 @@
         </div>
       </router-link>
     </div>
-    <div class="apus-logo">
-    <img src="../assets/images/apus-logo.png" class="icon">
-    </div>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import { _INIT } from '../store/type'
 export default {
   name: 'BaseInfo',
   props: {
@@ -46,6 +44,24 @@ export default {
   methods: {
     routerStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    },
+    login () {
+      if (!this.isOnline) {
+        if (utils.pageType === 'h5') {
+          utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
+        } else {
+          utils.statistic('wait_page', 1, {to_destination_s: 'loggin_page'}, 'wait_page')
+        }
+        utils.login(() => {
+          this.$store.dispatch(_INIT).then(() => {
+          }, (err) => {
+            console.log('点击头像登陆失败:', err)
+          })
+        })
+      } else {
+        utils.statistic('wait_page', 1, {to_destination_s: 'user_profile'}, 'wait_page')
+        this.$router.push({path: '/user-center'})
+      }
     }
   }
 }
@@ -56,16 +72,17 @@ export default {
     width: 670px;
     background-color: #ffffff;
     border-radius: 24px;
-    margin:70px auto 25px;
+    margin:0 auto 25px;
     padding: 0.5px;
-    padding-bottom: 70px;
+    padding-bottom: 40px;
+    padding-top:30px;
     position: relative;
     &__user{
       text-align: center;
-      transform: translate(0, -70px);
+      margin-bottom: 40px;
       &__head{
-        width:160px;
-        height:160px;
+        width:150px;
+        height:150px;
         border-radius: 50%;
         background: no-repeat center;
         background-size: cover;

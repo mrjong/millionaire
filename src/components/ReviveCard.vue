@@ -1,21 +1,25 @@
 <template>
   <div class="invitation-mark"  v-if="reviveObj.isShare">
     <div class="invitation-bomb">
-      <span class="invitation-bomb__close iconfont icon-cuowu" @click="reviveObj.isShare =false"></span>
+      <span class="invitation-bomb__close iconfont icon-cuowu" @click="shareClose"></span>
       <p class="invitation-bomb__info">
-        {{reviveObj.title}}
-        <span v-if="reviveObj.shareType">{{reviveObj.code}}</span>
+        My Referral Code:
+        <span>{{reviveObj.code}}</span>
       </p>
-      <p class="invitation-bomb__hint">{{reviveObj.hint}}</p>
+      <p class="invitation-bomb__hint">Inviting friends to get it now!</p>
       <div class="invitation-bomb__channel">
-        <div class="facebook" @click="fbAndMess('com.facebook.katana')"></div>
-        <div class="message" @click="fbAndMess('com.facebook.orca')"></div>
+        <div v-for="(val, idx) in shareObj"
+        :key="idx"
+        :class="val.className"
+        @click="fbAndMess(val.packgename)"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import utils from '../assets/js/utils'
 export default {
   name: 'ReviveCard',
   props: {
@@ -25,15 +29,46 @@ export default {
   },
   data () {
     return {
-      isClose: false
+      isClose: false,
+      shareObj: [
+        {
+          className: 'facebook',
+          packgename: 'com.facebook.katana'
+        },
+        {
+          className: 'message',
+          packgename: 'com.facebook.orca'
+        },
+        {
+          className: 'whatsapp',
+          packgename: 'com.whatsapp'
+        },
+        {
+          className: 'twitter',
+          packgename: 'com.twitter.android'
+        }
+      ]
     }
   },
-  computed: {},
-  mounted () {},
+  computed: {
+    ...mapGetters({
+      code: 'code'
+    })
+  },
   methods: {
     fbAndMess (val) {
-      console.log('包名=' + val)
-      this.$emit('fbAndMess', val)
+      utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
+      utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)
+    },
+    // 分享后的回调
+    callbackFn (isSucceed, packageName) {
+      this.reviveObj.isShare = false
+      if (!isSucceed) {
+        this.$emit('callbackFailed')
+      }
+    },
+    shareClose () {
+      this.$emit('shareClose')
     }
   }
 }
@@ -48,7 +83,6 @@ export default {
       z-index: 111;
       padding: 0 25px;
       background-color: rgba(68, 68, 68, 0.8);
-      z-index: 111;
       .invitation-bomb {
         max-width: 93% !important;
         width: 670px;
@@ -83,17 +117,36 @@ export default {
           padding: 0 30px;
         }
         &__channel{
-          display: flex;
-          margin: 0 148px 10px;
-          justify-content: space-between;
-          .facebook, .message{
+          overflow-y:hidden;
+          overflow-x:auto;
+          white-space: nowrap;
+          padding-bottom: 15px;
+          .facebook, .message, .whatsapp, .ins, .twitter{
             width: 96px;
             height: 96px;
+            display: inline-table;
+            vertical-align: top;
+            margin-left: 45px;
+          }
+           .facebook{
             background: url("../assets/images/facebook.png") no-repeat center;
             background-size: cover;
-          }
+            margin-left: 0;
+           }
           .message{
             background: url("../assets/images/messenger.png") no-repeat center;
+            background-size: cover;
+          }
+          .whatsapp{
+            background: url("../assets/images/whatsapp.png") no-repeat center;
+            background-size: cover;
+          }
+          .twitter{
+            background: url("../assets/images/twitter.png") no-repeat center;
+            background-size: cover;
+          }
+          .ins{
+            background: url("../assets/images/ins.png") no-repeat center;
             background-size: cover;
           }
         }

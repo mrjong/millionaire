@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const version = require('../package.json').version
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -48,7 +49,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env'),
       'IS_LOGIN':true,
-      'BUILD_ENV': JSON.stringify('local')
+      'BUILD_ENV': JSON.stringify('local'),
+      'VERSION': JSON.stringify(version),
+      'PUBLIC_URL': JSON.stringify(config.dev.assetsPublicPath + config.dev.assetsSubDirectory)
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
