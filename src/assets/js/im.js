@@ -6,6 +6,8 @@ import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
 import { _INIT } from '../../store/type'
+import gameProcess from './game-process'
+import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
 let keepLiveMessageTimer = null
 
@@ -13,6 +15,8 @@ const im = {
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
+  pullMsgErrorCount: 0, // 拉取消息错误次数
+  maxpullMsgErrorCount: 2, // 拉取消息最大错误次数
   isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
@@ -306,6 +310,30 @@ const im = {
         im.emitListener(type.NETWORK_UNAVAILABLE)
         im.timeoutStatistic()
       }
+      // 判断是否进入观战模式
+      const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+      if (!cachedGameProcessData.offlineMode) { // 未开启观战模式
+        im.pullMsgErrorCount++
+        if (im.pullMsgErrorCount >= im.maxpullMsgErrorCount) { // 异常次数超过上限
+          const {validTime = 0} = cachedGameProcessData
+          gameProcess.update({
+            ...cachedGameProcessData,
+            offlineMode: true
+          })
+          gameProcess.cacheProcessInfo()
+          if (validTime > 0) { // 若当前进度剩余时间大于0 直接开始运行 否则运行下一进度
+            gameProcess.run()
+          } else {
+            gameProcess.next()
+          }
+          // 如果当前状态不是结果也不是结果串词 停止轮询
+          const {currentState} = cachedGameProcessData
+          if (currentState !== PROCESS_RESULT_HOSTMSG && currentState !== PROCESS_RESULT) {
+            im.stopPullMsg()
+          }
+          im.pullMsgErrorCount = 0
+        }
+      }
     })
   },
   /**
@@ -332,70 +360,100 @@ const im = {
   pollMsgHandler (data = {}) {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
+    const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+    if (cachedGameProcessData.offlineMode) {
+      im.pullMsgId = ''
+      im.isHandledMsg = true
+      return
+    }
+    gameProcess.update({...cachedGameProcessData, validTime})
     if (msgId !== im.pullMsgId) { // 若是新消息，处理消息并触发监听器
-      const questions = utils.storage.get('millionaire-qs')
-      const index = msg || 0
-      const currentQuestion = questions[+index - 1] || {}
+      // const questions = utils.storage.get('millionaire-qs') || []
+      const currentIndex = msg || 1
+      // const currentQuestion = questions[+index - 1] || {}
       switch (msgType) {
         case 1: { // 串词消息
-          const resultHostMsgList = utils.storage.get('millionaire-cs') || [] // 从本地缓存中取出结束串词
           const {si: intervalTime} = msg || {}
-          im.emitListener(type.MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(resultHostMsgList)
-            }
-          }, intervalTime)
+          gameProcess.update({
+            currentState: PROCESS_RESULT_HOSTMSG,
+            hostMsgInterval: intervalTime
+          })
+          gameProcess.run()
+          // const resultHostMsgList = utils.storage.get('millionaire-cs') || [] // 从本地缓存中取出结束串词
+          // const {si: intervalTime} = msg || {}
+          // im.emitListener(type.MESSAGE_HOST, {
+          //   content: {
+          //     content: JSON.stringify(resultHostMsgList)
+          //   }
+          // }, intervalTime)
           break
         }
         case 7: { // 题目串词消息
-          const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
-          im.emitListener(type.MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(hostMsgList)
-            }
-          }, intervalTime)
+          gameProcess.update({
+            currentState: PROCESS_QUESTION_HOSTMSG,
+            currentIndex
+          })
+          gameProcess.run()
+          // const {jd: hostMsgList = [], si: intervalTime} = currentQuestion
+          // im.emitListener(type.MESSAGE_HOST, {
+          //   content: {
+          //     content: JSON.stringify(hostMsgList)
+          //   }
+          // }, intervalTime)
           break
         }
         case 2: { // 题目消息
-          const restTime = parseInt(validTime / 1000)
-          im.emitListener(type.MESSAGE_QUESTION, {
-            content: {
-              content: JSON.stringify({
-                ...currentQuestion,
-                restTime: restTime >= 10 ? 10 : restTime
-              })
-            }
+          gameProcess.update({
+            currentState: PROCESS_QUESTION,
+            currentIndex
           })
+          gameProcess.run()
+          // const restTime = parseInt(validTime / 1000)
+          // im.emitListener(type.MESSAGE_QUESTION, {
+          //   content: {
+          //     content: JSON.stringify({
+          //       ...currentQuestion,
+          //       restTime: restTime >= 10 ? 10 : restTime
+          //     })
+          //   }
+          // })
           break
         }
         case 3: { // 答案汇总消息
           const currentIndex = msg.js || 1
-          const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = questions[currentIndex - 1] || {}
-          const question = {
-            id,
-            index,
-            contents,
-            options
-          }
-          const answer = {
-            a: msg.ac || ''
-          }
-          const summary = msg.as || {}
-          im.emitListener(type.MESSAGE_ANSWER, {
-            content: {
-              answer: JSON.stringify(answer),
-              summary: JSON.stringify(summary),
-              question: JSON.stringify(question)
-            }
+          gameProcess.update({
+            currentState: PROCESS_ANSWER,
+            answerSummary: msg.as || {},
+            currentIndex
           })
+          gameProcess.run()
+          // const currentIndex = msg.js || 1
+          // const {ji: id = '', js: index = 1, jc: contents = '', jo: options = []} = questions[currentIndex - 1] || {}
+          // const question = {
+          //   id,
+          //   index,
+          //   contents,
+          //   options
+          // }
+          // const answer = {
+          //   a: msg.ac || ''
+          // }
+          // const summary = msg.as || {}
+          // im.emitListener(type.MESSAGE_ANSWER, {
+          //   content: {
+          //     answer: JSON.stringify(answer),
+          //     summary: JSON.stringify(summary),
+          //     question: JSON.stringify(question)
+          //   }
+          // })
           break
         }
         case 4: { // 比赛结果消息
-          im.emitListener(type.MESSAGE_RESULT, {
-            content: {
-              summary: JSON.stringify(msg)
-            }
+          gameProcess.update({
+            currentState: PROCESS_RESULT,
+            result: msg
           })
+          gameProcess.run()
           break
         }
         case 5: { // 比赛结束消息 重新初始化直接退出
