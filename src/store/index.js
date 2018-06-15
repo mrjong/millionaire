@@ -51,7 +51,8 @@ export default new Vuex.Store({
       shouldSub: false,
       markType: 0,
       okBtnText: 'OK',
-      hintImg: './static/images/tip-fail.png'
+      hintImg: './static/images/tip-fail.png',
+      lastTime: 3000
     },
     lives: 0,
     code: '',
@@ -107,6 +108,21 @@ export default new Vuex.Store({
       setTimeout(() => {
         state.showDialog = false
       }, 3000)
+    },
+    /**
+     * 关闭弹窗
+     */
+    [type._CLOSE_DIALOG] (state) {
+      state.showDialog = false
+      state.dialogInfo = {
+        htmlTitle: '',
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK',
+        hintImg: './static/images/tip-fail.png',
+        lastTime: 3000
+      }
     }
   },
   actions: {
@@ -310,8 +326,11 @@ export default new Vuex.Store({
      * @param {any} {commit, getters, state}
      * @param {any} dialogInfo 弹窗信息
      */
-    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo) {
+    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo = {}) {
       commit(type._OPEN_DIALOG, dialogInfo)
+      setTimeout(() => {
+        commit(type._CLOSE_DIALOG)
+      }, getters.dialogInfo.lastTime || 3000)
     }
   },
   modules: {

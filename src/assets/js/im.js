@@ -320,6 +320,7 @@ const im = {
             ...cachedGameProcessData,
             offlineMode: true
           })
+          gameProcess.cacheProcessInfo()
           if (validTime > 0) { // 若当前进度剩余时间大于0 直接开始运行 否则运行下一进度
             gameProcess.run()
           } else {

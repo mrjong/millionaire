@@ -233,13 +233,16 @@ export default {
           }, 3000)
         } else {
           this.cancelUseRecoveryCard()
+          this.failedUseRecoveryCardTip()
           console.log('复活卡使用失败:', data.msg)
         }
       }, (err) => {
         this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
         console.log('复活卡使用出错:', err)
       }).catch((err) => {
         this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
         console.log('复活卡使用代码逻辑出错:', err)
       })
     },
@@ -263,6 +266,18 @@ export default {
         watchingMode: watchingMode ? true : (!isAnswered || !isCorrect)
       })
       this.resetState()
+    },
+    /**
+     * 使用复活卡失败提示
+     */
+    failedUseRecoveryCardTip () {
+      this.$store.dispatch(type._OPEN_DIALOG, {
+        htmlTitle: 'Extra Lives Use Failed',
+        htmlText: 'Your internet connection is disconnected or your request of server is timeout. Please check your internet connection.',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
+      })
     }
   },
   watch: {

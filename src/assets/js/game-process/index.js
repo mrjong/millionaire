@@ -157,6 +157,12 @@ const gameProcess = {
     questionMsgProcess.stop()
     resultMsgProcess.stop()
     resultProcess.stop()
+  },
+  /**
+   * 缓存进度信息
+   */
+  cacheProcessInfo () {
+    utils.storage.set('millionaire-process', {...this.data, watchingMode: this.$store.getters.watchingMode})
   }
 }
 
