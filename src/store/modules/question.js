@@ -247,18 +247,15 @@ const actions = {
    */
   [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
     // 从本地获取用户作答情况
-    const userAnswerInfo = utils.storage.get('millionaire-user-answer')
-    if (userAnswerInfo) {
-      const {id, index, isAnswered, userAnswer} = userAnswerInfo
-      // 若本地存储的答案信息与当前题目一致，则同步答案信息
-      if (id === getters.id && index === getters.index) {
-        commit(type.QUESTION_UPDATE, {
-          id,
-          index,
-          isAnswered,
-          userAnswer
-        })
-      }
+    const {id, index, isAnswered, userAnswer, raceId} = utils.storage.get('millionaire-user-answer') || {}
+    // 若本地存储的答案信息与当前题目一致，则同步答案信息
+    if (raceId === utils.raceId && id === getters.id && index === getters.index) {
+      commit(type.QUESTION_UPDATE, {
+        id,
+        index,
+        isAnswered,
+        userAnswer
+      })
     }
   },
   [type.QUESTION_YOU_WON] ({commit}, question) {

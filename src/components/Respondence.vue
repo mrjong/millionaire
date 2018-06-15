@@ -138,8 +138,9 @@ export default {
             {
               ...userAnswerInfo,
               id,
-              index
-            }, Date.now() + 180000)
+              index,
+              raceId: utils.raceId
+            })
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
             utils.statistic('QUESTION_RESULT', 1, {
               id_s: `${this.index}`,
