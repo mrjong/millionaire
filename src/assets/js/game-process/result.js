@@ -34,7 +34,8 @@ const resultProcess = {
   run (data = {}) {
     this.update({
       ...data,
-      currentState: PROCESS_RESULT
+      currentState: PROCESS_RESULT,
+      offlineMode: false
     })
     const {result = {}} = this.data
     im.emitListener(MESSAGE_RESULT, {

@@ -156,7 +156,8 @@ const gameState = {
    * 加入聊天室
    */
   joinChatRoom () {
-    im.startPullMsg()
+    const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
+    !offlineMode && im.startPullMsg()
     im.addListener(CONNECT_SUCCESS, (imUserId) => {
       this.$store.commit(HOME_UPDATE, {
         imUserId

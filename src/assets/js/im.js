@@ -326,8 +326,12 @@ const im = {
           } else {
             gameProcess.next()
           }
-          im.stopPullMsg()
-          im.pullMsgErrorCount = -999999
+          // 如果当前状态不是结果也不是结果串词 停止轮询
+          const {currentState} = cachedGameProcessData
+          if (currentState !== PROCESS_RESULT_HOSTMSG && currentState !== PROCESS_RESULT) {
+            im.stopPullMsg()
+          }
+          im.pullMsgErrorCount = 0
         }
       }
     })
