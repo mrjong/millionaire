@@ -14,6 +14,7 @@ export const _INIT_LISTENER = '_INIT_LISTENER'
 export const _POLL_INIT = '_POLL_INIT'
 export const _END = '_END'
 export const _OPEN_DIALOG = '_OPEN_DIALOG'
+export const _CLOSE_DIALOG = '_CLOSE_DIALOG'
 
 export const HOME_UPDATE = 'HOME_UPDATE'
 

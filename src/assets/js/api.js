@@ -1,7 +1,6 @@
 /* global PUBLIC_URL */
 import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
-import md5 from 'md5'
 
 const publicUrl = PUBLIC_URL
 
@@ -36,7 +35,8 @@ export const api = {
   clearRecord: '/cmp/wc/', // 标记删除提现记录
   submitAgreePolicy: '/cmp/sub_ag/', // 上报协议
   queryAgreePolicy: '/cmp/ag/', // 查询是否同意协议
-  cashRecord: '/cmp/bfr/' // 余额记录
+  cashRecord: '/cmp/bfr/', // 余额记录
+  getAnswerSummary: '/cmp/as/' // 获取答案汇总结果
 }
 
 export const init = function (isRefreshToken) {
@@ -65,17 +65,19 @@ export const getRankInfo = function (type) {
   })
 }
 
-// id为题目ID answer为答案内容
-export const submitAnswer = function (id, answer, index) {
-  return axios.get(api.submitAnswer, {
-    params: {
-      i: id,
-      a: md5(answer),
-      s: index,
-      app_id: utils.app_id,
-      client_id: utils.clientId,
-      race_id: utils.raceId
-    }
+// 提交答案 uncommittedAnswers 为未提交的答案数组 isLastQuestion 为是否是最后一题
+export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false) {
+  const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
+  return axios.post(api.submitAnswer, {
+    i: utils.raceId,
+    as: uncommittedAnswers,
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    flag: offlineMode
+  }, {
+    retry: isLastQuestion ? 100 : 3,
+    retryDelay: isLastQuestion ? 2000 : 500,
+    timeout: 5000
   })
 }
 
@@ -330,5 +332,17 @@ export const getPolicyContent = function (filename) {
   return axios.get(`${publicUrl}/html/${filename}`, {
     baseURL: window.location.origin,
     withCredentials: false
+  })
+}
+
+// 获取答案汇总
+export const getAnswerSummary = function (index) {
+  return axios.get(api.getAnswerSummary, {
+    params: {
+      i: utils.raceId,
+      s: index
+    },
+    timeout: 5000,
+    retry: 0
   })
 }
