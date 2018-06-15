@@ -105,9 +105,6 @@ export default new Vuex.Store({
     [type._OPEN_DIALOG] (state, dialogInfo) {
       state.dialogInfo = Object.assign(state.dialogInfo, dialogInfo)
       state.showDialog = true
-      setTimeout(() => {
-        state.showDialog = false
-      }, 3000)
     },
     /**
      * 关闭弹窗
