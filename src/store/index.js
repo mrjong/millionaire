@@ -182,7 +182,7 @@ export default new Vuex.Store({
      */
     [type._POLL_INIT] ({dispatch, getters}) {
       setTimeout(() => {
-        dispatch(type._INIT)
+        getters.status === status._AWAIT && dispatch(type._INIT)
       }, getters.syncIntervalTime)
     },
     /**

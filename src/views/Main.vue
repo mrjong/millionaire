@@ -80,7 +80,11 @@ export default {
       this.$router.replace({path: '/'})
     },
     onError (err) {
-      this.dialogInfo.htmlText = err
+      if (typeof err === 'string') {
+        this.dialogInfo.htmlText = err
+      } else {
+        this.dialogInfo = {...this.dialogInfo, ...err}
+      }
       this.showDialog = true
       setTimeout(() => {
         this.showDialog = false

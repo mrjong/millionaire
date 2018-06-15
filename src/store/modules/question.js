@@ -154,7 +154,10 @@ const actions = {
           const index = +data.data
           switch (+data.code) {
             case 1005: {
-              reject('Game time out, you are eliminated. Please check your internet.')
+              reject({
+                htmlTitle: 'Game time out, you are eliminated',
+                htmlText: 'Please check your internet, otherwise your phone may hang or delay during the game if your internet is unstable'
+              })
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
               })
