@@ -312,7 +312,8 @@ const im = {
       }
       // 判断是否进入观战模式
       const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
-      if (!cachedGameProcessData.offlineMode) { // 未开启观战模式
+      const {offlineMode, currentState} = cachedGameProcessData
+      if (!offlineMode && currentState !== PROCESS_RESULT_HOSTMSG && currentState !== PROCESS_RESULT) { // 未开启观战模式且状态不是结果页和结束串词
         im.pullMsgErrorCount++
         if (im.pullMsgErrorCount >= im.maxpullMsgErrorCount) { // 异常次数超过上限
           const {validTime = 0} = cachedGameProcessData
@@ -326,11 +327,7 @@ const im = {
           } else {
             gameProcess.next()
           }
-          // 如果当前状态不是结果也不是结果串词 停止轮询
-          const {currentState} = cachedGameProcessData
-          if (currentState !== PROCESS_RESULT_HOSTMSG && currentState !== PROCESS_RESULT) {
-            im.stopPullMsg()
-          }
+          im.stopPullMsg()
           im.pullMsgErrorCount = 0
         }
       }
