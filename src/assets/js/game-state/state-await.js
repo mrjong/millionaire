@@ -3,7 +3,6 @@
  */
 import { _UPDATE, _POLL_INIT } from '../../../store/type.js'
 import { _AWAIT } from '../status'
-import utils from '../utils.js'
 import gameProcess from '../game-process/index.js'
 
 const awaitState = {
@@ -29,8 +28,6 @@ const awaitState = {
   run () {
     this.update()
     gameProcess.stop()
-    utils.storage.remove('millionaire-process') // 删除缓存的比赛信息
-    utils.storage.remove('millionaire-uncommittedAnswers') // 删除未提交的答案信息
     this.$store.dispatch(_POLL_INIT)
     this.$store.commit(_UPDATE, {
       status: _AWAIT

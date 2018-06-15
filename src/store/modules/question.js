@@ -131,8 +131,12 @@ const actions = {
    */
   [type.QUESTION_SUBMIT] ({commit, getters}) {
     // 取出未提交成功的答案一起提交
-    const uncommittedAnswers = utils.storage.get('millionaire-uncommittedAnswers') || []
+    let {id: raceId, uncommittedAnswers} = utils.storage.get('millionaire-uncommittedAnswers') || {}
     const {id, userAnswer, index, questionCount} = getters
+    if (raceId !== utils.raceId) { // 必须为当前比赛
+      uncommittedAnswers = []
+      utils.storage.remove('millionaire-uncommittedAnswers')
+    }
     uncommittedAnswers.push({
       i: id,
       s: index,
@@ -172,13 +176,19 @@ const actions = {
               break
             }
             default: {
-              utils.storage.set('millionaire-uncommittedAnswers', uncommittedAnswers)
+              utils.storage.set('millionaire-uncommittedAnswers', {
+                id: utils.raceId,
+                uncommittedAnswers
+              })
             }
           }
           console.log('答案提交失败:', id, data.msg)
         }
       }, (err) => {
-        utils.storage.set('millionaire-uncommittedAnswers', uncommittedAnswers)
+        utils.storage.set('millionaire-uncommittedAnswers', {
+          id: utils.raceId,
+          uncommittedAnswers
+        })
         console.log('答案提交错误:', err)
       }).catch((err) => {
         console.log('代码逻辑出错：' + err)
