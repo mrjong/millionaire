@@ -22,15 +22,13 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <fail-tip v-show="index === 1" v-model="showFailTip" :index="index"></fail-tip>
-    <fail-tip-act v-show="index !== 1" v-model="showFailTip"></fail-tip-act>
+    <fail-tip v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
 import FailTip from '../components/FailTip'
-import FailTipAct from '../components/FailTipAct.vue'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
@@ -118,8 +116,7 @@ export default {
     WinnersResult,
     Compere,
     BalanceMark,
-    FailTip,
-    FailTipAct
+    FailTip
   }
 }
 </script>

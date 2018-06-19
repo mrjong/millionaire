@@ -4,7 +4,7 @@
       <section class="fail-tip">
         <img class="icon" src="../assets/images/icon-feedback.png" v-if="index === 1">
         <img class="icon" src="../assets/images/icon-answer-fail.png" v-else>
-        <span class="iconfont icon-cuowu close" @click="isClose=true"></span>
+        <span class="iconfont icon-cuowu close" @click="close"></span>
         <p v-if="index === 1">Unwilling to be ELIMINATED?</p>
         <p v-else>
           <span class="fail">Oops!</span>
@@ -78,6 +78,10 @@ export default {
     },
     feedback () {
       window.location.href = getReportUrl()
+    },
+    close () {
+      this.isClose = true
+      this.$emit('close')
     }
   },
   components: {
