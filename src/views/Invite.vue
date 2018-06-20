@@ -118,7 +118,7 @@ export default {
         type: 'invite'
       },
       showDialog: false,
-      tap: ['Weekly rank', 'Total rank', 'My invite'],
+      tap: ['Weekly Rank', 'Total Rank', 'My Invite'],
       index: 0,
       weekTopThree: [],
       weekData: [],

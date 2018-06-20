@@ -361,15 +361,13 @@ export default {
     },
     getUrlParameter (name, link) {
       let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
-      let r = link.substr(1).match(reg)
+      let r = window.location.search.substr(1).match(reg)
       if (r != null) return unescape(r[2])
       return null
     },
     // 上报验证好友邀请码
     reportCheckCode () {
-      // let icode = this.getUrlParameter('icode')
-      let url = decodeURIComponent(this.getUrlParameter('url', window.location.search))
-      let icode = this.getUrlParameter('icode', url)
+      let icode = this.getUrlParameter('icode')
       if (icode) {
         if (utils.isOnline) {
           api.checkInviteCode(icode).then(({data}) => {
