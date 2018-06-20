@@ -513,7 +513,17 @@ const utils = {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
+    if (isFbApp) {
+      console.log('isFbApp')
+      window.location.href = 'fb://page/1814960232131059'
+    } else {
+      console.log('abbbbbbbbb')
+      setTimeout(() => {
+        console.log('hhhhh')
+        window.location.href = 'https://www.facebook.com/GoMillionaire-1814960232131059/'
+      }, 500)
+      window.location.href = 'fb://page/1814960232131059'
+    }
   },
   /**
    * 生成指定长度的随机串

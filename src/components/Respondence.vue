@@ -410,7 +410,7 @@ export default {
       padding: 0 16px;
       font: 300 28px/40px 'Roboto';
       text-align: left;
-      min-height: 28px;
+      min-height: 30px;
     }
     &__answer{
       font-size: 28px;
