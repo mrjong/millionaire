@@ -36,7 +36,12 @@ export const api = {
   submitAgreePolicy: '/cmp/sub_ag/', // 上报协议
   queryAgreePolicy: '/cmp/ag/', // 查询是否同意协议
   cashRecord: '/cmp/bfr/', // 余额记录
-  getAnswerSummary: '/cmp/as/' // 获取答案汇总结果
+  getAnswerSummary: '/cmp/as/', // 获取答案汇总结果
+  inviteWeeklyBoard: '/cmp/iwboard/', // 邀请好友周排行
+  inviteTotalBoard: '/cmp/itboard/', // 邀请好友总排行,
+  myInviteBoard: '/cmp/myinvite/', // 我的邀请
+  inviteLink: '/cmp/ic', // 生成分享facebook好友链接
+  checkInviteCode: '/cmp/ifc' // 验证分享好友码
 }
 
 export const init = function (isRefreshToken) {
@@ -68,11 +73,14 @@ export const getRankInfo = function (type) {
 // 提交答案 uncommittedAnswers 为未提交的答案数组 isLastQuestion 为是否是最后一题
 export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false) {
   const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
+  // 从本地同步复活卡信息
+  const {reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
   return axios.post(api.submitAnswer, {
     i: utils.raceId,
     as: uncommittedAnswers,
     app_id: utils.app_id,
     client_id: utils.clientId,
+    rs: reviveCardInfo.records || [],
     flag: offlineMode
   }, {
     retry: isLastQuestion ? 100 : 3,
@@ -344,5 +352,55 @@ export const getAnswerSummary = function (index) {
     },
     timeout: 5000,
     retry: 0
+  })
+}
+// 邀请好友周排行
+export const inviteWeeklyBoard = function () {
+  return axios.get(api.inviteWeeklyBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 邀请好友总排行
+
+export const inviteTotalBoard = function () {
+  return axios.get(api.inviteTotalBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 我的邀请排行
+
+export const myInviteBoard = function () {
+  return axios.get(api.myInviteBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 生成分享Facebook好友链接
+
+export const inviteLink = function () {
+  return axios.post(api.inviteLink, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 验证邀请好友码
+
+export const checkInviteCode = function (icode) {
+  return axios.post(api.checkInviteCode, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    icode: icode
   })
 }

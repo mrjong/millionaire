@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     back () {
-      this.$router.go(-1)
+      this.$router.replace('/')
     },
     /**
      * 登录验证

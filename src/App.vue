@@ -38,7 +38,8 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState'
+      initialState: 'initialState',
+      userInfo: 'userInfo'
     })
   },
   beforeCreate () {
@@ -48,6 +49,9 @@ export default {
   },
   created () {
     this.loading = true
+    this.$store.commit(type.HOME_UPDATE, {
+      icode: utils.getQuery('icode')
+    })
     api.queryAgreePolicy().then(({data}) => {
       this.loading = false
       const {isEU = false} = data.data || {}
@@ -135,6 +139,39 @@ export default {
           }
         })
       }
+    },
+    // 上报验证好友邀请码
+    reportCheckCode () {
+      if (this.userInfo.icode) {
+        if (utils.isOnline) {
+          console.log('已登录' + this.userInfo.icode)
+          api.checkInviteCode(this.userInfo.icode).then(({data}) => {
+            if (data.result !== 1) {
+              return false
+            }
+          }).catch(() => {
+            return false
+          })
+        } else {
+          utils.login(() => {
+            console.log('刚登录' + this.userInfo.icode)
+            this.$store.dispatch(type._INIT).then(() => {
+              api.checkInviteCode(this.userInfo.icode).then(({data}) => {
+                if (data.result !== 1) {
+                  return false
+                }
+              }).catch(() => {
+                return false
+              })
+            })
+            if (this.status === 2) {
+              this.$router.replace({path: '/main'})
+            } else {
+              this.$router.replace({path: '/'})
+            }
+          })
+        }
+      }
     }
   },
   components: {
@@ -146,7 +183,9 @@ export default {
   watch: {
     status: function (status, oldStatus) {
       if (status !== 1 && oldStatus === 1) {
-        this.$router.push({path: '/main'})
+        if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
+          this.$router.push({path: '/main'})
+        }
       } else if (status === 1) {
         this.$router.replace({path: '/'})
         im.stopPullMsg()
@@ -182,6 +221,11 @@ export default {
     '$route' (route) {
       if (route.path === '/main' && this.status === 1) {
         this.$router.replace({path: '/'})
+      }
+    },
+    initialState: function (newInitialState, oldInitialState) {
+      if (oldInitialState === -1 && newInitialState !== -1) {
+        this.reportCheckCode()
       }
     }
   }

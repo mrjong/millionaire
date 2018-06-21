@@ -131,7 +131,7 @@ const actions = {
    */
   [type.QUESTION_SUBMIT] ({commit, getters}) {
     // 取出未提交成功的答案一起提交
-    let {id: raceId, uncommittedAnswers} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+    let {id: raceId, uncommittedAnswers, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
     const {id, userAnswer, index, questionCount} = getters
     if (raceId !== utils.raceId) { // 必须为当前比赛
       uncommittedAnswers = []
@@ -169,7 +169,7 @@ const actions = {
             }
             case 1006:
             case 1007: {
-              reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
+              reject(`Oops, you have already failed on the ${utils.formatIndex(index)} question.`)
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
               })
@@ -178,7 +178,8 @@ const actions = {
             default: {
               utils.storage.set('millionaire-uncommittedAnswers', {
                 id: utils.raceId,
-                uncommittedAnswers
+                uncommittedAnswers,
+                reviveCardInfo
               })
             }
           }
@@ -187,7 +188,8 @@ const actions = {
       }, (err) => {
         utils.storage.set('millionaire-uncommittedAnswers', {
           id: utils.raceId,
-          uncommittedAnswers
+          uncommittedAnswers,
+          reviveCardInfo
         })
         console.log('答案提交错误:', err)
       }).catch((err) => {

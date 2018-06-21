@@ -16,7 +16,9 @@ const BalanceDetail = () => import('@/views/BalanceDetail.vue')
 const Contact = () => import('@/views/Contact.vue')
 const UserCenter = () => import('@/views/UserCenter.vue')
 const Blank = () => import('@/views/Blank.vue')
+// const Video = () => import('@/views/Video.vue')
 // const SamllAwait = () => import('@/views/SmallAwait.vue')
+const Invite = () => import('@/views/Invite.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -100,6 +102,16 @@ const router = new Router({
       path: '/blank',
       name: 'blank',
       component: Blank
+    },
+    // {
+    //   path: '/video',
+    //   name: 'video',
+    //   component: Video
+    // },
+    {
+      path: '/invite',
+      name: 'invite',
+      component: Invite
     }
     // {
     //   path: '/small-await',

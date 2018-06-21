@@ -3,10 +3,10 @@
     <div class="invitation-bomb">
       <span class="invitation-bomb__close iconfont icon-cuowu" @click="shareClose"></span>
       <p class="invitation-bomb__info">
-        My Referral Code:
-        <span>{{reviveObj.code}}</span>
+        {{reviveObj.title? reviveObj.title :'My Referral Code:'}}
+        <span v-if="!reviveObj.title">{{reviveObj.code}}</span>
       </p>
-      <p class="invitation-bomb__hint">Inviting friends to get it now!</p>
+      <p class="invitation-bomb__hint">{{reviveObj.hint ? reviveObj.hint : 'Inviting friends to get it now!'}}</p>
       <div class="invitation-bomb__channel">
         <div v-for="(val, idx) in shareObj"
         :key="idx"
@@ -20,6 +20,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
+import * as api from '../assets/js/api'
 export default {
   name: 'ReviveCard',
   props: {
@@ -57,8 +58,23 @@ export default {
   },
   methods: {
     fbAndMess (val) {
-      utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
-      utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)
+      if (this.reviveObj.type === 'invite') {
+        utils.statistic('invite_earn_share', 3, {to_destination_s: val}, 'invite_earn_page')
+        let title = `I'm playing 'Go! Millionaire', my referral code is ${this.code}，join us and win up to Rs.1,000,000 at 10PM every day!`
+        let desp = `Download Go!Millonaire Browser and use my referral code 345566, let keep winning cash every day!`
+        api.inviteLink().then(({data}) => {
+          if (data.result === 1 && data.code === 0 && data.data) {
+            utils.share(this.callbackFn, val, '', encodeURIComponent(data.data), '', title, desp)
+          } else {
+            return false
+          }
+        }).catch((e) => {
+          return false
+        })
+      } else {
+        utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
+        utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)
+      }
     },
     // 分享后的回调
     callbackFn (isSucceed, packageName) {
@@ -82,7 +98,7 @@ export default {
       left: 0;
       z-index: 111;
       padding: 0 25px;
-      background-color: rgba(68, 68, 68, 0.8);
+      background-color: rgba(0, 0, 0, 0.8);
       .invitation-bomb {
         max-width: 93% !important;
         width: 670px;

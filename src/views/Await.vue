@@ -42,6 +42,7 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
+    <div class="invite" @click="toInvite">Earn Cash Quickly</div>
     <div class="notice">
       <router-link to="/rank">
         <notices></notices>
@@ -98,6 +99,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
+    <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -118,9 +120,9 @@ import * as api from '../assets/js/api'
 import Living from '../components/Living'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
-import FeedbackBtn from '../components/FeedbackBtn'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
+// import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
@@ -185,6 +187,7 @@ export default {
         utils('millionaire-isFirstShare', false)
       }, 3000)
     }
+    // this.reportCheckCode()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -233,13 +236,21 @@ export default {
             result_code_s: data.result === 1 ? '1' : '0'
           }, 'wait_page')
           if (data.result === 1) {
+            // 从本地同步复活卡使用信息
+            const {id: raceId, reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+            let records = []
+            if (raceId === utils.raceId) {
+              records = reviveCardInfo.records || []
+            } else {
+              utils.storage.remove('millionaire-uncommittedAnswers')
+            }
             // 更新复活卡数量
             const {cn: lives = 0, lc: maxRecoveryCount = 0} = data.data || {}
             this.$store.commit(type._UPDATE, {
-              lives
+              lives: lives - records.length || 0
             })
             this.$store.commit(type.QUESTION_UPDATE, {
-              maxRecoveryCount
+              maxRecoveryCount: maxRecoveryCount - records.length || 0
             })
           } else {
             if (data.code === 404) {
@@ -301,6 +312,14 @@ export default {
         this.login('/share-detail')
       }
     },
+    toInvite () {
+      if (utils.isOnline) {
+        this.btnStatistic('earn_money_button')
+        this.$router.push({path: '/invite'})
+      } else {
+        this.login('/invite')
+      }
+    },
     // login
     login (path) {
       utils.login(() => {
@@ -357,7 +376,6 @@ export default {
     Living,
     HowPlayCard,
     Notices,
-    FeedbackBtn,
     ReminderBomb,
     PolicyBomb
   },
@@ -373,7 +391,9 @@ export default {
     },
     status: function (status, oldStatus) {
       if (status === 2) {
-        this.$router.replace({path: '/main'})
+        if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
+          this.$router.push({path: '/main'})
+        }
       } else {
         this.$router.replace({path: '/'})
       }
@@ -645,6 +665,18 @@ export default {
         width: 120px;
         margin: 0 auto;
       }
+    }
+    .invite {
+      width: 670px;
+      height: 100px;
+      background: url('../assets/images/invite-btn.png') no-repeat center;
+      background-size: cover;
+      border-radius: 24px;
+      margin: 0 auto;
+      text-align: center;
+      color: #fff;
+      font: 600 40px 'Roboto', Arial, serif;
+      line-height: 95px;
     }
     .notice{
       width: 100%;
