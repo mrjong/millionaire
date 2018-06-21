@@ -130,11 +130,10 @@ export default {
     flex-direction: column;
     position: relative;
     &__top{
-      width: 100%;
+      height: 85px;
       display: flex;
       align-items: center;
       padding: 25px 25px 0;
-      min-height: 59px;
       position: relative;
       &__back{
         width: 54px;
@@ -186,7 +185,7 @@ export default {
         border-radius: 26px;
         line-height: 54px;
         text-align: center;
-        margin-right: 15px;
+        margin-right: 25px;
         font-size: 24px;
         position: absolute;
         right:0;
