@@ -116,6 +116,8 @@ const utils = {
       errCallback && errCallback(err)
       console.log('退出登陆出错', err)
     })
+    // 客户端退出登陆
+    njordGame && njordGame.logout && njordGame.logout()
   },
   /**
    * 获取个人信息

@@ -65,6 +65,16 @@ const gameState = {
       chatRoomId: chatRoomInfo.rn || '',
       imToken: chatRoomInfo.it || ''
     })
+
+    // 从本地同步复活卡信息
+    const cachedUncommittedAnswers = utils.storage.get('millionaire-uncommittedAnswers')
+    if (cachedUncommittedAnswers && cachedUncommittedAnswers.reviveCardInfo && cachedUncommittedAnswers.id === utils.raceId) {
+      this.$store.commit(_UPDATE, {
+        lives: +cachedUncommittedAnswers.reviveCardInfo.lives || 0
+      })
+    } else {
+      utils.storage.remove('millionaire-uncommittedAnswers')
+    }
   },
   /**
    * 更新首页信息
@@ -112,6 +122,16 @@ const gameState = {
       maxRecoveryCount: +maxRecoveryCount || 0,
       count: +questionCount
     })
+
+    // 从本地同步复活卡信息
+    const cachedUncommittedAnswers = utils.storage.get('millionaire-uncommittedAnswers')
+    if (cachedUncommittedAnswers && cachedUncommittedAnswers.reviveCardInfo && cachedUncommittedAnswers.id === utils.raceId) {
+      this.$store.commit(_UPDATE, {
+        maxRecoveryCount: +cachedUncommittedAnswers.reviveCardInfo.maxRecoveryCount || 0
+      })
+    } else {
+      utils.storage.remove('millionaire-uncommittedAnswers')
+    }
   },
   /**
    * 运行状态
