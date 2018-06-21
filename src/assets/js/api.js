@@ -73,11 +73,14 @@ export const getRankInfo = function (type) {
 // 提交答案 uncommittedAnswers 为未提交的答案数组 isLastQuestion 为是否是最后一题
 export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false) {
   const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
+  // 从本地同步复活卡信息
+  const {reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
   return axios.post(api.submitAnswer, {
     i: utils.raceId,
     as: uncommittedAnswers,
     app_id: utils.app_id,
     client_id: utils.clientId,
+    rs: reviveCardInfo.records || [],
     flag: offlineMode
   }, {
     retry: isLastQuestion ? 100 : 3,

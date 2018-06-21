@@ -236,13 +236,21 @@ export default {
             result_code_s: data.result === 1 ? '1' : '0'
           }, 'wait_page')
           if (data.result === 1) {
+            // 从本地同步复活卡使用信息
+            const {id: raceId, reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+            let records = []
+            if (raceId === utils.raceId) {
+              records = reviveCardInfo.records || []
+            } else {
+              utils.storage.remove('millionaire-uncommittedAnswers')
+            }
             // 更新复活卡数量
             const {cn: lives = 0, lc: maxRecoveryCount = 0} = data.data || {}
             this.$store.commit(type._UPDATE, {
-              lives
+              lives: lives - records.length || 0
             })
             this.$store.commit(type.QUESTION_UPDATE, {
-              maxRecoveryCount
+              maxRecoveryCount: maxRecoveryCount - records.length || 0
             })
           } else {
             if (data.code === 404) {
