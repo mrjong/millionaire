@@ -55,7 +55,7 @@ export default {
     padding-right: 3.7%;
     height: 92px;
     position: relative;
-
+    margin-top: 25px;
     &_index {
       width: 15.64%;
       height: 100%;
@@ -66,7 +66,7 @@ export default {
 
     &_info {
       flex: 1;
-      border-bottom: 1px solid rgba(36, 18, 98, .08);
+      border-bottom: 1px solid rgba(34, 15, 96, .1);
       .avatar {
         width: 60px;
         height: 60px;
