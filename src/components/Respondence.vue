@@ -383,6 +383,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
+    height: auto;
     min-height: 500px;
     margin: 25px;
     background-color: #fff;
@@ -414,6 +415,7 @@ export default {
     }
     &__answer{
       font-size: 28px;
+      min-height:340px;
     }
     .living{
       position: fixed;
