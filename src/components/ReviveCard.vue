@@ -60,7 +60,7 @@ export default {
     fbAndMess (val) {
       if (this.reviveObj.type === 'invite') {
         utils.statistic('invite_earn_share', 3, {to_destination_s: val}, 'invite_earn_page')
-        let title = `I'm playing "Go! Millionaire", my referral code is 345566，join us and win up to Rs.1,000,000 at 10PM every day!`
+        let title = `I'm playing 'Go! Millionaire', my referral code is 345566，join us and win up to Rs.1,000,000 at 10PM every day!`
         let desp = `Download Go!Millonaire Browser and use my referral code 345566, let keep winning cash every day!`
         api.inviteLink().then(({data}) => {
           if (data.result === 1 && data.code === 0 && data.data) {
