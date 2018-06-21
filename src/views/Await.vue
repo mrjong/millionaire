@@ -187,7 +187,7 @@ export default {
         utils('millionaire-isFirstShare', false)
       }, 3000)
     }
-    this.reportCheckCode()
+    // this.reportCheckCode()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -358,38 +358,6 @@ export default {
           }
         }).catch()
       }
-    },
-    getUrlParameter (name, link) {
-      let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
-      let r = window.location.search.substr(1).match(reg)
-      if (r != null) return unescape(r[2])
-      return null
-    },
-    // 上报验证好友邀请码
-    reportCheckCode () {
-      let icode = this.getUrlParameter('icode')
-      if (icode) {
-        if (utils.isOnline) {
-          api.checkInviteCode(icode).then(({data}) => {
-            if (data.result !== 1) {
-              return false
-            }
-          }).catch(() => {
-            return false
-          })
-        } else {
-          utils.login(() => {
-            api.checkInviteCode(icode).then(({data}) => {
-              if (data.result !== 1) {
-                return false
-              }
-            }).catch(() => {
-              return false
-            })
-            this.$router.push({path: '/'})
-          })
-        }
-      }
     }
   },
   components: {
@@ -415,7 +383,9 @@ export default {
     },
     status: function (status, oldStatus) {
       if (status === 2) {
-        this.$router.replace({path: '/main'})
+        if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
+          this.$router.push({path: '/main'})
+        }
       } else {
         this.$router.replace({path: '/'})
       }

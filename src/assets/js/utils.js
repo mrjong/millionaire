@@ -98,7 +98,7 @@ const utils = {
       })
       njordGame.login && njordGame.login(loginArgs)
     } else {
-      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
+      vm.$router.replace({path: '/login'})
     }
   },
   /**
