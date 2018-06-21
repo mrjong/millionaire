@@ -429,6 +429,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
+    height: auto;
     min-height: 500px;
     margin: 25px;
     background-color: #fff;
@@ -456,10 +457,11 @@ export default {
       padding: 0 16px;
       font: 300 28px/40px 'Roboto';
       text-align: left;
-      min-height: 28px;
+      min-height: 30px;
     }
     &__answer{
       font-size: 28px;
+      min-height:340px;
     }
     .living{
       position: fixed;
