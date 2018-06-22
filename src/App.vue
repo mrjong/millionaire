@@ -96,17 +96,10 @@ export default {
      * 关闭弹窗
      */
     closeDialog () {
-      this.$store.commit(type._UPDATE, {
-        showDialog: false,
-        dialogInfo: {
-          htmlTitle: '',
-          htmlText: '',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK',
-          hintImg: '//static.apusapps.com/201803261933287074f92538.png'
-        }
-      })
+      if (this.dialogInfo.okEvent) {
+        this.dialogInfo.okEvent()
+      }
+      this.$store.dispatch(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码

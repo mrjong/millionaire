@@ -10,6 +10,7 @@ import http from './assets/js/http'
 import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
+import { _OPEN_DIALOG } from './store/type'
 im.init()
 
 window.onload = function () {
@@ -82,11 +83,21 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(registration => {
       registration.onupdatefound = () => {
         console.log('onupdatefound')
-        registration.update().then(() => setTimeout(() => {
-          window.location.reload()
-        }, 500))
+        vm.$store.dispatch(_OPEN_DIALOG, {
+          htmlTitle: 'New Version Available',
+          htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
+          lastTime: -1,
+          okBtnText: 'Upgrade Now',
+          hintImg: './static/images/tip-update.png',
+          okEvent: function () {
+            window.location.reload()
+          }
+        })
+        // registration.update().then(() => setTimeout(() => {
+        //   window.location.reload()
+        // }, 500))
       }
-      console.log('Service Worker registered2: ', registration)
+      console.log('Service Worker registered18: ', registration)
     }).catch(registrationError => {
       console.log('Service Worker failed: ', registrationError)
     })

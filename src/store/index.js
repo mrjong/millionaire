@@ -51,6 +51,7 @@ export default new Vuex.Store({
       shouldSub: false,
       markType: 0,
       okBtnText: 'OK',
+      okEvent: null,
       hintImg: './static/images/tip-fail.png',
       lastTime: 3000
     },
@@ -332,9 +333,9 @@ export default new Vuex.Store({
      * @param {any} {commit, getters, state}
      * @param {any} dialogInfo 弹窗信息
      */
-    [type._OPEN_DIALOG] ({commit, getters, state}, dialogInfo = {}) {
+    [type._OPEN_DIALOG] ({commit, getters}, dialogInfo = {}) {
       commit(type._OPEN_DIALOG, dialogInfo)
-      setTimeout(() => {
+      getters.dialogInfo.lastTime > 0 && setTimeout(() => {
         commit(type._CLOSE_DIALOG)
       }, getters.dialogInfo.lastTime || 3000)
     }
