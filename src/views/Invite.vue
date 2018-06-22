@@ -57,7 +57,7 @@
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
             <p class="number">Invite {{myInviteInfo.sc}} freshmen</p>
-            <p class="money">+₹{{myInviteInfo.amountFmt}}</p>
+            <p class="money">Earn ₹{{myInviteInfo.amountFmt}}</p>
           </div>
           <div class="item" v-if="myInviteData">
             <div class="rank-item" v-for="(val, idx) in myInviteData" :key="idx">
@@ -427,7 +427,7 @@ export default {
             height: 120px;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(34,15,96,0.3);
+            border-bottom: 1px solid rgba(34,15,96,0.2);
             .index {
               align-self: center;
               color:#201a98;
