@@ -3,7 +3,7 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">Rules</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">Earn Cash Together</p>
+      <p class="invite__btn__click"  @click="inviteEarn">Invite & Earn Cash</p>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">How To Earn</p>
