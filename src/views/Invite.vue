@@ -3,7 +3,7 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">Rules</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">Invite & Earn Cash</p>
+      <p class="invite__btn__click"  @click="inviteEarn">Earn Cash Together</p>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">How To Earn</p>
@@ -57,7 +57,7 @@
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
             <p class="number">Invite {{myInviteInfo.sc}} freshmen</p>
-            <p class="money">+₹{{myInviteInfo.amountFmt}}</p>
+            <p class="money">Earn ₹{{myInviteInfo.amountFmt}}</p>
           </div>
           <div class="item" v-if="myInviteData">
             <div class="rank-item" v-for="(val, idx) in myInviteData" :key="idx">
@@ -427,7 +427,7 @@ export default {
             height: 120px;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(34,15,96,0.3);
+            border-bottom: 1px solid rgba(34,15,96,0.2);
             .index {
               align-self: center;
               color:#201a98;
