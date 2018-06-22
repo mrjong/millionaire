@@ -63,7 +63,6 @@ import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import Living from '../components/Living'
-import { useRecoveryCard } from '../assets/js/api'
 export default {
   name: 'Respondence',
   data () {
@@ -138,8 +137,9 @@ export default {
             {
               ...userAnswerInfo,
               id,
-              index
-            }, Date.now() + 180000)
+              index,
+              raceId: utils.raceId
+            })
           this.$store.dispatch(type.QUESTION_SUBMIT).then(() => {
             utils.statistic('QUESTION_RESULT', 1, {
               id_s: `${this.index}`,
@@ -212,10 +212,57 @@ export default {
     useRecoveryCard () {
       this.isUsedRecoveryCard = true
       this.extraLifeTip = false
-      const {id, index, isAnswered} = this
+      const {id, index, isAnswered, lives, maxRecoveryCount, isCanRecoveryLastQuestion, questionCount} = this
       console.log('使用复活卡时题目信息：', id, index, isAnswered)
-      let recoveryType = isAnswered ? 1 : 2 // 复活类型 1 答错复活 2 未答复活
-      useRecoveryCard(id, index, recoveryType).then(({data}) => {
+      const recoveryType = isAnswered ? 1 : 2 // 复活类型 1 答错复活 2 未答复活
+      // 从本地获取复活卡信息
+      let {id: raceId, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}, uncommittedAnswers = []} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+      if (raceId !== utils.raceId) {
+        reviveCardInfo = {
+          lives: 0,
+          maxRecoveryCount: 0,
+          records: []
+        }
+        uncommittedAnswers = []
+        utils.storage.remove('millionaire-uncommittedAnswers')
+      }
+      reviveCardInfo.records.push({
+        s: index,
+        t: recoveryType
+      })
+      // 更新复活卡数量
+      this.$store.commit(type.QUESTION_UPDATE, {
+        isCorrect: true,
+        maxRecoveryCount: maxRecoveryCount - 1
+      })
+
+      this.$store.commit(type._UPDATE, {
+        lives: lives - 1
+      })
+
+      this.isLiving = true
+      utils.playSound('succeed')
+      setTimeout(() => {
+        this.isLiving = false
+      }, 3000)
+
+      // 缓存复活卡信息
+      const {lives: updatedLives = 0, maxRecoveryCount: updatedMaxRecoveryCount = 0} = this.$store.getters
+      utils.storage.set('millionaire-uncommittedAnswers', {
+        id: utils.raceId,
+        uncommittedAnswers,
+        reviveCardInfo: {
+          ...reviveCardInfo,
+          lives: updatedLives,
+          maxRecoveryCount: updatedMaxRecoveryCount
+        }
+      })
+
+      // 如果最后一题可以使用复活卡，提交复活卡使用信息
+      if (isCanRecoveryLastQuestion && index === questionCount) {
+        this.$store.dispatch(type.QUESTION_SUBMIT)
+      }
+      /* useRecoveryCard(id, index, recoveryType).then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {
           // 更新复活卡数量与复活次数
           const {cardNumber = 0, reviveTimes = 0} = data.data || {}
@@ -233,15 +280,18 @@ export default {
           }, 3000)
         } else {
           this.cancelUseRecoveryCard()
+          this.failedUseRecoveryCardTip()
           console.log('复活卡使用失败:', data.msg)
         }
       }, (err) => {
         this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
         console.log('复活卡使用出错:', err)
       }).catch((err) => {
         this.cancelUseRecoveryCard()
+        this.failedUseRecoveryCardTip()
         console.log('复活卡使用代码逻辑出错:', err)
-      })
+      }) */
     },
     /**
      * 重置问题状态
@@ -263,6 +313,18 @@ export default {
         watchingMode: watchingMode ? true : (!isAnswered || !isCorrect)
       })
       this.resetState()
+    },
+    /**
+     * 使用复活卡失败提示
+     */
+    failedUseRecoveryCardTip () {
+      this.$store.dispatch(type._OPEN_DIALOG, {
+        htmlTitle: 'Extra Lives Use Failed',
+        htmlText: 'Your internet connection is disconnected or your request of server is timeout. Please check your internet connection.',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: 'OK'
+      })
     }
   },
   watch: {
@@ -367,6 +429,7 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .respondence-container{
+    height: auto;
     min-height: 500px;
     margin: 25px;
     background-color: #fff;
@@ -394,10 +457,11 @@ export default {
       padding: 0 16px;
       font: 300 28px/40px 'Roboto';
       text-align: left;
-      min-height: 28px;
+      min-height: 30px;
     }
     &__answer{
       font-size: 28px;
+      min-height:340px;
     }
     .living{
       position: fixed;

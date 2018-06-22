@@ -98,7 +98,7 @@ const utils = {
       })
       njordGame.login && njordGame.login(loginArgs)
     } else {
-      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
+      vm.$router.replace({path: '/login'})
     }
   },
   /**
@@ -116,6 +116,8 @@ const utils = {
       errCallback && errCallback(err)
       console.log('退出登陆出错', err)
     })
+    // 客户端退出登陆
+    njordGame && njordGame.logout && njordGame.logout()
   },
   /**
    * 获取个人信息
@@ -273,11 +275,11 @@ const utils = {
    * @param {any} content 分享内容
    * @param {any} [link=window.location.href] 分享链接
    */
-  share (callback, packageName, content, link = window.location.href, code) {
+  share (callback, packageName, content, link = window.location.href, code, title, desp) {
     /* eslint-disable no-useless-escape */
-    const title = `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
-    const desp = `Open the game link and use my referral code ${code}, let keep winning cash every day!`
-    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}&desp=${encodeURIComponent(desp)}`
+    const shareTitle = title || `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
+    const shareDesp = desp || `Open the game link and use my referral code ${code}, let keep winning cash every day!`
+    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)
@@ -513,7 +515,17 @@ const utils = {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
+    if (isFbApp) {
+      console.log('isFbApp')
+      window.location.href = 'fb://page/1814960232131059'
+    } else {
+      console.log('abbbbbbbbb')
+      setTimeout(() => {
+        console.log('hhhhh')
+        window.location.href = 'https://www.facebook.com/GoMillionaire-1814960232131059/'
+      }, 500)
+      window.location.href = 'fb://page/1814960232131059'
+    }
   },
   /**
    * 生成指定长度的随机串
@@ -574,18 +586,19 @@ class Timer {
     }
     this.timer = setInterval(() => {
       if (this.offset > 0) {
-        const date = new Date(this.offset)
+        const {offset} = this
+        const date = new Date(offset)
         this.completeCallback && this.completeCallback({
           year: date.getUTCFullYear() - 1970,
           month: date.getUTCMonth(),
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(this.offset / 1000) % 60,
-          offset: this.offset
+          seconds: Math.round(offset / 1000) % 60,
+          offset
         })
         // 如果剩余时间小于间隔
-        if (this.offset < interval) {
+        if (offset <= interval) {
           this.stop()
           setTimeout(() => {
             this.endCallback && this.endCallback()
