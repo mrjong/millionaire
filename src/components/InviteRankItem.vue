@@ -32,7 +32,7 @@ export default {
     height: 120px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(34,15,96,0.3);
+    border-bottom: 1px solid rgba(34,15,96,0.2);
     .index {
       align-self: center;
       color:#201a98;
