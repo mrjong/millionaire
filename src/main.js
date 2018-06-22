@@ -68,6 +68,15 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+/* eslint-disable no-new */
+export const vm = new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(registration => {
@@ -77,18 +86,9 @@ if ('serviceWorker' in navigator) {
           window.location.reload()
         }, 500))
       }
-      console.log('Service Worker registered: ', registration)
+      console.log('Service Worker registered2: ', registration)
     }).catch(registrationError => {
       console.log('Service Worker failed: ', registrationError)
     })
   })
 }
-
-/* eslint-disable no-new */
-export const vm = new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
