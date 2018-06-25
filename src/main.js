@@ -8,6 +8,7 @@ import utils from './assets/js/utils'
 // import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
+import i18n from './i18n'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 im.init()
@@ -54,6 +55,7 @@ export const vm = new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
 })
