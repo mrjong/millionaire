@@ -270,6 +270,7 @@ export default {
     &__btn{
       padding-top: 620px;
       &__click{
+        max-width: 100%;
         width: 670px;
         height: 100px;
         background: url('../assets/images/invite-btn.png') no-repeat center;

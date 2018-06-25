@@ -659,6 +659,7 @@ export default {
       }
     }
     .invite {
+      max-width: 100%;
       width: 670px;
       height: 100px;
       background: url('../assets/images/invite-btn.png') no-repeat center;
