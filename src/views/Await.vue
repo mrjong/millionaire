@@ -42,7 +42,7 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">Earn Cash Quickly</div>
+    <div class="invite" @click="toInvite">Invite & Earn Cash</div>
     <div class="notice">
       <router-link to="/rank">
         <notices></notices>
