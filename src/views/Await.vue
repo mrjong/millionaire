@@ -1,5 +1,5 @@
 <template>
-  <div class="await">
+  <div class="await" v-bg-img="'await-bg.png -webkit-linear-gradient(top,#0e0842,#1b208c)'">
     <div class="await__top">
       <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"

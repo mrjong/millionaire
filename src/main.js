@@ -3,6 +3,7 @@
 import Fingerprint2 from 'fingerprintjs2'
 import Vue from 'vue'
 import App from './App'
+import Image from './components/StaticImage.vue'
 import router from './router'
 import utils from './assets/js/utils'
 // import axios from 'axios'
@@ -48,6 +49,16 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+Vue.component('static-image', Image) // 初始化图片组件
+
+Vue.directive('bg-img', (el, {value = ''}) => {
+  // 将多个值以空格分割
+  const vals = value.split(' ')
+  const imgUrl = vals[0] || ''
+  const resetVal = vals.slice(1).join(',')
+  el.style.backgroundImage = `url('${utils.getImageUrl(imgUrl)}'), ${resetVal}`
 })
 /* eslint-disable no-new */
 export const vm = new Vue({

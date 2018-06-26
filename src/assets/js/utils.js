@@ -5,7 +5,7 @@ import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
 import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
-import {host, env} from './http'
+import {host, env, imageHost} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
 import { _UPDATE, HOME_UPDATE } from '../../store/type'
@@ -538,6 +538,14 @@ const utils = {
       len--
     }
     return str
+  },
+  /**
+   * 获取图片URL
+   */
+  getImageUrl (name) {
+    const isSupportWebpFormat = !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0
+    const path = isSupportWebpFormat ? '/imageView/format/webp/source/millionaire/images/' : '/imageView/source/millionaire/images/'
+    return `${imageHost}${path}${name}`
   }
 }
 
