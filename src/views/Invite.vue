@@ -3,7 +3,10 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">Rules</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">Invite & Earn Cash</p>
+      <div class="invite__btn__click" @click="inviteEarn">
+        <img src="../assets/images/invite-btn.png">
+        <p>Invite & Earn Cash</p>
+      </div>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">How To Earn</p>
@@ -269,18 +272,28 @@ export default {
     }
     &__btn{
       padding-top: 620px;
-      &__click{
-        max-width: 100%;
-        width: 670px;
-        height: 100px;
-        background: url('../assets/images/invite-btn.png') no-repeat center;
-        background-size: cover;
+      &__click {
+        position: relative;
+        max-width:98%;
+        width: 680px;
         border-radius: 24px;
         margin: 0 auto;
         text-align: center;
         color: #fff;
         font: 600 40px 'Roboto', Arial, serif;
         line-height: 95px;
+        img{
+          max-width: 100%;
+          width: 670px;
+          height: 100px;
+        }
+        p{
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%,0);
+          width: 100%;
+        }
       }
     }
     &__step{
@@ -289,7 +302,7 @@ export default {
       max-width: 100%;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       padding: 30px;
       &__title{
         margin-bottom: 30px;
@@ -354,7 +367,7 @@ export default {
       min-height: 680px;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       overflow: hidden;
       .tap{
         width: 100%;
