@@ -100,24 +100,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       swDest: './sw.js',
       runtimeCaching: [{
         urlPattern: `${config.build.assetsPublicPath}index.html`,
-        handler: `networkOnly`,
-        options: {
-          cacheName: 'my-index.html',
-          expiration: {
-            maxEntries: 5,
-            maxAgeSeconds: 10,
-          }
-        }
+        handler: `networkOnly`
       },{
         urlPattern: `${config.build.assetsPublicPath}sw.js`,
-        handler: `networkOnly`,
-        options: {
-          cacheName: 'my-sw.js',
-          expiration: {
-            maxEntries: 5,
-            maxAgeSeconds: 5,
-          }
-        }
+        handler: `networkOnly`
       }]
     }),
     // keep module.id stable when vendor modules does not change
