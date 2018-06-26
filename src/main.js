@@ -97,7 +97,7 @@ if ('serviceWorker' in navigator) {
         //   window.location.reload()
         // }, 500))
       }
-      console.log('Service Worker registered18: ', registration)
+      console.log('Service Worker registered22: ', registration)
     }).catch(registrationError => {
       console.log('Service Worker failed: ', registrationError)
     })

@@ -97,7 +97,28 @@ const webpackConfig = merge(baseWebpackConfig, {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
-      swDest: './sw.js'
+      swDest: './sw.js',
+      runtimeCaching: [{
+        urlPattern: `${config.build.assetsPublicPath}index.html`,
+        handler: `networkOnly`,
+        options: {
+          cacheName: 'my-index.html',
+          expiration: {
+            maxEntries: 5,
+            maxAgeSeconds: 10,
+          }
+        }
+      },{
+        urlPattern: `${config.build.assetsPublicPath}sw.js`,
+        handler: `networkOnly`,
+        options: {
+          cacheName: 'my-sw.js',
+          expiration: {
+            maxEntries: 5,
+            maxAgeSeconds: 5,
+          }
+        }
+      }]
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
