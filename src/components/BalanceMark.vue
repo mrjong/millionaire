@@ -77,6 +77,7 @@ export default {
     align-items: center;
     text-align: center;
     &__wrap {
+      max-width: 85%;
       width: 602px;
       background: #fff;
       border-radius: 16px;
@@ -133,6 +134,7 @@ export default {
         margin-top: 25px;
         span {
           display: inline-block;
+          max-width: 47%;
           width: 240px;
           height: 100%;
           border-radius: 38px;
