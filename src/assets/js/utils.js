@@ -308,10 +308,10 @@ const utils = {
         }
         case TWITTER: {
           setTimeout(() => {
-            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
+            const href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareLink}`
             window.location.href = href
           }, 5)
-          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
+          window.location.href = `twitter://post?message=${shareTitle}&url=${encodeURIComponent(shareLink)}`
         }
       }
     }
