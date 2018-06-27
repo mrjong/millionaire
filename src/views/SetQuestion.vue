@@ -160,7 +160,7 @@ export default {
       this.isLoading = true
       const phoneRule = /^[\+\-0-9]{1,20}$/
       if (this.questionInfo.author === '') {
-        this.baseConfig('no_phone', 'Please enter your name.')
+        this.baseConfig('no_name', 'Please enter your name.')
         return false
       } else if (this.questionInfo.tel === '') {
         this.baseConfig('no_phone', 'Please enter your phone number')
