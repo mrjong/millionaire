@@ -189,6 +189,7 @@ export default {
     }
     // this.reportCheckCode()
     utils.statistic('wait_page', 0)
+    console.log(this.$t('title'))
   },
   methods: {
     // 按钮打点
