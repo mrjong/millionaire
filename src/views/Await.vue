@@ -316,12 +316,8 @@ export default {
       }
     },
     toInvite () {
-      if (utils.isOnline) {
-        this.btnStatistic('earn_money_button')
-        this.$router.push({path: '/invite'})
-      } else {
-        this.login('/invite')
-      }
+      this.btnStatistic('earn_money_button')
+      this.$router.push({path: '/invite'})
     },
     // login
     login (path) {
