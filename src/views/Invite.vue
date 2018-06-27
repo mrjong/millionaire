@@ -98,6 +98,7 @@ import InviteRankItem from '../components/InviteRankItem'
 import ReviveCard from '../components/ReviveCard'
 import InviteBlank from '../components/InviteBlank'
 import Loading from '../components/Loading'
+import * as type from '../store/type'
 export default {
   name: 'Invite',
   data () {
@@ -215,8 +216,15 @@ export default {
       }
     },
     inviteEarn () {
-      this.reviveObj.isShare = true
       utils.statistic('invite_earn_button', 1)
+      if (utils.isOnline) {
+        this.reviveObj.isShare = true
+      } else {
+        utils.login(() => {
+          this.$store.dispatch(type._INIT)
+          this.$router.push({path: '/invite'})
+        })
+      }
     },
     shareClose () {
       this.reviveObj.isShare = false
