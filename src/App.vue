@@ -99,7 +99,7 @@ export default {
       if (this.dialogInfo.okEvent) {
         this.dialogInfo.okEvent()
       }
-      this.$store.dispatch(type._CLOSE_DIALOG)
+      this.$store.commit(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码
