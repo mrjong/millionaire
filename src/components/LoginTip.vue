@@ -24,7 +24,7 @@ export default {
         shouldSub: false,
         markType: 0,
         okBtnText: 'Log in',
-        hintImg: 'http://static.subcdn.com/201803281952051c52ffc800.png'
+        hintImg: '//static.apusapps.com/201803281952051c52ffc800.png'
       }
     }
   },

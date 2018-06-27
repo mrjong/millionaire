@@ -11,6 +11,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const version = require('../package.json').version
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
@@ -92,6 +93,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
       host: JSON.stringify(host[buildEnv || process.env.BUILD_ENV || 'prod'])
+    }),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      swDest: './sw.js',
+      runtimeCaching: [{
+        urlPattern: `${config.build.assetsPublicPath}index.html`,
+        handler: `networkOnly`
+      },{
+        urlPattern: `${config.build.assetsPublicPath}sw.js`,
+        handler: `networkOnly`
+      }]
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),

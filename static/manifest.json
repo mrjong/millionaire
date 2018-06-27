@@ -1,0 +1,20 @@
+{
+  "short_name": "Go!Millionaire",
+  "name": "10PM Everyday, Win Up To ₹1,000,000!",
+  "icons": [
+    {
+      "src": "./images/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./images/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "../index.html",
+  "background_color": "#0e0a4a",
+  "theme_color": "#0e0a4a",
+  "display": "standalone"
+}

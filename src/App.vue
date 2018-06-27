@@ -50,7 +50,7 @@ export default {
   created () {
     this.loading = true
     this.$store.commit(type.HOME_UPDATE, {
-      icode: utils.getQuery('icode')
+      icode: utils.getQuery('icode') || utils.icode
     })
     api.queryAgreePolicy().then(({data}) => {
       this.loading = false
@@ -96,17 +96,10 @@ export default {
      * 关闭弹窗
      */
     closeDialog () {
-      this.$store.commit(type._UPDATE, {
-        showDialog: false,
-        dialogInfo: {
-          htmlTitle: '',
-          htmlText: '',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK',
-          hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-        }
-      })
+      if (this.dialogInfo.okEvent) {
+        this.dialogInfo.okEvent()
+      }
+      this.$store.commit(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码
@@ -148,6 +141,8 @@ export default {
           api.checkInviteCode(this.userInfo.icode).then(({data}) => {
             if (data.result !== 1) {
               return false
+            } else {
+              utils.clearShareParams()
             }
           }).catch(() => {
             return false
@@ -159,6 +154,8 @@ export default {
               api.checkInviteCode(this.userInfo.icode).then(({data}) => {
                 if (data.result !== 1) {
                   return false
+                } else {
+                  utils.clearShareParams()
                 }
               }).catch(() => {
                 return false
@@ -246,7 +243,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601364bf0e78d16.woff2) format('woff2');
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(//static.apusapps.com/201803201601364bf0e78d16.woff2) format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -254,7 +251,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601401014a81eaa.woff2) format('woff2');
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(//static.apusapps.com/201803201601401014a81eaa.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
 }
 
@@ -263,7 +260,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/2018032016013762a8c1210f.woff2) format('woff2');
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(//static.apusapps.com/2018032016013762a8c1210f.woff2) format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -271,7 +268,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/201803201601353e1f01c5c2.woff2) format('woff2');
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(//static.apusapps.com/201803201601353e1f01c5c2.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
 }
 
