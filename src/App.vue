@@ -50,7 +50,7 @@ export default {
   created () {
     this.loading = true
     this.$store.commit(type.HOME_UPDATE, {
-      icode: utils.getQuery('icode')
+      icode: utils.getQuery('icode') || utils.icode
     })
     api.queryAgreePolicy().then(({data}) => {
       this.loading = false
@@ -141,6 +141,8 @@ export default {
           api.checkInviteCode(this.userInfo.icode).then(({data}) => {
             if (data.result !== 1) {
               return false
+            } else {
+              utils.clearShareParams()
             }
           }).catch(() => {
             return false
@@ -152,6 +154,8 @@ export default {
               api.checkInviteCode(this.userInfo.icode).then(({data}) => {
                 if (data.result !== 1) {
                   return false
+                } else {
+                  utils.clearShareParams()
                 }
               }).catch(() => {
                 return false

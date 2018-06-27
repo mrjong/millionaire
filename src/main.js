@@ -86,18 +86,22 @@ if ('serviceWorker' in navigator) {
         vm.$store.dispatch(_OPEN_DIALOG, {
           htmlTitle: 'New Version Available',
           htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
-          lastTime: -1,
-          okBtnText: 'Upgrade Now',
+          lastTime: 5000,
+          okBtnText: 'OK',
           hintImg: './static/images/tip-update.png',
           okEvent: function () {
             window.location.reload()
           }
         })
+        // 弹窗自动关闭一秒后自动更新
+        setTimeout(() => {
+          window.location.reload()
+        }, 6000)
         // registration.update().then(() => setTimeout(() => {
         //   window.location.reload()
         // }, 500))
       }
-      console.log('Service Worker registered31: ', registration)
+      console.log('Service Worker registered35: ', registration)
     }).catch(registrationError => {
       console.log('Service Worker failed: ', registrationError)
     })

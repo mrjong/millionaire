@@ -1,6 +1,6 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
-/* eslint-disable standard/no-callback-literal */
+/* eslint-disable standard/no-callback-literal,camelcase */
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
@@ -11,6 +11,7 @@ import {vm} from '../../main'
 import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
 const njordGame = window.top.njordGame
+const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 storage.addPlugin(expirePlugin)
@@ -52,9 +53,12 @@ const sounds = {
     loop: false
   }
 }
-
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
+// 客户端分享参数
+const shareParams = (ma_js_i && ma_js_i.getSharedParam) ? JSON.parse(ma_js_i.getSharedParam()) : null
+
+console.log('客户端分享参数', shareParams)
 
 const utils = {
   /**
@@ -98,7 +102,7 @@ const utils = {
       })
       njordGame.login && njordGame.login(loginArgs)
     } else {
-      vm.$router.replace({path: '/login'})
+      vm.$router.push({path: '/login'})
     }
   },
   /**
@@ -188,6 +192,8 @@ const utils = {
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
   raceId: '', // 本场比赛ID
   actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
+  icode: shareParams ? shareParams.icode : null,
+
   /**
    * 关闭客户端WebView
    */
@@ -302,10 +308,10 @@ const utils = {
         }
         case TWITTER: {
           setTimeout(() => {
-            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
+            const href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareLink}`
             window.location.href = href
           }, 5)
-          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
+          window.location.href = `twitter://post?message=${shareTitle}&url=${encodeURIComponent(shareLink)}`
         }
       }
     }
@@ -519,9 +525,7 @@ const utils = {
       console.log('isFbApp')
       window.location.href = 'fb://page/1814960232131059'
     } else {
-      console.log('abbbbbbbbb')
       setTimeout(() => {
-        console.log('hhhhh')
         window.location.href = 'https://www.facebook.com/GoMillionaire-1814960232131059/'
       }, 500)
       window.location.href = 'fb://page/1814960232131059'
@@ -538,10 +542,16 @@ const utils = {
       len--
     }
     return str
+  },
+  /**
+   * 清除分享参数
+   */
+  clearShareParams () {
+    ma_js_i && ma_js_i.clearSharedParam && ma_js_i.clearSharedParam()
   }
 }
 
-window.utils = utils
+window.clearShare = utils.clearShareParams
 
 export default utils
 
