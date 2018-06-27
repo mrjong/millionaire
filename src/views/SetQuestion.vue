@@ -114,7 +114,7 @@ export default {
         shouldSub: false,
         markType: 0,
         okBtnText: 'OK',
-        hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+        hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       },
       isSetQuestion: false,
       isLoading: false,
@@ -160,7 +160,7 @@ export default {
       this.isLoading = true
       const phoneRule = /^[\+\-0-9]{1,20}$/
       if (this.questionInfo.author === '') {
-        this.baseConfig('no_phone', 'Please enter your name.')
+        this.baseConfig('no_name', 'Please enter your name.')
         return false
       } else if (this.questionInfo.tel === '') {
         this.baseConfig('no_phone', 'Please enter your phone number')
