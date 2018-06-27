@@ -42,9 +42,12 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">Invite & Earn Cash</div>
+    <div class="invite" @click="toInvite">
+      <img src="../assets/images/invite-btn.png">
+      <p>Invite & Earn Cash</p>
+    </div>
     <div class="notice">
-      <router-link to="/rank">
+      <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
     </div>
@@ -410,6 +413,9 @@ export default {
     background-size: cover;
     padding-bottom: 30px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -440,10 +446,12 @@ export default {
     }
     &__title{
       width: 300px;
-      height: 171px;
-      margin: 0 auto;
+      height: 130px;
+      margin: 0 auto 40px;
       img{
-        width: 100%;
+        max-width: 100%;
+        width: 300px;
+        height: 130px;
       }
     }
     &__reminder {
@@ -458,11 +466,14 @@ export default {
       border-radius: 46px;
     }
     &__btn{
+      max-width: 93%;
+      width: 6.7rem;
       display: flex;
       margin:0 25px 25px;
       justify-content: space-between;
       background-color: #fff;
       border-radius: 24px;
+      align-self: center;
       .invitation-code, .get-lives{
         max-width: 48%;
         width: 322px;
@@ -667,21 +678,33 @@ export default {
       }
     }
     .invite {
-      width: 670px;
-      height: 100px;
-      background: url('../assets/images/invite-btn.png') no-repeat center;
-      background-size: cover;
+      position: relative;
+      max-width:93%;
       border-radius: 24px;
       margin: 0 auto;
       text-align: center;
       color: #fff;
       font: 600 40px 'Roboto', Arial, serif;
       line-height: 95px;
+      img{
+        max-width: 100%;
+        width: 670px;
+        height: 100px;
+      }
+      p{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%,0);
+        width: 100%;
+      }
     }
     .notice{
       width: 100%;
       background: url("../assets/images/notice-bg.png") no-repeat center;
       background-size: contain;
+      display: flex;
+      justify-content: center;
     }
     .footer-bg{
       width: 100%;
