@@ -10,6 +10,7 @@ import http from './assets/js/http'
 import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
+import { _OPEN_DIALOG } from './store/type'
 im.init()
 
 window.onload = function () {
@@ -18,6 +19,24 @@ window.onload = function () {
     style_s: window.top.njordGame ? 'app' : 'h5' // 页面类型
   }, utils.getQuery('referrer'))
 }
+
+window.addEventListener('beforeinstallprompt', function (event) {
+  // 统计用户的选择
+  event.userChoice.then((choiceResult) => {
+    console.log(choiceResult.outcome) // 为 dismissed 或 accepted
+    if (choiceResult.outcome === 'accepted') {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '1'
+      })
+      console.log('User accepted home screen install')
+    } else {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '0'
+      })
+      console.log('User canceled home screen install')
+    }
+  })
+})
 
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
@@ -49,6 +68,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',
@@ -57,3 +77,33 @@ export const vm = new Vue({
   components: { App },
   template: '<App/>'
 })
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(registration => {
+      registration.onupdatefound = () => {
+        console.log('onupdatefound')
+        vm.$store.dispatch(_OPEN_DIALOG, {
+          htmlTitle: 'New Version Available',
+          htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
+          lastTime: 5000,
+          okBtnText: 'OK',
+          hintImg: './static/images/tip-update.png',
+          okEvent: function () {
+            window.location.reload()
+          }
+        })
+        // 弹窗自动关闭一秒后自动更新
+        setTimeout(() => {
+          window.location.reload()
+        }, 6000)
+        // registration.update().then(() => setTimeout(() => {
+        //   window.location.reload()
+        // }, 500))
+      }
+      console.log('Service Worker registered35: ', registration)
+    }).catch(registrationError => {
+      console.log('Service Worker failed: ', registrationError)
+    })
+  })
+}

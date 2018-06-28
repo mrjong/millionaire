@@ -42,6 +42,7 @@ export default {
     .rule{
       max-width: 90%;
       width: 600px;
+      height: 827px;
       margin: 0 auto;
     }
     .content{
