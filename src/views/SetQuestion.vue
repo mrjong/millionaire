@@ -86,9 +86,8 @@ export default {
       instruction: [
         '1. Set questions with proper grammar and spelling, and submit them to be our QUIZ MASTER. ',
         '2. Once your questions are selected, you\'ll get the chances to answer your own question in \'Go! Millionaire\' Game to win.',
-        '3. Once your questions are selected, you\'ll get the chances to answer your own question in \'Go! Millionaire\' Game to win.',
-        '4. Your name will be featured below your questions, which means to be seen by millions of APUS Users.',
-        '5. We\'ll announce each QUIZ MASTER on @APUSBrowser Facebook page everyday..'
+        '3. Your name will be featured below your questions, which means to be seen by millions of APUS Users.',
+        '4. We\'ll announce each QUIZ MASTER on @APUSBrowser Facebook page everyday..'
       ],
       note: [
         'English questions only.',
