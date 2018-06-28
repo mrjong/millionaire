@@ -550,8 +550,6 @@ const utils = {
   }
 }
 
-window.clearShare = utils.clearShareParams
-
 export default utils
 
 /**
