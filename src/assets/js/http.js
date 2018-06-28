@@ -3,7 +3,7 @@
 import axios from 'axios'
 export const env = BUILD_ENV || 'prod'
 export const host = {
-  local: '//mock.apuscn.com/mock/30/millionaire',
+  local: 'https://mock.apuscn.com/mock/30/millionaire',
   dev: '//dev-millionaire-api.apuscn.com',
   test: '//test-millionaire-api.apuscn.com',
   check: '//check-millionaire-api.apusapps.com',
