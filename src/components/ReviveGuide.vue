@@ -36,9 +36,9 @@ export default {
     })
   },
   mounted () {
-    if (!localStorage.getItem('NoFirstGuide') && this.$route.path === '/') {
+    if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = true
-      localStorage.setItem('NoFirstGuide', 'false')
+      utils.storage.set('millionaire-NoFirstGuide', true)
     } else {
       this.FirstGuide = false
     }
@@ -67,15 +67,16 @@ export default {
     },
     freeze () {
       document.querySelector('#app').style.overflow = 'hidden'
-      document.body.addEventListener('touchmove', this.preventDefault)
     },
     restore () {
       document.querySelector('#app').style.overflow = 'visible'
-      document.body.removeEventListener('touchmove', this.preventDefault)
     },
     preventDefault (event) {
       event.preventDefault()
     }
+  },
+  destroyed () {
+    this.restore()
   },
   watch: {
     // 关闭之后恢复屏幕滚动
@@ -90,13 +91,14 @@ export default {
 <style scoped lang="less" type="text/less">
   .guide {
     width: 100%;
-    height: 100%;
-    position: fixed;
+    min-height: 100%;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 111;
-    padding: 80px 40px 10px;
+    padding: 80px 40px 50px;
     background-color: rgba(0, 0, 0, 0.9);
+    overflow: auto;
     &__close{
       position: absolute;
       top: 24px;

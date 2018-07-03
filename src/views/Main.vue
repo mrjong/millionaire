@@ -22,15 +22,13 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <fail-tip v-show="index === 1" v-model="showFailTip" :index="index"></fail-tip>
-    <fail-tip-act v-show="index !== 1" v-model="showFailTip"></fail-tip-act>
+    <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import FailTip from '../components/FailTip'
-import FailTipAct from '../components/FailTipAct.vue'
+import FailTipInvite from '../components/FailTipInvite'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
@@ -53,7 +51,7 @@ export default {
         shouldSub: false,
         markType: 0,
         okBtnText: 'OK',
-        hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+        hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       }
     }
   },
@@ -80,7 +78,11 @@ export default {
       this.$router.replace({path: '/'})
     },
     onError (err) {
-      this.dialogInfo.htmlText = err
+      if (typeof err === 'string') {
+        this.dialogInfo.htmlText = err
+      } else {
+        this.dialogInfo = {...this.dialogInfo, ...err}
+      }
       this.showDialog = true
       setTimeout(() => {
         this.showDialog = false
@@ -114,8 +116,7 @@ export default {
     WinnersResult,
     Compere,
     BalanceMark,
-    FailTip,
-    FailTipAct
+    FailTipInvite
   }
 }
 </script>
@@ -129,11 +130,10 @@ export default {
     flex-direction: column;
     position: relative;
     &__top{
-      width: 100%;
+      height: 85px;
       display: flex;
       align-items: center;
       padding: 25px 25px 0;
-      min-height: 59px;
       position: relative;
       &__back{
         width: 54px;
@@ -185,7 +185,7 @@ export default {
         border-radius: 26px;
         line-height: 54px;
         text-align: center;
-        margin-right: 15px;
+        margin-right: 25px;
         font-size: 24px;
         position: absolute;
         right:0;

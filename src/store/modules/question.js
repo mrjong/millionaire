@@ -6,6 +6,7 @@ import utils from '../../assets/js/utils'
 import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
 import { submitAnswer } from '../../assets/js/api'
+import md5 from 'md5'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -125,17 +126,32 @@ const actions = {
     utils.playSound('go')
   },
   /**
-   *  提交答案
-   * @param {any} {getters}
+   * 提交答案
+   * @param {*} {commit, getters}
+   * @param {*} isOnlySubmitReviveCardInfo 是否只提交复活卡信息
+   * @returns
    */
-  [type.QUESTION_SUBMIT] ({commit, getters}) {
-    const {id, userAnswer, index} = getters
+  [type.QUESTION_SUBMIT] ({commit, getters}, isOnlySubmitReviveCardInfo) {
+    // 取出未提交成功的答案一起提交
+    let {id: raceId, uncommittedAnswers, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+    const {id, userAnswer, index, questionCount} = getters
+    if (raceId !== utils.raceId) { // 必须为当前比赛
+      uncommittedAnswers = []
+      utils.storage.remove('millionaire-uncommittedAnswers')
+    }
+    uncommittedAnswers.push({
+      i: id,
+      s: index,
+      a: md5(userAnswer)
+    })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(id, userAnswer, index).then(({data}) => {
+      submitAnswer(uncommittedAnswers, index === questionCount, isOnlySubmitReviveCardInfo).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
             case 0: {
+              // 提交成功后删除未提交的答案
+              utils.storage.remove('millionaire-uncommittedAnswers')
               break
             }
           }
@@ -144,27 +160,38 @@ const actions = {
           const index = +data.data
           switch (+data.code) {
             case 1005: {
-              reject('Time is out, you can view only.')
+              reject({
+                htmlTitle: 'Game over',
+                htmlText: 'Sorry for that you are already eliminated. Please check your internet connection.'
+              })
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
               break
             }
             case 1006:
             case 1007: {
-              reject(`Oops，you have already failed on the ${utils.formatIndex(index)} question.`)
+              reject(`Oops, you have already failed on the ${utils.formatIndex(index)} question.`)
+              commit(type.QUESTION_UPDATE, {
+                watchingMode: true
+              })
               break
             }
             default: {
-              reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
+              utils.storage.set('millionaire-uncommittedAnswers', {
+                id: utils.raceId,
+                uncommittedAnswers,
+                reviveCardInfo
+              })
             }
           }
-          commit(type.QUESTION_UPDATE, {
-            watchingMode: true
-          })
           console.log('答案提交失败:', id, data.msg)
         }
       }, (err) => {
-        reject('Sorry, you fail to submit. The internet is unstable, you can view only.')
-        commit(type.QUESTION_UPDATE, {
-          watchingMode: true
+        utils.storage.set('millionaire-uncommittedAnswers', {
+          id: utils.raceId,
+          uncommittedAnswers,
+          reviveCardInfo
         })
         console.log('答案提交错误:', err)
       }).catch((err) => {
@@ -197,7 +224,7 @@ const actions = {
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
-        const {i: id, a: correctAnswer} = answer
+        const {a: correctAnswer} = answer
 
         // 判断答案是否正确
         let isCorrect = md5Map[correctAnswer] === getters.userAnswer
@@ -210,7 +237,7 @@ const actions = {
         })
 
         commit(type.QUESTION_UPDATE, {
-          id, correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
+          correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END
@@ -224,18 +251,15 @@ const actions = {
    */
   [type.QUESTION_SYNC_LOCAL_ANSWER] ({commit, getters}) {
     // 从本地获取用户作答情况
-    const userAnswerInfo = utils.getLocaStorge('user-answer')
-    if (userAnswerInfo) {
-      const {id, index, isAnswered, userAnswer} = userAnswerInfo
-      // 若本地存储的答案信息与当前题目一致，则同步答案信息
-      if (id === getters.id && index === getters.index) {
-        commit(type.QUESTION_UPDATE, {
-          id,
-          index,
-          isAnswered,
-          userAnswer
-        })
-      }
+    const {id, index, isAnswered, userAnswer, raceId} = utils.storage.get('millionaire-user-answer') || {}
+    // 若本地存储的答案信息与当前题目一致，则同步答案信息
+    if (raceId === utils.raceId && id === getters.id && index === getters.index) {
+      commit(type.QUESTION_UPDATE, {
+        id,
+        index,
+        isAnswered,
+        userAnswer
+      })
     }
   },
   [type.QUESTION_YOU_WON] ({commit}, question) {

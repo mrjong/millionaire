@@ -70,13 +70,14 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 22;
+    z-index: 222;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     &__wrap {
+      max-width: 85%;
       width: 602px;
       background: #fff;
       border-radius: 16px;
@@ -129,11 +130,11 @@ export default {
       &__btn {
         width: 100%;
         height: 77px;
-        display: flex;
-        justify-content: space-around;
+        text-align: center;
         margin-top: 25px;
         span {
           display: inline-block;
+          max-width: 47%;
           width: 240px;
           height: 100%;
           border-radius: 38px;

@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     back () {
-      this.$router.go(-1)
+      this.$router.replace('/')
     },
     /**
      * 登录验证
@@ -121,9 +121,7 @@ export default {
             case 0: {
               utils.statistic('send_code', 1, {result_code_s: '1'}, 'sign_up')
               // 若为等待状态，返回首页
-              if (this.status === 1) {
-                this.$router.replace({path: '/'})
-              }
+              this.$router.go(-1)
               // 调用登陆成功回调
               window.loginSuccess()
               break

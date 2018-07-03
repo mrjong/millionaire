@@ -24,7 +24,7 @@ export default {
         shouldSub: false,
         markType: 0,
         okBtnText: 'Log in',
-        hintImg: 'http://static.subcdn.com/201803281952051c52ffc800.png'
+        hintImg: '//static.apusapps.com/201803281952051c52ffc800.png'
       }
     }
   },
@@ -61,7 +61,7 @@ export default {
       this.loading = true
       utils.syncAccountInfo().then(() => {
         this.loading = false
-        this.$emit('loginTipClose')
+        this.close()
       }, (errorCode) => {
         switch (errorCode) {
           case 3134: {

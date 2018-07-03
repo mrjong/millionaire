@@ -42,8 +42,12 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
+    <div class="invite" @click="toInvite">
+      <img src="../assets/images/invite-btn.png">
+      <p>Invite & Earn Cash</p>
+    </div>
     <div class="notice">
-      <router-link to="/rank">
+      <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
     </div>
@@ -98,6 +102,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
+    <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   :isInvitation = isInputInvitation
@@ -118,9 +123,9 @@ import * as api from '../assets/js/api'
 import Living from '../components/Living'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
-import FeedbackBtn from '../components/FeedbackBtn'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
+// import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
@@ -177,20 +182,15 @@ export default {
   },
   mounted () {
     this.$store.dispatch(type.HOME_UPDATE)
-    if (localStorage.getItem('isFirstShare')) {
-      let isFirst = localStorage.getItem('isFirstShare')
-      let duration = new Date().getTime() - localStorage.getItem('firstTime')
-      if (isFirst === 'true') {
-        this.isSucceed = true
-        setTimeout(() => {
-          this.isSucceed = false
-          localStorage.setItem('isFirstShare', 'false')
-        }, 3000)
-      }
-      if (duration > 86400000) {
-        localStorage.removeItem('isFirstShare')
-      }
+    const isFirst = utils.storage.get('millionaire-isFirstShare')
+    if (isFirst) {
+      this.isSucceed = true
+      setTimeout(() => {
+        this.isSucceed = false
+        utils('millionaire-isFirstShare', false)
+      }, 3000)
     }
+    // this.reportCheckCode()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -239,13 +239,21 @@ export default {
             result_code_s: data.result === 1 ? '1' : '0'
           }, 'wait_page')
           if (data.result === 1) {
+            // 从本地同步复活卡使用信息
+            const {id: raceId, reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+            let records = []
+            if (raceId === utils.raceId) {
+              records = reviveCardInfo.records || []
+            } else {
+              utils.storage.remove('millionaire-uncommittedAnswers')
+            }
             // 更新复活卡数量
             const {cn: lives = 0, lc: maxRecoveryCount = 0} = data.data || {}
             this.$store.commit(type._UPDATE, {
-              lives
+              lives: lives - records.length || 0
             })
             this.$store.commit(type.QUESTION_UPDATE, {
-              maxRecoveryCount
+              maxRecoveryCount: maxRecoveryCount - records.length || 0
             })
           } else {
             if (data.code === 404) {
@@ -307,6 +315,10 @@ export default {
         this.login('/share-detail')
       }
     },
+    toInvite () {
+      this.btnStatistic('earn_money_button')
+      this.$router.push({path: '/invite'})
+    },
     // login
     login (path) {
       utils.login(() => {
@@ -363,7 +375,6 @@ export default {
     Living,
     HowPlayCard,
     Notices,
-    FeedbackBtn,
     ReminderBomb,
     PolicyBomb
   },
@@ -379,7 +390,9 @@ export default {
     },
     status: function (status, oldStatus) {
       if (status === 2) {
-        this.$router.replace({path: '/main'})
+        if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
+          this.$router.push({path: '/main'})
+        }
       } else {
         this.$router.replace({path: '/'})
       }
@@ -396,6 +409,9 @@ export default {
     background-size: cover;
     padding-bottom: 30px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -426,10 +442,12 @@ export default {
     }
     &__title{
       width: 300px;
-      height: 171px;
-      margin: 0 auto;
+      height: 130px;
+      margin: 0 auto 40px;
       img{
-        width: 100%;
+        max-width: 100%;
+        width: 300px;
+        height: 130px;
       }
     }
     &__reminder {
@@ -444,11 +462,14 @@ export default {
       border-radius: 46px;
     }
     &__btn{
+      max-width: 93%;
+      width: 6.7rem;
       display: flex;
       margin:0 25px 25px;
       justify-content: space-between;
       background-color: #fff;
       border-radius: 24px;
+      align-self: center;
       .invitation-code, .get-lives{
         max-width: 48%;
         width: 322px;
@@ -652,10 +673,34 @@ export default {
         margin: 0 auto;
       }
     }
+    .invite {
+      position: relative;
+      max-width:93%;
+      border-radius: 24px;
+      margin: 0 auto;
+      text-align: center;
+      color: #fff;
+      font: 600 40px 'Roboto', Arial, serif;
+      line-height: 95px;
+      img{
+        max-width: 100%;
+        width: 670px;
+        height: 100px;
+      }
+      p{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%,0);
+        width: 100%;
+      }
+    }
     .notice{
       width: 100%;
       background: url("../assets/images/notice-bg.png") no-repeat center;
       background-size: contain;
+      display: flex;
+      justify-content: center;
     }
     .footer-bg{
       width: 100%;
@@ -685,9 +730,6 @@ export default {
       margin: 20px auto 0;
     }
   }
-  .await::before{
-    background:linear-gradient(red, blue)
-  }
   .bottom-text{
       margin: 25px 0;
       font: 200 24px 'Roboto', Arial, serif;
@@ -697,6 +739,13 @@ export default {
         color:#fff;
       }
     }
+  @media screen and (max-width: 321px) {
+    .await {
+      &__reminder {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
   @keyframes lives {
     0%{
       transform: scale(1);

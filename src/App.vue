@@ -38,17 +38,20 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState'
+      initialState: 'initialState',
+      userInfo: 'userInfo'
     })
   },
   beforeCreate () {
     if (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2) {
       window.location.reload()
     }
-    console.log('​beforeCreate -> window.performance.navigation.type', window.performance.navigation.type)
   },
   created () {
     this.loading = true
+    this.$store.commit(type.HOME_UPDATE, {
+      icode: utils.getQuery('icode') || utils.icode
+    })
     api.queryAgreePolicy().then(({data}) => {
       this.loading = false
       const {isEU = false} = data.data || {}
@@ -85,9 +88,6 @@ export default {
     this.init()
     this.getPhoneNationCode()
   },
-  mounted () {
-    console.log('mounted')
-  },
   methods: {
     init () {
       this.$store.dispatch(type._INIT_LISTENER)
@@ -96,27 +96,18 @@ export default {
      * 关闭弹窗
      */
     closeDialog () {
-      this.$store.commit(type._UPDATE, {
-        showDialog: false,
-        dialogInfo: {
-          htmlTitle: '',
-          htmlText: '',
-          shouldSub: false,
-          markType: 0,
-          okBtnText: 'OK',
-          hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
-        }
-      })
+      if (this.dialogInfo.okEvent) {
+        this.dialogInfo.okEvent()
+      }
+      this.$store.commit(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码
      */
     getPhoneNationCode () {
-      const phoneNationCodeStr = localStorage.getItem('millionaire-phoneNationCode')
-      let phoneNationCodes = null
+      let phoneNationCodes = utils.storage.get('millionaire-phoneNationCode')
       // 从本地获取
-      if (phoneNationCodeStr) {
-        phoneNationCodes = JSON.parse(phoneNationCodeStr)
+      if (phoneNationCodes) {
         const {phoneNationCode, phoneNationCodeList} = phoneNationCodes
         this.$store.commit(type._UPDATE, {
           phoneNationCodeList,
@@ -133,13 +124,50 @@ export default {
                 phoneNationCodeList,
                 phoneNationCode
               })
-              localStorage.setItem('millionaire-phoneNationCode', JSON.stringify({
+              utils.storage.set('millionaire-phoneNationCode', {
                 phoneNationCode,
                 phoneNationCodeList
-              }))
+              })
             }
           }
         })
+      }
+    },
+    // 上报验证好友邀请码
+    reportCheckCode () {
+      if (this.userInfo.icode) {
+        if (utils.isOnline) {
+          console.log('已登录' + this.userInfo.icode)
+          api.checkInviteCode(this.userInfo.icode).then(({data}) => {
+            if (data.result !== 1) {
+              return false
+            } else {
+              utils.clearShareParams()
+            }
+          }).catch(() => {
+            return false
+          })
+        } else {
+          utils.login(() => {
+            console.log('刚登录' + this.userInfo.icode)
+            this.$store.dispatch(type._INIT).then(() => {
+              api.checkInviteCode(this.userInfo.icode).then(({data}) => {
+                if (data.result !== 1) {
+                  return false
+                } else {
+                  utils.clearShareParams()
+                }
+              }).catch(() => {
+                return false
+              })
+            })
+            if (this.status === 2) {
+              this.$router.replace({path: '/main'})
+            } else {
+              this.$router.replace({path: '/'})
+            }
+          })
+        }
       }
     }
   },
@@ -152,7 +180,9 @@ export default {
   watch: {
     status: function (status, oldStatus) {
       if (status !== 1 && oldStatus === 1) {
-        this.$router.push({path: '/main'})
+        if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
+          this.$router.push({path: '/main'})
+        }
       } else if (status === 1) {
         this.$router.replace({path: '/'})
         im.stopPullMsg()
@@ -192,6 +222,16 @@ export default {
             }
           })
       }
+    },
+    '$route' (route) {
+      if (route.path === '/main' && this.status === 1) {
+        this.$router.replace({path: '/'})
+      }
+    },
+    initialState: function (newInitialState, oldInitialState) {
+      if (oldInitialState === -1 && newInitialState !== -1) {
+        this.reportCheckCode()
+      }
     }
   }
 }
@@ -211,7 +251,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601364bf0e78d16.woff2) format('woff2');
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(//static.apusapps.com/201803201601364bf0e78d16.woff2) format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -219,7 +259,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 400;
-  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(http://static.subcdn.com/201803201601401014a81eaa.woff2) format('woff2');
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(//static.apusapps.com/201803201601401014a81eaa.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
 }
 
@@ -228,7 +268,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/2018032016013762a8c1210f.woff2) format('woff2');
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(//static.apusapps.com/2018032016013762a8c1210f.woff2) format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -236,7 +276,7 @@ export default {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 700;
-  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(http://static.subcdn.com/201803201601353e1f01c5c2.woff2) format('woff2');
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(//static.apusapps.com/201803201601353e1f01c5c2.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
 }
 

@@ -1,6 +1,8 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
-/* eslint-disable standard/no-callback-literal */
+/* eslint-disable standard/no-callback-literal,camelcase */
+import storage from 'store'
+import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
 import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
 import {host, env} from './http'
@@ -9,48 +11,54 @@ import {vm} from '../../main'
 import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
 const njordGame = window.top.njordGame
+const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
+
+storage.addPlugin(expirePlugin)
 
 const sounds = {
   'countDown10-before': {
-    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
+    urls: ['//static.apusapps.com/countDown10-before.mp3', '//static.apusapps.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
+    urls: ['//static.apusapps.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
+    urls: ['//static.apusapps.com/20180314200629b0edee0942.ogg', '//static.apusapps.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
+    urls: ['//static.apusapps.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
+    urls: ['//static.apusapps.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
+    urls: ['//static.apusapps.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
+    urls: ['//static.apusapps.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
 }
-
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
+// 客户端分享参数
+const shareParams = (ma_js_i && ma_js_i.getSharedParam) ? JSON.parse(ma_js_i.getSharedParam()) : null
+
+console.log('客户端分享参数', shareParams)
 
 const utils = {
   /**
@@ -94,7 +102,7 @@ const utils = {
       })
       njordGame.login && njordGame.login(loginArgs)
     } else {
-      window.location.assign(`${window.location.origin}${window.location.pathname}#/login`)
+      vm.$router.push({path: '/login'})
     }
   },
   /**
@@ -112,6 +120,8 @@ const utils = {
       errCallback && errCallback(err)
       console.log('退出登陆出错', err)
     })
+    // 客户端退出登陆
+    njordGame && njordGame.logout && njordGame.logout()
   },
   /**
    * 获取个人信息
@@ -173,46 +183,7 @@ const utils = {
     const search = queryUrl.match(regx)
     return (search && decodeURIComponent(search[2])) || null
   },
-  /**
-   * 设置本地存储
-   * @param {any} [obj={}] 参数对象
-   * @param {string} [name='']
-   * @param {number} [expire=7 * 24 * 60 * 60 * 1000] 有效期 默认7天
-   */
-  setLocalStorge (obj = {}, name = '', expire) {
-    const val = utils.getLocaStorge(name) || {}
-    if (expire) {
-      obj.expire = Date.now() + expire
-    } else if (!val.expire) {
-      obj.expire = Date.now() + 7 * 24 * 60 * 60 * 1000
-    }
-    localStorage.setItem(`millionaire-${name}`, JSON.stringify({
-      ...val, ...obj
-    }))
-  },
-  /**
-   * 获取本地存储
-   * @param {string} [name='']
-   * @param {string} [key='']
-   * @returns
-   */
-  getLocaStorge (name = '', key = '') {
-    const localName = `millionaire-${name}`
-    const valStr = localStorage.getItem(localName)
-    if (valStr) {
-      let val = JSON.parse(valStr)
-      const {expire = 0} = val
-      if (expire < Date.now()) {
-        localStorage.removeItem(localName)
-        return null
-      }
-      if (key) {
-        val = val[key]
-      }
-      return val
-    }
-    return null
-  },
+  storage,
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
   timezone: clientParams ? clientParams.localZone : -new Date().getTimezoneOffset(),
@@ -221,6 +192,8 @@ const utils = {
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
   raceId: '', // 本场比赛ID
   actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
+  icode: shareParams ? shareParams.icode : null,
+
   /**
    * 关闭客户端WebView
    */
@@ -308,11 +281,11 @@ const utils = {
    * @param {any} content 分享内容
    * @param {any} [link=window.location.href] 分享链接
    */
-  share (callback, packageName, content, link = window.location.href, code) {
+  share (callback, packageName, content, link = window.location.href, code, title, desp) {
     /* eslint-disable no-useless-escape */
-    const title = `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
-    const desp = `Open the game link and use my referral code ${code}, let keep winning cash every day!`
-    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}&desp=${encodeURIComponent(desp)}`
+    const shareTitle = title || `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
+    const shareDesp = desp || `Open the game link and use my referral code ${code}, let keep winning cash every day!`
+    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)
@@ -335,10 +308,10 @@ const utils = {
         }
         case TWITTER: {
           setTimeout(() => {
-            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
+            const href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareLink}`
             window.location.href = href
           }, 5)
-          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
+          window.location.href = `twitter://post?message=${shareTitle}&url=${encodeURIComponent(shareLink)}`
         }
       }
     }
@@ -548,7 +521,15 @@ const utils = {
    */
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
-    window.location.href = (isFbApp ? 'fb://page/1814960232131059' : 'https://www.facebook.com/GoMillionaire-1814960232131059/')
+    if (isFbApp) {
+      console.log('isFbApp')
+      window.location.href = 'fb://page/1814960232131059'
+    } else {
+      setTimeout(() => {
+        window.location.href = 'https://www.facebook.com/GoMillionaire-1814960232131059/'
+      }, 500)
+      window.location.href = 'fb://page/1814960232131059'
+    }
   },
   /**
    * 生成指定长度的随机串
@@ -561,10 +542,14 @@ const utils = {
       len--
     }
     return str
+  },
+  /**
+   * 清除分享参数
+   */
+  clearShareParams () {
+    ma_js_i && ma_js_i.clearSharedParam && ma_js_i.clearSharedParam()
   }
 }
-
-window.utils = utils
 
 export default utils
 
@@ -609,18 +594,19 @@ class Timer {
     }
     this.timer = setInterval(() => {
       if (this.offset > 0) {
-        const date = new Date(this.offset)
+        const {offset} = this
+        const date = new Date(offset)
         this.completeCallback && this.completeCallback({
           year: date.getUTCFullYear() - 1970,
           month: date.getUTCMonth(),
           date: date.getUTCDate() - 1,
           hours: date.getUTCHours(),
           minuates: date.getUTCMinutes(),
-          seconds: Math.round(this.offset / 1000) % 60,
-          offset: this.offset
+          seconds: Math.round(offset / 1000) % 60,
+          offset
         })
         // 如果剩余时间小于间隔
-        if (this.offset < interval) {
+        if (offset <= interval) {
           this.stop()
           setTimeout(() => {
             this.endCallback && this.endCallback()

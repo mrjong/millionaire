@@ -1,7 +1,6 @@
 /* global PUBLIC_URL */
 import axios, { accountHost, env, reportHost} from './http'
 import utils from './utils'
-import md5 from 'md5'
 
 const publicUrl = PUBLIC_URL
 
@@ -36,13 +35,20 @@ export const api = {
   clearRecord: '/cmp/wc/', // 标记删除提现记录
   submitAgreePolicy: '/cmp/sub_ag/', // 上报协议
   queryAgreePolicy: '/cmp/ag/', // 查询是否同意协议
-  cashRecord: '/cmp/bfr/' // 余额记录
+  cashRecord: '/cmp/bfr/', // 余额记录
+  getAnswerSummary: '/cmp/as/', // 获取答案汇总结果
+  inviteWeeklyBoard: '/cmp/iwboard/', // 邀请好友周排行
+  inviteTotalBoard: '/cmp/itboard/', // 邀请好友总排行,
+  myInviteBoard: '/cmp/myinvite/', // 我的邀请
+  inviteLink: '/cmp/ic', // 生成分享facebook好友链接
+  checkInviteCode: '/cmp/ifc' // 验证分享好友码
 }
 
 export const init = function (isRefreshToken) {
   const params = {
     app_id: utils.app_id,
-    client_id: utils.clientId
+    client_id: utils.clientId,
+    f: true
   }
   // 是否刷新token
   if (isRefreshToken) {
@@ -64,17 +70,22 @@ export const getRankInfo = function (type) {
   })
 }
 
-// id为题目ID answer为答案内容
-export const submitAnswer = function (id, answer, index) {
-  return axios.get(api.submitAnswer, {
-    params: {
-      i: id,
-      a: md5(answer),
-      s: index,
-      app_id: utils.app_id,
-      client_id: utils.clientId,
-      race_id: utils.raceId
-    }
+// 提交答案 uncommittedAnswers 为未提交的答案数组 isLastQuestion 为是否是最后一题
+export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false, isOnlySubmitReviveCardInfo = false) {
+  const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
+  // 从本地同步复活卡信息
+  const {reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+  return axios.post(api.submitAnswer, {
+    i: utils.raceId,
+    as: isOnlySubmitReviveCardInfo ? [] : uncommittedAnswers,
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    rs: reviveCardInfo.records || [],
+    flag: offlineMode
+  }, {
+    retry: isLastQuestion ? 100 : 3,
+    retryDelay: isLastQuestion ? 2000 : 500,
+    timeout: 5000
   })
 }
 
@@ -207,7 +218,10 @@ export const signInByPhone = function (code) {
 
 // 获取手机号国家码
 export const getPhoneNationCode = function () {
-  return axios.post(`${accountHost[env]}${api.getPhoneNationCode}`)
+  return axios.post(api.getPhoneNationCode, {
+  }, {
+    baseURL: accountHost[env]
+  })
 }
 
 // 使用复活卡
@@ -326,5 +340,67 @@ export const getPolicyContent = function (filename) {
   return axios.get(`${publicUrl}/html/${filename}`, {
     baseURL: window.location.origin,
     withCredentials: false
+  })
+}
+
+// 获取答案汇总
+export const getAnswerSummary = function (index) {
+  return axios.get(api.getAnswerSummary, {
+    params: {
+      i: utils.raceId,
+      s: index
+    },
+    timeout: 5000,
+    retry: 0
+  })
+}
+// 邀请好友周排行
+export const inviteWeeklyBoard = function () {
+  return axios.get(api.inviteWeeklyBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 邀请好友总排行
+
+export const inviteTotalBoard = function () {
+  return axios.get(api.inviteTotalBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 我的邀请排行
+
+export const myInviteBoard = function () {
+  return axios.get(api.myInviteBoard, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 生成分享Facebook好友链接
+
+export const inviteLink = function () {
+  return axios.post(api.inviteLink, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+// 验证邀请好友码
+
+export const checkInviteCode = function (icode) {
+  return axios.post(api.checkInviteCode, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    icode: icode
   })
 }

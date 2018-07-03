@@ -16,7 +16,8 @@ const state = {
   currencyType: '₹', // 货币类型
   bonusAmount: 0, // 奖金数量
   income: 0, // 总收益,
-  incomeShow: '0' // 总收益展示
+  incomeShow: '0', // 总收益展示,
+  icode: '' // 好友验证码
 }
 
 const getters = {

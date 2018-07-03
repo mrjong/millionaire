@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted () {
-    utils.statistic('contact_page', 0, 'user_profile_page')
+    utils.statistic('contact_page', 0, {}, 'user_profile_page')
   },
   components: {
     loading
@@ -97,7 +97,6 @@ export default {
 </script>
 <style scoped lang="less" type="text/less">
   .contact-container {
-    width: 100%;
     height: 100%;
     background: url("../assets/images/await-bg.jpg") no-repeat top left;
     background-size: cover;
@@ -182,6 +181,8 @@ export default {
       width: 100%;
       position: absolute;
       bottom: 30px;
+      left: 50%;
+      transform: translate(-50%,0);
       font: 200 24px 'Roboto', Arial, serif;
       color: #fff;
       text-align: center;

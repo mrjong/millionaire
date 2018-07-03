@@ -10,6 +10,7 @@ import http from './assets/js/http'
 import store from './store'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
+import { _OPEN_DIALOG } from './store/type'
 im.init()
 
 window.onload = function () {
@@ -19,28 +20,40 @@ window.onload = function () {
   }, utils.getQuery('referrer'))
 }
 
+window.addEventListener('beforeinstallprompt', function (event) {
+  // 统计用户的选择
+  event.userChoice.then((choiceResult) => {
+    console.log(choiceResult.outcome) // 为 dismissed 或 accepted
+    if (choiceResult.outcome === 'accepted') {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '1'
+      })
+      console.log('User accepted home screen install')
+    } else {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '0'
+      })
+      console.log('User canceled home screen install')
+    }
+  })
+})
+
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
 }
 
 // 若在h5页面或无clientId 则生成clientId
 if (!utils.clientId) {
-  const clientId = utils.getLocaStorge('', 'clientId')
+  const clientId = utils.storage.get('millionaire-clientId')
   if (clientId) {
     utils.clientId = clientId
   } else {
     new Fingerprint2({excludeFlashFonts: true, excludeJsFonts: true}).get((result) => {
       utils.clientId = result
-      utils.setLocalStorge({clientId: result})
+      utils.storage.set('millionaire-clientId', result)
     })
   }
 }
-
-window.addEventListener('pageshow', function (e) {
-  if (e.persisted || (window.performance && window.performance.navigation && window.performance.navigation.type && window.performance.navigation.type === 2)) {
-    window.location.reload()
-  }
-})
 
 // 读取声音
 utils.loadSounds()
@@ -55,6 +68,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',
@@ -63,3 +77,23 @@ export const vm = new Vue({
   components: { App },
   template: '<App/>'
 })
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(registration => {
+      registration.onupdatefound = () => {
+        console.log('onupdatefound')
+        vm.$store.dispatch(_OPEN_DIALOG, {
+          htmlTitle: 'New Version Available',
+          htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
+          lastTime: 5000,
+          okBtnText: 'OK',
+          hintImg: './static/images/tip-update.png'
+        })
+      }
+      console.log('Service Worker registered35: ', registration)
+    }).catch(registrationError => {
+      console.log('Service Worker failed: ', registrationError)
+    })
+  })
+}

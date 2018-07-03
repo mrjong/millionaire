@@ -11,7 +11,7 @@
       </p>
       <div class="answer-container__base__right" v-if="questionStatus === 7" ref="resultNum">
         <p class="answer-container__base__right__num" ref="answerNum"
-           :class="{'font-white': isResultWhite || isAllWhite}">{{result}}</p>
+           :class="{'font-white': isResultWhite || isAllWhite}">{{result >= 0 ? result : ''}}</p>
         <span class="answer-container__base__right__icon iconfont icon-duihao resultIcon"
            ref="resultIcon"
            :class="{'icon-cuowu': !isRight, 'font-white': isAllWhite}"></span>
@@ -64,7 +64,9 @@ export default {
   },
   mounted () {
     if (this.questionStatus === 7) {
-      this.setFontSize()
+      this.$nextTick(() => {
+        this.setFontSize()
+      })
     }
   },
   methods: {
@@ -113,7 +115,9 @@ export default {
   watch: {
     questionStatus: function (questionStatus) {
       if (questionStatus === 7) {
-        this.setFontSize()
+        this.$nextTick(() => {
+          this.setFontSize()
+        })
       }
     }
   }
