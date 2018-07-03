@@ -11,10 +11,7 @@
         {{val.text}}
       </p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link></policy-link>
   </div>
 </template>
 
@@ -22,6 +19,7 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'Contact',
   data () {
@@ -89,13 +87,13 @@ export default {
     utils.statistic('contact_page', 0, {}, 'user_profile_page')
   },
   components: {
-    loading
+    loading,
+    PolicyLink
   }
 }
 </script>
 <style scoped lang="less" type="text/less">
   .contact-container {
-    width: 100%;
     height: 100%;
     background: url("../assets/images/await-bg.jpg") no-repeat top left;
     background-size: cover;
@@ -174,17 +172,6 @@ export default {
           background: url('../assets/images/icon-small-ins.png') no-repeat center;
           background-size: cover;
         }
-      }
-    }
-    .bottom-text{
-      width: 100%;
-      position: absolute;
-      bottom: 30px;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
       }
     }
   }

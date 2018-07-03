@@ -3,7 +3,10 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">{{$t('invite.invite_btn')}}</p>
+      <div class="invite__btn__click" @click="inviteEarn">
+        <img src="../assets/images/invite-btn.png">
+        <p>{{$t('invite.invite_btn')}}</p>
+      </div>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">{{$t('invite.steps_title')}}</p>
@@ -93,6 +96,7 @@ import InviteRankItem from '../components/InviteRankItem'
 import ReviveCard from '../components/ReviveCard'
 import InviteBlank from '../components/InviteBlank'
 import Loading from '../components/Loading'
+import * as type from '../store/type'
 export default {
   name: 'Invite',
   data () {
@@ -210,8 +214,15 @@ export default {
       }
     },
     inviteEarn () {
-      this.reviveObj.isShare = true
       utils.statistic('invite_earn_button', 1)
+      if (utils.isOnline) {
+        this.reviveObj.isShare = true
+      } else {
+        utils.login(() => {
+          this.$store.dispatch(type._INIT)
+          this.$router.push({path: '/invite'})
+        })
+      }
     },
     shareClose () {
       this.reviveObj.isShare = false
@@ -267,17 +278,28 @@ export default {
     }
     &__btn{
       padding-top: 620px;
-      &__click{
-        width: 670px;
-        height: 100px;
-        background: url('../assets/images/invite-btn.png') no-repeat center;
-        background-size: cover;
+      &__click {
+        position: relative;
+        max-width:98%;
+        width: 680px;
         border-radius: 24px;
         margin: 0 auto;
         text-align: center;
         color: #fff;
         font: 600 40px 'Roboto', Arial, serif;
         line-height: 95px;
+        img{
+          max-width: 100%;
+          width: 670px;
+          height: 100px;
+        }
+        p{
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%,0);
+          width: 100%;
+        }
       }
     }
     &__step{
@@ -286,7 +308,7 @@ export default {
       max-width: 100%;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       padding: 30px;
       &__title{
         margin-bottom: 30px;
@@ -351,7 +373,7 @@ export default {
       min-height: 680px;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       overflow: hidden;
       .tap{
         width: 100%;

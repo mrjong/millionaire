@@ -6,7 +6,7 @@
          @click="likeToFb('like_page')">
       </a>
       <div style="display: flex;">
-        <div class="await__top__lang" @click="showLang">{{lang}}</div>
+        <div class="await__top__lang" @click="showLang">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -17,7 +17,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder('set_reminder')">Set Reminder</div>
+    <div class="await__reminder" @click="Reminder('set_reminder')">{{$t('await.set_reminder_btn')}}</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -26,14 +26,14 @@
             <span class="extra-lives__icon"></span>
             <living class="invite-living" v-if="inviteLiving"></living>
           </div>
-          <span class="extra-lives__text">EXTRA LIVES: {{lives}}</span>
+          <span class="extra-lives__text">{{$t('await.extra_lives_text')}} {{lives}}</span>
         </div>
-        <div class="get-more-text" @click="toExtraLiveRules">Get More
+        <div class="get-more-text" @click="toExtraLiveRules">{{$t('await.get_more_text')}}
           <span class="get-more-text__icon iconfont icon-LIVINGyoujiantou"></span>
         </div>
       </div>
       <div class="get-lives">
-        <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
+        <div class="invitation-code__btn" @click="inputInvitation">{{$t('await.referral_code_btn')}}</div>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
@@ -43,9 +43,12 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">Invite & Earn Cash</div>
+    <div class="invite" @click="toInvite">
+      <img src="../assets/images/invite-btn.png">
+      <p>{{$t('await.invite_btn')}}</p>
+    </div>
     <div class="notice">
-      <router-link to="/rank">
+      <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
     </div>
@@ -88,15 +91,12 @@
     </router-link>
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-      <p class="await__set__text">Set Questions Myself</p>
+      <p class="await__set__text">{{$t('await.ses_question_btn')}}</p>
     </div>
     <div class="apus-logo">
       <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link></policy-link>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
@@ -124,6 +124,7 @@ import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import LangPop from '../components/LangPop'
+import PolicyLink from '../components/PolicyLink'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -159,7 +160,7 @@ export default {
     }),
     targetDate () {
       if (this.startTime === -1) {
-        return ['', 'Coming Soon']
+        return ['', this.$t('await.come_soon')]
       } else if (this.startTime === 0) {
         return ['', 'Living']
       } else {
@@ -316,12 +317,8 @@ export default {
       }
     },
     toInvite () {
-      if (utils.isOnline) {
-        this.btnStatistic('earn_money_button')
-        this.$router.push({path: '/invite'})
-      } else {
-        this.login('/invite')
-      }
+      this.btnStatistic('earn_money_button')
+      this.$router.push({path: '/invite'})
     },
     // login
     login (path) {
@@ -376,9 +373,15 @@ export default {
     changeLang (lang) {
       console.log(lang)
       if (lang) {
-        this.lang = 'EN'
+        this.$i18n.locale = 'en'
+        if (this.$i18n.locale === 'en') {
+          this.lang = 'EN'
+        }
       } else {
-        this.lang = 'HI'
+        this.$i18n.locale = 'hi'
+        if (this.$i18n.locale === 'hi') {
+          this.lang = 'HI'
+        }
       }
       this.isShowLang = false
     }
@@ -392,7 +395,8 @@ export default {
     Notices,
     ReminderBomb,
     PolicyBomb,
-    LangPop
+    LangPop,
+    PolicyLink
   },
   watch: {
     lives: function (val, oldVal) {
@@ -425,6 +429,9 @@ export default {
     background-size: cover;
     padding-bottom: 30px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -459,10 +466,12 @@ export default {
     }
     &__title{
       width: 300px;
-      height: 171px;
-      margin: 0 auto;
+      height: 130px;
+      margin: 0 auto 40px;
       img{
-        width: 100%;
+        max-width: 100%;
+        width: 300px;
+        height: 130px;
       }
     }
     &__reminder {
@@ -477,11 +486,14 @@ export default {
       border-radius: 46px;
     }
     &__btn{
+      max-width: 93%;
+      width: 6.7rem;
       display: flex;
       margin:0 25px 25px;
       justify-content: space-between;
       background-color: #fff;
       border-radius: 24px;
+      align-self: center;
       .invitation-code, .get-lives{
         max-width: 48%;
         width: 322px;
@@ -686,21 +698,33 @@ export default {
       }
     }
     .invite {
-      width: 670px;
-      height: 100px;
-      background: url('../assets/images/invite-btn.png') no-repeat center;
-      background-size: cover;
+      position: relative;
+      max-width:93%;
       border-radius: 24px;
       margin: 0 auto;
       text-align: center;
       color: #fff;
       font: 600 40px 'Roboto', Arial, serif;
       line-height: 95px;
+      img{
+        max-width: 100%;
+        width: 670px;
+        height: 100px;
+      }
+      p{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%,0);
+        width: 100%;
+      }
     }
     .notice{
       width: 100%;
       background: url("../assets/images/notice-bg.png") no-repeat center;
       background-size: contain;
+      display: flex;
+      justify-content: center;
     }
     .footer-bg{
       width: 100%;
@@ -730,15 +754,6 @@ export default {
       margin: 20px auto 0;
     }
   }
-  .bottom-text{
-      margin: 25px 0;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
-    }
   @media screen and (max-width: 321px) {
     .await {
       &__reminder {

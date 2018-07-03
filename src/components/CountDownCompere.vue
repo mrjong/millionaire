@@ -18,7 +18,7 @@ export default {
     return {
       supaTimer: null,
       supaOrder: 1,
-      compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
+      compereMsg: `Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`,
       supaStyle: `background-position: 0% 0%;`,
       timer: null
     }

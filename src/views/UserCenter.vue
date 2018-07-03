@@ -36,10 +36,7 @@
       </p>
     </div>
     <div class="logout-btn" @click="logOut">Log Out</div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link></policy-link>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
                   @okEvent='okEvent'
@@ -53,6 +50,7 @@ import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import BalanceMark from '../components/BalanceMark'
+import PolicyLink from '../components/PolicyLink'
 import * as api from '../assets/js/api'
 export default {
   name: 'Contact',
@@ -144,7 +142,8 @@ export default {
     }
   },
   components: {
-    BalanceMark
+    BalanceMark,
+    PolicyLink
   }
 }
 </script>
@@ -256,15 +255,6 @@ export default {
       line-height: 93px;
       background-color: rgba(255, 255, 255, 0.5);
       margin-top: 100px;
-  }
-    .bottom-text{
-      margin: 25px 0;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color: #fff;
-      }
     }
   }
 </style>
