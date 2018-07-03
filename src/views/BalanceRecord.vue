@@ -4,8 +4,8 @@
       <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
-      <p class="record__top__title">{{recordType ? 'Cash History' : 'Withdrawal History'}}</p>
-      <p class="record__top__detele" @click="detele" v-if="balanceRecordList.length > 0">Delete all</p>
+      <p class="record__top__title">{{recordType ? $t('balanceRecord.cash_title') : $t('balanceRecord.withdrawal_title')}}</p>
+      <p class="record__top__detele" @click="detele" v-if="balanceRecordList.length > 0">{{$t('balanceRecord.delete')}}</p>
     </div>
     <div class="record__wrap" ref="recordWrap" :style="{height:recordWrapHeight + 'px'}">
       <div class="loading" v-if="loading">
@@ -14,22 +14,21 @@
       <div class="record__wrap__list" ref="recordList" v-if="balanceRecordList.length > 0 &&!loading">
         <div class="record__wrap__list__item" v-for="(val, idx) in balanceRecordList" :key="idx">
           <div class="item-info1">
-            <span class="title big" >{{recordType ? statusText[idx] : 'Cash out'}}</span>
+            <span class="title big" >{{recordType ? statusText[idx] : $t('balanceRecord.item_withdrawal_title')}}</span>
             <span class="money big" v-if="recordType" :class="{success: val.orderType === 9}">{{val.orderType === 5 ? '-' : '+'}}{{userInfo.currencyType}}{{val.amountFmt}}</span>
-            <span class="money big" v-else :class="{success: val.state === 'Success'}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
+            <span class="money big" v-else :class="{success: val.state === $t('balanceRecord.cash_status.success')}">{{userInfo.currencyType}}{{val.amountFmt}}</span>
           </div>
           <div class="item-info2">
             <span class="time small">{{recordType ? val.updateTime : val.createTime}}</span>
             <span class="status small" v-if="!recordType">{{val.state}}</span>
           </div>
           <p class="hint" v-if="val.state === 'Failed' && !recordType">
-            Sorry,your apply for cash out was failed. Please check and submit again.
-          </p>
+            {{$t('balanceRecord.faild_hint')}}</p>
         </div>
       </div>
       <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList.length === 0 && !loading">
         <img src="../assets/images/no-history.png" class="no-list__img">
-        <p>{{recordType ? 'No Cash History' : 'No Withdrawal History'}}</p>
+        <p>{{recordType ? $t('balanceRecord.no_cash') : $t('balanceRecord.no_withdrawal')}}</p>
       </div>
     </div>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
@@ -105,7 +104,7 @@ export default {
           if (data.result === 1 && data.code === 0) {
             this.hasmore = data.data.hasmore
             data.data.recordData && data.data.recordData.forEach((val, idx) => {
-              this.statusText.push(val.orderType === 5 ? 'Withdraw Cash' : 'Win Cash')
+              this.statusText.push(val.orderType === 5 ? this.$t('balanceRecord.item_cash_title2') : this.$t('balanceRecord.item_cash_title1'))
               this.balanceRecordList.push(val)
             })
             this.pageNo += 1
@@ -125,8 +124,8 @@ export default {
           if (data.result === 1 && data.code === 0) {
             this.hasmore = data.data.hasmore
             data.data.recordData && data.data.recordData.forEach((val, idx) => {
-              this.statusText.push((val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'success'))))
-              val.state = (val.state === 0 ? 'Withdrawing' : (val.state === 1 ? 'Approved' : (val.state === 2 ? 'Failed' : 'Success')))
+              this.statusText.push((val.state === 0 ? this.$t('balanceRecord.cash_status.withdrawing') : (val.state === 1 ? this.$t('balanceRecord.cash_status.approved') : (val.state === 2 ? this.$t('balanceRecord.cash_status.failed') : this.$t('balanceRecord.cash_status.success')))))
+              val.state = (val.state === 0 ? this.$t('balanceRecord.cash_status.withdrawing') : (val.state === 1 ? this.$t('balanceRecord.cash_status.approved') : (val.state === 2 ? this.$t('balanceRecord.cash_status.failed') : this.$t('balanceRecord.cash_status.success'))))
               this.balanceRecordList.push(val)
             })
             this.pageNo += 1
@@ -172,9 +171,9 @@ export default {
     detele () {
       this.isClear = true
       if (this.recordType) {
-        this.markInfo.htmlText = 'Are you sure you want to delete all the cash history?'
+        this.markInfo.htmlText = this.$t('balanceRecord.delte_cash')
       } else {
-        this.markInfo.htmlText = 'Are you sure you want to delete all the withdrawal history?'
+        this.markInfo.htmlText = this.$t('balanceRecord.delete_withdwawal')
       }
       this.markInfo.okBtnText = 'OK'
       this.markInfo.showMark = true
@@ -191,7 +190,7 @@ export default {
             utils.statistic('delete_all', 1, {}, clearType === 2 ? 'user_profile_page' : 'tack_cash_page')
           } else {
             // 清空失败
-            this.markInfo.htmlText = 'You failed to delete the Withdrawal History.'
+            this.markInfo.htmlText = this.$t('balanceRecord.delete_faild')
           }
         }).catch((e) => {})
       }

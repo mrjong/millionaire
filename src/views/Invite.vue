@@ -1,12 +1,12 @@
 <template>
   <div class="invite">
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
-    <p class="invite__rule" @click="showDialog = true">Rules</p>
+    <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">Invite & Earn Cash</p>
+      <p class="invite__btn__click"  @click="inviteEarn">{{$t('invite.invite_btn')}}</p>
     </div>
     <div class="invite__step">
-      <p class="invite__step__title">How To Earn</p>
+      <p class="invite__step__title">{{$t('invite.steps_title')}}</p>
       <div class="invite__step__content">
         <div class="icon-img">
           <div class="icon">
@@ -31,9 +31,7 @@
           </div>
         </div>
         <div class="step-text">
-          <p class="text">Invite your friends to play</p>
-          <p class="text">Ask your friends to sign up and play</p>
-          <p class="text">You'll earn Rs.10 after his/her first playing game</p>
+          <p class="text" v-for="(val, idx) in $t('invite.steps')" :key="idx">{{val}}</p>
         </div>
       </div>
     </div>
@@ -56,8 +54,8 @@
           <div class="my-info" v-if="myInviteInfo">
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
-            <p class="number">Invite {{myInviteInfo.sc}} freshmen</p>
-            <p class="money">Earn ₹{{myInviteInfo.amountFmt}}</p>
+            <p class="number">{{$t('invite.rank_text1', {number: myInviteInfo.sc})}}</p>
+            <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{myInviteInfo.amountFmt}}</p>
           </div>
           <div class="item" v-if="myInviteData">
             <div class="rank-item" v-for="(val, idx) in myInviteData" :key="idx">
@@ -67,15 +65,15 @@
               </div>
               <div class="userinfo">
                 <p class="nickname">{{val.nick}}</p>
-                <p class="date">{{val.status === 1? 'Played on ': ' Invited on '}}{{ ' ' + val.bd}}</p>
+                <p class="date">{{val.status === 1? $t('invite.rank_text5'): $t('invite.rank_text6')}}{{ ' ' + val.bd}}</p>
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
-                <p class="number">{{val.status === 1 ? 'Get Reward' :'Not play yet'}}</p>
+                <p class="number">{{val.status === 1 ? $t('invite.rank_text3') : $t('invite.rank_text4')}}</p>
               </div>
             </div>
           </div>
-          <div class="hint">- You will get cash after the friend invited first playing 'Go!Millionaire' -</div>
+          <div class="hint">{{$t('invite.rank_hint')}}</div>
         </div>
         <invite-blank v-else></invite-blank>
       </div>
@@ -101,24 +99,24 @@ export default {
     return {
       dialogInfo: {
         htmlTitle: 'Rules',
-        htmlText: `<p style="text-align: left;line-height: 0.4rem;">1. You can invite friends through Facebook, WhatsApp，twitter etc.;</p>
-<p style="text-align: left;line-height: 0.4rem;">2. The one you invite should play 'Go! Millionaire', then you can receive the Rs. 10 rewards.</p>
-<p style="text-align: left;line-height: 0.4rem;">3. You can do cashout with Paytm account when your balance reaches Rs. 150;</p>
-<p style="text-align: left;line-height: 0.4rem;">4. You have to submit your PAN ID when you withdraw;</p>
-<p style="text-align: left;line-height: 0.4rem;">5. The cash will be transferred in 7 days;</p>
-<p style="text-align: left;line-height: 0.4rem;">6. You can not get prize from the friend who already registered before.</p>`,
+        htmlText: `<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[0]')}</p>
+<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[1]')}</p>
+<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[2]')}</p>
+<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[3]')}</p>
+<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[4]')}</p>
+<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[5]')}</p>`,
         shouldSub: false,
         markType: false,
         okBtnText: 'OK'
       },
       reviveObj: {
         isShare: false,
-        title: 'Invite  friends to earn cash quickly',
-        hint: 'Each invitaiton earn up to ₹1000',
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
         type: 'invite'
       },
       showDialog: false,
-      tap: ['Weekly Rank', 'Total Rank', 'My Invite'],
+      tap: this.$t('invite.rank_text'),
       index: 0,
       weekTopThree: [],
       weekData: [],

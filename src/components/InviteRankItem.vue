@@ -7,19 +7,25 @@
       </div>
       <p class="nickname">{{BoardData.nick}}</p>
       <div class="invite-data">
-        <p class="number">Invite {{BoardData.sc}} freshmen</p>
-        <p class="money">Earn ₹{{BoardData.amountFmt}}</p>
+        <p class="number">{{$t('invite.rank_text1', {number: BoardData.sc})}}</p>
+        <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{BoardData.amountFmt}}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'InviteRank',
   props: {
     BoardData: {
       type: Object
     }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
   }
 }
 </script>

@@ -1,12 +1,10 @@
 <template>
   <div class="contact-container">
     <div class="header">
-      <p class="title">Contact Us</p>
+      <p class="title">{{$t('contact.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
     </div>
-    <div class="describe">
-      If you have any question, or you want to delete your account permanently, feel free to contact us by the following methods:
-    </div>
+    <div class="describe">{{$t('contact.describe')}}</div>
     <div class="contact-way">
       <p class="method" v-for="(val, idx) in contactList" :key="idx" @click="contact(val.className)">
         <span :class="val.className"></span>
@@ -32,19 +30,19 @@ export default {
       contactList: [
         {
           className: 'mail',
-          text: 'gomillionaire@apusapps.com'
+          text: this.$t('contact.email')
         },
         {
           className: 'fb',
-          text: 'Facebook'
+          text: this.$t('contact.fb')
         },
         {
           className: 'twitter',
-          text: 'Twitter'
+          text: this.$t('contact.twitter')
         },
         {
           className: 'ins',
-          text: 'Instagram'
+          text: this.$t('contact.ins')
         }
       ]
     }

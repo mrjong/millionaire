@@ -5,7 +5,8 @@
          ref="toFbBrowser"
          @click="likeToFb('like_page')">
       </a>
-      <div>
+      <div style="display: flex;">
+        <div class="await__top__lang" @click="showLang">{{lang}}</div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -90,7 +91,7 @@
       <p class="await__set__text">Set Questions Myself</p>
     </div>
     <div class="apus-logo">
-    <img src="../assets/images/apus-logo-white.png" class="icon">
+      <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
     <p class="bottom-text">
       <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
@@ -99,6 +100,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
+    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang"></lang-pop>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -110,7 +112,6 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import BaseBtn from '../components/BaseBtn.vue'
 import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
@@ -122,6 +123,7 @@ import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
+import LangPop from '../components/LangPop'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -141,7 +143,9 @@ export default {
       isSucceed: false,
       logout: false,
       inviteLiving: false,
-      isReminderPop: false
+      isReminderPop: false,
+      isShowLang: false,
+      lang: 'EN'
     }
   },
   computed: {
@@ -187,7 +191,6 @@ export default {
         utils('millionaire-isFirstShare', false)
       }, 3000)
     }
-    // this.reportCheckCode()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -366,10 +369,21 @@ export default {
           }
         }).catch()
       }
+    },
+    showLang () {
+      this.isShowLang = true
+    },
+    changeLang (lang) {
+      console.log(lang)
+      if (lang) {
+        this.lang = 'EN'
+      } else {
+        this.lang = 'HI'
+      }
+      this.isShowLang = false
     }
   },
   components: {
-    BaseBtn,
     NextTime,
     BaseInfo,
     BalanceMark,
@@ -377,7 +391,8 @@ export default {
     HowPlayCard,
     Notices,
     ReminderBomb,
-    PolicyBomb
+    PolicyBomb,
+    LangPop
   },
   watch: {
     lives: function (val, oldVal) {
@@ -414,7 +429,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
-      &__like, &__instructions{
+      &__like, &__instructions, &__lang{
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -423,12 +438,16 @@ export default {
         text-align: center;
         align-self: center;
         line-height: 54px;
+        color: #fff;
       }
       &__like{
         display: block;
       }
       &__instructions{
         font-size: 28px;
+      }
+      &__lang {
+        margin-right: 20px;
       }
       &__logo{
         width: 168px;

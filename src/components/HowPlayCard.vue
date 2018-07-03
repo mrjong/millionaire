@@ -1,12 +1,11 @@
 <template>
   <div class="play-card">
-    <p class="title">HOW TO PLAY</p>
+    <p class="title">{{$t('await.play_card_title')}}</p>
     <img src="../assets/images/how-play-card.png" class="rule">
     <div class="content">
-      <p class="text text1">Sign up, answer questions at <span class="special">10 PM </span>everyday</p>
-      <p class="text text2">Get 12 questions all right, win up to <span class="special">₹1,000,000!</span></p>
-      <p class="text text3">Use
-        <span class="special">EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!</p>
+      <p class="text text1">{{$t('await.play_card_title', {time: '10PM'})}}</p>
+      <p class="text text2">{{$t('await.play_card_title', {money: '₹1,000,000!'})}}</p>
+      <p class="text text3">{{$t('await.play_card_title', {money: 'EXTRA LIFE'})}}</p>
     </div>
   </div>
 </template>
