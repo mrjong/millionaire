@@ -3,7 +3,10 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">{{$t('invite.invite_btn')}}</p>
+      <div class="invite__btn__click" @click="inviteEarn">
+        <img src="../assets/images/invite-btn.png">
+        <p>{{$t('invite.invite_btn')}}</p>
+      </div>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">{{$t('invite.steps_title')}}</p>

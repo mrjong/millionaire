@@ -23,7 +23,7 @@
     <div>
       <p class="balance-detail__operate__btn" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
     </div>
-    <policy></policy>
+    <policy-link></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
   </div>
@@ -36,7 +36,7 @@ import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
-import Policy from '../components/Policy'
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'BalanceDetail',
   data () {
@@ -165,7 +165,7 @@ export default {
   components: {
     BalanceMark,
     Loading,
-    Policy
+    PolicyLink
   }
 }
 </script>
@@ -287,15 +287,6 @@ export default {
       font: 300 36px/94px 'Roboto', Arial, serif;
       margin-bottom: 50px;
     }
-  }
-}
-.bottom-text{
-  margin-bottom: 25px;
-  font: 200 24px 'Roboto', Arial, serif;
-  color: #fff;
-  text-align: center;
-  a{
-    color:#fff;
   }
 }
 </style>

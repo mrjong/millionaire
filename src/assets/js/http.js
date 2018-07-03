@@ -41,8 +41,7 @@ const http = axios.create({
   withCredentials: env !== 'local',
   timeout: 8000,
   params: {
-    version: VERSION,
-    lang: i18n.locale
+    version: VERSION
   },
   data: {
     version: VERSION
@@ -51,7 +50,7 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => {
   const {params = {}, data = {}} = config
-  config.params = {...params, timestamp: Date.now()}
+  config.params = {...params, timestamp: Date.now(), lang: i18n.vm.locale}
   config.data = {...data, timestamp: Date.now()}
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData

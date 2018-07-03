@@ -6,7 +6,7 @@
          @click="likeToFb('like_page')">
       </a>
       <div style="display: flex;">
-        <div class="await__top__lang" @click="showLang">{{lang}}</div>
+        <div class="await__top__lang" @click="showLang">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -43,7 +43,10 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">{{$t('await.invite_btn')}}</div>
+    <div class="invite" @click="toInvite">
+      <img src="../assets/images/invite-btn.png">
+      <p>{{$t('await.invite_btn')}}</p>
+    </div>
     <div class="notice">
       <router-link to="/rank" style="width: 100%;">
         <notices></notices>
@@ -93,7 +96,7 @@
     <div class="apus-logo">
       <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
-    <policy></policy>
+    <policy-link></policy-link>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
@@ -121,7 +124,7 @@ import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import LangPop from '../components/LangPop'
-import Policy from '../components/Policy'
+import PolicyLink from '../components/PolicyLink'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -370,11 +373,15 @@ export default {
     changeLang (lang) {
       console.log(lang)
       if (lang) {
-        this.lang = 'EN'
         this.$i18n.locale = 'en'
+        if (this.$i18n.locale === 'en') {
+          this.lang = 'EN'
+        }
       } else {
-        this.lang = 'HI'
         this.$i18n.locale = 'hi'
+        if (this.$i18n.locale === 'hi') {
+          this.lang = 'HI'
+        }
       }
       this.isShowLang = false
     }
@@ -389,7 +396,7 @@ export default {
     ReminderBomb,
     PolicyBomb,
     LangPop,
-    Policy
+    PolicyLink
   },
   watch: {
     lives: function (val, oldVal) {

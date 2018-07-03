@@ -26,14 +26,7 @@
             <p class="share__describe">{{$t('rule.fb_describe')}}</p>
           </a>
         </div>
-        <p class="bottom-text">
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>
-            {{$t('publicText.agreement')}}
-          </a> &
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>
-            {{$t('publicText.policy')}}
-          </a>
-        </p>
+        <policy-link></policy-link>
       </div>
     </div>
   </div>
@@ -41,7 +34,7 @@
 
 <script>
 import utils from '../assets/js/utils'
-
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'Rule',
   data () {
@@ -102,6 +95,9 @@ export default {
     goBack () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    PolicyLink
   }
 }
 </script>
@@ -231,13 +227,4 @@ export default {
 .terms::visited {
   color: #241262;
 }
-.bottom-text{
-    margin: 25px 0;
-    font: 200 24px 'Roboto', Arial, serif;
-    color: #241262;
-    text-align: center;
-    a{
-      color:#241262
-    }
-  }
 </style>

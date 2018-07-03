@@ -24,7 +24,7 @@
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__btn" @click="cashOut">{{$t('balance.cash_out_btn')}}</p>
     </div>
-    <policy></policy>
+    <policy-link></policy-link>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
@@ -35,7 +35,7 @@ import {mapGetters} from 'vuex'
 import Loading from '../components/Loading'
 import utils from '../assets/js/utils'
 import LoginTip from '../components/LoginTip'
-import Policy from '../components/Policy'
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'Balance',
   data () {
@@ -73,7 +73,7 @@ export default {
   components: {
     Loading,
     LoginTip,
-    Policy
+    PolicyLink
   }
 }
 </script>

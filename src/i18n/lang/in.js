@@ -284,11 +284,9 @@ const locale = {
     title1: 'विजेता!',
     title2: 'आप जीट गेए<b>बधाई! इस खेल में {winnerAmount} विजेता!</b>'
   },
-  publicText: {
+  policyBomb: {
     agreement: 'User Agreement',
     policy: 'Privacy Policy'
-  },
-  policyBomb: {
   }
 }
 export default locale

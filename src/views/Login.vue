@@ -29,10 +29,7 @@
       <button class="btn-login" @click="login">{{$t('login.login_btn')}}</button>
       <p class="policy">{{$t('login.notice')}}</p>
       <img src="../assets/images/apus-logo-white.png" :class="['login-container__footer', {hide: isInputting}]">
-      <p :class="['bottom-text', {hide: isInputting}]">
-        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-      </p>
+      <policy-link :class="{hide: isInputting}"></policy-link>
     </section>
     <country-list v-model="showCountryList"></country-list>
     <loading v-if="loading"></loading>
@@ -45,6 +42,7 @@ import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
 import CountryList from '../components/CountryList.vue'
+import PolicyLink from '../components/PolicyLink'
 import { register, signInByPhone } from '../assets/js/api'
 let timer = null
 export default {
@@ -233,7 +231,8 @@ export default {
   },
   components: {
     loading,
-    CountryList
+    CountryList,
+    PolicyLink
   }
 }
 </script>
@@ -368,18 +367,6 @@ export default {
       left: 50%;
       transform: translateX(-50%);
     }
-  }
-  .bottom-text{
-      width: 100%;
-      position: absolute;
-      bottom: 10px;
-      margin: 25px 0 15px;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
   }
   .hide {
     visibility: hidden;
