@@ -107,7 +107,6 @@ export default {
           isInputting: true
         })
       }
-      console.log(this.windowInnerHeight, window.innerHeight, this.isInputting)
       this.windowInnerHeight = window.innerHeight
       this.timeOffset = Date.now()
     })
