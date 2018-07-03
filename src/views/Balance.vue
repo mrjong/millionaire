@@ -10,19 +10,19 @@
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
          <img :src="userInfo.avatar" class="balance-wrap__contain__wrap__img">
-        <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
+        <p class="balance-wrap__contain__wrap__mytitle">{{$t('balance.your_blance')}}</p>
         <div class="balance-wrap__contain__wrap__mybalance">
           <p class="balance-wrap__contain__wrap__symbol">
             {{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}
           </p>
         </div>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
+        <p class="balance-wrap__contain__wrap__totaltitle">{{$t('balance.total_revenus')}}</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
-      <p class="balance-hint">(You can cash out with the minimum balance of ₹150,The payouts will be made in 7 days after Approved)</p>
+      <p class="balance-hint">{{$t('balance.hint')}}</p>
     </div>
     <div class="balance-wrap__operate">
-      <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
+      <p class="balance-wrap__operate__btn" @click="cashOut">{{$t('balance.cash_out_btn')}}</p>
     </div>
     <p class="bottom-text">
       <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &

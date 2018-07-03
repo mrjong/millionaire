@@ -4,43 +4,44 @@
       <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
-      <p class="set-question__wrap__title">Set Questions Myself</p>
+      <p class="set-question__wrap__title">{{$t('setQuestion.title')}}</p>
       <a class="set-question__wrap__join" @click="join" ref="toFbGroup" v-if="isSetQuestion">
         <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
-        Follow Us</a>
+        {{$t('setQuestion.share_btn')}}
+      </a>
       <div class="form">
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="100" placeholder="YOUR NAME" v-model="questionInfo.author">
+          <input type="text" class="form__name base" maxlength="100" :placeholder="$t('setQuestion.name')" v-model="questionInfo.author">
           <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" class="form__name base" maxlength="20" placeholder="YOUR PHONE NUMBER" v-model="questionInfo.tel">
+          <input type="text" class="form__name base" maxlength="20" :placeholder="$t('setQuestion.tel')" v-model="questionInfo.tel">
           <check-str-length :originalLength=20 :currentLength=questionInfo.tel.length class="check-str-length-name"></check-str-length>
         </div>
         <div class="form__question">
           <p class="form__question__hint" v-show="isShowHint">
             <span class="form__question__hint__icon icon-yonghuchuti_qianzise iconfont"></span>
-            Tap to set your question now
+            {{$t('setQuestion.question')}}
           </p>
           <textarea class="" maxlength="200" v-on:focus="focusText" v-on:blur=" blurText" v-model="questionInfo.title"></textarea>
           <check-str-length :originalLength=200 :currentLength=questionInfo.title.length class="check-str-length-title"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerA"  class="base answer-text" placeholder="Option A" maxlength="150" v-model="questionInfo.option1">
+          <input type="text" id="answerA"  class="base answer-text" :placeholder="$t('setQuestion.option_a')" maxlength="150" v-model="questionInfo.option1">
           <check-str-length :originalLength=100 :currentLength=questionInfo.option1.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerB"  class="base answer-text" placeholder="Option B" maxlength="150" v-model="questionInfo.option2">
+          <input type="text" id="answerB"  class="base answer-text" :placeholder="$t('setQuestion.option_b')" maxlength="150" v-model="questionInfo.option2">
           <check-str-length :originalLength=100 :currentLength=questionInfo.option2.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="frame">
-          <input type="text" id="answerC"  class="base answer-text" placeholder="Option C" maxlength="150" v-model="questionInfo.option3">
+          <input type="text" id="answerC"  class="base answer-text" :placeholder="$t('setQuestion.option_c')" maxlength="150" v-model="questionInfo.option3">
           <check-str-length :originalLength=100 :currentLength=questionInfo.option3.length class="check-str-length-option"></check-str-length>
         </div>
         <div class="form__correct">
           <div class="form__correct__title">
             <p class="form__correct__title__icon iconfont icon-juxing"></p>
-            <p class="form__correct__title__text">Correct answer</p>
+            <p class="form__correct__title__text">{{$t('setQuestion.correct_text')}}</p>
           </div>
           <div class="form__correct__options">
             <p class="option" v-for="(val, index) in options"  :key="index">
@@ -50,21 +51,21 @@
             </p>
           </div>
         </div>
-        <div class="form__submit" @click="submit">Submit</div>
+        <div class="form__submit" @click="submit">{{$t('setQuestion.submit_btn')}}</div>
         </div>
     </div>
     <div class="set-question__mark" v-else>
       <div class="bomb">
         <img src="../assets/images/logo.png" class="bomb__logo">
         <div class="bomb__content">
-          <p class="bomb__content__title1">QUIZ MASTER Required!</p>
-          <p class="bomb__content__title2">Set it, Question it, Win it!!</p>
+        <p class="bomb__content__title1">{{$t('setQuestion.question_rule.title1')}}</p>
+          <p class="bomb__content__title2">{{$t('setQuestion.question_rule.title2')}}</p>
           <p class="bomb__content__clause" v-for="(item, index) in instruction" :key="index">{{item}}</p>
-          <p class="bomb__content__note">Note:</p>
+          <p class="bomb__content__note">{{$t('setQuestion.question_rule.notice_title')}}</p>
           <p class="bomb__content__text" v-for="(value) in note" :key="value">{{value}}</p>
         </div>
         <div class="bomb__btn" @click="isShowBomb">
-          <p class="bomb__btn__text">OK, I agree</p>
+          <p class="bomb__btn__text">{{$t('setQuestion.question_rule.agree_btn')}}</p>
         </div>
       </div>
     </div>
@@ -83,17 +84,8 @@ export default {
   name: 'Rule',
   data () {
     return {
-      instruction: [
-        '1. Set questions with proper grammar and spelling, and submit them to be our QUIZ MASTER. ',
-        '2. Once your questions are selected, you\'ll get the chances to answer your own question in \'Go! Millionaire\' Game to win.',
-        '3. Your name will be featured below your questions, which means to be seen by millions of APUS Users.',
-        '4. We\'ll announce each QUIZ MASTER on @APUSBrowser Facebook page everyday..'
-      ],
-      note: [
-        'English questions only.',
-        'Submit as more questions as you can to be "Golden QUIZ ',
-        'MASTER" every week, awards await you.'
-      ],
+      instruction: this.$t('setQuestion.question_rule.instruction'),
+      note: this.$t('setQuestion.question_rule.notice'),
       isPop: false,
       isShowHint: true,
       options: ['A', 'B', 'C'],
@@ -108,7 +100,7 @@ export default {
       },
       showDialog: false,
       dialogInfo: {
-        htmlTitle: 'Failed to Submit',
+        htmlTitle: this.$t('setQuestion.question_pop.submit_faild_title'),
         htmlText: '',
         shouldSub: false,
         markType: 0,
@@ -159,19 +151,19 @@ export default {
       this.isLoading = true
       const phoneRule = /^[\+\-0-9]{1,20}$/
       if (this.questionInfo.author === '') {
-        this.baseConfig('no_phone', 'Please enter your name.')
+        this.baseConfig('no_phone', this.$t('setQuestion.question_pop.no_name'))
         return false
       } else if (this.questionInfo.tel === '') {
-        this.baseConfig('no_phone', 'Please enter your phone number')
+        this.baseConfig('no_phone', this.$t('setQuestion.question_pop.no_tel'))
         return false
       } else if (!phoneRule.test(this.questionInfo.tel)) {
-        this.baseConfig('no_phone', 'Please enter right phone number')
+        this.baseConfig('no_phone', this.$t('setQuestion.question_pop.wrong_tel'))
         return false
       } else if (this.questionInfo.title === '') {
-        this.baseConfig('no_question', 'Please complete the question')
+        this.baseConfig('no_question', this.$t('setQuestion.question_pop.no_question'))
         return false
       } else if (this.questionInfo.option1 === '' || this.questionInfo.option2 === '' || this.questionInfo.option3 === '' || this.questionInfo.correct === '') {
-        this.baseConfig('no_answer', 'Please complete the answer')
+        this.baseConfig('no_answer', this.$t('setQuestion.question_pop.no_answer'))
         return false
       }
       api.setQuestions(this.questionInfo).then(({data}) => {
@@ -180,7 +172,7 @@ export default {
           this.setQuestionBtnStatics('submit', 'success')
           this.$router.replace('/set-question-result')
         } else {
-          this.baseConfig('', 'Your Internet is unstable, please try it again.')
+          this.baseConfig('', this.$t('setQuestion.question_pop.submit_faild'))
           return false
         }
       }).catch(() => {

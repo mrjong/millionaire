@@ -8,7 +8,7 @@
     <div class="base-info__other">
       <router-link to="/balance" class="balance-router" >
         <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
-          <p class="base-info__other__balance__text">Balance</p>
+          <p class="base-info__other__balance__text">{{$t('await.userinfo_blance_text')}}</p>
           <p class="base-info__other__balance__num num"
              ref="balanceNum"
              :style="{fontSize: baseInfo.balanceShow.length > 9 ? '0.45rem' : '0.55rem'}">{{baseInfo.currencyType }}{{ isOnline ? baseInfo.balanceShow : baseInfo.clientBalanceShow}}</p>
@@ -17,7 +17,7 @@
       <div class="base-info__other__line"></div>
       <router-link to="/rank" class="balance-rank">
         <div class="base-info__other__rank"  @click="routerStatistic('rank_page')">
-          <p class="base-info__other__rank__text">Weekly Rank</p>
+          <p class="base-info__other__rank__text">{{$t('await.userinfo_rank_text')}}</p>
           <p class="base-info__other__rank__num num" :style="{fontSize: baseInfo.balanceShow.length > 9 ? '0.45rem' : '0.55rem'}">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
         </div>
       </router-link>

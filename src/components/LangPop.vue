@@ -1,57 +1,40 @@
 <template>
-  <div class="mark" v-if="isReminderPop" @click="showCountryList = false">
+  <div class="mark" v-if="isShowLang">
     <div class="wrap">
-    <span class="cancel iconfont icon-cuowu" @click="close"></span>
-    <p class="hint-icon">
-      <img src="../assets/images/reminder-icon.png" class="hint-icon__img">
-    </p>
-    <p class="title">{{$t('await.set_reminder_btn')}}</p>
-    <div class="national-code" @click.stop="showCountryList = !showCountryList">
-      <span class="iconfont icon-guojia code-icon"></span>
-      <span class="iconfont icon-LIVINGyoujiantou drop-down"></span>
-      <p class="invitation">{{phoneNationCode.country}}{{ ' +' + phoneNationCode.code}}</p>
-    </div>
-    <div class="phone">
-      <span class="iconfont icon-shouji phone-icon"></span>
-      <input type="text"
-          :placeholder="$t('await.reminder_phone')"
-          class="invitation"
-          v-model="reminderObj.phone">
-    </div>
-    <div class="is-reminder">
-      <p class="checkbox">
-        <label for="yes" class="iconfont" :class="{'selected icon-duigou': type}"></label>
-        <input type="checkbox" id="yes" v-model="type" name="option">
+      <p class="hint-icon">
+        <img src="../assets/images/lang-icon.png" class="hint-icon__img">
       </p>
-      <p class="">{{$t('await.remider_tip')}}</p>
+      <p class="title">Select Language</p>
+      <p class="title">भाषा चुनिए</p>
+      <div class="is-reminder">
+        <p class="checkbox" @click="selectLang('en')">
+          <span class="radio" :class="{'selected': isEN}" ></span>
+          <span>English</span>
+        </p>
+        <p class="checkbox"  @click="selectLang('hi')">
+          <span  class="radio" :class="{'selected': !isEN}"></span>
+          <span>हिन्दी</span>
+        </p>
+      </div>
+      <p class="btn">
+        <span class="btn__ok" @click="okEvent">OK(ठीक)</span>
+      </p>
     </div>
-    <p class="btn">
-      <span class="btn__ok" @click="okEvent">OK</span>
-    </p>
-    </div>
-    <country-list v-model="showCountryList"></country-list>
   </div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import CountryList from './CountryList'
 export default {
-  name: 'ReminderBomb',
+  name: 'LangPop',
   props: {
-    isReminderPop: {
+    isShowLang: {
       type: Boolean
     }
   },
   data () {
     return {
-      reminderObj: {
-        nation_code: '',
-        phone: '',
-        type: false
-      },
-      type: false,
-      isReminderMark: true,
-      showCountryList: false
+      isEN: true,
+      isHi: false
     }
   },
   computed: {
@@ -59,17 +42,17 @@ export default {
   },
   methods: {
     okEvent () {
-      this.reminderObj.nation_code = this.phoneNationCode.code
-      this.reminderObj.type = (this.type === true ? 0 : 1)
-      this.$emit('ReminderOk', this.reminderObj)
+      this.$emit('changeLang', this.isEN)
     },
-    close () {
-      this.$emit('ReminderClose')
+    selectLang (val) {
+      if (val === 'en') {
+        this.isEN = true
+      } else {
+        this.isEN = false
+      }
     }
   },
-  components: {
-    CountryList
-  }
+  components: {}
 }
 </script>
 <style scoped lang="less" type="text/less">
@@ -80,6 +63,7 @@ export default {
     top:0;
     left: 0;
     background: rgba(0, 0,0, 0.8);
+    z-index: 11;
   }
   .wrap {
     width: 602px;
@@ -104,7 +88,7 @@ export default {
       border-radius: 50%;
     }
     .hint-icon{
-      width: 100px;
+      width: 80px;
       margin:0 auto 26px;
       &__img{
         width: 100%;
@@ -112,7 +96,7 @@ export default {
     }
     .is-reminder {
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
       input{
         opacity: 0;
       }
@@ -123,18 +107,24 @@ export default {
         font-size: 20px;
         font-weight: 100;
       }
+      .radio {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background: url('../assets/images/no-checked-icon.png') no-repeat center;
+        background-size: cover;
+        vertical-align: baseline;
+      }
       .selected{
-        color: #241262;
+        background: url('../assets/images/checked-icon.png') no-repeat center;
+        background-size: cover;
       }
       .checkbox{
-        width: 30px;
         height: 30px;
         text-align: center;
         font-size: .15px;
         color: #241262;
         line-height: 38px;
-        box-shadow: 0 0 0 2px #241262;
-        border-radius: 5px;
         align-self: center;
       }
       p{
@@ -147,8 +137,8 @@ export default {
     }
     .title {
       width: 100%;
-      font: 32px/30px 'Roboto', Arial, serif;
-      color: #000;
+      font: 400 32px/30px 'Roboto', Arial, serif;
+      color: #220f60;
       min-height: 40px;
       margin: 10px auto;
       text-align: center;

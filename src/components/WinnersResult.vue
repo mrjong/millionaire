@@ -3,15 +3,14 @@
     <div class='no-winner-result' v-if='!respondence.winners.length'>
       <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
       <p class= 'no-winner-result__bonus'>{{currencyType}}{{respondence.bonusAmount}}</p>
-      <p class='no-winner-result__tip'>Prize rolls over to next game</p>
+      <p class='no-winner-result__tip'>{{$t('winnersResult.tip')}}</p>
     </div>
     <div class="has-winner-result" v-else>
        <p class="has-winner-result__title" v-if="!isWon">
-        <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>Winners!
+        <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>{{$t('winnersResult.title1')}}
       </p>
       <p class="has-winner-result__title" v-else>
-        You Won!
-        <b>Congrats! {{respondence.winnerAmount}} winners in this game!</b>
+        {{$t('winnersResult.title2', {winnerAmount: respondence.winnerAmount})}}
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">

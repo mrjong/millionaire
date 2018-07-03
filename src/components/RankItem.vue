@@ -6,7 +6,7 @@
       <img class="avatar" :src="avatar" alt="">
       <span class="name ellipsis-1">{{name}}</span>
       <span class="money" v-if="isInList">{{currencyType}}{{amount}}</span>
-      <span class="notInList" v-else>Not on the list</span>
+      <span class="notInList" v-else>{{$t('anwser_rank.not_on_list')}}</span>
     </section>
   </div>
 </template>

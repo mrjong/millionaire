@@ -5,13 +5,13 @@
       </p>
     <div class="rule-container">
       <div class="rule__wrap">
-        <p class="title">How to play</p>
-        <div class="rule-item" v-for="col in ruleList" :key="col.id">
+        <p class="title">{{$t('rule.title')}}</p>
+        <div class="rule-item" v-for="(col, idx) in $t('rule.ruleList')" :key="idx">
           <div class="rule-item__wrap">
-            <img :src="col.img" alt="" class="rule-item__wrap__img">
+            <img :src="ruleList[idx].img" class="rule-item__wrap__img">
           </div>
           <div class="rule-item__title">
-            <span class="rule-item__title__index">{{col.id}}</span>
+            <span class="rule-item__title__index">{{idx}}</span>
             {{col.title}}
           </div>
           <p class="rule-item__text">
@@ -23,12 +23,16 @@
             <p class="share__wrap">
               <img src="../assets/images/facebook.png" alt="" class="share__wrap__icon">
             </p>
-            <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+            <p class="share__describe">{{$t('rule.fb_describe')}}</p>
           </a>
         </div>
         <p class="bottom-text">
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
+          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>
+            {{$t('publicText.agreement')}}
+          </a> &
+          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>
+            {{$t('publicText.policy')}}
+          </a>
         </p>
       </div>
     </div>
@@ -87,6 +91,9 @@ export default {
         }
       ]
     }
+  },
+  mounted () {
+    console.log(this.$t('publicText.agreement'))
   },
   methods: {
     toFb () {

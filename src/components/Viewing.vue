@@ -3,7 +3,7 @@
     <div class="view-container__icon">
       <img src="../assets/images/watchingMode.png" >
     </div>
-    <div class="view-container__text">Viewing</div>
+    <div class="view-container__text">{{$t('main.viewing')}}</div>
   </div>
 </template>
 
