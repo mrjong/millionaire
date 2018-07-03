@@ -3,7 +3,10 @@
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">Rules</p>
     <div class="invite__btn">
-      <p class="invite__btn__click"  @click="inviteEarn">Invite & Earn Cash</p>
+      <div class="invite__btn__click" @click="inviteEarn">
+        <img src="../assets/images/invite-btn.png">
+        <p>Invite & Earn Cash</p>
+      </div>
     </div>
     <div class="invite__step">
       <p class="invite__step__title">How To Earn</p>
@@ -31,9 +34,9 @@
           </div>
         </div>
         <div class="step-text">
-          <p class="text">Invite your friends to play</p>
-          <p class="text">Ask your friends to sign up and play</p>
-          <p class="text">You'll earn Rs.10 after his/her first playing game</p>
+          <p class="text">Click above invite button and share to friends</p>
+          <p class="text">Friends open your sharing link to login</p>
+          <p class="text">You'll earn Rs.10 after his/her first answering quiz</p>
         </div>
       </div>
     </div>
@@ -75,7 +78,7 @@
               </div>
             </div>
           </div>
-          <div class="hint">- You will get cash after the friend invited first playing 'Go!Millionaire' -</div>
+          <div class="hint">- You will get cash after the friends invited first answering quiz in 'Go!Millionaire' -</div>
         </div>
         <invite-blank v-else></invite-blank>
       </div>
@@ -95,6 +98,7 @@ import InviteRankItem from '../components/InviteRankItem'
 import ReviveCard from '../components/ReviveCard'
 import InviteBlank from '../components/InviteBlank'
 import Loading from '../components/Loading'
+import * as type from '../store/type'
 export default {
   name: 'Invite',
   data () {
@@ -212,8 +216,15 @@ export default {
       }
     },
     inviteEarn () {
-      this.reviveObj.isShare = true
       utils.statistic('invite_earn_button', 1)
+      if (utils.isOnline) {
+        this.reviveObj.isShare = true
+      } else {
+        utils.login(() => {
+          this.$store.dispatch(type._INIT)
+          this.$router.push({path: '/invite'})
+        })
+      }
     },
     shareClose () {
       this.reviveObj.isShare = false
@@ -269,17 +280,28 @@ export default {
     }
     &__btn{
       padding-top: 620px;
-      &__click{
-        width: 670px;
-        height: 100px;
-        background: url('../assets/images/invite-btn.png') no-repeat center;
-        background-size: cover;
+      &__click {
+        position: relative;
+        max-width:98%;
+        width: 680px;
         border-radius: 24px;
         margin: 0 auto;
         text-align: center;
         color: #fff;
         font: 600 40px 'Roboto', Arial, serif;
         line-height: 95px;
+        img{
+          max-width: 100%;
+          width: 670px;
+          height: 100px;
+        }
+        p{
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%,0);
+          width: 100%;
+        }
       }
     }
     &__step{
@@ -288,7 +310,7 @@ export default {
       max-width: 100%;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       padding: 30px;
       &__title{
         margin-bottom: 30px;
@@ -353,7 +375,7 @@ export default {
       min-height: 680px;
       background-color: #fff;
       border-radius: 24px;
-      margin-top: 25px;
+      margin: 25px auto;
       overflow: hidden;
       .tap{
         width: 100%;

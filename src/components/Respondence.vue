@@ -260,7 +260,7 @@ export default {
 
       // 如果最后一题可以使用复活卡，提交复活卡使用信息
       if (isCanRecoveryLastQuestion && index === questionCount) {
-        this.$store.dispatch(type.QUESTION_SUBMIT)
+        this.$store.dispatch(type.QUESTION_SUBMIT, true)
       }
       /* useRecoveryCard(id, index, recoveryType).then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {

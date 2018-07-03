@@ -86,9 +86,8 @@ export default {
       instruction: [
         '1. Set questions with proper grammar and spelling, and submit them to be our QUIZ MASTER. ',
         '2. Once your questions are selected, you\'ll get the chances to answer your own question in \'Go! Millionaire\' Game to win.',
-        '3. Once your questions are selected, you\'ll get the chances to answer your own question in \'Go! Millionaire\' Game to win.',
-        '4. Your name will be featured below your questions, which means to be seen by millions of APUS Users.',
-        '5. We\'ll announce each QUIZ MASTER on @APUSBrowser Facebook page everyday..'
+        '3. Your name will be featured below your questions, which means to be seen by millions of APUS Users.',
+        '4. We\'ll announce each QUIZ MASTER on @APUSBrowser Facebook page everyday.'
       ],
       note: [
         'English questions only.',
@@ -114,7 +113,7 @@ export default {
         shouldSub: false,
         markType: 0,
         okBtnText: 'OK',
-        hintImg: 'http://static.subcdn.com/201803261933287074f92538.png'
+        hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       },
       isSetQuestion: false,
       isLoading: false,
@@ -160,7 +159,7 @@ export default {
       this.isLoading = true
       const phoneRule = /^[\+\-0-9]{1,20}$/
       if (this.questionInfo.author === '') {
-        this.baseConfig('no_phone', 'Please enter your name.')
+        this.baseConfig('no_name', 'Please enter your name.')
         return false
       } else if (this.questionInfo.tel === '') {
         this.baseConfig('no_phone', 'Please enter your phone number')
