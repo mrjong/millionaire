@@ -82,6 +82,7 @@ export default {
     background: rgba(0, 0,0, 0.8);
   }
   .wrap {
+    max-width: 85%;
     width: 602px;
     background: #fff;
     border-radius: 16px;
