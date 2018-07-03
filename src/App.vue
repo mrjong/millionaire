@@ -27,7 +27,9 @@ export default {
     return {
       loading: false,
       showLogin: false,
-      showGameDialog: true
+      showGameDialog: true,
+      windowInnerHeight: 0,
+      timeOffset: 0
     }
   },
   computed: {
@@ -87,6 +89,28 @@ export default {
     })
     this.init()
     this.getPhoneNationCode()
+  },
+  mounted () {
+    // 利用resize事件判断是否调起软键盘
+    this.windowInnerHeight = window.innerHeight
+    window.addEventListener('resize', () => {
+      if (Date.now() - this.timeOffset < 500) {
+        this.timeOffset = Date.now()
+        return false
+      }
+      if (window.innerHeight - this.windowInnerHeight >= 150) {
+        this.$store.commit(type._UPDATE, {
+          isInputting: false
+        })
+      } else {
+        this.$store.commit(type._UPDATE, {
+          isInputting: true
+        })
+      }
+      console.log(this.windowInnerHeight, window.innerHeight, this.isInputting)
+      this.windowInnerHeight = window.innerHeight
+      this.timeOffset = Date.now()
+    })
   },
   methods: {
     init () {

@@ -62,32 +62,14 @@ export default {
       username: '',
       phoneNumber: '',
       code: '',
-      isAgree: true,
-      isInputting: false, // 是否正在输入
-      windowInnerHeight: 0,
-      timeOffset: 0
+      isAgree: true
     }
   },
   computed: {
-    ...mapGetters(['status', 'phoneNationCode'])
+    ...mapGetters(['status', 'phoneNationCode', 'isInputting'])
   },
   mounted () {
     utils.statistic('login_page', 0)
-    this.windowInnerHeight = window.innerHeight
-    window.addEventListener('resize', () => {
-      if (Date.now() - this.timeOffset < 500) {
-        this.timeOffset = Date.now()
-        return false
-      }
-      if (window.innerHeight - this.windowInnerHeight >= 150) {
-        this.isInputting = false
-      } else {
-        this.isInputting = true
-      }
-      console.log(this.windowInnerHeight, window.innerHeight, this.isInputting)
-      this.windowInnerHeight = window.innerHeight
-      this.timeOffset = Date.now()
-    })
   },
   methods: {
     back () {
@@ -236,6 +218,11 @@ export default {
   components: {
     loading,
     CountryList
+  },
+  watch: {
+    isInputting (val) {
+      console.log(val)
+    }
   }
 }
 </script>
@@ -382,8 +369,5 @@ export default {
       a{
         color:#fff;
       }
-  }
-  .hide {
-    visibility: hidden;
   }
 </style>
