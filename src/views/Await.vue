@@ -17,7 +17,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder('set_reminder')">Set Reminder</div>
+    <div class="await__reminder" @click="Reminder('set_reminder')">{{$t('await.set_reminder_btn')}}</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -26,14 +26,14 @@
             <span class="extra-lives__icon"></span>
             <living class="invite-living" v-if="inviteLiving"></living>
           </div>
-          <span class="extra-lives__text">EXTRA LIVES: {{lives}}</span>
+          <span class="extra-lives__text">{{$t('await.extra_lives_text')}} {{lives}}</span>
         </div>
-        <div class="get-more-text" @click="toExtraLiveRules">Get More
+        <div class="get-more-text" @click="toExtraLiveRules">{{$t('await.get_more_text')}}
           <span class="get-more-text__icon iconfont icon-LIVINGyoujiantou"></span>
         </div>
       </div>
       <div class="get-lives">
-        <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
+        <div class="invitation-code__btn" @click="inputInvitation">{{$t('await.referral_code_btn')}}</div>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
@@ -43,7 +43,7 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">Invite & Earn Cash</div>
+    <div class="invite" @click="toInvite">{{$t('await.invite_btn')}}</div>
     <div class="notice">
       <router-link to="/rank">
         <notices></notices>
@@ -88,15 +88,12 @@
     </router-link>
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-      <p class="await__set__text">Set Questions Myself</p>
+      <p class="await__set__text">{{$t('await.ses_question_btn')}}</p>
     </div>
     <div class="apus-logo">
       <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy></policy>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
@@ -124,6 +121,7 @@ import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import LangPop from '../components/LangPop'
+import Policy from '../components/Policy'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -159,7 +157,7 @@ export default {
     }),
     targetDate () {
       if (this.startTime === -1) {
-        return ['', 'Coming Soon']
+        return ['', this.$t('await.come_soon')]
       } else if (this.startTime === 0) {
         return ['', 'Living']
       } else {
@@ -377,8 +375,10 @@ export default {
       console.log(lang)
       if (lang) {
         this.lang = 'EN'
+        this.$i18n.locale = 'en'
       } else {
         this.lang = 'HI'
+        this.$i18n.locale = 'hi'
       }
       this.isShowLang = false
     }
@@ -392,7 +392,8 @@ export default {
     Notices,
     ReminderBomb,
     PolicyBomb,
-    LangPop
+    LangPop,
+    Policy
   },
   watch: {
     lives: function (val, oldVal) {
@@ -730,15 +731,6 @@ export default {
       margin: 20px auto 0;
     }
   }
-  .bottom-text{
-      margin: 25px 0;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
-    }
   @media screen and (max-width: 321px) {
     .await {
       &__reminder {

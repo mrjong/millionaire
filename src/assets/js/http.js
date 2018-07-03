@@ -1,6 +1,7 @@
 /* global BUILD_ENV VERSION */
 // BUILD_ENV webpack define
 import axios from 'axios'
+import i18n from '../../i18n'
 export const env = BUILD_ENV || 'prod'
 export const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
@@ -40,7 +41,8 @@ const http = axios.create({
   withCredentials: env !== 'local',
   timeout: 8000,
   params: {
-    version: VERSION
+    version: VERSION,
+    lang: i18n.locale
   },
   data: {
     version: VERSION

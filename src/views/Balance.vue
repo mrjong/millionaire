@@ -24,10 +24,7 @@
     <div class="balance-wrap__operate">
       <p class="balance-wrap__operate__btn" @click="cashOut">{{$t('balance.cash_out_btn')}}</p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy></policy>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
@@ -38,6 +35,7 @@ import {mapGetters} from 'vuex'
 import Loading from '../components/Loading'
 import utils from '../assets/js/utils'
 import LoginTip from '../components/LoginTip'
+import Policy from '../components/Policy'
 export default {
   name: 'Balance',
   data () {
@@ -74,7 +72,8 @@ export default {
   },
   components: {
     Loading,
-    LoginTip
+    LoginTip,
+    Policy
   }
 }
 </script>
@@ -205,15 +204,6 @@ export default {
       text-align: center;
       font: 300 36px/94px 'Roboto', Arial, serif;
     }
-  }
-}
-.bottom-text{
-  margin-bottom: 25px;
-  font: 200 24px 'Roboto', Arial, serif;
-  color: #fff;
-  text-align: center;
-  a{
-    color:#fff;
   }
 }
 </style>

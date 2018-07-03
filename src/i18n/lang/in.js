@@ -14,7 +14,7 @@ const locale = {
     referral_code_btn: 'रेफ़रल कोड लागू करें',
     invite_btn: 'आमंत्रित करें और नकद कमाएं',
     play_card_title: 'कैसे खेलें',
-    play_card_step1: 'Sign up, answer questions at <span class="special">{time}</span>everyday',
+    play_card_step1: 'साइन अप करें, प्रतिदिन <span class="special">{time}</span> बजे प्रश्नों का उत्तर दें',
     play_card_step2: 'सभी 12 सवालों का जवाब दें, <span class="special">{money}</span> तक जीतें!',
     play_card_step3: 'Use<span class="special">{life}</span>when answering incorrectly. Invite new user to get it!',
     ses_question_btn: 'खुद से प्रश्न सेट करें',

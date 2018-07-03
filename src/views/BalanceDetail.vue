@@ -23,10 +23,7 @@
     <div>
       <p class="balance-detail__operate__btn" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy></policy>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
   </div>
@@ -39,6 +36,7 @@ import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import Policy from '../components/Policy'
 export default {
   name: 'BalanceDetail',
   data () {
@@ -166,7 +164,8 @@ export default {
   },
   components: {
     BalanceMark,
-    Loading
+    Loading,
+    Policy
   }
 }
 </script>

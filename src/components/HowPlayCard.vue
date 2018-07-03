@@ -3,9 +3,9 @@
     <p class="title">{{$t('await.play_card_title')}}</p>
     <img src="../assets/images/how-play-card.png" class="rule">
     <div class="content">
-      <p class="text text1">{{$t('await.play_card_title', {time: '10PM'})}}</p>
-      <p class="text text2">{{$t('await.play_card_title', {money: '₹1,000,000!'})}}</p>
-      <p class="text text3">{{$t('await.play_card_title', {money: 'EXTRA LIFE'})}}</p>
+      <p class="text text1" v-html="$t('await.play_card_step1', {time: '10PM'})"></p>
+      <p class="text text2" v-html="$t('await.play_card_step2', {money: '₹1,000,000!'})"></p>
+      <p class="text text3" v-html="$t('await.play_card_step3', {life: 'EXTRA LIFE'})"></p>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   }
 }
 </script>
-<style scoped lang="less" type="text/less">
+<style lang="less" type="text/less">
   .play-card{
     max-width: 93%!important;
     width: 6.7rem;
