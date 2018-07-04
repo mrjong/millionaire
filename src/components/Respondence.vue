@@ -210,6 +210,10 @@ export default {
      * 使用复活卡
      */
     useRecoveryCard () {
+      // 如果本题已经使用过复活卡，直接返回
+      if (this.isUsedRecoveryCard) {
+        return false
+      }
       this.isUsedRecoveryCard = true
       this.extraLifeTip = false
       const {id, index, isAnswered, lives, maxRecoveryCount, isCanRecoveryLastQuestion, questionCount} = this
