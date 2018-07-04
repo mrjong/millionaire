@@ -126,10 +126,12 @@ const actions = {
     utils.playSound('go')
   },
   /**
-   *  提交答案
-   * @param {any} {getters}
+   * 提交答案
+   * @param {*} {commit, getters}
+   * @param {*} isOnlySubmitReviveCardInfo 是否只提交复活卡信息
+   * @returns
    */
-  [type.QUESTION_SUBMIT] ({commit, getters}) {
+  [type.QUESTION_SUBMIT] ({commit, getters}, isOnlySubmitReviveCardInfo) {
     // 取出未提交成功的答案一起提交
     let {id: raceId, uncommittedAnswers, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
     const {id, userAnswer, index, questionCount} = getters
@@ -144,7 +146,7 @@ const actions = {
     })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(uncommittedAnswers, index === questionCount).then(({data}) => {
+      submitAnswer(uncommittedAnswers, index === questionCount, isOnlySubmitReviveCardInfo).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
             case 0: {
