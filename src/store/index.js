@@ -129,7 +129,7 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, getters}, isRefreshToken = false) {
-      clearInterval(initTimer)
+      clearTimeout(initTimer)
       commit(type._UPDATE, {
         isRefreshedToken: isRefreshToken
       })
@@ -204,7 +204,7 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._POLL_INIT] ({dispatch, getters}) {
-      setTimeout(() => {
+      initTimer = setTimeout(() => {
         getters.status === status._AWAIT && dispatch(type._INIT)
       }, getters.syncIntervalTime)
     },
