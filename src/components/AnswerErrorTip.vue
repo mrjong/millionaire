@@ -1,8 +1,8 @@
 <template>
   <transition name="answer-error-tip-fade">
     <section class="answer-error-tip" v-show="value">
-      <p class="out" v-if="type==='out'">{{$t('main.anwser_error_text')}}</p>
-      <p v-if="type==='incorrect'"><span class="iconfont icon-cuowu" style="font-size:0.222rem;margin-right:0.08rem;"></span><span style="vertical-align:middle;">Incorrect</span></p>
+      <p class="out" v-if="type==='out'">{{$t('main.anwser_out_text')}}</p>
+      <p v-if="type==='incorrect'"><span class="iconfont icon-cuowu" style="font-size:0.222rem;margin-right:0.08rem;"></span><span style="vertical-align:middle;">{{$t('main.anwser_incorrect_text')}}</span></p>
     </section>
   </transition>
 </template>

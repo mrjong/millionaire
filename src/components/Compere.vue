@@ -5,7 +5,8 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__notice">
-      <img src="../assets/images/small-awiat-title.png">
+      <img src="../assets/images/small-awiat-title-hi.png" v-if="lang === 'hi'">
+      <img src="../assets/images/small-awiat-title-en.png" v-else>
     </div>
     <!-- <div class="compere-container__supa">
        <p class="supa" :style="supaStyle"></p>
@@ -15,6 +16,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
+import i18n from '../i18n'
 export default {
   name: 'Compere',
   data () {
@@ -23,7 +25,8 @@ export default {
       msgTimer: null,
       supaOrder: 1,
       compereMsg: `Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`,
-      supaStyle: `background-position: 0% 0%;`
+      supaStyle: `background-position: 0% 0%;`,
+      lang: i18n.locale
     }
   },
   computed: {
@@ -32,6 +35,7 @@ export default {
   mounted () {
     this.gameType !== 3 && this.changeSupa()
     this.rollingMsg()
+    console.log('sdfasdfsdfsdfsdf' + i18n.locale)
   },
   methods: {
     // 1. 改变 supa(主持人) 位置

@@ -75,7 +75,7 @@ export default {
       this.showDialog = false
     },
     callbackFailed () {
-      this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+      this.dialogInfo.htmlText = this.$t('await.remider_pop.case3')
       this.showDialog = true
     },
     shareClose () {

@@ -5,7 +5,7 @@
     <div class="content">
       <p class="text text1" v-html="$t('await.play_card_step1', {time: '10PM'})"></p>
       <p class="text text2" v-html="$t('await.play_card_step2', {money: '₹1,000,000!'})"></p>
-      <p class="text text3" v-html="$t('await.play_card_step3', {life: 'EXTRA LIFE'})"></p>
+      <p class="text text3" v-html="$t('await.play_card_step3')"></p>
     </div>
   </div>
 </template>

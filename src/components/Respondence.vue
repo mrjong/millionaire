@@ -42,12 +42,12 @@
     <modal v-model="extraLifeTip">
       <section class="tip-extra-life">
         <img src="../assets/images/heart-light.png" alt="" class="heart-light">
-        <p class="tip-text">You have an  Extra Life!</p>
+        <p class="tip-text">{{$t('tip.userReviveCard.title')}}</p>
         <div class="useExtraLife" @click="useRecoveryCard">
           <section class="useExtraLife_wrapper" v-if="extraLifeTip"></section>
-          <p>Using Extra Life in 5</p>
+          <p>{{$t('tip.userReviveCard.desp')}}</p>
         </div>
-        <p class="useExtraLife-not" @click="extraLifeTip=false">Not now</p>
+        <p class="useExtraLife-not" @click="extraLifeTip=false">{{$t('tip.userReviveCard.btn')}}</p>
         <span class="iconfont icon-cuowu close" @click="extraLifeTip=false"></span>
       </section>
     </modal>
@@ -117,11 +117,11 @@ export default {
       })
       if (this.watchingMode || this.isClick) {
         this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'You\'ve been eliminated. ',
-          htmlText: 'You can no longer play for the cash prize. But you can watch and chat.',
+          htmlTitle: this.$t('tip.eliminated.title'),
+          htmlText: this.$t('tip.eliminated.desp'),
           shouldSub: false,
           markType: 0,
-          okBtnText: 'OK'
+          okBtnText: this.$t('tip.eliminated.btn')
         })
         return false
       }
@@ -323,11 +323,11 @@ export default {
      */
     failedUseRecoveryCardTip () {
       this.$store.dispatch(type._OPEN_DIALOG, {
-        htmlTitle: 'Extra Lives Use Failed',
-        htmlText: 'Your internet connection is disconnected or your request of server is timeout. Please check your internet connection.',
+        htmlTitle: this.$t('tip.failToUseReviveCard.title'),
+        htmlText: this.$t('tip.failToUseReviveCard.desp'),
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK'
+        okBtnText: this.$t('tip.failToUseReviveCard.btn')
       })
     }
   },

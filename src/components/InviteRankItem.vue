@@ -67,13 +67,14 @@ export default {
       .number{
         color: #201a98;
         font: 24px 'Roboto', Arial, serif;
+        text-align: center;
       }
       .money {
         width: 200px;
         height: 40px;
         font: 24px 'Roboto', Arial, serif;
         line-height: 37px;
-        margin-top: 10px;
+        margin: 10px auto 0;
         text-align: center;
         background-color: #ffb03e;
         color:#fff;

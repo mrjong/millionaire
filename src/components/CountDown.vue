@@ -1,7 +1,7 @@
 <template>
   <div class="count-down-container">
     <div class="count-down-container__module" v-if="startTime > 10 || startTime === 0 ">
-      <p class="count-down-container__module__text">{{$t('main.count_down', {time: countDown})}}</p>
+      <span class="count-down-container__module__text">{{$t('main.count_down', {time: countDown})}}</span>
       <count-down-compere></count-down-compere>
     </div>
     <div class="count-down-container__animation" v-show = 'startTime <= 10 && startTime !== 0'>
@@ -73,14 +73,14 @@ export default {
   .count-down-container{
     width: 100%;
     &__module{
+       margin: 35px auto 0;
+       text-align: center;
       &__text{
-        width: 280px;
-        padding: 10px 0;
+        padding: 10px 50px;
         color: #ffffff;
         text-align: center;
         background: rgba(250,167,23, 0.95);
         border-radius: 26px;
-        margin: 35px auto 0;
         font: 300 32px 'Roboto', Arial, serif;
         box-shadow: 0px 1px 10px 0.5px #faa729;
       }

@@ -4,17 +4,17 @@
       <p class="hint-icon">
         <img src="../assets/images/lang-icon.png" class="hint-icon__img">
       </p>
-      <p class="title">Select Language</p>
-      <p class="title">भाषा चुनिए</p>
+      <p class="title">Choose Languague</p>
+      <p class="title">भाषा चुने</p>
       <div class="is-reminder">
-        <p class="checkbox" @click="selectedLang = 'en'">
-          <span class="radio" :class="{'selected': selectedLang === 'en'}" ></span>
-          <span>English</span>
-        </p>
-        <p class="checkbox"  @click="selectedLang = 'hi'">
-          <span  class="radio" :class="{'selected': selectedLang === 'hi'}"></span>
-          <span>हिन्दी</span>
-        </p>
+        <div class="checkbox" @click="selectedLang = 'en'">
+          <p class="radio" :class="{'selected': selectedLang === 'en'}" ></p>
+          <p>English</p>
+        </div>
+        <div class="checkbox"  @click="selectedLang = 'hi'">
+          <p class="radio" :class="{'selected': selectedLang === 'hi'}"></p>
+          <p>हिन्दी</p>
+        </div>
       </div>
       <p class="btn">
         <span class="btn__ok" @click="okEvent">OK(ठीक)</span>
@@ -23,7 +23,6 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
 export default {
   name: 'LangPop',
   props: {
@@ -40,9 +39,6 @@ export default {
     return {
       selectedLang: this.lang
     }
-  },
-  computed: {
-    ...mapGetters(['status', 'phoneNationCode'])
   },
   methods: {
     okEvent () {
@@ -93,7 +89,8 @@ export default {
     }
     .is-reminder {
       display: flex;
-      justify-content: space-evenly;
+      justify-content: space-around;
+      margin: 20px auto;
       input{
         opacity: 0;
       }
@@ -105,24 +102,21 @@ export default {
         font-weight: 100;
       }
       .radio {
-        display: inline-block;
-        width: 25px;
-        height: 25px;
+        width: 26px;
+        height: 26px;
         background: url('../assets/images/no-checked-icon.png') no-repeat center;
         background-size: cover;
-        vertical-align: baseline;
       }
       .selected{
         background: url('../assets/images/checked-icon.png') no-repeat center;
         background-size: cover;
       }
       .checkbox{
-        height: 30px;
         text-align: center;
         font-size: .15px;
         color: #241262;
-        line-height: 38px;
         align-self: center;
+        display: flex;
       }
       p{
         height: 30px;
@@ -151,33 +145,6 @@ export default {
       transform: translate(0,-50%);
       color: #241262;
       font-size: 42px;
-    }
-    .drop-down{
-      position: absolute;
-      top: 50%;
-      right: 30px;
-      transform: translate(0,-50%) rotateZ(90deg);
-      color: #241262;
-      font-size: 32px;
-    }
-    .invitation{
-      width: 100%;
-      height: 77px;
-      line-height: 77px;
-      border-radius: 46px;
-      background-color:#f4f3f7 ;
-      border: 0;
-      padding-left: 30px;
-      color:#241262 ;
-      font-size: 28px;
-      text-align: center;
-    }
-    input::-webkit-input-placeholder{
-      width: 100%;
-      color: #241262;
-      opacity: 0.6;
-      text-align: center;
-      font-size: 28px;
     }
     .btn {
       width: 100%;

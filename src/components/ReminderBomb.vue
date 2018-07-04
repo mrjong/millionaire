@@ -26,7 +26,7 @@
       <p class="">{{$t('await.remider_tip')}}</p>
     </div>
     <p class="btn">
-      <span class="btn__ok" @click="okEvent">OK</span>
+      <span class="btn__ok" @click="okEvent">{{$t('await.referral_code_pop.ok')}}</span>
     </p>
     </div>
     <country-list v-model="showCountryList"></country-list>

@@ -86,10 +86,10 @@ if ('serviceWorker' in navigator) {
       registration.onupdatefound = () => {
         console.log('onupdatefound')
         vm.$store.dispatch(_OPEN_DIALOG, {
-          htmlTitle: 'New Version Available',
-          htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
+          htmlTitle: i18n.t('tip.versionUpdate.title'),
+          htmlText: i18n.t('tip.versionUpdate.desp'),
           lastTime: 5000,
-          okBtnText: 'OK',
+          okBtnText: i18n.t('tip.versionUpdate.btn'),
           hintImg: './static/images/tip-update.png'
         })
       }

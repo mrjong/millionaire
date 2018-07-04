@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="header">
-      <p class="title">User Profile</p>
+      <p class="title">{{$t('userCenter.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
       <!-- <p class="edit"></p> -->
     </div>
@@ -11,31 +11,31 @@
     <div class="user__wrap">
       <p class="name">
         <span class="name__icon iconfont icon-nicheng"></span>
-        <span class="name__tip">Nickname</span>
+        <span class="name__tip">{{$t('userCenter.name')}}</span>
         <span class="name__text">{{userInfo.userName}}</span>
       </p>
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
-        <span class="paytm__tip">Phone Number</span>
+        <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
         <span class="paytm__text">{{phone}}</span>
       </p>
       <p class="code">
         <span class="code__icon iconfont icon-yaoqingma"></span>
-        <span class="code__tip">Referral Code</span>
+        <span class="code__tip">{{$t('userCenter.code')}}</span>
         <span class="code__text">{{code}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-cashhistory"></span>
-        <span class="cash-history__tip">Cash History</span>
+        <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
         <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
-        <span class="contact__tip">Contact Us</span>
+        <span class="contact__tip">{{$t('userCenter.contact')}}</span>
         <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
-    <div class="logout-btn" @click="logOut">Log Out</div>
+    <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
     <policy-link></policy-link>
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -62,7 +62,7 @@ export default {
       dialogInfo: {
         htmlText: '',
         markType: false,
-        okBtnText: 'OK'
+        okBtnText: this.$t('tip.lateJoin.btn')
       },
       phone: ''
     }
@@ -97,7 +97,7 @@ export default {
       this.isLogout = true
       this.showDialog = true
       this.dialogInfo.markType = true
-      this.dialogInfo.htmlText = 'Are you sure you want to log out?'
+      this.dialogInfo.htmlText = this.$t('userCenter.logout_pop.text1')
     },
     okEvent () {
       this.showDialog = false
@@ -132,7 +132,7 @@ export default {
           // 登出失败
           utils.statistic('log_out', 1, {result_code_s: '0'}, 'user_profile_page')
           this.isLogout = false
-          this.dialogInfo.htmlText = 'You failed to logout, please try again.'
+          this.dialogInfo.htmlText = this.$t('userCenter.logout_pop.text2')
           this.showDialog = true
         })
       }

@@ -7,6 +7,7 @@ import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
 import { submitAnswer } from '../../assets/js/api'
 import md5 from 'md5'
+import i18n from '../../i18n'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -161,8 +162,8 @@ const actions = {
           switch (+data.code) {
             case 1005: {
               reject({
-                htmlTitle: 'Game over',
-                htmlText: 'Sorry for that you are already eliminated. Please check your internet connection.'
+                htmlTitle: i18n.t('tip.timeoutToSubmit.title'),
+                htmlText: i18n.t('tip.timeoutToSubmit.desp')
               })
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
@@ -171,7 +172,7 @@ const actions = {
             }
             case 1006:
             case 1007: {
-              reject(`Oops, you have already failed on the ${utils.formatIndex(index)} question.`)
+              reject(i18n.t('tip.failtosubmit.desp', {index}))
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
               })
