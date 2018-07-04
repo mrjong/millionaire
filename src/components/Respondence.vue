@@ -23,7 +23,7 @@
               :isRight="val && val.isRight"
               @answer="answer(val.answerText)"
               :is-click="isClick"
-              :myChick="userAnswer === val.answerText"
+              :myChick="userAnswer.answer === val.answerText"
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
@@ -129,7 +129,13 @@ export default {
         if (!this.watchingMode) {
           // 可以点击
           this.isClick = true
-          const userAnswerInfo = {userAnswer: e, isAnswered: true}
+          const userAnswerInfo = {
+            userAnswer: {
+              lang: this.$i18n.locale,
+              answer: e
+            },
+            isAnswered: true
+          }
           const {id, index} = this
           this.$store.commit(type.QUESTION_UPDATE, userAnswerInfo)
           // 作答情况存储在本地

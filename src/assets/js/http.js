@@ -50,8 +50,8 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => {
   const {params = {}, data = {}} = config
-  config.params = {...params, timestamp: Date.now(), lang: i18n.vm.locale}
-  config.data = {...data, timestamp: Date.now(), lang: i18n.vm.locale}
+  config.params = {...params, timestamp: Date.now(), lang: i18n.locale}
+  config.data = {...data, timestamp: Date.now(), lang: i18n.locale}
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData
     config.transformRequest = [function (data) {

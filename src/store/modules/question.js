@@ -20,7 +20,10 @@ const state = {
   isAnswered: false, // 是否作答
   isCorrect: true, // 作答是否正确
   correctAnswer: '', // 正确答案
-  userAnswer: '', // 用户答案
+  userAnswer: {
+    lang: i18n.locale,
+    answer: ''
+  }, // 用户答案
   result: {}, // 结果汇总
   time: 10, // 作答时间, 默认10秒
   restTime: 0, // 剩余时间
@@ -143,7 +146,8 @@ const actions = {
     uncommittedAnswers.push({
       i: id,
       s: index,
-      a: md5(userAnswer)
+      a: md5(userAnswer.answer || ''),
+      l: i18n.locale
     })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
@@ -225,10 +229,12 @@ const actions = {
       if (answerStr && resultStr) {
         const answer = JSON.parse(answerStr)
         const result = JSON.parse(resultStr)
-        const {a: correctAnswer} = answer
+        const {a: correctAnswerList = {}} = answer
 
+        const {lang = 'en', userAnswer = ''} = getters.userAnswer
+        const currentLang = i18n.locale || 'en'
         // 判断答案是否正确
-        let isCorrect = md5Map[correctAnswer] === getters.userAnswer
+        let isCorrect = correctAnswerList[lang] === md5(userAnswer)
 
         utils.statistic('ANSWER', 0, {
           flag_s: `${getters.index}`,
@@ -238,7 +244,7 @@ const actions = {
         })
 
         commit(type.QUESTION_UPDATE, {
-          correctAnswer: md5Map[correctAnswer], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
+          correctAnswer: md5Map[correctAnswerList[currentLang]], result: utils.parseMd5(result, md5Map), isCorrect, restTime: 0
         })
         commit(type.QUESTION_UPDATE, {
           status: status.QUESTION_END

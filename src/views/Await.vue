@@ -370,12 +370,14 @@ export default {
       this.isShowLang = true
     },
     changeLang (lang) {
-      console.log(lang)
       this.$i18n.locale = lang
       if (this.lang && lang && this.lang !== lang) {
-        this.$store.dispatch(type._INIT)
+        this.$store.dispatch(type._INIT).then(() => {
+          this.lang = lang
+        }, () => {
+          this.$i18n.locale = this.lang
+        })
       }
-      this.lang = lang
       utils.storage.set('millionaire-lang', lang)
       this.isShowLang = false
     }
