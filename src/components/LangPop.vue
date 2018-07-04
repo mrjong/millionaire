@@ -7,12 +7,12 @@
       <p class="title">Select Language</p>
       <p class="title">भाषा चुनिए</p>
       <div class="is-reminder">
-        <p class="checkbox" @click="selectLang('en')">
-          <span class="radio" :class="{'selected': isEN}" ></span>
+        <p class="checkbox" @click="selectedLang = 'en'">
+          <span class="radio" :class="{'selected': selectedLang === 'en'}" ></span>
           <span>English</span>
         </p>
-        <p class="checkbox"  @click="selectLang('hi')">
-          <span  class="radio" :class="{'selected': !isEN}"></span>
+        <p class="checkbox"  @click="selectedLang = 'hi'">
+          <span  class="radio" :class="{'selected': selectedLang === 'hi'}"></span>
           <span>हिन्दी</span>
         </p>
       </div>
@@ -28,13 +28,17 @@ export default {
   name: 'LangPop',
   props: {
     isShowLang: {
-      type: Boolean
+      type: Boolean,
+      default: false
+    },
+    lang: {
+      type: String,
+      default: 'en'
     }
   },
   data () {
     return {
-      isEN: true,
-      isHi: false
+      selectedLang: this.lang
     }
   },
   computed: {
@@ -42,14 +46,7 @@ export default {
   },
   methods: {
     okEvent () {
-      this.$emit('changeLang', this.isEN)
-    },
-    selectLang (val) {
-      if (val === 'en') {
-        this.isEN = true
-      } else {
-        this.isEN = false
-      }
+      this.$emit('changeLang', this.selectedLang)
     }
   },
   components: {}

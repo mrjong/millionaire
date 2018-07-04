@@ -100,7 +100,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
-    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang"></lang-pop>
+    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -146,7 +146,7 @@ export default {
       inviteLiving: false,
       isReminderPop: false,
       isShowLang: false,
-      lang: 'EN'
+      lang: this.$i18n.locale
     }
   },
   computed: {
@@ -372,17 +372,12 @@ export default {
     },
     changeLang (lang) {
       console.log(lang)
-      if (lang) {
-        this.$i18n.locale = 'en'
-        if (this.$i18n.locale === 'en') {
-          this.lang = 'EN'
-        }
-      } else {
-        this.$i18n.locale = 'hi'
-        if (this.$i18n.locale === 'hi') {
-          this.lang = 'HI'
-        }
+      this.$i18n.locale = lang
+      if (this.lang && lang && this.lang !== lang) {
+        this.$store.dispatch(type._INIT)
       }
+      this.lang = lang
+      utils.storage.set('millionaire-lang', lang)
       this.isShowLang = false
     }
   },
