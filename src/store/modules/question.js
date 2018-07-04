@@ -231,7 +231,7 @@ const actions = {
         const result = JSON.parse(resultStr)
         const {a: correctAnswerList = {}} = answer
 
-        const {lang = 'en', userAnswer = ''} = getters.userAnswer
+        const {lang = 'en', answer: userAnswer = ''} = getters.userAnswer
         const currentLang = i18n.locale || 'en'
         // 判断答案是否正确
         let isCorrect = correctAnswerList[lang] === md5(userAnswer)
