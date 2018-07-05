@@ -6,7 +6,7 @@ const locale = {
     living: 'सप्राण',
     login_text: 'लॉगिन',
     set_reminder_btn: 'अनुस्मारक सेट करें',
-    cancel_reminder_btn: 'Cancel Reminder',
+    cancel_reminder_btn: 'अनुस्मारक रद्द करें',
     reminder_phone: 'फ़ोन नंबर',
     remider_tip: 'मुझे रोज़ाना याद दिलाएं',
     userinfo_blance_text: 'शेष',
@@ -40,9 +40,9 @@ const locale = {
       case2: 'आपका फोन नंबर पहले ही अनुस्मारक सेट कर चुका है।',
       case3: 'जमा करने में असफल कृपया बाद में पुनः प्रयास करें।',
       case4: 'बधाई। आप पहले ही अपना अनुस्मारक सेट कर चुके हैं।',
-      cancel_case1: '手机号不存在',
-      cancel_case2: '取消失败',
-      cancel_case3: '取消成功'
+      cancel_case1: 'क्या आप क्विज़ रिमाइंडर को कैंसल चाहते हैं？',
+      cancel_case2: 'असफल अनुस्मारक असफल',
+      cancel_case3: 'फोन नंबर मौजूद नहीं है।'
     },
     set_question_pop: 'कृपया प्रश्न सेट करने के लिए लॉग इन करें और आप पहले से ही प्रश्न और संकेत प्राप्त कर सकते हैं, और अतिरिक्त पुरस्कार जीतने की संभावना है!'
   },
