@@ -84,7 +84,8 @@ export default {
   align-items: flex-end;
   &__text {
     width: 100%;
-    height: 200px;
+    min-height: 200px;
+    max-height: 250px;
     color: #fed331;
     font: 500 40px/48px 'Roboto', Arial, serif;;
     padding: 0 30px 0 44px;
