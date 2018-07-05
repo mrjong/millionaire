@@ -297,7 +297,8 @@ const locale = {
     result_tip: 'Prize rolls over to next game',
     no_winner: 'No winners!',
     title1: 'Winners!',
-    title2: 'You Won!<b>Congrats! {winnerAmount} winners in this game!</b>'
+    title2: 'You Won!',
+    hint: 'Congrats! {winnerAmount} winners in this game!'
   },
   policyBomb: {
     agreement: 'User Agreement',
