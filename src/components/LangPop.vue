@@ -1,5 +1,5 @@
 <template>
-  <div class="mark" v-if="isShowLang">
+  <div id="lang-dialog" class="mark" v-if="isShowLang" style="z-index: 222;">
     <div class="wrap">
       <p class="hint-icon">
         <img src="../assets/images/lang-icon.png" class="hint-icon__img">
@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 export default {
   name: 'LangPop',
@@ -30,16 +31,15 @@ export default {
     isShowLang: {
       type: Boolean,
       default: false
-    },
-    lang: {
-      type: String,
-      default: 'en'
     }
   },
   data () {
     return {
-      selectedLang: this.lang
+      selectedLang: this.$i18n.locale
     }
+  },
+  computed: {
+    ...mapGetters(['lang'])
   },
   methods: {
     okEvent () {
@@ -47,7 +47,11 @@ export default {
       this.$emit('changeLang', this.selectedLang)
     }
   },
-  components: {}
+  watch: {
+    lang (val) {
+      this.selectedLang = val
+    }
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">
@@ -58,7 +62,6 @@ export default {
     top:0;
     left: 0;
     background: rgba(0, 0,0, 0.8);
-    z-index: 11;
   }
   .wrap {
     width: 602px;

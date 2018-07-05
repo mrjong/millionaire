@@ -6,7 +6,7 @@
          @click="likeToFb('like_page')">
       </a>
       <div style="display: flex;">
-        <div class="await__top__lang" @click="showLang" v-if="status === 1 || status === 2">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
+        <lang class="await__top__lang"></lang>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -100,7 +100,6 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
-    <lang-pop v-if="status === 1 || status === 2" :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -123,7 +122,7 @@ import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
-import LangPop from '../components/LangPop'
+import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
 // import VideoButton from '../components/VideoButton'
 export default {
@@ -145,8 +144,6 @@ export default {
       logout: false,
       inviteLiving: false,
       isReminderPop: false,
-      isShowLang: false,
-      lang: this.$i18n.locale,
       isChangeReminder: false
     }
   },
@@ -158,7 +155,8 @@ export default {
       lives: 'lives',
       code: 'code',
       isAgreePolicy: 'isAgreePolicy',
-      isRemider: 'isRemider'
+      isRemider: 'isRemider',
+      watchingMode: 'watchingMode'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -389,21 +387,6 @@ export default {
           }
         }).catch()
       }
-    },
-    showLang () {
-      this.isShowLang = true
-    },
-    changeLang (lang) {
-      this.$i18n.locale = lang
-      if (this.lang && lang && this.lang !== lang) {
-        this.$store.dispatch(type._INIT).then(() => {
-          this.lang = lang
-        }, () => {
-          this.$i18n.locale = this.lang
-        })
-      }
-      utils.storage.set('millionaire-lang', lang)
-      this.isShowLang = false
     }
   },
   components: {
@@ -415,7 +398,7 @@ export default {
     Notices,
     ReminderBomb,
     PolicyBomb,
-    LangPop,
+    lang,
     PolicyLink
   },
   watch: {
@@ -456,7 +439,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
-      &__like, &__instructions, &__lang{
+      &__like, &__instructions{
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
