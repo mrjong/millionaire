@@ -31,10 +31,8 @@
       <div class="living-bg">
         <living class="living-animation"></living>
       </div>
-      <p class="revive-title">You get revived.</p>
-      <p class="revive-text">
-        Note: Extra Lives could be used twice per game, except on the last question.
-      </p>
+      <p class="revive-title">{{$t('tip.reviveSuccess.title')}}</p>
+      <p class="revive-text">{{$t('tip.reviveSuccess.desp')}}</p>
     </div>
     <!-- 答错或未答提示 -->
     <answer-error-tip v-model="answerErrorTip" :type="answerErrorType"></answer-error-tip>

@@ -4,6 +4,7 @@ const locale = {
     next_bonus_text: 'Next Bonus',
     come_soon: 'Coming soon',
     living: 'LIVING',
+    login_text: 'Log in',
     set_reminder_btn: 'Set Reminder',
     reminder_phone: 'Phone Number',
     remider_tip: 'Remind me everyday',
@@ -17,6 +18,7 @@ const locale = {
     play_card_step1: 'Sign up, answer questions at <span class="special">10PM</span>everyday',
     play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
+    play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
     ses_question_btn: 'Set Questions Myself',
     referral_code_pop: {
       title: 'APPLY REFERRAL CODE',
@@ -299,6 +301,9 @@ const locale = {
     describe2: 'and',
     describe3: 'carefully before you start game!'
   },
+  stringWords: [
+    'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
+    'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
   // 全局提示
   tip: {
     userReviveCard: { // 使用复活卡
@@ -350,6 +355,15 @@ const locale = {
       title: 'New Version Available',
       desp: 'Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!',
       btn: 'OK'
+    },
+    reviveSuccess: {
+      title: 'You get revived.',
+      desp: 'Note: Extra Lives could be used twice per game, except on the last question.'
+    },
+    anwserWrong: {
+      title: 'Are You  Losing Bonus?',
+      desp: 'Invite friends to join and play, earn cash  now!',
+      btn: 'Invite & Earn Cash'
     }
   }
 }

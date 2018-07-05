@@ -26,7 +26,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: [`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`], // 主持人消息列表
+    hostMsgList: i18n.t('stringWords'), // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID

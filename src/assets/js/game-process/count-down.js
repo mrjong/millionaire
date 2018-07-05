@@ -4,6 +4,7 @@ import { _UPDATE } from '../../../store/type'
 import { MESSAGE_HOST } from '../listener-type'
 import im from '../im'
 import questionProcess from './question'
+import i18n from '../../../i18n'
 /**
  * 游戏进度-开场串词
  */
@@ -46,7 +47,7 @@ const countDownProcess = {
         if (this.$store.getters.status === _AWAIT || this.$store.getters.status === _READY) {
           im.emitListener(MESSAGE_HOST, {
             content: {
-              content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
+              content: JSON.stringify(i18n.t('stringWords'))
             }
           })
         }

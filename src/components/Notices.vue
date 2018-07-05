@@ -1,6 +1,6 @@
 <template>
   <div class="notices">
-    <img src="../assets/images/notices-title-hi.png" alt="" class="title" v-if="lang === 'hi'">
+    <img src="../assets/images/notices-title-hi.png" alt="" class="title" v-if="$i18n.locale === 'hi'">
     <img src="../assets/images/notices-title.png" alt="" class="title" v-else>
     <!-- 排行榜前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
@@ -41,7 +41,6 @@
 import {mapGetters} from 'vuex'
 import { RANK_UPDATE } from '../store/type'
 import { getWinnerList } from '../assets/js/api'
-import i18n from '../i18n'
 let timer = null
 export default {
   name: 'Notices',
@@ -50,8 +49,7 @@ export default {
       mode: 'total',
       listSize: 5,
       winnerList: [],
-      list: [],
-      lang: i18n.locale
+      list: []
     }
   },
   computed: {

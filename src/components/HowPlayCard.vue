@@ -6,6 +6,7 @@
       <p class="text text1" v-html="$t('await.play_card_step1', {time: '10PM'})"></p>
       <p class="text text2" v-html="$t('await.play_card_step2', {money: '₹1,000,000!'})"></p>
       <p class="text text3" v-html="$t('await.play_card_step3')"></p>
+      <p class="text text4" v-html="$t('await.play_card_step4')"></p>
     </div>
   </div>
 </template>
@@ -42,7 +43,7 @@ export default {
       max-width: 90%;
       width: 600px;
       height: 827px;
-      margin: 0 auto;
+      margin: 0 auto 100px;
     }
     .content{
       height: 100%;
@@ -74,6 +75,14 @@ export default {
       .text3{
         top:435px;
         left: 275px;
+      }
+      .text4 {
+        width: 80%;
+        top:635px;
+        left: 50%;
+        transform: translate(-50%,0);
+        font-size: 34px;
+        text-align: center;
       }
     }
   }

@@ -5,7 +5,7 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__notice">
-      <img src="../assets/images/small-awiat-title-hi.png" v-if="lang === 'hi'">
+      <img src="../assets/images/small-awiat-title-hi.png" v-if="$i18n.locale === 'hi'">
       <img src="../assets/images/small-awiat-title-en.png" v-else>
     </div>
     <!-- <div class="compere-container__supa">
@@ -35,7 +35,6 @@ export default {
   mounted () {
     this.gameType !== 3 && this.changeSupa()
     this.rollingMsg()
-    console.log('sdfasdfsdfsdfsdf' + i18n.locale)
   },
   methods: {
     // 1. 改变 supa(主持人) 位置
@@ -78,7 +77,7 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 100px 0 0;
+  padding: 50px 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
