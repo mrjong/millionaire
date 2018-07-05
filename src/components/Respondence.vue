@@ -23,7 +23,7 @@
               :isRight="val && val.isRight"
               @answer="answer(val.answerText)"
               :is-click="isClick"
-              :myChick="userAnswer.answer === val.answerText"
+              :myChick="userAnswer === val.answerText"
               @setAllFontSize="setAllFontSize">
       </answer>
     </div>
@@ -128,10 +128,7 @@ export default {
           // 可以点击
           this.isClick = true
           const userAnswerInfo = {
-            userAnswer: {
-              lang: this.$i18n.locale,
-              answer: e
-            },
+            userAnswer: e,
             isAnswered: true
           }
           const {id, index} = this

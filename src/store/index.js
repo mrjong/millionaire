@@ -122,6 +122,12 @@ export default new Vuex.Store({
         hintImg: './static/images/tip-fail.png',
         lastTime: 3000
       }
+    },
+    /**
+     * 重置串词至默认串词
+     */
+    [type._RESET_HOSTMSGLIST] (state) {
+      state.hostMsgList = i18n.t('stringWords')
     }
   },
   actions: {

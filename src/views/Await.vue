@@ -100,7 +100,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
-    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
+    <lang-pop v-if="status === 1 || status === 2" :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"

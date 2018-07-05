@@ -1,10 +1,8 @@
 import utils from '../utils'
 import { PROCESS_COUNT_DOWN, _AWAIT, _READY } from '../status'
 import { _UPDATE } from '../../../store/type'
-import { MESSAGE_HOST } from '../listener-type'
-import im from '../im'
 import questionProcess from './question'
-import i18n from '../../../i18n'
+import playingState from '../game-state/state-playing'
 /**
  * 游戏进度-开场串词
  */
@@ -43,13 +41,10 @@ const countDownProcess = {
         this.$store.commit(_UPDATE, {
           startTimeOffset: 0
         })
-        // 倒计时结束后 比赛未开始展示串词
-        if (this.$store.getters.status === _AWAIT || this.$store.getters.status === _READY) {
-          im.emitListener(MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify(i18n.t('stringWords'))
-            }
-          })
+        // 倒计时结束后 若比赛处于倒计时或者等待状态 比赛进入Plyaing状态
+        const {status} = this.$store.getters
+        if (status === _AWAIT || status === _READY) {
+          playingState.run()
         }
       } else {
         this.$store.commit(_UPDATE, {
