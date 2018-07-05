@@ -282,7 +282,7 @@ const locale = {
       text2: 'Each invitation can earn up to ₹1000'
     }
   },
-  reviveCard: {
+  reviveGuide: {
     title: 'Referral Code Available Now!',
     text1: 'Keep playing when answer incorrectly',
     text2: 'Get more chances to WIN',

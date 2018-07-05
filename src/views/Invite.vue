@@ -2,6 +2,10 @@
   <div class="invite">
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
+    <div class="invite__title">
+      <img src="../assets/images/invite-title-hi.png" class="invite__title__img" v-if="$i18n.locale === 'hi'">
+      <img src="../assets/images/invite-title-en.png" class="invite__title__img" v-else>
+    </div>
     <div class="invite__btn">
       <div class="invite__btn__click" @click="inviteEarn">
         <img src="../assets/images/invite-btn.png">
@@ -276,8 +280,17 @@ export default {
       border-top-left-radius: 24px 24px;
       border-bottom-left-radius: 24px 24px;
     }
+    &__title {
+      width: 620px;
+      margin: 0 auto 250px;
+      padding-top: 70px;
+      &__img {
+        max-width: 100%;
+        width: 620px;
+        height: 332px;
+      }
+    }
     &__btn{
-      padding-top: 620px;
       &__click {
         position: relative;
         max-width:98%;

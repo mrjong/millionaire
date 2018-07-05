@@ -1,17 +1,17 @@
 <template>
   <div class="guide" v-if="FirstGuide && !isClose">
     <span class="guide__close iconfont icon-cuowu" @click="isClose = true"></span>
-    <p class="important ">{{$t('reviveCard.title')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveCard.text1')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveCard.text2')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveCard.text3')}}</p>
+    <p class="important ">{{$t('reviveGuide.title')}}</p>
+    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text1')}}</p>
+    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>
+    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text3')}}</p>
     <div class="guide__img">
       <img src="../assets/images/light.png" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
     <div class="guide__btn" @click="toShareDetail">
       <p class="guide__btn__icon">+1</p>
-      {{$t('reviveCard.btn')}}</div>
+      {{$t('reviveGuide.btn')}}</div>
   </div>
 </template>
 
