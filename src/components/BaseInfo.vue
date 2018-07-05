@@ -93,6 +93,7 @@ export default {
         .login-text{
           width: 100%;
           height: 40%;
+          padding-top: 10px;
           position: absolute;
           bottom: 0;
           color: #ffffff;

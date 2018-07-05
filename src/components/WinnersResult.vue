@@ -9,9 +9,7 @@
        <p class="has-winner-result__title" v-if="!isWon">
         <span class="has-winner-result__title__count">{{respondence.winnerAmount}}</span>{{$t('winnersResult.title1')}}
       </p>
-      <p class="has-winner-result__title" v-else>
-        {{$t('winnersResult.title2', {winnerAmount: respondence.winnerAmount})}}
-      </p>
+      <p class="has-winner-result__title" v-else v-html="$t('winnersResult.title2', {winnerAmount: respondence.winnerAmount})"></p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">
           <div class="has-winner-result-top-item"
