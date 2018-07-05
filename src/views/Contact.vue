@@ -78,7 +78,6 @@ export default {
             window.location.href = 'https://www.instagram.com/apusgomillionaire/'
           }, 5)
           window.location.href = 'instagram://user?username=apusgomillionaire'
-          console.log('sss')
         }
       }
     }

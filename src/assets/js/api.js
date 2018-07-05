@@ -41,7 +41,8 @@ export const api = {
   inviteTotalBoard: '/cmp/itboard/', // 邀请好友总排行,
   myInviteBoard: '/cmp/myinvite/', // 我的邀请
   inviteLink: '/cmp/ic', // 生成分享facebook好友链接
-  checkInviteCode: '/cmp/ifc' // 验证分享好友码
+  checkInviteCode: '/cmp/ifc', // 验证分享好友码
+  cancelReminder: '/cmp/cancel_remind/' // 取消订阅
 }
 
 export const init = function (isRefreshToken) {
@@ -402,5 +403,12 @@ export const checkInviteCode = function (icode) {
     app_id: utils.app_id,
     client_id: utils.clientId,
     icode: icode
+  })
+}
+
+export const cancelReminder = function () {
+  return axios.post(api.cancelReminder, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
   })
 }
