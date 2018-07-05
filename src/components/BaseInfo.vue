@@ -1,8 +1,9 @@
 <template>
   <div class="base-info">
     <div class="base-info__user">
-        <div class="base-info__user__head"
-             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login"></div>
+        <div class="base-info__user__head" :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login">
+          <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+        </div>
         <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
@@ -87,6 +88,16 @@ export default {
         background: no-repeat center;
         background-size: cover;
         margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        .login-text{
+          width: 100%;
+          height: 40%;
+          position: absolute;
+          bottom: 0;
+          color: #ffffff;
+          font: 36px 'Roboto Condensed', Arial, sans-serif;
+        }
       }
       &__name{
         color: #241262;

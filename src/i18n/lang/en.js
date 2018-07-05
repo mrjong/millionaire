@@ -4,6 +4,7 @@ const locale = {
     next_bonus_text: 'Next Bonus',
     come_soon: 'Coming soon',
     living: 'LIVING',
+    login_text: 'Log in',
     set_reminder_btn: 'Set Reminder',
     reminder_phone: 'Phone Number',
     remider_tip: 'Remind me everyday',
@@ -14,21 +15,24 @@ const locale = {
     referral_code_btn: 'Apply Referral Code',
     invite_btn: 'Invite & Earn Cash',
     play_card_title: 'HOW TO PLAY',
-    play_card_step1: 'Sign up, answer questions at <span class="special">{time}</span>everyday',
-    play_card_step2: 'Answer all 12 questions right, win up to <span class="special">{money}</span>',
-    play_card_step3: 'Use<span class="special"> {life} </span>when answering incorrectly. Invite new user to get it!',
+    play_card_step1: 'Sign up, answer questions at <span class="special">10PM</span>everyday',
+    play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
+    play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
+    play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
     ses_question_btn: 'Set Questions Myself',
     referral_code_pop: {
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
-      Instructions: 'Referral Code',
+      instructions: 'Referral Code',
       case1: 'You can not enter your own Referral Code.',
       case2: 'Invalid referral code, please check it now.',
       case3: 'You\'ve already applied a referral code. You can apply only once.',
       case4: 'This referral code expired.',
       case5: 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!',
       case6: 'This referral code has already been applied',
-      case7: 'Fail to submit, please try again later.'
+      case7: 'Fail to submit, please try again later.',
+      cancel: 'Cancel',
+      ok: 'OK'
     },
     remider_pop: {
       case1: 'Please enter right phone number',
@@ -107,7 +111,7 @@ const locale = {
     rank_text2: 'Earn',
     rank_text3: 'Get Reward',
     rank_text4: 'Not play yet',
-    rank_text5: 'Played on {time}',
+    rank_text5: ' Played on {time}',
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [
@@ -141,15 +145,21 @@ const locale = {
       text2: 'Wrong verification code, please try again.',
       text3: 'Fail to verify the code, please try again.',
       text4: 'Sending the code too often. Please verify later.',
-      text5: 'Fail to send, please try again.'
+      text5: 'Fail to send, please try again.',
+      text6: 'Sorry',
+      text6_1: 'Oops, don\'t be upset. Your balance already reset to zero since you didn\'t cash out within the first 24 hours after you won. Please login after you win immediately for the next time.',
+      text7: 'You\'ve logged in this account on other device. Please check and try another one.',
+      text8: 'You have disconnected. Please check your internet connection and try again.',
+      btn1: 'OK',
+      btn2: 'Try again'
     }
   },
   main: {
     count_down: 'Starting in {time}',
     send_btn: 'Send',
     viewing: 'Viewing',
-    anwser_error_text: 'Out',
-    anwser_pop: ''
+    anwser_out_text: 'Out',
+    anwser_incorrect_text: 'Incorrect'
   },
   anwser_rank: {
     week_tap: 'Weekly Rank',
@@ -284,11 +294,77 @@ const locale = {
     title1: 'Winners!',
     title2: 'You Won!<b>Congrats! {winnerAmount} winners in this game!</b>'
   },
-  publicText: {
-    agreement: 'User Agreement',
-    policy: 'Privacy Policy'
-  },
   policyBomb: {
+    agreement: 'User Agreement',
+    policy: 'Privacy Policy',
+    describe1: 'In order to improve game experience and protect user data, please read the',
+    describe2: 'and',
+    describe3: 'carefully before you start game!'
+  },
+  stringWords: [
+    'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
+    'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
+  // 全局提示
+  tip: {
+    userReviveCard: { // 使用复活卡
+      title: 'You have an  Extra Life!', // 主题
+      desp: 'Using Extra Life in 5', // 描述
+      btn: 'Not now' // 按钮文案
+    },
+    firstQuestionWrong: { // 首题答错
+      title: 'Unwilling to ELIMINATE?', // 主题
+      desp: 'Tell us the reason you failed on this question.Let\'s make this game better!', // 描述
+      btn: 'JOIN NOW' // 按钮文案
+    },
+    otherquestionwrong: { // 非首题答错
+      title: 'Oops! You failed on the 1 question.', // 主题
+      desp: 'There are(is) only {index} question(s) between you and a MILLION. Invite a new user to get a extra life', // 描述
+      btn: 'Invite Now' // 按钮文案
+    },
+    failtosubmit: { // 提交答案失败
+      title: 'Failed to Submit', // 主题
+      desp: 'Oops, you have already failed on the {index} question.', // 描述
+      btn: 'OK' // 按钮文案
+    },
+    timeoutToSubmit: { // 提交答案超时
+      title: 'Game over', // 主题
+      desp: 'Sorry , but you are already eliminated from the game . Please check your internet connection.', // 描述
+      btn: 'OK' // 按钮文案
+    },
+    failToUseReviveCard: { // 复活卡使用失败
+      title: 'Extra Lives Use Failed', // 主题
+      desp: 'Your internet connection is disconnected or request to your server  timeout. Please check your internet connection.', // 描述
+      btn: 'OK' // 按钮文案
+    },
+    eliminated: { // 点击选项已经被淘汰
+      title: 'You have been removed from the game', // 主题
+      desp: 'You can no longer play for the cash prize. But you can watch and chat.', // 描述
+      btn: 'OK' // 按钮文案
+    },
+    lateJoin: { // 进入时已经被淘汰
+      title: 'You are late to join', // 主题
+      desp: 'The game already started, you can now only view the game. Please come earlier for the next time to play and win.', // 描述
+      btn: 'OK' // 按钮文案
+    },
+    networkNotice: {
+      title: 'Please check your internet connection.',
+      desp: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+      btn: 'OK'
+    },
+    versionUpdate: {
+      title: 'New Version Available',
+      desp: 'Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!',
+      btn: 'OK'
+    },
+    reviveSuccess: {
+      title: 'You get revived.',
+      desp: 'Note: Extra Lives could be used twice per game, except on the last question.'
+    },
+    anwserWrong: {
+      title: 'Are You  Losing Bonus?',
+      desp: 'Invite friends to join and play, earn cash  now!',
+      btn: 'Invite & Earn Cash'
+    }
   }
 }
 export default locale

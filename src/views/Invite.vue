@@ -102,7 +102,7 @@ export default {
   data () {
     return {
       dialogInfo: {
-        htmlTitle: 'Rules',
+        htmlTitle: this.$t('invite.rule_bnt'),
         htmlText: `<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[0]')}</p>
 <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[1]')}</p>
 <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[2]')}</p>
@@ -111,7 +111,7 @@ export default {
 <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[5]')}</p>`,
         shouldSub: false,
         markType: false,
-        okBtnText: 'OK'
+        okBtnText: this.$t('tip.lateJoin.btn')
       },
       reviveObj: {
         isShare: false,

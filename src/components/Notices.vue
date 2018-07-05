@@ -1,6 +1,7 @@
 <template>
   <div class="notices">
-    <img src="../assets/images/notices-title.png" alt="" class="title">
+    <img src="../assets/images/notices-title-hi.png" alt="" class="title" v-if="$i18n.locale === 'hi'">
+    <img src="../assets/images/notices-title.png" alt="" class="title" v-else>
     <!-- 排行榜前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
       <section class="second">

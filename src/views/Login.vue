@@ -29,7 +29,7 @@
       <button class="btn-login" @click="login">{{$t('login.login_btn')}}</button>
       <p class="policy">{{$t('login.notice')}}</p>
       <img src="../assets/images/apus-logo-white.png" :class="['login-container__footer', {hide: isInputting}]">
-      <policy-link :class="{hide: isInputting}"></policy-link>
+      <policy-link class="bottom" :class="{hide: isInputting}"></policy-link>
     </section>
     <country-list v-model="showCountryList"></country-list>
     <loading v-if="loading"></loading>
@@ -370,5 +370,12 @@ export default {
   }
   .hide {
     visibility: hidden;
+  }
+  .bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 </style>

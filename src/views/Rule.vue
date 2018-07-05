@@ -1,8 +1,8 @@
 <template>
   <div class="rule">
     <p class="header" @click="goBack">
-         <span class="iconfont icon-fanhui"></span>
-      </p>
+      <span class="iconfont icon-fanhui"></span>
+    </p>
     <div class="rule-container">
       <div class="rule__wrap">
         <p class="title">{{$t('rule.title')}}</p>
@@ -26,8 +26,8 @@
             <p class="share__describe">{{$t('rule.fb_describe')}}</p>
           </a>
         </div>
-        <policy-link></policy-link>
       </div>
+      <policy-link color="#241262"></policy-link>
     </div>
   </div>
 </template>
@@ -41,52 +41,28 @@ export default {
     return {
       ruleList: [
         {
-          id: 1,
-          img: `./static/images/rule1.png`,
-          title: `Join our live Quiz Game on time`,
-          describe: `Please don't be late or you'll miss the cash prize. A push notification will be sent to remind you.`
+          img: `./static/images/rule1.png`
         },
         {
-          id: 2,
-          img: `./static/images/rule2.png`,
-          title: `Answer each question in 10s`,
-          describe: `There're 12 questions. Choose the answer in 10 seconds for each.`
+          img: `./static/images/rule2.png`
         },
         {
-          id: 3,
-          img: `./static/images/rule3.png`,
-          title: `Answer them all right to WIN Cash`,
-          describe: `People who get them all right will split the cash prize.`
+          img: `./static/images/rule3.png`
         },
         {
-          id: 4,
-          img: `./static/images/rule4.png`,
-          title: `One who answer wrong will be out`,
-          describe: `If you choose the wrong answer, or time is out, you'll be eliminated.`
+          img: `./static/images/rule4.png`
         },
         {
-          id: 5,
-          img: `./static/images/rule5.png`,
-          title: `No winners? Get next prize bigger`,
-          describe: `The prize rolls over to the next day if no one get all questions right.`
+          img: `./static/images/rule5.png`
         },
         {
-          id: 6,
-          img: `./static/images/rule6.png`,
-          title: `Cash Out with Paytm`,
-          describe: `You can cash out to your Paytm account if you win.`
+          img: `./static/images/rule6.png`
         },
         {
-          id: 7,
-          img: `./static/images/rule7.png`,
-          title: `Invite friends to win real cash together`,
-          describe: ``
+          img: `./static/images/rule7.png`
         }
       ]
     }
-  },
-  mounted () {
-    console.log(this.$t('publicText.agreement'))
   },
   methods: {
     toFb () {
@@ -214,7 +190,9 @@ export default {
     text-align: center;
   }
 }
-
+.bottom-text {
+  color: #241262 !important;
+}
 .terms {
   font: 500 30px/35px 'Roboto', Arial, serif;
   margin-bottom: 20px;

@@ -4,6 +4,7 @@
 import utils from '../utils.js'
 import { _UPDATE, _OPEN_DIALOG, QUESTION_UPDATE } from '../../../store/type.js'
 import { _PLAYING } from '../status'
+import i18n from '../../../i18n/index.js'
 
 const playingState = {
   data: {},
@@ -52,11 +53,11 @@ const playingState = {
     // 如果已经被淘汰，打开弹窗提示
     if (this.$store.getters.watchingMode) {
       this.$store.dispatch(_OPEN_DIALOG, {
-        htmlTitle: 'You are late.',
-        htmlText: 'The game already started, you can view only. Please come ealier for the next time to play and win.',
+        htmlTitle: i18n.t('tip.lateJoin.title'),
+        htmlText: i18n.t('tip.lateJoin.desp'),
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK'
+        okBtnText: i18n.t('tip.lateJoin.btn')
       })
     }
   },

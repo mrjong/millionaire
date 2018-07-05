@@ -138,7 +138,7 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: false,
-        okBtnText: 'OK'
+        okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false,
       isSucceed: false,
@@ -210,8 +210,8 @@ export default {
       if (utils.isOnline) {
         this.isInputInvitation = true
         this.BobmParamesConfig(
-          'APPLY REFERRAL CODE',
-          'Enter a friend\'s Referral Code to get an extra life.',
+          this.$t('await.referral_code_pop.title'),
+          this.$t('await.referral_code_pop.description'),
           true, true)
       } else {
         this.login()
@@ -226,7 +226,7 @@ export default {
         } else if (b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code) {
           console.log('fghhjklllkjuuhfdsss', b.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))
           this.isInputInvitation = false
-          this.BobmParamesConfig('', 'You can not enter your own Referral Code.', false, true)
+          this.BobmParamesConfig('', this.$t('await.referral_code_pop.case1'), false, true)
           return false
         } else {
           this.showDialog = false
@@ -258,23 +258,23 @@ export default {
             })
           } else {
             if (data.code === 404) {
-              this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case2'), false, true)
             } else if (data.code === 30100) {
-              this.BobmParamesConfig('', 'You\'ve already applied a referral code. You may only do this once.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case3'), false, true)
             } else if (data.code === 30101) {
-              this.BobmParamesConfig('', 'This referral code expired.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case4'), false, true)
             } else if (data.code === 30102) {
-              this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case5'), false, true)
             } else if (data.code === 30103) {
-              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case6'), false, true)
             } else if (data.code === 30104) {
-              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case6'), false, true)
             } else {
-              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case7'), false, true)
             }
           }
         }).catch(() => {
-          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          this.BobmParamesConfig('', this.$t('await.referral_code_pop.case7'), false, true)
         })
         this.isInputInvitation = false
       } else {
@@ -296,8 +296,7 @@ export default {
         this.$router.push({path: '/set-question'})
       } else {
         this.logout = true
-        this.BobmParamesConfig('',
-          'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
+        this.BobmParamesConfig('', this.$t('await.set_question_pop'), false, true)
       }
     },
     // 调起弹框参数配置
@@ -346,7 +345,7 @@ export default {
         // 提示错误，手机号错误
         reminderObj.phone = ''
         this.isReminderPop = false
-        this.BobmParamesConfig('', 'Please enter right phone number', false, true)
+        this.BobmParamesConfig('', this.$t('await.remider_pop.case1'), false, true)
         return false
       } else {
         // 请求接口
@@ -356,13 +355,13 @@ export default {
           if (data.result !== 1) {
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'fail'}, 'wait_page')
             if (data.code === 60001) {
-              this.BobmParamesConfig('', 'Your phone number already set  reminder. ', false, true)
+              this.BobmParamesConfig('', this.$t('await.remider_pop.case2'), false, true)
             } else {
-              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+              this.BobmParamesConfig('', this.$t('await.remider_pop.case3'), false, true)
             }
           } else {
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'success'}, 'wait_page')
-            this.BobmParamesConfig('', 'Congrats. You already set your reminder.', false, true)
+            this.BobmParamesConfig('', this.$t('await.remider_pop.case4'), false, true)
           }
         }).catch()
       }
@@ -443,6 +442,7 @@ export default {
         align-self: center;
         line-height: 54px;
         color: #fff;
+        font-family: 'Roboto', Arial, serif;
       }
       &__like{
         display: block;
@@ -518,7 +518,7 @@ export default {
             width: 50px;
           }
           &__icon{
-            width: 40px;
+            width: 44px;
             height: 36px;
             color: #f4387c;
             font-size: 40px;

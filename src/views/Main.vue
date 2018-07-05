@@ -46,11 +46,11 @@ export default {
       showFailTip: false,
       index: 1, // 题目序号
       dialogInfo: {
-        htmlTitle: 'Failed to Submit',
+        htmlTitle: this.$t('tip.failtosubmit.title'),
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK',
+        okBtnText: this.$t('tip.failtosubmit.btn'),
         hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       }
     }

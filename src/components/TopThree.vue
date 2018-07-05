@@ -92,6 +92,8 @@ export default {
       color: #201a98;
       min-height: 30px;
       font: 20px 'Roboto', Arial, serif;
+      text-align: center;
+      padding: 0 15px;
     }
     .nickname {
       margin-top: 50px;

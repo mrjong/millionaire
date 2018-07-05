@@ -12,6 +12,7 @@ import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import throttle from 'lodash.throttle'
 import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
+import i18n from '../i18n'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -25,7 +26,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: [`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`], // 主持人消息列表
+    hostMsgList: i18n.t('stringWords'), // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -160,11 +161,11 @@ export default new Vuex.Store({
       // 添加网络状况监听器
       im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
         !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'Please check your internet connection.',
-          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+          htmlTitle: i18n.t('tip.networkNotice.title'),
+          htmlText: i18n.t('tip.networkNotice.desp'),
           shouldSub: false,
           markType: 0,
-          okBtnText: 'OK'
+          okBtnText: i18n.t('tip.networkNotice.btn')
         })
         utils.statistic('NETWORK_UNAVAILABLE', 6)
       }, 30000))
