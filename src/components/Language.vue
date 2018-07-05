@@ -1,5 +1,5 @@
 <template>
-  <section class="select-language" v-if="status === 1 || status === 2">
+  <section class="select-language" v-if="status === 1 || status === 2 || watchingMode">
     <div class="icon-lang" @click="isShowDialog = true">{{$i18n.locale.toUpperCase()}}</div>
     <lang-pop :isShowLang= "isShowDialog" @changeLang= "changeLang"></lang-pop>
   </section>
