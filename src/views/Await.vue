@@ -17,7 +17,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder('set_reminder')">{{$t('await.set_reminder_btn')}}</div>
+    <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -146,7 +146,8 @@ export default {
       inviteLiving: false,
       isReminderPop: false,
       isShowLang: false,
-      lang: this.$i18n.locale
+      lang: this.$i18n.locale,
+      isChangeReminder: false
     }
   },
   computed: {
@@ -156,7 +157,8 @@ export default {
       status: 'status',
       lives: 'lives',
       code: 'code',
-      isAgreePolicy: 'isAgreePolicy'
+      isAgreePolicy: 'isAgreePolicy',
+      isRemider: 'isRemider'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -224,7 +226,6 @@ export default {
         if (!b) {
           return false
         } else if (b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code) {
-          console.log('fghhjklllkjuuhfdsss', b.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))
           this.isInputInvitation = false
           this.BobmParamesConfig('', this.$t('await.referral_code_pop.case1'), false, true)
           return false
@@ -283,6 +284,21 @@ export default {
       if (this.logout) {
         this.login('/set-question')
       }
+      if (this.isRemider && this.isChangeReminder) {
+        this.isChangeReminder = false
+        api.cancelReminder().then(({data}) => {
+          if (data.result === 1) {
+            this.$store.commit(type._UPDATE, {
+              isRemider: false
+            })
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'success'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case3'), false, true)
+          } else {
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'fail'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case2'), false, true)
+          }
+        })
+      }
     },
     // 弹框cancel
     cancelEvent () {
@@ -333,7 +349,12 @@ export default {
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
-      this.isReminderPop = true
+      if (this.isRemider) {
+        this.isChangeReminder = true
+        this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case1'), true, true)
+      } else {
+        this.isReminderPop = true
+      }
     },
     // 关闭游戏定时提醒弹框
     ReminderClose () {
@@ -348,7 +369,7 @@ export default {
         this.BobmParamesConfig('', this.$t('await.remider_pop.case1'), false, true)
         return false
       } else {
-        // 请求接口
+        // 请求接口订阅
         api.Reminder(reminderObj).then(({data}) => {
           this.isReminderPop = false
           console.log('定时提醒' + data)
@@ -360,6 +381,9 @@ export default {
               this.BobmParamesConfig('', this.$t('await.remider_pop.case3'), false, true)
             }
           } else {
+            this.$store.commit(type._UPDATE, {
+              isRemider: true
+            })
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'success'}, 'wait_page')
             this.BobmParamesConfig('', this.$t('await.remider_pop.case4'), false, true)
           }
@@ -473,7 +497,7 @@ export default {
       }
     }
     &__reminder {
-      width: 253px;
+      padding: 0 40px;
       height: 67px;
       color: #fff;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
