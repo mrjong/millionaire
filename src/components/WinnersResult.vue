@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class='no-winner-result' v-if='!respondence.winners.length'>
-      <img src="../assets/images/no-winners.png" alt="" class="no-winner-result__title">
+      <div class="no-winner-result__title">
+        <img src="../assets/images/no-winners.png" alt="" >
+        <p class="no-winner-result__title__text">{{$t('winnersResult.no_winner')}}</p>
+      </div>
       <p class= 'no-winner-result__bonus'>{{currencyType}}{{respondence.bonusAmount}}</p>
       <p class='no-winner-result__tip'>{{$t('winnersResult.tip')}}</p>
     </div>
@@ -70,13 +73,27 @@ export default {
 .no-winner-result {
     height: 785px;
     &__title {
-        width: 560px;
-        margin: 56px 0 218px 0px;
+      width: 560px;
+      margin: 56px 0 218px 0px;
+      position: relative;
+      img{
+        width: 100%;
+      }
+      &__text {
+        width: 100%;
+        height: 100px;
+        font: 60px 'Roboto Condensed', Arial, serif;
+        line-height: 100px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-align: center;
+      }
     }
     &__bonus {
-        margin-bottom: 32px;
-        font: 700 114px 'Roboto Condensed', Arial, serif;
-        color:#fbc222;
+      margin-bottom: 32px;
+      font: 700 114px 'Roboto Condensed', Arial, serif;
+      color:#fbc222;
     }
     &__tip {
         font: 300 28px 'Roboto';

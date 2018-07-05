@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import utils from '../assets/js/utils'
 export default {
   name: 'LangPop',
   props: {
@@ -42,6 +43,7 @@ export default {
   },
   methods: {
     okEvent () {
+      utils.statistic('Language_button', 1, {result_code_s: this.selectedLang})
       this.$emit('changeLang', this.selectedLang)
     }
   },
