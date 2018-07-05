@@ -291,6 +291,7 @@ const locale = {
   },
   winnersResult: {
     result_tip: 'Prize rolls over to next game',
+    no_winner: 'No winners!',
     title1: 'Winners!',
     title2: 'You Won!<b>Congrats! {winnerAmount} winners in this game!</b>'
   },
