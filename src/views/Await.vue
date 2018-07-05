@@ -6,7 +6,7 @@
          @click="likeToFb('like_page')">
       </a>
       <div style="display: flex;">
-        <div class="await__top__lang" @click="showLang">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
+        <div class="await__top__lang" @click="showLang" v-if="status === 1 || status === 2">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -452,6 +452,7 @@ export default {
       }
       &__lang {
         margin-right: 20px;
+        font-size: 26px;
       }
       &__logo{
         width: 168px;
@@ -524,7 +525,7 @@ export default {
             font-size: 40px;
             align-self: center;
             background: url("../assets/images/lives-icon.png") no-repeat center;
-            background-size: cover;
+            background-size: contain;
           }
           &__text{
             font-size: 28px;

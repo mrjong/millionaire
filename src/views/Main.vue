@@ -11,6 +11,7 @@
       <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
+      <div class="main-container__top__lang" @click="showLang" v-if="status === 1 || status === 2">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
       <div class="main-container__top__music" @click="isPlay">
         <img src="../assets/images/music-icon.png" v-if="isPlayingMusic">
         <img src="../assets/images/music_close-icon.png" v-else>
@@ -21,6 +22,7 @@
     <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
   </div>
@@ -28,6 +30,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import * as type from '../store/type'
 import FailTipInvite from '../components/FailTipInvite'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
@@ -36,7 +39,8 @@ import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
-import { _UPDATE } from '../store/type'
+import LangPop from '../components/LangPop'
+// import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -52,7 +56,9 @@ export default {
         markType: 0,
         okBtnText: this.$t('tip.failtosubmit.btn'),
         hintImg: '//static.apusapps.com/201803261933287074f92538.png'
-      }
+      },
+      isShowLang: false,
+      lang: this.$i18n.locale
     }
   },
   computed: {
@@ -90,12 +96,12 @@ export default {
     },
     isPlay () {
       if (!this.isPlayingMusic) {
-        this.$store.commit(_UPDATE, {
+        this.$store.commit(type._UPDATE, {
           isPlayingMusic: true
         })
         utils.playSound('bg')
       } else {
-        this.$store.commit(_UPDATE, {
+        this.$store.commit(type._UPDATE, {
           isPlayingMusic: false
         })
         utils.stopSound()
@@ -107,6 +113,21 @@ export default {
     failTip () {
       this.index = this.$store.getters.index || 1
       this.showFailTip = true
+    },
+    showLang () {
+      this.isShowLang = true
+    },
+    changeLang (lang) {
+      this.$i18n.locale = lang
+      if (this.lang && lang && this.lang !== lang) {
+        this.$store.dispatch(type._INIT).then(() => {
+          this.lang = lang
+        }, () => {
+          this.$i18n.locale = this.lang
+        })
+      }
+      utils.storage.set('millionaire-lang', lang)
+      this.isShowLang = false
     }
   },
   components: {
@@ -116,7 +137,8 @@ export default {
     WinnersResult,
     Compere,
     BalanceMark,
-    FailTipInvite
+    FailTipInvite,
+    LangPop
   }
 }
 </script>
@@ -135,7 +157,7 @@ export default {
       align-items: center;
       padding: 25px 25px 0;
       position: relative;
-      &__back{
+      &__back, &__lang{
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -143,9 +165,16 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
+        color: #fff;
+        font-family: 'Roboto', Arial, serif;
         &__icon {
           font-size: 24px;
         }
+      }
+      &__lang {
+        position: absolute;
+        right: 70px;
+        font-size: 26px;
       }
       &__online{
         padding: 0 18px;
