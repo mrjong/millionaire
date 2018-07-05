@@ -297,7 +297,8 @@ const locale = {
     result_tip: 'पुरस्कार अगले गेम में रोल हो जाएगा',
     no_winner: 'कोई विजेता नहीं!',
     title1: 'विजेता!',
-    title2: 'आप जीट गेए<b>बधाई! इस खेल में {winnerAmount} विजेता!</b>'
+    title2: 'आप जीट गेए',
+    hint: 'बधाई! इस खेल में {winnerAmount} विजेता!'
   },
   policyBomb: {
     agreement: 'उपयोगकर्ता अनुबंध',
