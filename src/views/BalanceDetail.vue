@@ -23,7 +23,7 @@
     <div>
       <p class="balance-detail__operate__btn" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
     </div>
-    <policy-link></policy-link>
+    <policy-link :class="{hide: isInputting}"></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
   </div>
@@ -58,7 +58,8 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
-      isOnline: 'isOnline'
+      isOnline: 'isOnline',
+      isInputting: 'isInputting'
     })
   },
   mounted () {
