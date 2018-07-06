@@ -4,7 +4,7 @@
       <p class="hint-icon">
         <img src="../assets/images/lang-icon.png" class="hint-icon__img">
       </p>
-      <p class="title">Choose Languague</p>
+      <p class="title">Choose Language</p>
       <p class="title">भाषा चुने</p>
       <div class="is-reminder">
         <div class="checkbox" @click="selectedLang = 'en'">

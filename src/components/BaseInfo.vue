@@ -97,7 +97,7 @@ export default {
           position: absolute;
           bottom: 0;
           color: #ffffff;
-          font: 36px 'Roboto Condensed', Arial, sans-serif;
+          font: 34px 'Roboto Condensed', Arial, sans-serif;
         }
       }
       &__name{

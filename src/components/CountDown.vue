@@ -76,6 +76,7 @@ export default {
        margin: 35px auto 0;
        text-align: center;
       &__text{
+        max-width: 350px;
         padding: 10px 50px;
         color: #ffffff;
         text-align: center;
