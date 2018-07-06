@@ -6,6 +6,7 @@ const locale = {
     living: 'LIVING',
     login_text: 'Log in',
     set_reminder_btn: 'Set Reminder',
+    cancel_reminder_btn: 'Cancel Reminder',
     reminder_phone: 'Phone Number',
     remider_tip: 'Remind me everyday',
     userinfo_blance_text: 'Balance',
@@ -38,7 +39,10 @@ const locale = {
       case1: 'Please enter right phone number',
       case2: 'Your phone number already set  reminder.',
       case3: 'Fail to submit, please try again later.',
-      case4: 'Congrats. You already set your reminder.'
+      case4: 'Congrats. You already set your reminder.',
+      cancel_case1: 'Are you sure to cancel quiz reminer?',
+      cancel_case2: 'Cancel Reminder Failed.',
+      cancel_case3: 'Cancel Reminder Succeeded'
     },
     set_question_pop: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!'
   },
@@ -293,7 +297,8 @@ const locale = {
     result_tip: 'Prize rolls over to next game',
     no_winner: 'No winners!',
     title1: 'Winners!',
-    title2: 'You Won!<b>Congrats! {winnerAmount} winners in this game!</b>'
+    title2: 'You Won!',
+    hint: 'Congrats! {winnerAmount} winners in this game!'
   },
   policyBomb: {
     agreement: 'User Agreement',

@@ -6,7 +6,7 @@
          @click="likeToFb('like_page')">
       </a>
       <div style="display: flex;">
-        <div class="await__top__lang" @click="showLang" v-if="status === 1 || status === 2">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
+        <lang class="await__top__lang"></lang>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -17,7 +17,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder('set_reminder')">{{$t('await.set_reminder_btn')}}</div>
+    <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -100,7 +100,6 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
-    <lang-pop v-if="status === 1 || status === 2" :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -123,7 +122,7 @@ import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
-import LangPop from '../components/LangPop'
+import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
 // import VideoButton from '../components/VideoButton'
 export default {
@@ -145,8 +144,7 @@ export default {
       logout: false,
       inviteLiving: false,
       isReminderPop: false,
-      isShowLang: false,
-      lang: this.$i18n.locale
+      isChangeReminder: false
     }
   },
   computed: {
@@ -156,7 +154,9 @@ export default {
       status: 'status',
       lives: 'lives',
       code: 'code',
-      isAgreePolicy: 'isAgreePolicy'
+      isAgreePolicy: 'isAgreePolicy',
+      isRemider: 'isRemider',
+      watchingMode: 'watchingMode'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -224,7 +224,6 @@ export default {
         if (!b) {
           return false
         } else if (b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code) {
-          console.log('fghhjklllkjuuhfdsss', b.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))
           this.isInputInvitation = false
           this.BobmParamesConfig('', this.$t('await.referral_code_pop.case1'), false, true)
           return false
@@ -283,6 +282,21 @@ export default {
       if (this.logout) {
         this.login('/set-question')
       }
+      if (this.isRemider && this.isChangeReminder) {
+        this.isChangeReminder = false
+        api.cancelReminder().then(({data}) => {
+          if (data.result === 1) {
+            this.$store.commit(type._UPDATE, {
+              isRemider: false
+            })
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'success'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case3'), false, true)
+          } else {
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'fail'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case2'), false, true)
+          }
+        })
+      }
     },
     // 弹框cancel
     cancelEvent () {
@@ -333,7 +347,12 @@ export default {
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
-      this.isReminderPop = true
+      if (this.isRemider) {
+        this.isChangeReminder = true
+        this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case1'), true, true)
+      } else {
+        this.isReminderPop = true
+      }
     },
     // 关闭游戏定时提醒弹框
     ReminderClose () {
@@ -348,7 +367,7 @@ export default {
         this.BobmParamesConfig('', this.$t('await.remider_pop.case1'), false, true)
         return false
       } else {
-        // 请求接口
+        // 请求接口订阅
         api.Reminder(reminderObj).then(({data}) => {
           this.isReminderPop = false
           console.log('定时提醒' + data)
@@ -360,26 +379,14 @@ export default {
               this.BobmParamesConfig('', this.$t('await.remider_pop.case3'), false, true)
             }
           } else {
+            this.$store.commit(type._UPDATE, {
+              isRemider: true
+            })
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'success'}, 'wait_page')
             this.BobmParamesConfig('', this.$t('await.remider_pop.case4'), false, true)
           }
         }).catch()
       }
-    },
-    showLang () {
-      this.isShowLang = true
-    },
-    changeLang (lang) {
-      this.$i18n.locale = lang
-      if (this.lang && lang && this.lang !== lang) {
-        this.$store.dispatch(type._INIT).then(() => {
-          this.lang = lang
-        }, () => {
-          this.$i18n.locale = this.lang
-        })
-      }
-      utils.storage.set('millionaire-lang', lang)
-      this.isShowLang = false
     }
   },
   components: {
@@ -391,7 +398,7 @@ export default {
     Notices,
     ReminderBomb,
     PolicyBomb,
-    LangPop,
+    lang,
     PolicyLink
   },
   watch: {
@@ -432,7 +439,7 @@ export default {
       display: flex;
       padding: 25px 25px 0;
       justify-content: space-between;
-      &__like, &__instructions, &__lang{
+      &__like, &__instructions{
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -473,7 +480,7 @@ export default {
       }
     }
     &__reminder {
-      width: 253px;
+      padding: 0 40px;
       height: 67px;
       color: #fff;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);

@@ -11,7 +11,7 @@
       <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
-      <div class="main-container__top__lang" @click="showLang" v-if="status === 1 || status === 2">{{$i18n.locale === 'en' ? 'EN': 'HI'}}</div>
+      <lang class="main-container__top__lang"></lang>
       <div class="main-container__top__music" @click="isPlay">
         <img src="../assets/images/music-icon.png" v-if="isPlayingMusic">
         <img src="../assets/images/music_close-icon.png" v-else>
@@ -22,7 +22,6 @@
     <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
-    <lang-pop :isShowLang= "isShowLang" @changeLang= "changeLang" :lang="lang"></lang-pop>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
   </div>
@@ -39,7 +38,7 @@ import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
-import LangPop from '../components/LangPop'
+import lang from '../components/Language'
 // import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
@@ -56,9 +55,7 @@ export default {
         markType: 0,
         okBtnText: this.$t('tip.failtosubmit.btn'),
         hintImg: '//static.apusapps.com/201803261933287074f92538.png'
-      },
-      isShowLang: false,
-      lang: this.$i18n.locale
+      }
     }
   },
   computed: {
@@ -113,21 +110,6 @@ export default {
     failTip () {
       this.index = this.$store.getters.index || 1
       this.showFailTip = true
-    },
-    showLang () {
-      this.isShowLang = true
-    },
-    changeLang (lang) {
-      this.$i18n.locale = lang
-      if (this.lang && lang && this.lang !== lang) {
-        this.$store.dispatch(type._INIT).then(() => {
-          this.lang = lang
-        }, () => {
-          this.$i18n.locale = this.lang
-        })
-      }
-      utils.storage.set('millionaire-lang', lang)
-      this.isShowLang = false
     }
   },
   components: {
@@ -138,7 +120,7 @@ export default {
     Compere,
     BalanceMark,
     FailTipInvite,
-    LangPop
+    lang
   }
 }
 </script>
@@ -157,7 +139,7 @@ export default {
       align-items: center;
       padding: 25px 25px 0;
       position: relative;
-      &__back, &__lang{
+      &__back {
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -173,7 +155,7 @@ export default {
       }
       &__lang {
         position: absolute;
-        right: 70px;
+        right: 93px;
         font-size: 26px;
       }
       &__online{
