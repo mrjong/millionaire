@@ -133,10 +133,8 @@ export default {
       }
     },
     uploadPic () {
-      let that = this
       let preview = document.querySelector('#img')
       let file = document.querySelector('#uploadPic').files[0]
-      // console.log(file.size)
       let img = new Image()
       let reader = new FileReader()
       reader.readAsDataURL(file)
@@ -152,11 +150,11 @@ export default {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
         canvas.toBlob((blob) => {
           if (blob.size / (1024 * 1024) > 4) { // 图片大于4M限制上传
-            that.$store.dispatch(type._OPEN_DIALOG, {
-              htmlText: that.$t('userCenter.edit_pop.picture_large'),
+            this.$store.dispatch(type._OPEN_DIALOG, {
+              htmlText: this.$t('userCenter.edit_pop.picture_large'),
               shouldSub: false,
               markType: 0,
-              okBtnText: that.$t('userCenter.edit_pop.ok'),
+              okBtnText: this.$t('userCenter.edit_pop.ok'),
               hintImg: '',
               lastTime: 3000
             })
@@ -165,22 +163,22 @@ export default {
             // 执行上传操作
             api.uploadAvatar(newFile).then(({ data }) => {
               if (+data.error_code !== 0) {
-                that.$store.dispatch(type._OPEN_DIALOG, {
-                  htmlText: that.$t('userCenter.edit_pop.upload_faild'),
+                this.$store.dispatch(type._OPEN_DIALOG, {
+                  htmlText: this.$t('userCenter.edit_pop.upload_faild'),
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: that.$t('userCenter.edit_pop.ok'),
+                  okBtnText: this.$t('userCenter.edit_pop.ok'),
                   hintImg: '',
                   lastTime: 3000
                 })
               } else {
                 api.updateAvatarCache().then(res => {
                 })
-                that.$store.dispatch(type._OPEN_DIALOG, {
-                  htmlText: that.$t('userCenter.edit_pop.upload_success'),
+                this.$store.dispatch(type._OPEN_DIALOG, {
+                  htmlText: this.$t('userCenter.edit_pop.upload_success'),
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: that.$t('userCenter.edit_pop.ok'),
+                  okBtnText: this.$t('userCenter.edit_pop.ok'),
                   hintImg: '',
                   lastTime: 3000
                 })
