@@ -459,7 +459,7 @@ export default {
           line-height: 38px;
         }
         &__title2{
-          margin: 0 auto 40px;
+          margin: 0 auto 35px;
           text-align: center;
           font: 32px "Roboto Regular";
           line-height: 38px;
@@ -469,12 +469,12 @@ export default {
           font: 100 .24rem Roboto;
           font-style: italic;
           font-weight: lighter;
-          margin-bottom: 16px;
+          margin-bottom: 10px;
         }
         &__note{
           font-size: 24px;
           font-weight: bold;
-          margin: 24px 0 10px;
+          margin: 20px 0 10px;
         }
         &__text{
           font: 100 20px "Roboto" ;
