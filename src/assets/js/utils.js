@@ -205,7 +205,7 @@ const utils = {
    * @static
    * @memberof Utils
    */
-  statistic (name = '', event = 0, params = {}, from = '') {
+  statistic (name = '', event = 0, params = {}, from = utils.getQuery('referrer') || 'default') {
     let eventType
     switch (+event) {
       case 0: // ALEX_SHOW
