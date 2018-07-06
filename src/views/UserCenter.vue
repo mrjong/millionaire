@@ -1,5 +1,6 @@
 <template>
   <div class="user">
+    <loading v-if="loading"></loading>
     <div class="header">
       <p class="title">{{$t('userCenter.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
@@ -58,6 +59,7 @@ import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import BalanceMark from '../components/BalanceMark'
 import PolicyLink from '../components/PolicyLink'
+import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 export default {
   name: 'Contact',
@@ -103,8 +105,7 @@ export default {
       if (this.nickname.length !== 0) {
         api.updateNickname(this.nickname).then(({ data }) => {
           if (+data.error_code === 0) {
-            api.updateAvatarCache().then(res => {
-            })
+            api.updateAvatarCache().then(res => {})
             this.isEditable = false
             this.$store.dispatch(type._OPEN_DIALOG, {
               htmlText: this.$t('userCenter.edit_pop.save_success'),
@@ -138,7 +139,6 @@ export default {
       img.onload = (e) => {
         let canvas = document.createElement('canvas')
         let ctx = canvas.getContext('2d')
-        console.log(e.target.width + '--------' + e.target.height)
         // 图片原始尺寸
         let scale = (e.target.width / e.target.height)
         canvas.width = 100
@@ -155,10 +155,13 @@ export default {
               lastTime: 3000
             })
           } else {
+            this.loading = true
             let newFile = new File([blob], file.name, { type: file.type })
             // 执行上传操作
             api.uploadAvatar(newFile).then(({ data }) => {
+              console.log(data)
               if (+data.error_code !== 0) {
+                this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
                   htmlText: this.$t('userCenter.edit_pop.upload_faild'),
                   shouldSub: false,
@@ -168,8 +171,8 @@ export default {
                   lastTime: 3000
                 })
               } else {
-                api.updateAvatarCache().then(res => {
-                })
+                api.updateAvatarCache().then(res => {})
+                this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
                   htmlText: this.$t('userCenter.edit_pop.upload_success'),
                   shouldSub: false,
@@ -181,7 +184,7 @@ export default {
               }
             })
           }
-        }, 'image/jpeg', 1.0)
+        })
       }
 
       reader.onload = (e) => {
@@ -266,7 +269,8 @@ export default {
   },
   components: {
     BalanceMark,
-    PolicyLink
+    PolicyLink,
+    Loading
   }
 }
 </script>
