@@ -144,6 +144,7 @@ export default {
       &__img {
         position: absolute;
         width: 103px;
+        height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;

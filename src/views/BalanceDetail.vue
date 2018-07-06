@@ -49,7 +49,7 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: ''
+        okBtnText: this.$t('balanceDetail.balance_pop.ok')
       },
       withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
@@ -68,7 +68,7 @@ export default {
   methods: {
     cashOut () {
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
-        this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money'))
+        this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
@@ -88,7 +88,7 @@ export default {
           this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_ptm'))
           return false
         } else {
-          this.changeMarkInfo(true, true, 1, this.$t('balanceDetail.balance_pop.text'))
+          this.changeMarkInfo(true, true, 1, this.$t('balanceDetail.balance_pop.text', {myPay: this.myPay}))
         }
       }
     },
@@ -153,7 +153,7 @@ export default {
       this.$router.go(-1)
     },
     changeMarkInfo (showMark, shouldSub, markType, htmlText, okBtnText) {
-      const okBtnInnerText = okBtnText || 'OK'
+      const okBtnInnerText = okBtnText || this.$t('balanceDetail.balance_pop.ok')
       this.markInfo = {
         showMark: showMark,
         shouldSub: shouldSub,

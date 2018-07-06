@@ -95,9 +95,11 @@ export default {
         }
       }
       &__hour,&__number{
+        height: 70px;
         margin-top: 25px;
         color: #ffb227;
         font: 700 56px 'Roboto Condensed', Arial, serif;
+        line-height: 70px;
       }
       &__hour{
         color: #fff;
