@@ -104,7 +104,7 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK',
+        okBtnText: this.$t('setQuestion.question_pop.ok'),
         hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       },
       isSetQuestion: false,
