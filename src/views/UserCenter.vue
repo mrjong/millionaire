@@ -4,8 +4,8 @@
       <p class="title">{{$t('userCenter.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
       <p class="edit" >
-        <span @click="edit" v-if="!isEditable">Edit</span>
-        <span @click="save" v-else>Save</span>
+        <span @click="edit" v-if="!isEditable">{{$t('userCenter.edit')}}</span>
+        <span @click="save" v-else>{{$t('userCenter.save')}}</span>
       </p>
     </div>
     <div class="user__head">
@@ -17,7 +17,7 @@
     <div class="user__wrap">
       <p class="name">
         <span class="name__icon iconfont icon-nicheng"></span>
-        <span class="name__tip">Nickname</span>
+        <span class="name__tip">{{$t('userCenter.name')}}</span>
         <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput">
         <span class="name__text" v-else>{{userInfo.userName}}</span>
       </p>
@@ -111,9 +111,9 @@ export default {
             })
             this.isEditable = false
             this.$store.dispatch(type._OPEN_DIALOG, {
-              htmlText: 'Info modification success',
+              htmlText: this.$t('userCenter.edit_pop.save_success'),
               markType: 0,
-              okBtnText: 'OK',
+              okBtnText: this.$t('userCenter.edit_pop.ok'),
               lastTime: 3000
             })
 
@@ -123,9 +123,9 @@ export default {
           } else {
             this.isEditable = false
             this.$store.dispatch(type._OPEN_DIALOG, {
-              htmlText: 'Info modification fail',
+              htmlText: this.$t('userCenter.edit_pop.save_faild'),
               markType: 0,
-              okBtnText: 'OK',
+              okBtnText: this.$t('userCenter.edit_pop.ok'),
               lastTime: 3000
             })
           }
@@ -141,24 +141,22 @@ export default {
       let reader = new FileReader()
       reader.readAsDataURL(file)
 
-      img.onload = function (e) {
+      img.onload = (e) => {
         let canvas = document.createElement('canvas')
         let ctx = canvas.getContext('2d')
-        // let originWidth = this.width
-        // let originHeight = this.height
-
+        console.log(e.target.width + '--------' + e.target.height)
         // 图片原始尺寸
-        let scale = (this.width / this.height)
+        let scale = (e.target.width / e.target.height)
         canvas.width = 100
         canvas.height = 100 / scale
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
         canvas.toBlob((blob) => {
           if (blob.size / (1024 * 1024) > 4) { // 图片大于4M限制上传
             that.$store.dispatch(type._OPEN_DIALOG, {
-              htmlText: 'Upload fail: The pictures are too large',
+              htmlText: that.$t('userCenter.edit_pop.picture_large'),
               shouldSub: false,
               markType: 0,
-              okBtnText: 'OK',
+              okBtnText: that.$t('userCenter.edit_pop.ok'),
               hintImg: '',
               lastTime: 3000
             })
@@ -168,10 +166,10 @@ export default {
             api.uploadAvatar(newFile).then(({ data }) => {
               if (+data.error_code !== 0) {
                 that.$store.dispatch(type._OPEN_DIALOG, {
-                  htmlText: 'Upload fail',
+                  htmlText: that.$t('userCenter.edit_pop.upload_faild'),
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: 'OK',
+                  okBtnText: that.$t('userCenter.edit_pop.ok'),
                   hintImg: '',
                   lastTime: 3000
                 })
@@ -179,10 +177,10 @@ export default {
                 api.updateAvatarCache().then(res => {
                 })
                 that.$store.dispatch(type._OPEN_DIALOG, {
-                  htmlText: 'Upload success',
+                  htmlText: that.$t('userCenter.edit_pop.upload_success'),
                   shouldSub: false,
                   markType: 0,
-                  okBtnText: 'OK',
+                  okBtnText: that.$t('userCenter.edit_pop.ok'),
                   hintImg: '',
                   lastTime: 3000
                 })
@@ -192,13 +190,13 @@ export default {
         }, 'image/jpeg', 1.0)
       }
 
-      reader.onload = function (e) {
+      reader.onload = (e) => {
         if (!/^image\/[jpeg|png|gif]/.test(file.type)) {
-          that.$store.dispatch(type._OPEN_DIALOG, {
-            htmlText: 'Uploading file format is incorrect',
+          this.$store.dispatch(type._OPEN_DIALOG, {
+            htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
             markType: 0,
-            okBtnText: 'OK',
+            okBtnText: this.$t('userCenter.edit_pop.ok'),
             hintImg: '',
             lastTime: 3000
           })
