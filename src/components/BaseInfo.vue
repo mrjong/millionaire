@@ -105,7 +105,7 @@ export default {
         font: 500 36px 'Roboto', sans-serif;
         width: 60%;
         text-align: center;
-        margin: 0.28px auto;
+        margin: 20px auto;
       }
     }
     &__other{

@@ -63,7 +63,7 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: 1,
-        okBtnText: ''
+        okBtnText: this.$t('await.referral_code_pop.ok')
       }
     }
   },
@@ -175,7 +175,7 @@ export default {
       } else {
         this.markInfo.htmlText = this.$t('balanceRecord.delete_withdwawal')
       }
-      this.markInfo.okBtnText = 'OK'
+      this.markInfo.okBtnText = this.$t('await.referral_code_pop.ok')
       this.markInfo.showMark = true
     },
     okEvent (info) {

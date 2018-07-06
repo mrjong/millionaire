@@ -41,7 +41,7 @@ export default {
       dialogInfo: {
         htmlTitle: '',
         htmlText: '',
-        okBtnText: 'OK'
+        okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false
     }
