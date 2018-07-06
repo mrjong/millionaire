@@ -241,7 +241,8 @@ const locale = {
       wrong_tel: 'Please enter right phone number',
       no_question: 'Please complete the question',
       no_answer: 'Please complete the answer',
-      submit_faild: 'Your Internet is unstable, please try again.'
+      submit_faild: 'Your Internet is unstable, please try again.',
+      ok: 'Ok'
     }
   },
   setQuestionResult: {

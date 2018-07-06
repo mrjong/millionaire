@@ -4,7 +4,7 @@
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
       <router-link to="/balance-record" @click="history" v-if="isOnline">
-        <p class="balance-wrap__title__history">History</p>
+        <p class="balance-wrap__title__history">{{$t('balance.history')}}</p>
       </router-link>
     </div>
     <div class="balance-wrap__contain">
