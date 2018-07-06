@@ -40,9 +40,9 @@ const locale = {
       case2: 'Your phone number already set  reminder.',
       case3: 'Fail to submit, please try again later.',
       case4: 'Congrats. You already set your reminder.',
-      cancel_case1: 'Are you sure to cancel quiz reminer?',
-      cancel_case2: 'Cancel Reminder Failed.',
-      cancel_case3: 'Cancel Reminder Succeeded'
+      cancel_case1: 'Are you sure to cancel quiz reminder?',
+      cancel_case2: 'Cancel Reminder is Failed',
+      cancel_case3: 'Cancel Reminder Successful'
     },
     set_question_pop: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!'
   },
@@ -256,6 +256,8 @@ const locale = {
   },
   userCenter: {
     title: 'User Profile',
+    save: 'Save ',
+    edit: 'Edit',
     name: 'Nickname',
     tel: 'Phone Number',
     code: 'Referral Code',
@@ -265,6 +267,15 @@ const locale = {
     logout_pop: {
       text1: 'Are you sure you want to log out?',
       text2: 'You failed to logout, please try again.'
+    },
+    edit_pop: {
+      save_success: 'User Profile Saved successfully',
+      save_faild: 'User profile not saved',
+      upload_success: 'Profile Picture Uploaded successfully',
+      upload_faild: 'Profile Picture Upload Failed ',
+      picture_large: 'The picture uploading is too large',
+      picture_format_error: 'The format of picture is incorrect',
+      ok: 'Ok'
     }
   },
   shareDetail: {
