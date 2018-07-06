@@ -78,7 +78,7 @@ export default {
       }
       .text4 {
         width: 80%;
-        top:635px;
+        top:650px;
         left: 50%;
         transform: translate(-50%,0);
         font-size: 34px;

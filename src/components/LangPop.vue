@@ -110,11 +110,11 @@ export default {
         width: 26px;
         height: 26px;
         background: url('../assets/images/no-checked-icon.png') no-repeat center;
-        background-size: cover;
+        background-size: contain;
       }
       .selected{
         background: url('../assets/images/checked-icon.png') no-repeat center;
-        background-size: cover;
+        background-size: contain;
       }
       .checkbox{
         text-align: center;
