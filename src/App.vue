@@ -27,7 +27,9 @@ export default {
     return {
       loading: false,
       showLogin: false,
-      showGameDialog: true
+      showGameDialog: true,
+      windowInnerHeight: 0,
+      timeOffset: 0
     }
   },
   computed: {
@@ -88,6 +90,27 @@ export default {
     this.init()
     this.getPhoneNationCode()
   },
+  mounted () {
+    // 利用resize事件判断是否调起软键盘
+    this.windowInnerHeight = window.innerHeight
+    window.addEventListener('resize', () => {
+      if (Date.now() - this.timeOffset < 500) {
+        this.timeOffset = Date.now()
+        return false
+      }
+      if (window.innerHeight - this.windowInnerHeight >= 150) {
+        this.$store.commit(type._UPDATE, {
+          isInputting: false
+        })
+      } else {
+        this.$store.commit(type._UPDATE, {
+          isInputting: true
+        })
+      }
+      this.windowInnerHeight = window.innerHeight
+      this.timeOffset = Date.now()
+    })
+  },
   methods: {
     init () {
       this.$store.dispatch(type._INIT_LISTENER)
@@ -99,7 +122,7 @@ export default {
       if (this.dialogInfo.okEvent) {
         this.dialogInfo.okEvent()
       }
-      this.$store.dispatch(type._CLOSE_DIALOG)
+      this.$store.commit(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码

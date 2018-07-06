@@ -34,9 +34,9 @@
           </div>
         </div>
         <div class="step-text">
-          <p class="text">Invite your friends to play</p>
-          <p class="text">Ask your friends to sign up and play</p>
-          <p class="text">You'll earn Rs.10 after his/her first playing game</p>
+          <p class="text">Click above invite button and share to friends</p>
+          <p class="text">Friends open your sharing link to login</p>
+          <p class="text">You'll earn Rs.10 after his/her first answering quiz</p>
         </div>
       </div>
     </div>
@@ -78,7 +78,7 @@
               </div>
             </div>
           </div>
-          <div class="hint">- You will get cash after the friend invited first playing 'Go!Millionaire' -</div>
+          <div class="hint">- You will get cash after the friends invited first answering quiz in 'Go!Millionaire' -</div>
         </div>
         <invite-blank v-else></invite-blank>
       </div>

@@ -21,9 +21,9 @@
       <p class="balance-detail__operate__wrap__hint">Notice: The info above will be submitted to paytm for cash out. Currently, only India rupee are available to be withdrawn in our game.</p>
     </div>
     <div>
-      <p class="balance-detail__operate__btn" @click="cashOut">Cash Out</p>
+      <p :class="[{hide: isInputting}, 'balance-detail__operate__btn']" @click="cashOut">Cash Out</p>
     </div>
-    <p class="bottom-text">
+    <p :class="['bottom-text', {hide: isInputting}]">
       <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
       <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
     </p>
@@ -60,7 +60,8 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
-      isOnline: 'isOnline'
+      isOnline: 'isOnline',
+      isInputting: 'isInputting'
     })
   },
   mounted () {
