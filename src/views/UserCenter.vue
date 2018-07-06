@@ -85,10 +85,6 @@ export default {
   mounted () {
     utils.getPersonInfo(data => {
       this.phone = data.mobile
-      this.$store.commit(type.HOME_UPDATE, {
-        userName: data.nickname,
-        avatar: data.upic
-      })
     })
     utils.statistic('user_profile_page', 0, {}, 'wait_page')
   },
