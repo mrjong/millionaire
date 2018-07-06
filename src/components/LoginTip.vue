@@ -23,7 +23,7 @@ export default {
         htmlText: this.desp,
         shouldSub: false,
         markType: 0,
-        okBtnText: 'Log in',
+        okBtnText: this.$t('await.login_text'),
         hintImg: '//static.apusapps.com/201803281952051c52ffc800.png'
       }
     }
@@ -65,15 +65,15 @@ export default {
       }, (errorCode) => {
         switch (errorCode) {
           case 3134: {
-            this.error(this.$t('login.login_pop.text6'), this.$t('login.login_pop.text6_1'), 'OK', this.close)
+            this.error(this.$t('login.login_pop.text6'), this.$t('login.login_pop.text6_1'), this.$t('login.login_pop.btn1'), this.close)
             break
           }
           case 3135: {
-            this.error(null, this.$t('login.login_pop.text7'), 'OK', this.close)
+            this.error(null, this.$t('login.login_pop.text7'), this.$t('login.login_pop.btn1'), this.close)
             break
           }
           default: {
-            this.error(null, this.$t('login.login_pop.text8'), 'Try again', this.sync)
+            this.error(null, this.$t('login.login_pop.text8'), this.$t('login.login_pop.btn2'), this.sync)
           }
         }
         this.loading = false

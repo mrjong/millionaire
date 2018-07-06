@@ -319,6 +319,7 @@ export default {
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
+      this.dialogInfo.okBtnText = this.$t('await.referral_code_pop.ok')
     },
     // toExtraLiveRules
     toExtraLiveRules () {
