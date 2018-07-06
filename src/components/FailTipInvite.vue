@@ -88,7 +88,7 @@ export default {
     }
 
     .btn-invite {
-      width: 407px;
+      width: 450px;
       height: 75px;
       border-radius: 46px;
       border: none;
