@@ -70,7 +70,8 @@ const locale = {
       submit_success: 'Success! You’ll receive your balance after reviewing.',
       submit_faild1: 'Records about your account doesn\'t exist.',
       submit_faild2: 'Your account balance is not enough.',
-      submit_faild3: 'Loading error, please check your internet now.'
+      submit_faild3: 'Loading error, please check your internet now.',
+      ok: 'Ok'
     }
   },
   balanceRecord: {

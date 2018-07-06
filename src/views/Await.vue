@@ -480,6 +480,7 @@ export default {
       }
     }
     &__reminder {
+      max-width: 350px;
       padding: 0 40px;
       height: 67px;
       color: #fff;
