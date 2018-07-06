@@ -53,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rankInfo', 'currencyType'])
+    ...mapGetters(['rankInfo', 'currencyType', 'lang'])
   },
   created () {
     this.getRank()
@@ -100,6 +100,11 @@ export default {
           })
         }, 3000)
       }
+    }
+  },
+  watch: {
+    lang () {
+      this.getList()
     }
   }
 }
