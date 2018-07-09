@@ -61,9 +61,10 @@ export default {
       if (this.reviveObj.type === 'invite') {
         utils.statistic('invite_earn_share', 3, {to_destination_s: val}, 'invite_earn_page')
         let title = this.$t('receiveCard.share_title', {code: this.code})
-        let desp = this.$t('receiveCard.share_descripe')
+        let desp = this.$t('receiveCard.share_descripe', {code: this.code})
         api.inviteLink().then(({data}) => {
           if (data.result === 1 && data.code === 0 && data.data) {
+            console.log(data.data)
             utils.share(this.callbackFn, val, '', encodeURIComponent(data.data), '', title, desp)
           } else {
             return false

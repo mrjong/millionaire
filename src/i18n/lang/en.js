@@ -1,5 +1,5 @@
 const locale = {
-  await: {
+  await: { // 首页
     next_time_text: 'Next Time',
     next_bonus_text: 'Next Bonus',
     come_soon: 'Coming soon',
@@ -15,13 +15,13 @@ const locale = {
     get_more_text: 'Get More',
     referral_code_btn: 'Apply Referral Code',
     invite_btn: 'Invite & Earn Cash',
-    play_card_title: 'HOW TO PLAY',
+    play_card_title: 'HOW TO PLAY', // 玩法规则
     play_card_step1: 'Sign up, answer questions at <span class="special">10PM</span>everyday',
     play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
     ses_question_btn: 'Set Questions Myself',
-    referral_code_pop: {
+    referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
       instructions: 'Referral Code',
@@ -35,7 +35,7 @@ const locale = {
       cancel: 'Cancel',
       ok: 'OK'
     },
-    remider_pop: {
+    remider_pop: { // 订阅和取消提醒弹框及相关case
       case1: 'Please enter right phone number',
       case2: 'Your phone number already set  reminder.',
       case3: 'Fail to submit, please try again later.',
@@ -44,16 +44,16 @@ const locale = {
       cancel_case2: 'Cancel Reminder is Failed',
       cancel_case3: 'Cancel Reminder Successful'
     },
-    set_question_pop: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!'
+    set_question_pop: 'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!' // 出图弹框
   },
-  balance: {
+  balance: { // 余额页面
     your_blance: 'Your Balance',
     total_revenus: 'Total Revenus',
     history: 'History',
     hint: 'You can cash out with the minimum balance of ₹150,The payouts will be made in 7 days after Approved',
     cash_out_btn: 'Cash Out'
   },
-  balanceDetail: {
+  balanceDetail: { // 余额详情
     title: 'Cash Out',
     withdraw_cash_text: 'Withdraw Cash',
     name: 'Name',
@@ -61,7 +61,7 @@ const locale = {
     paytm: 'Paytm Account',
     noitce: 'Notice: The above information will be submitted to Paytm for cash out. Currently, only Indian rupee are available to withdraw cash in this game.',
     cash_out_btn: 'Cash Out',
-    balance_pop: {
+    balance_pop: { // 提现弹框及case
       no_money: 'Sorry you need a minimum balance of {currencyType} {withdraw} to cash out. Win more games to get it!',
       no_name: 'Please enter the right name',
       no_p_number: 'Please enter a right PAN ID',
@@ -74,7 +74,7 @@ const locale = {
       ok: 'Ok'
     }
   },
-  balanceRecord: {
+  balanceRecord: { // 提现记录
     withdrawal_title: 'Withdrawal History',
     cash_title: 'Cash History',
     item_withdrawal_title: 'Cash out',
@@ -84,23 +84,23 @@ const locale = {
     no_withdrawal: 'No Withdrawal History',
     no_cash: 'No Cash History',
     faild_hint: 'Sorry,your apply for cash out was failed. Please check and submit again.',
-    cash_status: {
+    cash_status: { // 提现记录状态
       withdrawing: 'Withdrawing',
       approved: 'Approved',
       failed: 'Failed',
       success: 'Success'
     },
-    delete_pop: {
+    delete_pop: { // 删除记录弹框
       delete_withdwawal: 'Are you sure you want to delete all the withdrawal history?',
       delte_cash: 'Are you sure you want to delete all the cash history?',
       delete_faild: 'You failed to delete the Withdrawal History.'
     }
   },
-  blank: {
+  blank: { // 空白页面
     text1: 'Sorry!',
     text2: 'Currently, we don\'t provide any game service in EU, and it is only available in India.'
   },
-  contact: {
+  contact: { // 联系我们
     title: 'Contact Us',
     describe: 'If you have any question, or you want to delete your account permanently. Feel free to contact us by the following methods:',
     email: 'gomillionaire@apusapps.com',
@@ -108,7 +108,7 @@ const locale = {
     twitter: 'Twitter',
     ins: 'Instagram'
   },
-  invite: {
+  invite: { // 邀请助力
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
     steps_title: 'How To Earn',
@@ -119,7 +119,7 @@ const locale = {
     rank_text5: ' Played on {time}',
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
-    rule: [
+    rule: [ // 规则说明
       '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
       '2. The one you invite should play \'Go! Millionaire\', then you can receive the Rs. 10 rewards.',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
@@ -138,14 +138,14 @@ const locale = {
     no_list_title: 'No Friends invited',
     no_list_text: '. Invite friends to earn cash right now!'
   },
-  login: {
+  login: { // 登录页面
     title: 'Sign Up',
     tel_tip: 'Enter Your Phone Number',
     code_tip: 'Enter your Verification Code',
     send_btn: 'send',
     login_btn: 'Sign Up',
     notice: 'Notice: The mobile number will only be used to receive the SMS verification code from Tencent Cloud.',
-    login_pop: {
+    login_pop: { // 登录弹框及case
       text1: 'Please enter a right phone number.',
       text2: 'Wrong verification code, please try again.',
       text3: 'Fail to verify the code, please try again.',
@@ -166,12 +166,12 @@ const locale = {
     anwser_out_text: 'Out',
     anwser_incorrect_text: 'Incorrect'
   },
-  anwser_rank: {
+  anwser_rank: { // 答题排行榜
     week_tap: 'Weekly Rank',
     total_tap: 'All Time Rank',
     not_on_list: 'Not on the list'
   },
-  rule: {
+  rule: { // 游戏说明页
     title: 'How to play',
     ruleList: [
       {
@@ -205,7 +205,7 @@ const locale = {
     ],
     fb_describe: 'Wanna get more tips how to win? Like us on Facebook page!'
   },
-  setQuestion: {
+  setQuestion: { // 出题页面
     title: 'Set Questions Myself',
     share_btn: 'Follow Us',
     name: 'YOUR NAME',
@@ -216,7 +216,7 @@ const locale = {
     option_c: 'Option C',
     correct_text: 'Correct answer',
     submit_btn: 'Submit',
-    question_rule: {
+    question_rule: { // 出题规则
       title1: 'We Required QUIZ MASTER !',
       title2: 'Set it, Question it, Win it!!',
       notice_title: 'Notice',
@@ -234,7 +234,7 @@ const locale = {
       },
       agree_btn: 'OK, I agree'
     },
-    question_pop: {
+    question_pop: { // 出题弹框及case
       submit_faild_title: 'Failed to Submit',
       no_name: 'Please enter your name.',
       no_tel: 'Please enter your phone number',
@@ -245,7 +245,7 @@ const locale = {
       ok: 'Ok'
     }
   },
-  setQuestionResult: {
+  setQuestionResult: { // 出题结果页
     title: 'Set Questions Myself',
     text1: 'Your question has been submitted.',
     text2: 'Thank you! Knowledge is power. We\'ll review all submissions and announce the selected questions and  QUIZ MASTER on APUS Browser Facebook page everyday.',
@@ -256,7 +256,7 @@ const locale = {
     share_btn: 'Follow Us',
     submit_btn: 'Submit another'
   },
-  userCenter: {
+  userCenter: { // 个人中心
     title: 'User Profile',
     save: 'Save ',
     edit: 'Edit',
@@ -270,7 +270,7 @@ const locale = {
       text1: 'Are you sure you want to log out?',
       text2: 'You failed to logout, please try again.'
     },
-    edit_pop: {
+    edit_pop: { // 编辑个人中心弹框
       save_success: 'User Profile Saved successfully',
       save_faild: 'User profile not saved',
       upload_success: 'Profile Picture Uploaded successfully',
@@ -280,16 +280,16 @@ const locale = {
       ok: 'Ok'
     }
   },
-  shareDetail: {
+  shareDetail: { // 分享详情页
     title: 'Extra Lives',
     describe1: 'You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game except the last question.',
     describe2: 'You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.',
     text: 'My Referral Code:',
     share_btn: 'Invite'
   },
-  receiveCard: {
+  receiveCard: { // 分享社交app弹框
     share_title: 'I\'m playing \'Go! Millionaire\', my referral code is {code}，join us and win up to Rs.1,000,000 at 10PM every day!',
-    share_descripe: 'Download Go!Millonaire Browser and use my referral code 345566, let keep winning cash every day!',
+    share_descripe: 'Download Go!Millonaire Browser and use my referral code {code}, let keep winning cash every day!',
     share_pop: {
       text1: 'My Referral Code:',
       text2: 'Inviting friends to get it now!'
@@ -299,28 +299,28 @@ const locale = {
       text2: 'Each invitation can earn up to ₹1000'
     }
   },
-  reviveGuide: {
+  reviveGuide: { // 复活卡说明页
     title: 'Referral Code Available Now!',
     text1: 'Keep playing when answer incorrectly',
     text2: 'Get more chances to WIN',
     text3: 'Win cash to be the next MILLIONAIRE!',
     btn: 'Get Extra Life Now'
   },
-  winnersResult: {
+  winnersResult: { // 答题结果页
     result_tip: 'Prize rolls over to next game',
     no_winner: 'No winners!',
     title1: 'Winners!',
     title2: 'You Won!',
     hint: 'Congrats! {winnerAmount} winners in this game!'
   },
-  policyBomb: {
+  policyBomb: { // 隐私协议弹框
     agreement: 'User Agreement',
     policy: 'Privacy Policy',
     describe1: 'In order to improve game experience and protect user data, please read the',
     describe2: 'and',
     describe3: 'carefully before you start game!'
   },
-  stringWords: [
+  stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
   // 全局提示

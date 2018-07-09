@@ -289,7 +289,7 @@ const locale = {
   },
   receiveCard: {
     share_title: 'I\'m playing \'Go! Millionaire\', my referral code is {code}，join us and win up to Rs.1,000,000 at 10PM every day!',
-    share_descripe: 'Download Go!Millonaire Browser and use my referral code 345566, let keep winning cash every day!',
+    share_descripe: 'Download Go!Millonaire Browser and use my referral code {code}, let keep winning cash every day!',
     share_pop: {
       text1: 'मेरा रेफ़रल कोड:',
       text2: 'इसे पाने के लिए अपने दोस्तों को आमंत्रित करना शुरू करें!'

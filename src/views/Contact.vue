@@ -11,7 +11,7 @@
         {{val.text}}
       </p>
     </div>
-    <policy-link></policy-link>
+    <policy-link class="policy"></policy-link>
   </div>
 </template>
 
@@ -99,6 +99,7 @@ export default {
     padding: 3.7% 3.7% 0;
     display: flex;
     flex-direction: column;
+    position: relative;
     .header {
       width: 100%;
       min-height: 51.5px;
@@ -172,6 +173,12 @@ export default {
           background-size: cover;
         }
       }
+    }
+    .policy{
+      width: 100%;
+      position: absolute;
+      bottom: 10px;
+      text-align: center;
     }
   }
 </style>
