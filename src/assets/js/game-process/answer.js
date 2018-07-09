@@ -54,7 +54,7 @@ const answerProcess = {
       options
     }
     const answer = {
-      a: correctAnswer || ''
+      a: correctAnswer || {}
     }
     let summary = answerSummary
     const optionsMd5Map = this.$store.getters.optionsMd5Map

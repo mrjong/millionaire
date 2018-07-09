@@ -1,17 +1,17 @@
 <template>
   <div class="rule">
     <p class="header" @click="goBack">
-         <span class="iconfont icon-fanhui"></span>
-      </p>
+      <span class="iconfont icon-fanhui"></span>
+    </p>
     <div class="rule-container">
       <div class="rule__wrap">
-        <p class="title">How to play</p>
-        <div class="rule-item" v-for="col in ruleList" :key="col.id">
+        <p class="title">{{$t('rule.title')}}</p>
+        <div class="rule-item" v-for="(col, idx) in $t('rule.ruleList')" :key="idx">
           <div class="rule-item__wrap">
-            <img :src="col.img" alt="" class="rule-item__wrap__img">
+            <img :src="ruleList[idx].img" class="rule-item__wrap__img">
           </div>
           <div class="rule-item__title">
-            <span class="rule-item__title__index">{{col.id}}</span>
+            <span class="rule-item__title__index">{{idx}}</span>
             {{col.title}}
           </div>
           <p class="rule-item__text">
@@ -23,67 +23,43 @@
             <p class="share__wrap">
               <img src="../assets/images/facebook.png" alt="" class="share__wrap__icon">
             </p>
-            <p class="share__describe">Wanna get more tips to win? Like us on Facebook!</p>
+            <p class="share__describe">{{$t('rule.fb_describe')}}</p>
           </a>
         </div>
-        <p class="bottom-text">
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-          <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-        </p>
       </div>
+      <policy-link color="#241262"></policy-link>
     </div>
   </div>
 </template>
 
 <script>
 import utils from '../assets/js/utils'
-
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'Rule',
   data () {
     return {
       ruleList: [
         {
-          id: 1,
-          img: `./static/images/rule1.png`,
-          title: `Join our live Quiz Game on time`,
-          describe: `Please don't be late or you'll miss the cash prize. A push notification will be sent to remind you.`
+          img: `./static/images/rule1.png`
         },
         {
-          id: 2,
-          img: `./static/images/rule2.png`,
-          title: `Answer each question in 10s`,
-          describe: `There're 12 questions. Choose the answer in 10 seconds for each.`
+          img: `./static/images/rule2.png`
         },
         {
-          id: 3,
-          img: `./static/images/rule3.png`,
-          title: `Answer them all right to WIN Cash`,
-          describe: `People who get them all right will split the cash prize.`
+          img: `./static/images/rule3.png`
         },
         {
-          id: 4,
-          img: `./static/images/rule4.png`,
-          title: `One who answer wrong will be out`,
-          describe: `If you choose the wrong answer, or time is out, you'll be eliminated.`
+          img: `./static/images/rule4.png`
         },
         {
-          id: 5,
-          img: `./static/images/rule5.png`,
-          title: `No winners? Get next prize bigger`,
-          describe: `The prize rolls over to the next day if no one get all questions right.`
+          img: `./static/images/rule5.png`
         },
         {
-          id: 6,
-          img: `./static/images/rule6.png`,
-          title: `Cash Out with Paytm`,
-          describe: `You can cash out to your Paytm account if you win.`
+          img: `./static/images/rule6.png`
         },
         {
-          id: 7,
-          img: `./static/images/rule7.png`,
-          title: `Invite friends to win real cash together`,
-          describe: ``
+          img: `./static/images/rule7.png`
         }
       ]
     }
@@ -95,6 +71,9 @@ export default {
     goBack () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    PolicyLink
   }
 }
 </script>
@@ -211,7 +190,9 @@ export default {
     text-align: center;
   }
 }
-
+.bottom-text {
+  color: #241262 !important;
+}
 .terms {
   font: 500 30px/35px 'Roboto', Arial, serif;
   margin-bottom: 20px;
@@ -224,13 +205,4 @@ export default {
 .terms::visited {
   color: #241262;
 }
-.bottom-text{
-    margin: 25px 0;
-    font: 200 24px 'Roboto', Arial, serif;
-    color: #241262;
-    text-align: center;
-    a{
-      color:#241262
-    }
-  }
 </style>

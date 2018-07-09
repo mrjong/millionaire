@@ -3,8 +3,8 @@
     <header class="flex-box flex-justify-center flex-align-center">
       <button class="back iconfont icon-fanhui" @click="back">
       </button>
-      <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">Weekly Rank</section>
-      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All Time</section>
+      <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">{{$t('anwser_rank.week_tap')}}</section>
+      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">{{$t('anwser_rank.total_tap')}}</section>
     </header>
     <!-- 前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
