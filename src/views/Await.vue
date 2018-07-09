@@ -107,6 +107,7 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+
   </div>
 </template>
 <script>
@@ -124,11 +125,13 @@ import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
+
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
     return {
+      // showFailTip: true,
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
