@@ -7,12 +7,12 @@
       <p class="balance-mark__wrap__title" v-if="dataInfo.htmlTitle">{{dataInfo.htmlTitle}}</p>
       <p class="balance-mark__wrap__description" v-if="dataInfo.htmlText" id="balanceMarkText" v-html="dataInfo.htmlText"></p>
       <input type="text"
-             placeholder="Referral Code"
+             :placeholder="$t('await.referral_code_pop.instructions')"
              class="balance-mark__wrap__invitation"
              v-if="isInvitation" v-model="invitationCode">
       <p class="balance-mark__wrap__btn">
         <span class="balance-mark__wrap__btn__ok" @click="okEvent">{{dataInfo.okBtnText}}</span>
-        <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">Cancel</span>
+        <span class="balance-mark__wrap__btn__cancel" v-if="dataInfo.markType" @click="cancelEvent">{{$t('await.referral_code_pop.cancel')}}</span>
       </p>
       <slot></slot>
     </div>
@@ -70,13 +70,14 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 22;
+    z-index: 222;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     &__wrap {
+      max-width: 85%;
       width: 602px;
       background: #fff;
       border-radius: 16px;
@@ -133,6 +134,7 @@ export default {
         margin-top: 25px;
         span {
           display: inline-block;
+          max-width: 47%;
           width: 240px;
           height: 100%;
           border-radius: 38px;

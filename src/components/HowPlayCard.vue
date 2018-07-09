@@ -1,12 +1,12 @@
 <template>
   <div class="play-card">
-    <p class="title">HOW TO PLAY</p>
+    <p class="title">{{$t('await.play_card_title')}}</p>
     <img src="../assets/images/how-play-card.png" class="rule">
     <div class="content">
-      <p class="text text1">Sign up, answer questions at <span class="special">10 PM </span>everyday</p>
-      <p class="text text2">Get 12 questions all right, win up to <span class="special">₹1,000,000!</span></p>
-      <p class="text text3">Use
-        <span class="special">EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!</p>
+      <p class="text text1" v-html="$t('await.play_card_step1', {time: '10PM'})"></p>
+      <p class="text text2" v-html="$t('await.play_card_step2', {money: '₹1,000,000!'})"></p>
+      <p class="text text3" v-html="$t('await.play_card_step3')"></p>
+      <p class="text text4" v-html="$t('await.play_card_step4')"></p>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   }
 }
 </script>
-<style scoped lang="less" type="text/less">
+<style lang="less" type="text/less">
   .play-card{
     max-width: 93%!important;
     width: 6.7rem;
@@ -42,7 +42,8 @@ export default {
     .rule{
       max-width: 90%;
       width: 600px;
-      margin: 0 auto;
+      height: 827px;
+      margin: 0 auto 100px;
     }
     .content{
       height: 100%;
@@ -74,6 +75,14 @@ export default {
       .text3{
         top:435px;
         left: 275px;
+      }
+      .text4 {
+        width: 80%;
+        top:650px;
+        left: 50%;
+        transform: translate(-50%,0);
+        font-size: 34px;
+        text-align: center;
       }
     }
   }

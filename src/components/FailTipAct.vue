@@ -1,7 +1,7 @@
 <template>
   <modal :value="!isClose">
     <section class="fail-tip-act" >
-      <img style="width: 100%;" src="http://static.subcdn.com/201805301642482c2e4fc771.png" alt="">
+      <img style="width: 100%;" src="//static.apusapps.com/201805301642482c2e4fc771.png" alt="">
       <button @click="redirect"></button>
       <img class="close" @click="isClose = true" src="../assets/images/icon-fail-tip-close.png" alt="">
     </section>

@@ -18,7 +18,7 @@ export default {
     return {
       supaTimer: null,
       supaOrder: 1,
-      compereMsg: `Welcome to “Go! Millionaire”, this is a live quiz game where you can answer 12 questions to win cash at 10 PM Everyday!`,
+      compereMsg: `Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`,
       supaStyle: `background-position: 0% 0%;`,
       timer: null
     }
@@ -75,12 +75,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  text-align: left;
   &__text {
     width: 100%;
     height: 200px;
     color: #fff;
     padding: 40px 40px 0;
-    font: 500 40px/48px 'Roboto', Arial, serif;
+    font: 500 34px/48px 'Roboto', Arial, serif;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

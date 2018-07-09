@@ -1,21 +1,22 @@
 /* global BUILD_ENV VERSION */
 // BUILD_ENV webpack define
 import axios from 'axios'
+import i18n from '../../i18n'
 export const env = BUILD_ENV || 'prod'
 export const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
-  dev: 'http://dev-millionaire-api.apuscn.com',
-  test: 'http://test-millionaire-api.apuscn.com',
-  check: 'http://check-millionaire-api.apusapps.com',
-  prod: 'http://millionaire-api.apusapps.com'
+  dev: '//dev-millionaire-api.apuscn.com',
+  test: '//test-millionaire-api.apuscn.com',
+  check: '//check-millionaire-api.apusapps.com',
+  prod: '//millionaire-api.apusapps.com'
 }
 
 export const accountHost = {
-  local: 'http://test-accounts.apuscn.com',
-  dev: 'http://test-accounts.apuscn.com',
-  test: 'http://test-account.apuscn.com',
-  check: 'http://account.apusapps.com',
-  prod: 'http://account.apusapps.com'
+  local: '//test-accounts.apuscn.com',
+  dev: '//test-accounts.apuscn.com',
+  test: '//test-account.apuscn.com',
+  check: '//account.apusapps.com',
+  prod: '//account.apusapps.com'
 }
 
 export const reportHost = {
@@ -49,8 +50,8 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => {
   const {params = {}, data = {}} = config
-  config.params = {...params, timestamp: Date.now()}
-  config.data = {...data, timestamp: Date.now()}
+  config.params = {...params, timestamp: Date.now(), lang: i18n.locale}
+  config.data = {...data, timestamp: Date.now(), lang: i18n.locale}
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData
     config.transformRequest = [function (data) {

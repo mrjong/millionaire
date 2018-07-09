@@ -5,7 +5,7 @@
     <p class="hint-icon">
       <img src="../assets/images/reminder-icon.png" class="hint-icon__img">
     </p>
-    <p class="title">Set Reminder</p>
+    <p class="title">{{$t('await.set_reminder_btn')}}</p>
     <div class="national-code" @click.stop="showCountryList = !showCountryList">
       <span class="iconfont icon-guojia code-icon"></span>
       <span class="iconfont icon-LIVINGyoujiantou drop-down"></span>
@@ -14,7 +14,7 @@
     <div class="phone">
       <span class="iconfont icon-shouji phone-icon"></span>
       <input type="text"
-          placeholder="Phone Number"
+          :placeholder="$t('await.reminder_phone')"
           class="invitation"
           v-model="reminderObj.phone">
     </div>
@@ -23,10 +23,10 @@
         <label for="yes" class="iconfont" :class="{'selected icon-duigou': type}"></label>
         <input type="checkbox" id="yes" v-model="type" name="option">
       </p>
-      <p class="">Remind me everyday</p>
+      <p class="">{{$t('await.remider_tip')}}</p>
     </div>
     <p class="btn">
-      <span class="btn__ok" @click="okEvent">OK</span>
+      <span class="btn__ok" @click="okEvent">{{$t('await.referral_code_pop.ok')}}</span>
     </p>
     </div>
     <country-list v-model="showCountryList"></country-list>
@@ -82,6 +82,7 @@ export default {
     background: rgba(0, 0,0, 0.8);
   }
   .wrap {
+    max-width: 85%;
     width: 602px;
     background: #fff;
     border-radius: 16px;

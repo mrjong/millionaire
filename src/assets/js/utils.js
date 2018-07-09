@@ -1,6 +1,6 @@
 /* global IS_LOGIN */
 // IS_LOGIN webpack define
-/* eslint-disable standard/no-callback-literal */
+/* eslint-disable standard/no-callback-literal,camelcase */
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
@@ -11,50 +11,54 @@ import {vm} from '../../main'
 import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
 const njordGame = window.top.njordGame
+const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
 storage.addPlugin(expirePlugin)
 
 const sounds = {
   'countDown10-before': {
-    urls: ['http://static.subcdn.com/countDown10-before.mp3', 'http://static.subcdn.com/20180424112649eb09f8016b.m4a'],
+    urls: ['//static.apusapps.com/countDown10-before.mp3', '//static.apusapps.com/20180424112649eb09f8016b.m4a'],
     instance: null,
     loop: false
   },
   'countDown10-after': {
-    urls: ['http://static.subcdn.com/countDown10-after.mp3'],
+    urls: ['//static.apusapps.com/countDown10-after.mp3'],
     instance: null,
     loop: false
   },
   bg: {
-    urls: ['http://static.subcdn.com/20180314200629b0edee0942.ogg', 'http://static.subcdn.com/20180424100731925fbbbfca.m4a'],
+    urls: ['//static.apusapps.com/20180314200629b0edee0942.ogg', '//static.apusapps.com/20180424100731925fbbbfca.m4a'],
     instance: null,
     loop: true
   },
   countDown5: {
-    urls: ['http://static.subcdn.com/5s-countdown.mp3'],
+    urls: ['//static.apusapps.com/5s-countdown.mp3'],
     instance: null,
     loop: false
   },
   go: {
-    urls: ['http://static.subcdn.com/20180313173916879991205a.mp3'],
+    urls: ['//static.apusapps.com/20180313173916879991205a.mp3'],
     instance: null,
     loop: false
   },
   failed: {
-    urls: ['http://static.subcdn.com/2018031317404850dad39593.mp3'],
+    urls: ['//static.apusapps.com/2018031317404850dad39593.mp3'],
     instance: null,
     loop: false
   },
   succeed: {
-    urls: ['http://static.subcdn.com/201803131742354229751a36.mp3'],
+    urls: ['//static.apusapps.com/201803131742354229751a36.mp3'],
     instance: null,
     loop: false
   }
 }
-
 // 客户端公共参数
 const clientParams = (njordGame && njordGame.getClientParams) ? JSON.parse(njordGame.getClientParams()) : null
+// 客户端分享参数
+const shareParams = (ma_js_i && ma_js_i.getSharedParam) ? JSON.parse(ma_js_i.getSharedParam()) : null
+
+console.log('客户端分享参数', shareParams)
 
 const utils = {
   /**
@@ -188,6 +192,8 @@ const utils = {
   pageType: clientParams ? 'app' : 'h5', // 页面类型 app代表客户端 h5代表网页
   raceId: '', // 本场比赛ID
   actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
+  icode: shareParams ? shareParams.icode : null,
+
   /**
    * 关闭客户端WebView
    */
@@ -199,7 +205,7 @@ const utils = {
    * @static
    * @memberof Utils
    */
-  statistic (name = '', event = 0, params = {}, from = '') {
+  statistic (name = '', event = 0, params = {}, from = utils.getQuery('referrer') || 'default') {
     let eventType
     switch (+event) {
       case 0: // ALEX_SHOW
@@ -302,10 +308,10 @@ const utils = {
         }
         case TWITTER: {
           setTimeout(() => {
-            const href = `https://twitter.com/intent/tweet?text=${title}&url=${shareLink}`
+            const href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareLink}`
             window.location.href = href
           }, 5)
-          window.location.href = `twitter://post?message=${title}&url=${encodeURIComponent(shareLink)}`
+          window.location.href = `twitter://post?message=${shareTitle}&url=${encodeURIComponent(shareLink)}`
         }
       }
     }
@@ -535,10 +541,14 @@ const utils = {
       len--
     }
     return str
+  },
+  /**
+   * 清除分享参数
+   */
+  clearShareParams () {
+    ma_js_i && ma_js_i.clearSharedParam && ma_js_i.clearSharedParam()
   }
 }
-
-window.utils = utils
 
 export default utils
 

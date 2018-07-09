@@ -143,52 +143,52 @@ export default {
       move: '',
       video: [
         {
-          img: 'http://static.subcdn.com/201806141345571001efe508.jpg',
+          img: 'https://static.apusapps.com/201806141345571001efe508.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1837231499903932/',
           text: 'Quiz Master Pushpanjli'
         },
         {
-          img: 'http://static.subcdn.com/201806141345547671c943bc.jpg',
+          img: 'https://static.apusapps.com/201806141345547671c943bc.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1834488896844859/',
           text: 'Quiz Master Nischaya'
         },
         {
-          img: 'http://static.subcdn.com/201806141346006cce2a078e.jpg',
+          img: 'https://static.apusapps.com/201806141346006cce2a078e.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1832818200345262/',
           text: 'Quiz Master Amrita'
         },
         {
-          img: 'http://static.subcdn.com/20180614134553989c9bfc92.jpg',
+          img: 'https://static.apusapps.com/20180614134553989c9bfc92.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1836665556627193/',
           text: 'Quiz Master Harsh'
         },
         {
-          img: 'http://static.subcdn.com/20180614134604af5a17bd64.jpg',
+          img: 'https://static.apusapps.com/20180614134604af5a17bd64.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1832332103727205/',
           text: 'Quiz Master Diwaker Singh'
         },
         {
-          img: 'http://static.subcdn.com/2018061413455900c72e529e.jpg',
+          img: 'https://static.apusapps.com/2018061413455900c72e529e.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1835268590100223/',
           text: 'Quiz Master Sumant'
         },
         {
-          img: 'http://static.subcdn.com/20180614134603475ca8b66a.jpg',
+          img: 'https://static.apusapps.com/20180614134603475ca8b66a.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1835836796710069/',
           text: 'Quiz Master Mitali'
         },
         {
-          img: 'http://static.subcdn.com/20180614134558393eb3ddd4.jpg',
+          img: 'https://static.apusapps.com/20180614134558393eb3ddd4.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1833945303565885/',
           text: 'Quiz Master Ruchika'
         },
         {
-          img: 'http://static.subcdn.com/201806141346019b855b18e0.jpg',
+          img: 'https://static.apusapps.com/201806141346019b855b18e0.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1836263523334063/',
           text: 'Quiz Master Amzad'
         },
         {
-          img: 'http://static.subcdn.com/201806141346023525aaca4e.jpg',
+          img: 'https://static.apusapps.com/201806141346023525aaca4e.jpg',
           link: 'https://www.facebook.com/GoMillionaireGo/videos/1833503200276762/',
           text: 'Quiz Master Manju '
         }

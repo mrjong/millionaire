@@ -8,8 +8,10 @@ import utils from './assets/js/utils'
 // import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
+import i18n from './i18n'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
+import { _OPEN_DIALOG } from './store/type'
 im.init()
 
 window.onload = function () {
@@ -18,6 +20,24 @@ window.onload = function () {
     style_s: window.top.njordGame ? 'app' : 'h5' // 页面类型
   }, utils.getQuery('referrer'))
 }
+
+window.addEventListener('beforeinstallprompt', function (event) {
+  // 统计用户的选择
+  event.userChoice.then((choiceResult) => {
+    console.log(choiceResult.outcome) // 为 dismissed 或 accepted
+    if (choiceResult.outcome === 'accepted') {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '1'
+      })
+      console.log('User accepted home screen install')
+    } else {
+      utils.statistic('ADD_TO_HOMESCREEN', 1, {
+        result_code_s: '0'
+      })
+      console.log('User canceled home screen install')
+    }
+  })
+})
 
 function statisticEntry () {
   utils.statistic('millionaire', 0, {style_s: ['', 'waiting', 'countdown', 'playing'][this.status] || 'unknown'})
@@ -48,11 +68,33 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
 })
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(registration => {
+      registration.onupdatefound = () => {
+        console.log('onupdatefound')
+        vm.$store.dispatch(_OPEN_DIALOG, {
+          htmlTitle: i18n.t('tip.versionUpdate.title'),
+          htmlText: i18n.t('tip.versionUpdate.desp'),
+          lastTime: 5000,
+          okBtnText: i18n.t('tip.versionUpdate.btn'),
+          hintImg: './static/images/tip-update.png'
+        })
+      }
+      console.log('Service Worker registered35: ', registration)
+    }).catch(registrationError => {
+      console.log('Service Worker failed: ', registrationError)
+    })
+  })
+}

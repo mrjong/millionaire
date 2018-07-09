@@ -1,6 +1,7 @@
 <template>
   <div class="notices">
-    <img src="../assets/images/notices-title.png" alt="" class="title">
+    <img src="../assets/images/notices-title-hi.png" alt="" class="title" v-if="$i18n.locale === 'hi'">
+    <img src="../assets/images/notices-title.png" alt="" class="title" v-else>
     <!-- 排行榜前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
       <section class="second">
@@ -8,7 +9,7 @@
           <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
           <img class="decorate" src="../assets/images/rank-second.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
         </div>
       </section>
       <section class="first" >
@@ -16,7 +17,7 @@
           <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
           <img class="decorate" src="../assets/images/rank-first.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
         </div>
       </section>
       <section class="third" >
@@ -24,7 +25,7 @@
           <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
           <img class="decorate" src="../assets/images/rank-third.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
         </div>
       </section>
     </div>
@@ -52,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rankInfo', 'currencyType'])
+    ...mapGetters(['rankInfo', 'currencyType', 'lang'])
   },
   created () {
     this.getRank()
@@ -100,6 +101,11 @@ export default {
         }, 3000)
       }
     }
+  },
+  watch: {
+    lang () {
+      this.getList()
+    }
   }
 }
 </script>
@@ -107,10 +113,10 @@ export default {
   .notices {
     width: 670px;
     height: 670px;
-    margin: 26px;
+    max-width: 94% !important;
+    margin: 25px auto;
     border: 1px solid #3e407d;
-    border-radius: 20px;
-    padding-bottom: 30px;
+    border-radius: 26px;
     .title {
       width: 514px;
       margin: 40px auto 53px;

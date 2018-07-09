@@ -5,7 +5,8 @@
          ref="toFbBrowser"
          @click="likeToFb('like_page')">
       </a>
-      <div>
+      <div style="display: flex;">
+        <lang class="await__top__lang"></lang>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
@@ -16,7 +17,7 @@
       <img src="../assets/images/await-logo.png">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder('set_reminder')">Set Reminder</div>
+    <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div>
     <base-info :baseInfo="userInfo"></base-info>
     <div class="await__btn">
       <div class="invitation-code">
@@ -25,14 +26,14 @@
             <span class="extra-lives__icon"></span>
             <living class="invite-living" v-if="inviteLiving"></living>
           </div>
-          <span class="extra-lives__text">EXTRA LIVES: {{lives}}</span>
+          <span class="extra-lives__text">{{$t('await.extra_lives_text')}} {{lives}}</span>
         </div>
-        <div class="get-more-text" @click="toExtraLiveRules">Get More
+        <div class="get-more-text" @click="toExtraLiveRules">{{$t('await.get_more_text')}}
           <span class="get-more-text__icon iconfont icon-LIVINGyoujiantou"></span>
         </div>
       </div>
       <div class="get-lives">
-        <div class="invitation-code__btn" @click="inputInvitation">Apply Referral Code</div>
+        <div class="invitation-code__btn" @click="inputInvitation">{{$t('await.referral_code_btn')}}</div>
       </div>
       <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
@@ -42,9 +43,12 @@
         <p class="share-success__num">+1</p>
       </div>
     </div>
-    <div class="invite" @click="toInvite">Invite & Earn Cash</div>
+    <div class="invite" @click="toInvite">
+      <img src="../assets/images/invite-btn.png">
+      <p>{{$t('await.invite_btn')}}</p>
+    </div>
     <div class="notice">
-      <router-link to="/rank">
+      <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
     </div>
@@ -87,15 +91,12 @@
     </router-link>
     <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
-      <p class="await__set__text">Set Questions Myself</p>
+      <p class="await__set__text">{{$t('await.ses_question_btn')}}</p>
     </div>
     <div class="apus-logo">
-    <img src="../assets/images/apus-logo-white.png" class="icon">
+      <img src="../assets/images/apus-logo-white.png" class="icon">
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link></policy-link>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
@@ -106,11 +107,11 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+
   </div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import BaseBtn from '../components/BaseBtn.vue'
 import NextTime from '../components/NextTime.vue'
 import BaseInfo from '../components/BaseInfo.vue'
 import * as type from '../store/type'
@@ -122,11 +123,15 @@ import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
+import lang from '../components/Language'
+import PolicyLink from '../components/PolicyLink'
+
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
     return {
+      // showFailTip: true,
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -135,13 +140,14 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: false,
-        okBtnText: 'OK'
+        okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false,
       isSucceed: false,
       logout: false,
       inviteLiving: false,
-      isReminderPop: false
+      isReminderPop: false,
+      isChangeReminder: false
     }
   },
   computed: {
@@ -151,11 +157,13 @@ export default {
       status: 'status',
       lives: 'lives',
       code: 'code',
-      isAgreePolicy: 'isAgreePolicy'
+      isAgreePolicy: 'isAgreePolicy',
+      isRemider: 'isRemider',
+      watchingMode: 'watchingMode'
     }),
     targetDate () {
       if (this.startTime === -1) {
-        return ['', 'Coming Soon']
+        return ['', this.$t('await.come_soon')]
       } else if (this.startTime === 0) {
         return ['', 'Living']
       } else {
@@ -187,7 +195,6 @@ export default {
         utils('millionaire-isFirstShare', false)
       }, 3000)
     }
-    // this.reportCheckCode()
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -206,8 +213,8 @@ export default {
       if (utils.isOnline) {
         this.isInputInvitation = true
         this.BobmParamesConfig(
-          'APPLY REFERRAL CODE',
-          'Enter a friend\'s Referral Code to get an extra life.',
+          this.$t('await.referral_code_pop.title'),
+          this.$t('await.referral_code_pop.description'),
           true, true)
       } else {
         this.login()
@@ -220,9 +227,8 @@ export default {
         if (!b) {
           return false
         } else if (b.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === this.code) {
-          console.log('fghhjklllkjuuhfdsss', b.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))
           this.isInputInvitation = false
-          this.BobmParamesConfig('', 'You can not enter your own Referral Code.', false, true)
+          this.BobmParamesConfig('', this.$t('await.referral_code_pop.case1'), false, true)
           return false
         } else {
           this.showDialog = false
@@ -254,23 +260,23 @@ export default {
             })
           } else {
             if (data.code === 404) {
-              this.BobmParamesConfig('', 'Invalid referral code, please check it now.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case2'), false, true)
             } else if (data.code === 30100) {
-              this.BobmParamesConfig('', 'You\'ve already applied a referral code. You may only do this once.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case3'), false, true)
             } else if (data.code === 30101) {
-              this.BobmParamesConfig('', 'This referral code expired.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case4'), false, true)
             } else if (data.code === 30102) {
-              this.BobmParamesConfig('', 'Sorry, you missed the last chance of using this referral code. You can share or invite friends to get more!', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case5'), false, true)
             } else if (data.code === 30103) {
-              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case6'), false, true)
             } else if (data.code === 30104) {
-              this.BobmParamesConfig('', 'This referral code has already been applied.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case6'), false, true)
             } else {
-              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+              this.BobmParamesConfig('', this.$t('await.referral_code_pop.case7'), false, true)
             }
           }
         }).catch(() => {
-          this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+          this.BobmParamesConfig('', this.$t('await.referral_code_pop.case7'), false, true)
         })
         this.isInputInvitation = false
       } else {
@@ -278,6 +284,21 @@ export default {
       }
       if (this.logout) {
         this.login('/set-question')
+      }
+      if (this.isRemider && this.isChangeReminder) {
+        this.isChangeReminder = false
+        api.cancelReminder().then(({data}) => {
+          if (data.result === 1) {
+            this.$store.commit(type._UPDATE, {
+              isRemider: false
+            })
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'success'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case3'), false, true)
+          } else {
+            utils.statistic('wait_page', 1, {to_destination_s: 'cancel_reminder', set_info_s: 'fail'}, 'wait_page')
+            this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case2'), false, true)
+          }
+        })
       }
     },
     // 弹框cancel
@@ -292,8 +313,7 @@ export default {
         this.$router.push({path: '/set-question'})
       } else {
         this.logout = true
-        this.BobmParamesConfig('',
-          'Please login to set questions and you can get questions and hints in advance, and chances to win extra prize!', false, true)
+        this.BobmParamesConfig('', this.$t('await.set_question_pop'), false, true)
       }
     },
     // 调起弹框参数配置
@@ -302,6 +322,7 @@ export default {
       this.dialogInfo.htmlText = text
       this.dialogInfo.markType = markType
       this.showDialog = isShow
+      this.dialogInfo.okBtnText = this.$t('await.referral_code_pop.ok')
     },
     // toExtraLiveRules
     toExtraLiveRules () {
@@ -313,12 +334,8 @@ export default {
       }
     },
     toInvite () {
-      if (utils.isOnline) {
-        this.btnStatistic('earn_money_button')
-        this.$router.push({path: '/invite'})
-      } else {
-        this.login('/invite')
-      }
+      this.btnStatistic('earn_money_button')
+      this.$router.push({path: '/invite'})
     },
     // login
     login (path) {
@@ -334,7 +351,12 @@ export default {
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
-      this.isReminderPop = true
+      if (this.isRemider) {
+        this.isChangeReminder = true
+        this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case1'), true, true)
+      } else {
+        this.isReminderPop = true
+      }
     },
     // 关闭游戏定时提醒弹框
     ReminderClose () {
@@ -346,30 +368,32 @@ export default {
         // 提示错误，手机号错误
         reminderObj.phone = ''
         this.isReminderPop = false
-        this.BobmParamesConfig('', 'Please enter right phone number', false, true)
+        this.BobmParamesConfig('', this.$t('await.remider_pop.case1'), false, true)
         return false
       } else {
-        // 请求接口
+        // 请求接口订阅
         api.Reminder(reminderObj).then(({data}) => {
           this.isReminderPop = false
           console.log('定时提醒' + data)
           if (data.result !== 1) {
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'fail'}, 'wait_page')
             if (data.code === 60001) {
-              this.BobmParamesConfig('', 'Your phone number already set  reminder. ', false, true)
+              this.BobmParamesConfig('', this.$t('await.remider_pop.case2'), false, true)
             } else {
-              this.BobmParamesConfig('', 'Fail to submit, please try again later.', false, true)
+              this.BobmParamesConfig('', this.$t('await.remider_pop.case3'), false, true)
             }
           } else {
+            this.$store.commit(type._UPDATE, {
+              isRemider: true
+            })
             utils.statistic('wait_page', 1, {to_destination_s: 'set_reminder', set_info_s: 'success'}, 'wait_page')
-            this.BobmParamesConfig('', 'Congrats. You already set your reminder.', false, true)
+            this.BobmParamesConfig('', this.$t('await.remider_pop.case4'), false, true)
           }
         }).catch()
       }
     }
   },
   components: {
-    BaseBtn,
     NextTime,
     BaseInfo,
     BalanceMark,
@@ -377,7 +401,9 @@ export default {
     HowPlayCard,
     Notices,
     ReminderBomb,
-    PolicyBomb
+    PolicyBomb,
+    lang,
+    PolicyLink
   },
   watch: {
     lives: function (val, oldVal) {
@@ -410,6 +436,9 @@ export default {
     background-size: cover;
     padding-bottom: 30px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__top{
       display: flex;
       padding: 25px 25px 0;
@@ -423,12 +452,18 @@ export default {
         text-align: center;
         align-self: center;
         line-height: 54px;
+        color: #fff;
+        font-family: 'Roboto', Arial, serif;
       }
       &__like{
         display: block;
       }
       &__instructions{
         font-size: 28px;
+      }
+      &__lang {
+        margin-right: 20px;
+        font-size: 26px;
       }
       &__logo{
         width: 168px;
@@ -440,14 +475,17 @@ export default {
     }
     &__title{
       width: 300px;
-      height: 171px;
-      margin: 0 auto;
+      height: 130px;
+      margin: 0 auto 40px;
       img{
-        width: 100%;
+        max-width: 100%;
+        width: 300px;
+        height: 130px;
       }
     }
     &__reminder {
-      width: 253px;
+      max-width: 350px;
+      padding: 0 40px;
       height: 67px;
       color: #fff;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
@@ -458,11 +496,14 @@ export default {
       border-radius: 46px;
     }
     &__btn{
+      max-width: 93%;
+      width: 6.7rem;
       display: flex;
       margin:0 25px 25px;
       justify-content: space-between;
       background-color: #fff;
       border-radius: 24px;
+      align-self: center;
       .invitation-code, .get-lives{
         max-width: 48%;
         width: 322px;
@@ -490,13 +531,13 @@ export default {
             width: 50px;
           }
           &__icon{
-            width: 40px;
+            width: 44px;
             height: 36px;
             color: #f4387c;
             font-size: 40px;
             align-self: center;
             background: url("../assets/images/lives-icon.png") no-repeat center;
-            background-size: cover;
+            background-size: contain;
           }
           &__text{
             font-size: 28px;
@@ -667,21 +708,33 @@ export default {
       }
     }
     .invite {
-      width: 670px;
-      height: 100px;
-      background: url('../assets/images/invite-btn.png') no-repeat center;
-      background-size: cover;
+      position: relative;
+      max-width:93%;
       border-radius: 24px;
       margin: 0 auto;
       text-align: center;
       color: #fff;
       font: 600 40px 'Roboto', Arial, serif;
       line-height: 95px;
+      img{
+        max-width: 100%;
+        width: 670px;
+        height: 100px;
+      }
+      p{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%,0);
+        width: 100%;
+      }
     }
     .notice{
       width: 100%;
       background: url("../assets/images/notice-bg.png") no-repeat center;
       background-size: contain;
+      display: flex;
+      justify-content: center;
     }
     .footer-bg{
       width: 100%;
@@ -711,15 +764,6 @@ export default {
       margin: 20px auto 0;
     }
   }
-  .bottom-text{
-      margin: 25px 0;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
-    }
   @media screen and (max-width: 321px) {
     .await {
       &__reminder {
