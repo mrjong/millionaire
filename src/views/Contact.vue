@@ -175,10 +175,10 @@ export default {
       }
     }
     .policy{
-      width: 100%;
       position: absolute;
       bottom: 10px;
-      text-align: center;
+      left: 50%;
+      transform: translate(-50%, 0);
     }
   }
 </style>
