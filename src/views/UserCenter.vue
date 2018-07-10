@@ -111,7 +111,8 @@ export default {
               htmlText: this.$t('userCenter.edit_pop.save_success'),
               markType: 0,
               okBtnText: this.$t('userCenter.edit_pop.ok'),
-              lastTime: 3000
+              lastTime: 3000,
+              hintImg: './static/images/tip-success.png'
             })
 
             this.$store.commit(type.HOME_UPDATE, {
@@ -151,7 +152,6 @@ export default {
               shouldSub: false,
               markType: 0,
               okBtnText: this.$t('userCenter.edit_pop.ok'),
-              hintImg: '',
               lastTime: 3000
             })
           } else {
@@ -167,7 +167,6 @@ export default {
                   shouldSub: false,
                   markType: 0,
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
-                  hintImg: '',
                   lastTime: 3000
                 })
               } else {
@@ -178,7 +177,7 @@ export default {
                   shouldSub: false,
                   markType: 0,
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
-                  hintImg: '',
+                  hintImg: './static/images/tip-success.png',
                   lastTime: 3000
                 })
               }
@@ -194,7 +193,6 @@ export default {
             shouldSub: false,
             markType: 0,
             okBtnText: this.$t('userCenter.edit_pop.ok'),
-            hintImg: '',
             lastTime: 3000
           })
         } else {
