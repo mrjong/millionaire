@@ -85,6 +85,7 @@ export default {
      * 轮播
      */
     swiper () {
+      clearInterval(this.timer)
       const {listSize, winnerList} = this
       let pointer = listSize
       this.list = this.winnerList.slice(pointer - listSize, pointer)
