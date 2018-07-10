@@ -92,7 +92,7 @@ const locale = {
     },
     delete_pop: { // 删除记录弹框
       delete_withdwawal: 'Are you sure you want to delete all the withdrawal history?',
-      delte_cash: 'Are you sure you want to delete all the cash history?',
+      delete_cash: 'Are you sure you want to delete all the cash history?',
       delete_faild: 'You failed to delete the Withdrawal History.'
     }
   },
