@@ -2,11 +2,11 @@
   <div class="hint">
     <div class="hint__time">
       <p class="hint__time__text">
-        Next Game
+        {{$t('await.next_time_text')}}
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
       <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
-        <p class="living-text">LIVING</p>
+        <p class="living-text">{{$t('await.living')}}</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
           <span class="living-icon iconfont icon-LIVINGyoujiantou right"></span>
@@ -18,7 +18,7 @@
     </div>
     <div class="hint__line"></div>
     <div class="hint__money">
-      <p class="hint__money__text">Next Bonus</p>
+      <p class="hint__money__text">{{$t('await.next_bonus_text')}}</p>
       <p class="hint__money__number">
         {{currencyType}}{{money}}
       </p>
@@ -95,9 +95,11 @@ export default {
         }
       }
       &__hour,&__number{
+        height: 70px;
         margin-top: 25px;
         color: #ffb227;
         font: 700 56px 'Roboto Condensed', Arial, serif;
+        line-height: 70px;
       }
       &__hour{
         color: #fff;

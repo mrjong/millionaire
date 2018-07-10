@@ -1,14 +1,15 @@
 <template>
   <div class="base-info">
     <div class="base-info__user">
-        <div class="base-info__user__head"
-             :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login"></div>
+        <div class="base-info__user__head" :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login">
+          <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+        </div>
         <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p>
       </div>
     <div class="base-info__other">
       <router-link to="/balance" class="balance-router" >
         <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
-          <p class="base-info__other__balance__text">Balance</p>
+          <p class="base-info__other__balance__text">{{$t('await.userinfo_blance_text')}}</p>
           <p class="base-info__other__balance__num num"
              ref="balanceNum"
              :style="{fontSize: baseInfo.balanceShow.length > 9 ? '0.45rem' : '0.55rem'}">{{baseInfo.currencyType }}{{ isOnline ? baseInfo.balanceShow : baseInfo.clientBalanceShow}}</p>
@@ -17,7 +18,7 @@
       <div class="base-info__other__line"></div>
       <router-link to="/rank" class="balance-rank">
         <div class="base-info__other__rank"  @click="routerStatistic('rank_page')">
-          <p class="base-info__other__rank__text">Weekly Rank</p>
+          <p class="base-info__other__rank__text">{{$t('await.userinfo_rank_text')}}</p>
           <p class="base-info__other__rank__num num" :style="{fontSize: baseInfo.balanceShow.length > 9 ? '0.45rem' : '0.55rem'}">{{baseInfo.rank !== -1? baseInfo.rank: '-'}}</p>
         </div>
       </router-link>
@@ -87,13 +88,25 @@ export default {
         background: no-repeat center;
         background-size: cover;
         margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        .login-text{
+          width: 100%;
+          height: 40%;
+          padding-top: 10px;
+          position: absolute;
+          bottom: 0;
+          color: #ffffff;
+          text-align: center;
+          font: 34px 'Roboto Condensed', Arial, sans-serif;
+        }
       }
       &__name{
         color: #241262;
         font: 500 36px 'Roboto', sans-serif;
         width: 60%;
         text-align: center;
-        margin: 0.28px auto;
+        margin: 20px auto;
       }
     }
     &__other{
