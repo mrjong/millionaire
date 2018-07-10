@@ -22,7 +22,7 @@
             <span class="time small">{{recordType ? val.updateTime : val.createTime}}</span>
             <span class="status small" v-if="!recordType">{{val.state}}</span>
           </div>
-          <p class="hint" v-if="val.state === 'Failed' && !recordType">
+          <p class="hint" v-if="val.state === $t('balanceRecord.cash_status.failed') && !recordType">
             {{$t('balanceRecord.faild_hint')}}</p>
         </div>
       </div>
@@ -171,9 +171,9 @@ export default {
     detele () {
       this.isClear = true
       if (this.recordType) {
-        this.markInfo.htmlText = this.$t('balanceRecord.delte_cash')
+        this.markInfo.htmlText = this.$t('balanceRecord.delete_pop.delete_cash')
       } else {
-        this.markInfo.htmlText = this.$t('balanceRecord.delete_withdwawal')
+        this.markInfo.htmlText = this.$t('balanceRecord.delete_pop.delete_withdwawal')
       }
       this.markInfo.okBtnText = this.$t('await.referral_code_pop.ok')
       this.markInfo.showMark = true
