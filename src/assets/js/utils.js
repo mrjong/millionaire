@@ -205,7 +205,7 @@ const utils = {
    * @static
    * @memberof Utils
    */
-  statistic (name = '', event = 0, params = {}, from = '') {
+  statistic (name = '', event = 0, params = {}, from = utils.getQuery('referrer') || 'default') {
     let eventType
     switch (+event) {
       case 0: // ALEX_SHOW
@@ -285,7 +285,7 @@ const utils = {
     /* eslint-disable no-useless-escape */
     const shareTitle = title || `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
     const shareDesp = desp || `Open the game link and use my referral code ${code}, let keep winning cash every day!`
-    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
+    const shareLink = `${window.location.protocol}${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)

@@ -49,7 +49,7 @@ const gameState = {
    */
   update_global () {
     const {data: info} = this
-    const {ri: gameInfo = {}, cn: lives = 0, cd: code, m: chatRoomInfo = {}} = info
+    const {ri: gameInfo = {}, cn: lives = 0, cd: code, m: chatRoomInfo = {}, sub: isRemider = false} = info
     const {si: hostIntervalTime = 3000, t: gameType} = gameInfo
     const startTime = +info.sr || -1
     const startTimeOffset = +info.ls || 0
@@ -63,7 +63,8 @@ const gameState = {
       startTimeOffset,
       onlineAmount: chatRoomInfo.is || '',
       chatRoomId: chatRoomInfo.rn || '',
-      imToken: chatRoomInfo.it || ''
+      imToken: chatRoomInfo.it || '',
+      isRemider
     })
 
     // 从本地同步复活卡信息

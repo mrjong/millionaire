@@ -6,8 +6,8 @@
         <img class="decorate" src="../assets/images/rank-second.png"/>
       </div>
       <p class="nickname">{{BoardData[1].nick}}</p>
-      <p class="number"> Invite {{BoardData[1].sc}} freshmen </p>
-      <p class="money">Earn ₹{{BoardData[1].amountFmt}}</p>
+      <p class="number">{{$t('invite.rank_text1', {number: BoardData[1].sc})}}</p>
+      <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{BoardData[1].amountFmt}}</p>
     </div>
     <div class="first" v-if="BoardData[0]">
       <div class="head">
@@ -15,8 +15,8 @@
         <img class="decorate" src="../assets/images/rank-first.png"/>
       </div>
       <p class="nickname">{{BoardData[0].nick}}</p>
-      <p class="number"> Invite {{BoardData[0].sc}} freshmen </p>
-      <p class="money">Earn ₹{{BoardData[0].amountFmt}}</p>
+      <p class="number">{{$t('invite.rank_text1', {number: BoardData[0].sc})}}</p>
+      <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{BoardData[0].amountFmt}}</p>
     </div>
     <div class="third" v-if="BoardData[2]">
       <div class="head">
@@ -24,13 +24,14 @@
         <img class="decorate" src="../assets/images/rank-third.png"/>
       </div>
       <p class="nickname">{{BoardData[2].nick}}</p>
-      <p class="number"> Invite {{BoardData[2].sc}} freshmen </p>
-      <p class="money">Earn ₹{{BoardData[2].amountFmt}}</p>
+      <p class="number">{{$t('invite.rank_text1', {number: BoardData[2].sc})}}</p>
+      <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{BoardData[2].amountFmt}}</p>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'TopThree',
   props: {
@@ -40,6 +41,11 @@ export default {
   },
   data () {
     return {}
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
   }
 }
 </script>
@@ -86,6 +92,8 @@ export default {
       color: #201a98;
       min-height: 30px;
       font: 20px 'Roboto', Arial, serif;
+      text-align: center;
+      padding: 0 15px;
     }
     .nickname {
       margin-top: 50px;

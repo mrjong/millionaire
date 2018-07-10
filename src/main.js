@@ -8,6 +8,7 @@ import utils from './assets/js/utils'
 // import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
+import i18n from './i18n'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 import { _OPEN_DIALOG } from './store/type'
@@ -73,6 +74,7 @@ export const vm = new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
 })
@@ -83,10 +85,10 @@ if ('serviceWorker' in navigator) {
       registration.onupdatefound = () => {
         console.log('onupdatefound')
         vm.$store.dispatch(_OPEN_DIALOG, {
-          htmlTitle: 'New Version Available',
-          htmlText: `Quit and then open, or you can clear browser cache to upgrade. Experience the latest feature to win cash now!`,
+          htmlTitle: i18n.t('tip.versionUpdate.title'),
+          htmlText: i18n.t('tip.versionUpdate.desp'),
           lastTime: 5000,
-          okBtnText: 'OK',
+          okBtnText: i18n.t('tip.versionUpdate.btn'),
           hintImg: './static/images/tip-update.png'
         })
       }
