@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-text">
-      <a class= "policy" :style="{color: color}" href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>{{$t('policyBomb.agreement')}}</a>
-      <a class= "policy" :style="{color: color}" href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>{{$t('policyBomb.policy')}}</a>
+      <a class= "policy" :style="{color: color}" href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>- {{$t('policyBomb.agreement')}}</a> {{$t('policyBomb.symbol')}}
+      <a class= "policy" :style="{color: color}" href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>{{$t('policyBomb.policy')}} -</a>
   </div>
 </template>
 

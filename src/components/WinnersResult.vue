@@ -14,7 +14,7 @@
       </p>
       <p class="has-winner-result__title" v-else>
         {{$t('winnersResult.title2')}}
-        <b>{{$t('winnersResult.hint',respondence.winnerAmount)}}</b>
+        <b>{{$t('winnersResult.hint',{winnerAmount: respondence.winnerAmount})}}</b>
       </p>
       <div class="has-winner-result-wrap">
         <div class="has-winner-result-top">

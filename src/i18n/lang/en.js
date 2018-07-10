@@ -296,7 +296,7 @@ const locale = {
     },
     invite_pop: {
       text1: 'Invite  friends to earn cash quickly',
-      text2: 'Each invitation can earn up to ₹1000'
+      text2: 'Each invitation can earn up to ₹10000'
     }
   },
   reviveGuide: { // 复活卡说明页
@@ -314,11 +314,12 @@ const locale = {
     hint: 'Congrats! {winnerAmount} winners in this game!'
   },
   policyBomb: { // 隐私协议弹框
-    agreement: 'User Agreement &',
+    agreement: 'User Agreement',
     policy: 'Privacy Policy',
     describe1: 'In order to improve game experience and protect user data, please read the',
     describe2: 'and',
-    describe3: 'carefully before you start game!'
+    describe3: 'carefully before you start game!',
+    symbol: '&'
   },
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
