@@ -72,7 +72,7 @@
               </div>
               <div class="userinfo">
                 <p class="nickname">{{val.nick}}</p>
-                <p class="date">{{val.status === 1? $t('invite.rank_text5'): $t('invite.rank_text6')}}{{ ' ' + val.bd}}</p>
+                <p class="date">{{val.status === 1? $t('invite.rank_text5', {time: ' ' + val.bd}): $t('invite.rank_text6', {time: ' ' + val.bd})}}</p>
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
