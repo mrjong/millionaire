@@ -11,7 +11,7 @@
             <img :src="ruleList[idx].img" class="rule-item__wrap__img">
           </div>
           <div class="rule-item__title">
-            <span class="rule-item__title__index">{{idx}}</span>
+            <span class="rule-item__title__index">{{idx + 1}}</span>
             {{col.title}}
           </div>
           <p class="rule-item__text">

@@ -50,7 +50,7 @@ const locale = {
     your_blance: 'Your Balance',
     total_revenus: 'Total Revenus',
     history: 'History',
-    hint: 'You can cash out with the minimum balance of ₹150,The payouts will be made in 7 days after Approved',
+    hint: 'You can cash out with the minimum balance of ₹150.After Approved,the cash will be transferred in 7 days.',
     cash_out_btn: 'Cash Out'
   },
   balanceDetail: { // 余额详情
@@ -121,7 +121,7 @@ const locale = {
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [ // 规则说明
       '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
-      '2. The one you invite should play \'Go! Millionaire\', then you can receive the Rs. 10 rewards.',
+      '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
       '4. You have to submit your PAN ID when you withdraw;',
       '5. The cash will be transferred in 7 days;',
@@ -314,7 +314,7 @@ const locale = {
     hint: 'Congrats! {winnerAmount} winners in this game!'
   },
   policyBomb: { // 隐私协议弹框
-    agreement: 'User Agreement',
+    agreement: 'User Agreement &',
     policy: 'Privacy Policy',
     describe1: 'In order to improve game experience and protect user data, please read the',
     describe2: 'and',
