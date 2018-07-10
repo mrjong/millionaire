@@ -117,6 +117,7 @@ export default {
     margin: 25px auto;
     border: 1px solid #3e407d;
     border-radius: 26px;
+    overflow: hidden;
     .title {
       width: 514px;
       margin: 40px auto 53px;
