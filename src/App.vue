@@ -202,6 +202,7 @@ export default {
   },
   watch: {
     status: function (status, oldStatus) {
+      window.gameState = status
       if (status !== 1 && oldStatus === 1) {
         if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
           this.$router.push({path: '/main'})

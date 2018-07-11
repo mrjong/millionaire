@@ -76,6 +76,10 @@ http.interceptors.response.use(undefined, (err) => {
   if (/\/cmp\/q/.test(config.url)) { // 如果是轮询接口，直接返回
     return Promise.reject(err)
   }
+  // 如果游戏状态为初始状态 取消重试
+  if (window.gameState === 1 || !window.gameState) {
+    return Promise.reject(err)
+  }
 
   // 设置重置次数，默认为0
   config.__retryCount = config.__retryCount || 0
