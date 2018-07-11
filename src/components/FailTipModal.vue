@@ -5,10 +5,10 @@
       <div class="fail-tip-inner">
         <section class="fail-tip">
             <div class="fail-tip-text">
-            <p class="fail-tip-title">ARE YOU LOSING BONUS?</p>
-            <p class="fail-tip-desc">Invite friends to join and play<br>earn cash up to ₹10000!</p>
+            <p class="fail-tip-title">{{$('tip.failTipModal.title')}}</p>
+            <p class="fail-tip-desc">{{$('tip.failTipModal.desc')}}</p>
             </div>
-            <button @click="invite" class="btn-invite">Invite & Earn Cash</button>
+            <button @click="invite" class="btn-invite">{{$('tip.failTipModal.button')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -79,7 +79,7 @@ export default {
         flex-direction: column;
         justify-content: space-between;
     }
-    
+
     &-title {
       font-size: 36px;
       margin-bottom: 38px;
