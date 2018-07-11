@@ -3,8 +3,8 @@
     <div class="content">
       <p class="back iconfont icon-fanhui" @click="close"></p>
       <img src="../assets/images/cry-supa.png" class="img">
-      <p class="title">Sorry!</p>
-      <p class="hint">Currently, we don't provide any game service in EU, and it is only available in India.</p>
+      <p class="title">{{$t('blank.text1')}}</p>
+      <p class="hint">{{$t('blank.text2')}}</p>
     </div>
   </div>
 </template>
