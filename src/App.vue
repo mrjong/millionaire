@@ -102,7 +102,7 @@ export default {
         this.$store.commit(type._UPDATE, {
           isInputting: false
         })
-      } else {
+      } else if (this.windowInnerHeight - window.innerHeight >= 150) {
         this.$store.commit(type._UPDATE, {
           isInputting: true
         })
