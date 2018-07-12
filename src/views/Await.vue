@@ -100,6 +100,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
+    <new-announcement></new-announcement>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -124,6 +125,7 @@ import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
+import NewAnnouncement from '../components/NewAnnouncement'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -400,7 +402,8 @@ export default {
     ReminderBomb,
     PolicyBomb,
     lang,
-    PolicyLink
+    PolicyLink,
+    NewAnnouncement
   },
   watch: {
     lives: function (val, oldVal) {
