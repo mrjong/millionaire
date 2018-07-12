@@ -21,7 +21,7 @@
       <p class="balance-detail__operate__wrap__hint">{{$t('balanceDetail.noitce')}}</p>
     </div>
     <div>
-      <p class="balance-detail__operate__btn" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
+      <p :class="['balance-detail__operate__btn', {hide: isInputting}]" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
     </div>
     <policy-link :class="{hide: isInputting}"></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
