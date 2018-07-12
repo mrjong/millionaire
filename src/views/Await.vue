@@ -109,6 +109,15 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+    <div class="browser-tip" v-if="isShowBrowserTip">
+      <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
+      <div class="browser-tip__icon"></div>
+      <div class="browser-tip__text">
+        <p style="font-weight: bold;">Go!Millionaire Browser</p>
+        <p>Answer Quiz and Win Cash Up To ₹1,000,000!</p>
+      </div>
+      <a class="browser-tip__button" href="https://play.google.com/store/apps/details?id=com.millionaire.aries">Start Now</a>
+    </div>
   </div>
 </template>
 <script>
@@ -130,6 +139,7 @@ export default {
   name: 'Await',
   data () {
     return {
+      isShowBrowserTip: true,
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -728,6 +738,47 @@ export default {
       display: flex;
       justify-content: center;
       margin: 20px auto 0;
+    }
+
+    .browser-tip {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 133px;
+      background: url('../assets/images/browser-tip-bg.png') no-repeat;
+      background-size: cover;
+      color: #fff;
+      padding-right: 30px;
+      z-index: 1;
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        opacity: 0.5;
+      }
+      &__icon {
+        width: 110px;
+        height: 91px;
+        background: url('../assets/images/browser-tip-icon.png') no-repeat;
+        background-size: 100% 100%;
+        margin: 0 20px;
+      }
+      &__text {
+        line-height: 1.4;
+      }
+      &__button {
+        color: #fff;
+        width: 175px;
+        height: 58px;
+        line-height: 58px;
+        text-align: center;
+        background: url('../assets/images/browser-tip-button.png') no-repeat;
+        background-size: 100% 100%;
+      }
     }
   }
   .bottom-text{
