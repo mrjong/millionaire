@@ -40,7 +40,7 @@ import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
-import NewAnnouncement from '../components/NewAnnouncement'
+// import NewAnnouncement from '../components/NewAnnouncement'
 // import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
@@ -122,8 +122,7 @@ export default {
     Compere,
     BalanceMark,
     FailTipInvite,
-    lang,
-    NewAnnouncement
+    lang
   }
 }
 </script>
