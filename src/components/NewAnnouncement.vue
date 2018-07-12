@@ -9,8 +9,6 @@
 import utils from '../assets/js/utils'
 export default {
   name: 'NewAnnouncement',
-  props: {
-  },
   data () {
     return {
       isClose: true
@@ -24,12 +22,9 @@ export default {
       return utils.storage.get('newAnnouncement')
     }
   },
-  mounted () {
-  },
   methods: {
     close () {
       this.isClose = false
-      console.log(utils.storage.get('newAnnouncement'))
       utils.storage.set('newAnnouncement', utils.storage.get('newAnnouncement') + 1)
     }
   }
