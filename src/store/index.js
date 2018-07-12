@@ -66,7 +66,8 @@ export default new Vuex.Store({
     isAgreePolicy: true, // 是否同意过协议
     isRemider: false, // 是否订阅过消息
     lang: i18n.locale, // 本地语言
-    isInputting: false // 是否正在输入文字
+    isInputting: false, // 是否正在输入文字
+    isShowNewbieTask: false
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -94,7 +95,8 @@ export default new Vuex.Store({
     isAgreePolicy: (state) => state.isAgreePolicy,
     isRemider: (state) => state.isRemider,
     lang: (state) => state.lang,
-    isInputting: (state) => state.isInputting
+    isInputting: (state) => state.isInputting,
+    isShowNewbieTask: (state) => state.isShowNewbieTask
   },
   mutations: {
     /**

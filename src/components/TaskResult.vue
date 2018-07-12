@@ -1,17 +1,14 @@
 <template>
-  <div class="guide" v-if="FirstGuide && !isClose">
-    <span class="guide__close iconfont icon-cuowu" @click="isClose = true"></span>
-    <p class="important ">{{$t('reviveGuide.title')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text1')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text3')}}</p>
+  <div class="guide" v-if="!isClose">
+    <span class="guide__close iconfont icon-cuowu" @click="close"></span>
+    <p class="important ">Congratulations!</p>
+    <p class="guide__text">The novice task has been completed!</p>
+    <p class="guide__text">Answer the three questions and get a Extra Live!</p>
     <div class="guide__img">
       <img src="../assets/images/light.png" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
-    <div class="guide__btn" @click="toShareDetail">
-      <p class="guide__btn__icon">+1</p>
-      {{$t('reviveGuide.btn')}}</div>
+    <div class="guide__btn get-more" @click="getExtraLift">Get More Extra Life</div>
   </div>
 </template>
 
@@ -19,8 +16,9 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
+import * as api from '../assets/js/api'
 export default {
-  name: 'ReviveGuide',
+  name: 'TaskResult',
   props: {
   },
   data () {
@@ -36,27 +34,43 @@ export default {
     })
   },
   mounted () {
-    if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
-      this.FirstGuide = true
-      utils.storage.set('millionaire-NoFirstGuide', true)
-    } else {
-      this.FirstGuide = false
-    }
-    // 显示之后禁止屏幕滚动
-    if (this.FirstGuide) {
-      this.freeze()
-    } else {
-      this.restore()
-    }
   },
   methods: {
-    toShareDetail () {
+    close () {
+      this.isClose = true
+      if (utils.isOnline) {
+        this.reportLift()
+      }
+      this.$router.push({path: '/'})
+    },
+    getExtraLift () {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
-      // 跳新手任务
-      this.$store.commit(type._UPDATE, {
-        isShowNewbieTask: true
+      if (utils.isOnline) {
+        this.reportLift()
+        this.$router.push({path: '/'})
+      } else {
+        utils.login(() => {
+          utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
+          this.$store.dispatch(type._INIT)
+          this.reportLift()
+          this.$router.push({path: '/'})
+        })
+      }
+    },
+    reportLift () {
+      // 上报得复活卡
+      this.isClose = true
+      api.doTaskToLife().then(({data}) => {
+        // if (data.result === 1 && data.code === 0) {
+        //   // 上报成功
+        // } else {
+
+        // }
       })
+    },
+    earnCash  () {
+      this.$router.push({path: '/invite'})
     },
     freeze () {
       document.querySelector('#app').style.overflow = 'hidden'
@@ -162,6 +176,9 @@ export default {
         font-size: 22px;
         margin-right: 15px;
       }
+    }
+    .get-more{
+      background-color: #e03c79
     }
     .important{
       color: #e03c79;
