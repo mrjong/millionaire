@@ -1,22 +1,17 @@
 <template>
   <div class="contact-container">
     <div class="header">
-      <p class="title">Contact Us</p>
+      <p class="title">{{$t('contact.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
     </div>
-    <div class="describe">
-      If you have any question, or you want to delete your account permanently, feel free to contact us by the following methods:
-    </div>
+    <div class="describe">{{$t('contact.describe')}}</div>
     <div class="contact-way">
       <p class="method" v-for="(val, idx) in contactList" :key="idx" @click="contact(val.className)">
         <span :class="val.className"></span>
         {{val.text}}
       </p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link class="policy"></policy-link>
   </div>
 </template>
 
@@ -24,6 +19,7 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
+import PolicyLink from '../components/PolicyLink'
 export default {
   name: 'Contact',
   data () {
@@ -32,19 +28,19 @@ export default {
       contactList: [
         {
           className: 'mail',
-          text: 'gomillionaire@apusapps.com'
+          text: this.$t('contact.email')
         },
         {
           className: 'fb',
-          text: 'Facebook'
+          text: this.$t('contact.fb')
         },
         {
           className: 'twitter',
-          text: 'Twitter'
+          text: this.$t('contact.twitter')
         },
         {
           className: 'ins',
-          text: 'Instagram'
+          text: this.$t('contact.ins')
         }
       ]
     }
@@ -82,7 +78,6 @@ export default {
             window.location.href = 'https://www.instagram.com/apusgomillionaire/'
           }, 5)
           window.location.href = 'instagram://user?username=apusgomillionaire'
-          console.log('sss')
         }
       }
     }
@@ -91,7 +86,8 @@ export default {
     utils.statistic('contact_page', 0, {}, 'user_profile_page')
   },
   components: {
-    loading
+    loading,
+    PolicyLink
   }
 }
 </script>
@@ -103,6 +99,7 @@ export default {
     padding: 3.7% 3.7% 0;
     display: flex;
     flex-direction: column;
+    position: relative;
     .header {
       width: 100%;
       min-height: 51.5px;
@@ -177,18 +174,11 @@ export default {
         }
       }
     }
-    .bottom-text{
-      width: 100%;
+    .policy{
       position: absolute;
-      bottom: 30px;
+      bottom: 10px;
       left: 50%;
-      transform: translate(-50%,0);
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
+      transform: translate(-50%, 0);
     }
   }
 </style>

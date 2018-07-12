@@ -3,9 +3,9 @@
     <span class="iconfont icon-cuowu close" @click="reportPolicy"></span>
     <div class="content">
       <span class="iconfont icon-laba horn"></span>
-      In order to improve game experience and protect user data, please read the
-      <span class="policy-link" @click="reportPolicy('service')">User Agreement </span> and
-      <span class="policy-link" @click="reportPolicy('privacy')"> Privacy Policy </span>carefully before you start game!
+      {{$t('policyBomb.describe1')}}
+      <span class="policy-link" @click="reportPolicy('service')"> {{$t('policyBomb.agreement')}} </span> {{$t('policyBomb.describe2')}}
+      <span class="policy-link" @click="reportPolicy('privacy')"> {{$t('policyBomb.agreement')}} </span> {{$t('policyBomb.describe3')}}
     </div>
   </div>
 </template>

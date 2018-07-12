@@ -1,6 +1,7 @@
 /* global BUILD_ENV VERSION */
 // BUILD_ENV webpack define
 import axios from 'axios'
+import i18n from '../../i18n'
 export const env = BUILD_ENV || 'prod'
 export const host = {
   local: 'https://mock.apuscn.com/mock/30/millionaire',
@@ -49,8 +50,8 @@ const http = axios.create({
 
 http.interceptors.request.use((config) => {
   const {params = {}, data = {}} = config
-  config.params = {...params, timestamp: Date.now()}
-  config.data = {...data, timestamp: Date.now()}
+  config.params = {...params, timestamp: Date.now(), lang: i18n.locale}
+  config.data = {...data, timestamp: Date.now(), lang: i18n.locale}
   if (config.baseURL === accountHost[env]) {
     // 如果是账号域名,请求数据类型转换为formData
     config.transformRequest = [function (data) {
@@ -73,6 +74,10 @@ http.interceptors.response.use(undefined, (err) => {
   // 判断是否配置了重试
   if (!config || !config.retry) return Promise.reject(err)
   if (/\/cmp\/q/.test(config.url)) { // 如果是轮询接口，直接返回
+    return Promise.reject(err)
+  }
+  // 如果游戏状态为初始状态 取消重试
+  if (window.gameState === 1 || !window.gameState) {
     return Promise.reject(err)
   }
 

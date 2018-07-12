@@ -1,7 +1,7 @@
 <template>
   <div class="login-container" @click="showCountryList = false">
     <header>
-      <p class="title">Sign Up</p>
+      <p class="title">{{$t('login.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
     </header>
     <section class="login">
@@ -13,28 +13,23 @@
       <section class="phone inputItem">
         <!-- 手机号 -->
         <span class="iconfont icon-shouji"></span>
-        <input type="number" placeholder="Enter Your Phone Number" v-model="phoneNumber">
+        <input type="number" :placeholder="$t('login.tel_tip')" v-model="phoneNumber">
       </section>
       <section class="code inputItem">
         <!-- 验证码 -->
         <span class="iconfont icon-yanzhengma"></span>
-        <input type="text" placeholder="Enter Verification Code " v-model="code" @keyup.enter="login">
+        <input type="text" :placeholder="$t('login.code_tip')" v-model="code" @keyup.enter="login">
         <button class="send" :class="{'send-disable': disableGetCode}" :disabled="disableGetCode" @click="sendCode">
-          <span v-if="!disableGetCode">Send</span>
+          <span v-if="!disableGetCode">{{$t('login.send_btn')}}</span>
           <span v-else>{{restResetTime}}s</span>
         </button>
       </section>
       <!-- 错误信息 -->
       <p class="errorMsg">{{errorMsg}}</p>
-      <button class="btn-login" @click="login">Sign up</button>
-      <p class="policy">
-        Notice: The mobile number will only be used to receive the SMS verification code from Tencent Cloud.
-      </p>
+      <button class="btn-login" @click="login">{{$t('login.login_btn')}}</button>
+      <p class="policy">{{$t('login.notice')}}</p>
       <img src="../assets/images/apus-logo-white.png" :class="['login-container__footer', {hide: isInputting}]">
-      <p :class="['bottom-text', {hide: isInputting}]">
-        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-        <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-      </p>
+      <policy-link class="bottom" :class="{hide: isInputting}"></policy-link>
     </section>
     <country-list v-model="showCountryList"></country-list>
     <loading v-if="loading"></loading>
@@ -47,6 +42,7 @@ import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import loading from '../components/Loading.vue'
 import CountryList from '../components/CountryList.vue'
+import PolicyLink from '../components/PolicyLink'
 import { register, signInByPhone } from '../assets/js/api'
 let timer = null
 export default {
@@ -80,10 +76,10 @@ export default {
      */
     loginValidate () {
       if (!this.phoneNumber) {
-        this.error('Please enter a right phone number.')
+        this.error(this.$t('login.login_pop.text1'))
         return false
       } else if (!this.code) {
-        this.error('Wrong verification code, please try again.')
+        this.error(this.$t('login.login_pop.text2'))
         return false
       }
       return true
@@ -110,19 +106,19 @@ export default {
             }
             case 20002: {
               utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
-              this.error('Wrong verification code, please try again.')
+              this.error(this.$t('login.login_pop.text2'))
               break
             }
             default: {
               utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
-              this.error('Fail to verify the code, please try again. ')
+              this.error(this.$t('login.login_pop.text3'))
               console.log('手机验证码验证失败:', data.error_msg)
             }
           }
           this.loading = false
         }, (err) => {
           utils.statistic('send_code', 1, {result_code_s: '0'}, 'sign_up')
-          this.error('Fail to verify the code, please try again. ')
+          this.error(this.$t('login.login_pop.text3'))
           console.log('手机验证码验证出错', err)
         })
       }
@@ -149,7 +145,7 @@ export default {
      */
     sendCodeValidate () {
       if (!this.phoneNumber) {
-        this.error('Please enter a right phone number.')
+        this.error(this.$t('login.login_pop.text1'))
         return false
       }
       return true
@@ -185,16 +181,16 @@ export default {
               break
             }
             case 40022: {
-              this.error('Sending the code too often. Please verify later.')
+              this.error(this.$t('login.login_pop.text4'))
               break
             }
             default: {
-              this.error('Fail to send, please try again.')
+              this.error(this.$t('login.login_pop.text5'))
               console.log('发送验证码失败：', data.error_msg)
             }
           }
         }, err => {
-          this.error('Fail to send, please try again.')
+          this.error(this.$t('login.login_pop.text5'))
           console.log('发送验证码出错：', err)
         })
       }
@@ -217,12 +213,8 @@ export default {
   },
   components: {
     loading,
-    CountryList
-  },
-  watch: {
-    isInputting (val) {
-      console.log(val)
-    }
+    CountryList,
+    PolicyLink
   }
 }
 </script>
@@ -358,16 +350,14 @@ export default {
       transform: translateX(-50%);
     }
   }
-  .bottom-text{
-      width: 100%;
-      position: absolute;
-      bottom: 10px;
-      margin: 25px 0 15px;
-      font: 200 24px 'Roboto', Arial, serif;
-      color: #fff;
-      text-align: center;
-      a{
-        color:#fff;
-      }
+  .hide {
+    visibility: hidden;
+  }
+  .bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 </style>
