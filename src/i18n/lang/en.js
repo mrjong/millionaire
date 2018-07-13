@@ -389,7 +389,7 @@ const locale = {
     downBrowser: {
       title: 'Try \'Go!Millionaire Browser\' app to win cash easily.',
       desc: 'Play QUIZ and win up to ₹1,000,000!',
-      btn: 'Try It Now'
+      btn: 'Open Now'
     },
     failTipModal: {
       title: 'ARE YOU LOSING BONUS?',

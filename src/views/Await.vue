@@ -110,12 +110,12 @@
     </balance-mark>
     <div class="browser-tip" v-if="isShowBrowserTip">
       <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
-      <div class="browser-tip__icon"></div>
+      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"></img>
       <div class="browser-tip__text">
-        <p style="font-weight: bold;">{{$('tip.downBrowser.title')}}</p>
-        <p>{{$('tip.downBrowser.desc')}}</p>
+        <p style="font-weight: bold;">{{$t('tip.downBrowser.title')}}</p>
+        <p>{{$t('tip.downBrowser.desc')}}</p>
       </div>
-      <a class="browser-tip__button" href="javascript:;" @click="downBrowser">{{$('tip.downBrowser.btn')}}</a>
+      <a class="browser-tip__button ellipsis-1" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
     </div>
   </div>
 </template>
@@ -140,7 +140,7 @@ export default {
   name: 'Await',
   data () {
     return {
-      isShowBrowserTip: true,
+      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -209,9 +209,9 @@ export default {
   methods: {
     downBrowser () {
       setTimeout(function () {
-      window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D'+ '334005'
-    }, 500);
-      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href);
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
+      }, 500)
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href)
     },
     // 按钮打点
     btnStatistic (destination) {
@@ -800,12 +800,10 @@ export default {
         right: 15px;
         opacity: 0.5;
       }
-      &__icon {
-        width: 110px;
-        height: 91px;
-        background: url('../assets/images/browser-tip-icon.png') no-repeat;
-        background-size: 100% 100%;
-        margin: 0 20px;
+      img {
+        width: 90px;
+        height: 90px;
+        margin: 0 10px;
       }
       &__text {
         line-height: 1.4;
@@ -818,6 +816,7 @@ export default {
         text-align: center;
         background: url('../assets/images/browser-tip-button.png') no-repeat;
         background-size: 100% 100%;
+        margin-top: 10px;
       }
     }
   }
