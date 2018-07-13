@@ -110,7 +110,7 @@
     </balance-mark>
     <div class="browser-tip" v-if="isShowBrowserTip">
       <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
-      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"></img>
+      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png" />
       <div class="browser-tip__text">
         <p style="font-weight: bold;">{{$t('tip.downBrowser.title')}}</p>
         <p>{{$t('tip.downBrowser.desc')}}</p>
@@ -791,7 +791,7 @@ export default {
       background: url('../assets/images/browser-tip-bg.png') no-repeat;
       background-size: cover;
       color: #fff;
-      padding-right: 30px;
+      padding-right: 10px;
       z-index: 1;
 
       .close {
@@ -806,17 +806,24 @@ export default {
         margin: 0 10px;
       }
       &__text {
+        width: 68%;
         line-height: 1.4;
+        font: 200 24px 'Roboto,Arial,serif'
       }
       &__button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translate(0,-50%);
         color: #fff;
-        width: 175px;
+        width: 155px;
         height: 58px;
-        line-height: 58px;
         text-align: center;
         background: url('../assets/images/browser-tip-button.png') no-repeat;
         background-size: 100% 100%;
         margin-top: 10px;
+        font: 24px 'Roboto,Arial,serif';
+        line-height: 58px;
       }
     }
   }
