@@ -386,6 +386,11 @@ const locale = {
       desp: 'Invite friends to join and play, earn cash  now!',
       btn: 'Invite & Earn Cash'
     },
+    downBrowser: {
+      title: 'Try \'Go!Millionaire Browser\' app to win cash easily.',
+      desc: 'Play QUIZ and win up to ₹1,000,000!',
+      btn: 'Try It Now'
+    },
     failTipModal: {
       title: 'ARE YOU LOSING BONUS?',
       desc: 'Invite friends to join and play earn cash up to ₹10000!',
