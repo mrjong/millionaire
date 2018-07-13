@@ -111,10 +111,10 @@
       <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
       <div class="browser-tip__icon"></div>
       <div class="browser-tip__text">
-        <p style="font-weight: bold;">Go!Millionaire Browser</p>
-        <p>Answer Quiz and Win Cash Up To ₹1,000,000!</p>
+        <p style="font-weight: bold;">{{$('tip.downBrowser.title')}}</p>
+        <p>{{$('tip.downBrowser.desc')}}</p>
       </div>
-      <a class="browser-tip__button" href="javascript:;" @click="downBrowser">Start Now</a>
+      <a class="browser-tip__button" href="javascript:;" @click="downBrowser">{{$('tip.downBrowser.btn')}}</a>
     </div>
   </div>
 </template>

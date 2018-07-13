@@ -384,6 +384,11 @@ const locale = {
       title: 'Are You  Losing Bonus?',
       desp: 'Invite friends to join and play, earn cash  now!',
       btn: 'Invite & Earn Cash'
+    },
+    downBrowser: {
+      title: 'Try \'Go!Millionaire Browser\' app to win cash easily.',
+      desc: 'Play QUIZ and win up to ₹1,000,000!',
+      btn: 'Try It Now'
     }
   }
 }
