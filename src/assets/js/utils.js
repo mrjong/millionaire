@@ -72,7 +72,6 @@ const utils = {
       vm.$store.commit(_UPDATE, {
         isOnline: true
       })
-      isSyncInfo && utils.syncAccountInfo()
       addExtraLife().then(({data}) => {
         if (+data.result === 1 && +data.code === 0) {
           vm.$store.commit(_UPDATE, {
@@ -554,6 +553,14 @@ const utils = {
    */
   clearShareParams () {
     ma_js_i && ma_js_i.clearSharedParam && ma_js_i.clearSharedParam()
+  },
+  /**
+   * 是否安装应用
+   * @param {*} packageName 包名
+   * @returns
+   */
+  isInstall (packageName) {
+    return njordGame && njordGame.isPackageInstalled && njordGame.isPackageInstalled(packageName)
   }
 }
 
