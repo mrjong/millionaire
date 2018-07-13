@@ -188,11 +188,12 @@ export const DailyShare = function () {
   })
 }
 
-// 首次登陆增加额外生命
-export const addExtraLife = function () {
+// 增加额外生命
+export const addExtraLife = function (type = 0) {
   return axios.post(api.addExtraLife, {
     app_id: utils.app_id,
-    client_id: utils.clientId
+    client_id: utils.clientId,
+    tp: type
   })
 }
 
@@ -432,6 +433,7 @@ export const uploadAvatar = function (pic) {
   })
 }
 
+// 刷新个人信息缓存
 export const updateAvatarCache = function () {
   return axios.get(api.updateAvatarCache, {
     params: {
@@ -441,6 +443,7 @@ export const updateAvatarCache = function () {
   })
 }
 
+// 取消提醒
 export const cancelReminder = function () {
   return axios.post(api.cancelReminder, {
     app_id: utils.app_id,

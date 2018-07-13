@@ -4,7 +4,7 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
-import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
+import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo, addExtraLife} from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
@@ -73,6 +73,13 @@ const utils = {
         isOnline: true
       })
       isSyncInfo && utils.syncAccountInfo()
+      addExtraLife().then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          vm.$store.commit(_UPDATE, {
+            lives: +data.data || 0
+          })
+        }
+      })
       callback()
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
