@@ -5,7 +5,7 @@
     <section class="rank-item_info flex-box flex-align-center">
       <img class="avatar" :src="avatar" alt="">
       <span class="name ellipsis-1">{{name}}</span>
-      <span class="money" v-if="isInList">{{currencyType}}{{amount}}</span>
+      <span class="money ellipsis-1" v-if="isInList">{{currencyType}}{{amount}}</span>
       <span class="notInList" v-else>{{$t('anwser_rank.not_on_list')}}</span>
     </section>
   </div>
@@ -76,13 +76,17 @@ export default {
         font: 300 28px 'Roboto', Arial, serif;
         color: #241262;
         margin-left: 31px;
-        max-width: 330px;
+        max-width: 300px;
       }
       .money, .notInList {
         font: 400 24px/92px 'Roboto Condensed', Arial, serif;
         color: #ffb227;
         position: absolute;
         right: 2%;
+      }
+
+      .money {
+        max-width: 140px;
       }
 
       .notInList {

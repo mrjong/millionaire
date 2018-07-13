@@ -85,6 +85,7 @@ export default {
      * 轮播
      */
     swiper () {
+      clearInterval(timer)
       const {listSize, winnerList} = this
       let pointer = listSize
       this.list = this.winnerList.slice(pointer - listSize, pointer)
@@ -117,6 +118,7 @@ export default {
     margin: 25px auto;
     border: 1px solid #3e407d;
     border-radius: 26px;
+    overflow: hidden;
     .title {
       width: 514px;
       margin: 40px auto 53px;

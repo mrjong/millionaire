@@ -9,7 +9,10 @@
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-         <img :src="userInfo.avatar" class="balance-wrap__contain__wrap__img">
+        <div class="head" @click="login">
+          <img :src="userInfo.avatar" class="balance-wrap__contain__wrap__img">
+          <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+        </div>
         <p class="balance-wrap__contain__wrap__mytitle">{{$t('balance.your_blance')}}</p>
         <div class="balance-wrap__contain__wrap__mybalance">
           <p class="balance-wrap__contain__wrap__symbol">
@@ -36,6 +39,7 @@ import Loading from '../components/Loading'
 import utils from '../assets/js/utils'
 import LoginTip from '../components/LoginTip'
 import PolicyLink from '../components/PolicyLink'
+import * as type from '../store/type'
 export default {
   name: 'Balance',
   data () {
@@ -68,6 +72,16 @@ export default {
     },
     history () {
       utils.statistic('take_cash_page', 1, {to_destination_s: 'withdrawal_history'}, 'take_cash_page')
+    },
+    login () {
+      utils.statistic('user_login', 1, {'to_destination_s': utils.isOnline ? 'user_profile_page' : 'sigh_up'})
+      if (utils.isOnline) {
+        this.$router.push({path: '/user-center'})
+      } else {
+        utils.login(() => {
+          this.$store.dispatch(type._INIT)
+        })
+      }
     }
   },
   components: {
@@ -141,13 +155,28 @@ export default {
       box-sizing: border-box;
       position: relative;
       color: #241262;
-      &__img {
+      .head {
         position: absolute;
         width: 103px;
         height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;
+        overflow: hidden;
+        img {
+          width: 103px;
+          height: 103px;
+        }
+       .login-text{
+          width: 100%;
+          height: 45%;
+          padding-top: 10px;
+          position: absolute;
+          bottom: 0;
+          color: #ffffff;
+          text-align: center;
+          font: 24px 'Roboto Condensed', Arial, sans-serif;
+        }
       }
       &__symbol {
         font-family: 'Roboto Condensed', Arial, serif;

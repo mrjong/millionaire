@@ -50,7 +50,7 @@ const locale = {
     your_blance: 'Your Balance',
     total_revenus: 'Total Revenus',
     history: 'History',
-    hint: 'You can cash out with the minimum balance of ₹150,The payouts will be made in 7 days after Approved',
+    hint: 'You can cash out with the minimum balance of ₹150.After Approved,the cash will be transferred in 7 days.',
     cash_out_btn: 'Cash Out'
   },
   balanceDetail: { // 余额详情
@@ -92,7 +92,7 @@ const locale = {
     },
     delete_pop: { // 删除记录弹框
       delete_withdwawal: 'Are you sure you want to delete all the withdrawal history?',
-      delte_cash: 'Are you sure you want to delete all the cash history?',
+      delete_cash: 'Are you sure you want to delete all the cash history?',
       delete_faild: 'You failed to delete the Withdrawal History.'
     }
   },
@@ -121,7 +121,7 @@ const locale = {
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [ // 规则说明
       '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
-      '2. The one you invite should play \'Go! Millionaire\', then you can receive the Rs. 10 rewards.',
+      '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
       '4. You have to submit your PAN ID when you withdraw;',
       '5. The cash will be transferred in 7 days;',
@@ -296,7 +296,7 @@ const locale = {
     },
     invite_pop: {
       text1: 'Invite  friends to earn cash quickly',
-      text2: 'Each invitation can earn up to ₹1000'
+      text2: 'Each invitation can earn up to ₹10000'
     }
   },
   reviveGuide: { // 复活卡说明页
@@ -318,8 +318,10 @@ const locale = {
     policy: 'Privacy Policy',
     describe1: 'In order to improve game experience and protect user data, please read the',
     describe2: 'and',
-    describe3: 'carefully before you start game!'
+    describe3: 'carefully before you start game!',
+    symbol: '&'
   },
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear Crorepati, enter <span class="highlight">\'gomillionairegp\'</span> to get free extra life. Win cash ₹100000 at 10PM today!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
