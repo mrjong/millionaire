@@ -6,7 +6,7 @@
       :key="user.userId"
       >
         <div class="item_pic"><img :src="user.userPic" alt=""></div>
-        <div class="item_name ellipsis-1">{{user.userName}}</div>
+        <p class="item_name ellipsis-1">{{user.userName}}</p>
       </div>
     </div>
   </div>
@@ -80,8 +80,9 @@ export default {
     }
 
     .item_name {
+      font: normal 24px/100px 'Roboto', Arial, serif;
       color: #fff;
-      max-width: 100px;
+      max-width: 130px;
       float: left;
     }
 
