@@ -57,7 +57,12 @@ const gameProcess = {
     // 从本地同步进度信息
     const cachedProcess = utils.storage.get('millionaire-process')
     if (cachedProcess && cachedProcess.id === id) {
-      this.update(cachedProcess)
+      this.update({...cachedProcess,
+        ...{
+          questions,
+          beginHostMsgList,
+          resultHostMsgList
+        }})
     } else {
       this.stop()
       utils.storage.remove('millionaire-process')
@@ -68,6 +73,7 @@ const gameProcess = {
     questionMsgProcess.init(this.data, $store)
     resultMsgProcess.init(this.data, $store)
     resultProcess.init(this.data, $store)
+    this.cacheProcessInfo()
     // 若离线模式已经开启，则直接开始运行
     if (this.data.offlineMode) {
       this.run()

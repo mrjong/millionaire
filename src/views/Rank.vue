@@ -3,8 +3,8 @@
     <header class="flex-box flex-justify-center flex-align-center">
       <button class="back iconfont icon-fanhui" @click="back">
       </button>
-      <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">Weekly Rank</section>
-      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">All Time</section>
+      <section class="tab-week" :class="{selected: mode === 'week'}" @click="mode='week'">{{$t('anwser_rank.week_tap')}}</section>
+      <section class="tab-total" :class="{selected: mode === 'total'}" @click="mode='total'">{{$t('anwser_rank.total_tap')}}</section>
     </header>
     <!-- 前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
@@ -13,7 +13,7 @@
           <img class="avatar" :src="rankInfo[mode].list[1].upic" alt="">
           <img class="decorate" src="../assets/images/rank-second.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[1].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[1].amount}}</p>
         </div>
       </section>
       <section class="first" >
@@ -21,7 +21,7 @@
           <img class="avatar" :src="rankInfo[mode].list[0].upic" alt="">
           <img class="decorate" src="../assets/images/rank-first.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[0].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[0].amount}}</p>
         </div>
       </section>
       <section class="third" >
@@ -29,7 +29,7 @@
           <img class="avatar" :src="rankInfo[mode].list[2].upic" alt="">
           <img class="decorate" src="../assets/images/rank-third.png" alt="">
           <p class="name ellipsis-1">{{rankInfo[mode].list[2].nick}}</p>
-          <p class="money">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
+          <p class="money ellipsis-1">{{currencyType}}{{rankInfo[mode].list[2].amount}}</p>
         </div>
       </section>
     </div>

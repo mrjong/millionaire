@@ -4,30 +4,30 @@
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
       <router-link to="/balance-record" @click="history" v-if="isOnline">
-        <p class="balance-wrap__title__history">History</p>
+        <p class="balance-wrap__title__history">{{$t('balance.history')}}</p>
       </router-link>
     </div>
     <div class="balance-wrap__contain">
       <div class="balance-wrap__contain__wrap">
-         <img :src="userInfo.avatar" class="balance-wrap__contain__wrap__img">
-        <p class="balance-wrap__contain__wrap__mytitle">Your Balance</p>
+        <div class="head" @click="login">
+          <img :src="userInfo.avatar" class="balance-wrap__contain__wrap__img">
+          <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+        </div>
+        <p class="balance-wrap__contain__wrap__mytitle">{{$t('balance.your_blance')}}</p>
         <div class="balance-wrap__contain__wrap__mybalance">
           <p class="balance-wrap__contain__wrap__symbol">
             {{userInfo.currencyType}}{{isOnline ? userInfo.balanceShow : userInfo.clientBalanceShow}}
           </p>
         </div>
-        <p class="balance-wrap__contain__wrap__totaltitle">Total Revenus</p>
+        <p class="balance-wrap__contain__wrap__totaltitle">{{$t('balance.total_revenus')}}</p>
         <p class="balance-wrap__contain__wrap__totalbalance">{{userInfo.currencyType}}{{userInfo.incomeShow}}</p>
       </div>
-      <p class="balance-hint">(You can cash out with the minimum balance of ₹150,The payouts will be made in 7 days after Approved)</p>
+      <p class="balance-hint">{{$t('balance.hint')}}</p>
     </div>
     <div class="balance-wrap__operate">
-      <p class="balance-wrap__operate__btn" @click="cashOut">Cash Out</p>
+      <p class="balance-wrap__operate__btn" @click="cashOut">{{$t('balance.cash_out_btn')}}</p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link></policy-link>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
@@ -38,6 +38,8 @@ import {mapGetters} from 'vuex'
 import Loading from '../components/Loading'
 import utils from '../assets/js/utils'
 import LoginTip from '../components/LoginTip'
+import PolicyLink from '../components/PolicyLink'
+import * as type from '../store/type'
 export default {
   name: 'Balance',
   data () {
@@ -70,11 +72,22 @@ export default {
     },
     history () {
       utils.statistic('take_cash_page', 1, {to_destination_s: 'withdrawal_history'}, 'take_cash_page')
+    },
+    login () {
+      utils.statistic('user_login', 1, {'to_destination_s': utils.isOnline ? 'user_profile_page' : 'sigh_up'})
+      if (utils.isOnline) {
+        this.$router.push({path: '/user-center'})
+      } else {
+        utils.login(() => {
+          this.$store.dispatch(type._INIT)
+        })
+      }
     }
   },
   components: {
     Loading,
-    LoginTip
+    LoginTip,
+    PolicyLink
   }
 }
 </script>
@@ -142,12 +155,28 @@ export default {
       box-sizing: border-box;
       position: relative;
       color: #241262;
-      &__img {
+      .head {
         position: absolute;
         width: 103px;
+        height: 103px;
         border-radius: 50%;
         top: -51px;
         right: 55px;
+        overflow: hidden;
+        img {
+          width: 103px;
+          height: 103px;
+        }
+       .login-text{
+          width: 100%;
+          height: 45%;
+          padding-top: 10px;
+          position: absolute;
+          bottom: 0;
+          color: #ffffff;
+          text-align: center;
+          font: 24px 'Roboto Condensed', Arial, sans-serif;
+        }
       }
       &__symbol {
         font-family: 'Roboto Condensed', Arial, serif;
@@ -205,15 +234,6 @@ export default {
       text-align: center;
       font: 300 36px/94px 'Roboto', Arial, serif;
     }
-  }
-}
-.bottom-text{
-  margin-bottom: 25px;
-  font: 200 24px 'Roboto', Arial, serif;
-  color: #fff;
-  text-align: center;
-  a{
-    color:#fff;
   }
 }
 </style>

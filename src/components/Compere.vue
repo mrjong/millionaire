@@ -5,7 +5,8 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__notice">
-      <img src="../assets/images/small-awiat-title.png">
+      <img src="../assets/images/small-awiat-title-hi.png" v-if="$i18n.locale === 'hi'">
+      <img src="../assets/images/small-awiat-title-en.png" v-else>
     </div>
     <!-- <div class="compere-container__supa">
        <p class="supa" :style="supaStyle"></p>
@@ -15,6 +16,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
+import i18n from '../i18n'
 export default {
   name: 'Compere',
   data () {
@@ -23,7 +25,8 @@ export default {
       msgTimer: null,
       supaOrder: 1,
       compereMsg: `Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`,
-      supaStyle: `background-position: 0% 0%;`
+      supaStyle: `background-position: 0% 0%;`,
+      lang: i18n.locale
     }
   },
   computed: {
@@ -74,14 +77,14 @@ export default {
 .compere-container {
   min-height: 500px;
   box-sizing: border-box;
-  padding: 100px 0 0;
+  padding: 50px 0 0;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   &__text {
     width: 100%;
-    height: 200px;
+    height: 265px;
     color: #fed331;
     font: 500 40px/48px 'Roboto', Arial, serif;;
     padding: 0 30px 0 44px;

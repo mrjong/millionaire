@@ -102,7 +102,7 @@ export default {
         this.$store.commit(type._UPDATE, {
           isInputting: false
         })
-      } else {
+      } else if (this.windowInnerHeight - window.innerHeight >= 150) {
         this.$store.commit(type._UPDATE, {
           isInputting: true
         })
@@ -202,6 +202,7 @@ export default {
   },
   watch: {
     status: function (status, oldStatus) {
+      window.gameState = status
       if (status !== 1 && oldStatus === 1) {
         if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
           this.$router.push({path: '/main'})
