@@ -529,7 +529,6 @@ const utils = {
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
     if (isFbApp) {
-      console.log('isFbApp')
       window.location.href = 'fb://page/1814960232131059'
     } else {
       setTimeout(() => {

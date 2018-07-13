@@ -385,6 +385,11 @@ const locale = {
       title: 'Are You  Losing Bonus?',
       desp: 'Invite friends to join and play, earn cash  now!',
       btn: 'Invite & Earn Cash'
+    },
+    failTipModal: {
+      title: 'ARE YOU LOSING BONUS?',
+      desc: 'Invite friends to join and play earn cash up to ₹10000!',
+      button: 'Invite & Earn Cash'
     }
   }
 }

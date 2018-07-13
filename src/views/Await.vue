@@ -108,6 +108,7 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+
   </div>
 </template>
 <script>
@@ -131,6 +132,7 @@ export default {
   name: 'Await',
   data () {
     return {
+      // showFailTip: true,
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
