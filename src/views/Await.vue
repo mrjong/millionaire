@@ -207,7 +207,7 @@ export default {
   methods: {
     downBrowser () {
       setTimeout(function () {
-      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D'+ referrerId
+      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D'+ ''
     }, 500);
       window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href);
     },
