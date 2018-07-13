@@ -321,6 +321,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear Crorepati, enter <span class="highlight">\'gomillionairegp\'</span> to get free extra life. Win cash ₹100000 at 10PM today!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -389,6 +390,11 @@ const locale = {
       title: 'Try \'Go!Millionaire Browser\' app to win cash easily.',
       desc: 'Play QUIZ and win up to ₹1,000,000!',
       btn: 'Try It Now'
+    },
+    failTipModal: {
+      title: 'ARE YOU LOSING BONUS?',
+      desc: 'Invite friends to join and play earn cash up to ₹10000!',
+      button: 'Invite & Earn Cash'
     }
   }
 }
