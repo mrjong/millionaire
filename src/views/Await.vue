@@ -114,7 +114,7 @@
         <p style="font-weight: bold;">Go!Millionaire Browser</p>
         <p>Answer Quiz and Win Cash Up To ₹1,000,000!</p>
       </div>
-      <a class="browser-tip__button" href="https://play.google.com/store/apps/details?id=com.millionaire.aries">Start Now</a>
+      <a class="browser-tip__button" href="javascript:;" @click="downBrowser">Start Now</a>
     </div>
   </div>
 </template>
@@ -205,6 +205,12 @@ export default {
     utils.statistic('wait_page', 0)
   },
   methods: {
+    downBrowser () {
+      setTimeout(function () {
+      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D'+ referrerId
+    }, 500);
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href);
+    },
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
