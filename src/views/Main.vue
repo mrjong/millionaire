@@ -22,8 +22,9 @@
     <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
+    <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
   </div>
 </template>
 
@@ -31,6 +32,7 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import FailTipInvite from '../components/FailTipInvite'
+import FailTipModal from '../components/FailTipModal'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
@@ -39,6 +41,7 @@ import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
+// import NewAnnouncement from '../components/NewAnnouncement'
 // import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
@@ -120,7 +123,8 @@ export default {
     Compere,
     BalanceMark,
     FailTipInvite,
-    lang
+    lang,
+    FailTipModal
   }
 }
 </script>

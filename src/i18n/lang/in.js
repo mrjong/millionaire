@@ -321,7 +321,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>प्रिय करोड़पति, मुफ्त अतिरिक्त जीवन पाने के लिए <span class="highlight">\'gomillionairegp\'</span> दर्ज करें। विन नकद आज 10 पीएम पर रु100000!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now  >></a>',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
@@ -384,6 +384,16 @@ const locale = {
       title: 'क्या आप बोनस खो रहे हैं?',
       desp: 'दोस्तों को शामिल होने और खेलने के लिए आमंत्रित करें, अब नकद कमाएं!',
       btn: 'आमंत्रित करें और नकद कमाएं'
+    },
+    downBrowser: {
+      title: 'आसानी से नकदी जीतने के लिए “गो मिलियनेयर ब्राउज़र” ऐप का प्रयास करें।',
+      desc: 'प्रश्नोत्तरी खेलें और जीतें रु 1,000,000 तक।',
+      btn: 'अब खोलो'
+    },
+    failTipModal: {
+      title: 'क्या आप बोनस खो रहे हैं?',
+      desc: 'दोस्तों को शामिल होने और खेलने के लिए आमंत्रित करें₹10000 तक नकद कमाएं!',
+      button: 'आमंत्रित करें और नकद कमाएं'
     }
   }
 }

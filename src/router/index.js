@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
+import DoubleRewardCard from '@/views/DoubleRewardCard.vue'
 const SetQuestion = () => import('@/views/SetQuestion.vue')
 const SetQuestionResult = () => import('@/views/SetQuestionResult.vue')
 const Rule = () => import('@/views/Rule.vue')
@@ -112,6 +113,11 @@ const router = new Router({
       path: '/invite',
       name: 'invite',
       component: Invite
+    },
+    {
+      path: '/doubleRewardCard',
+      name: 'doubleRewardCard',
+      component: DoubleRewardCard
     }
     // {
     //   path: '/small-await',
