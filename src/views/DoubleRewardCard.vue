@@ -1,6 +1,12 @@
 <template>
   <div class="double-reward-card">
     <BackArrow class="double-reward-card__back"></BackArrow>
+      <div class="double-reward-rule">
+        <h2>HOW TO USE</h2>
+        <p>1. Double Prize Cards are only available after you won more than once at 10PM before today.</p>
+        <p>2. With it, you prize will double after you win at the 10PM game in 3 days.</p>
+        <p>3. A 'Doube Prize Card' can only be used after login, and it will expire after 3 days.</p>
+      </div>
       <div class="double-reward-list">
           <div class="double-reward-list_item"
           v-for="user in userList"
@@ -22,8 +28,7 @@ export default {
   name: 'DoubleRewardCard',
   data () {
     return {
-      userList: [
-      ]
+      userList: []
     }
   },
   components: {
@@ -48,30 +53,51 @@ export default {
 <style lang="less" scoped>
 .double-reward {
   position: relative;
+  &-rule {
+    width: 660px;
+    height: 470px;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0 20px 20px;
+    background-image: url('../assets/images/double-rule-bg.jpg');
+    background-size: cover;
+    color: #fff;
+
+    h2 {
+      text-align: center;
+      font-size: 32px;
+      margin: 34px 0 28px;
+      font-family: 'Roboto', Arial, serif;
+    }
+
+    p {
+      font: normal 28px/1.8 'Roboto', Arial, serif;
+    }
+  }
   &-card {
     width: auto;
     height: 1681px;
     background-image: url('../assets/images/double-reward-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    padding: 1200px 30px 0;
+    padding: 590px 30px 0;
   }
   &-card__back {
     position: absolute;
     top: 25px;
     left: 30px;
-    
   }
   &-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     width: 660px;
-    height: 480px;
+    height: 500px;
     background-color: rgba(255,255,255, .16);
     border-radius: 10px;
     padding: 10px 30px 0;
     overflow-y: scroll;
+    margin-top: 110px;
   }
 
   &-list_item {
@@ -98,7 +124,6 @@ export default {
       max-width: 130px;
       float: left;
     }
-
   }
 }
 </style>
