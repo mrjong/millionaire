@@ -44,6 +44,7 @@ import loading from '../components/Loading.vue'
 import CountryList from '../components/CountryList.vue'
 import PolicyLink from '../components/PolicyLink'
 import { register, signInByPhone } from '../assets/js/api'
+import awaitState from '../assets/js/game-state/state-end.js'
 let timer = null
 export default {
   name: 'Login',
@@ -58,7 +59,8 @@ export default {
       username: '',
       phoneNumber: '',
       code: '',
-      isAgree: true
+      isAgree: true,
+      isTaskEnd: 'isTaskEnd'
     }
   },
   computed: {
@@ -69,6 +71,10 @@ export default {
   },
   methods: {
     back () {
+      if (this.isTaskEnd) {
+        console.log('退出后停止游戏')
+        awaitState.run()
+      }
       this.$router.replace('/')
     },
     /**

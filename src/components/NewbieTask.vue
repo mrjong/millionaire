@@ -1,6 +1,6 @@
 <template>
-  <div class="task" v-if="!isClose">
-    <span class="task__close iconfont icon-cuowu" @click="isClose = true"></span>
+  <div class="task" v-if="isShowNewbieTask">
+    <span class="task__close iconfont icon-cuowu" @click="close"></span>
     <div class="task__content">
       <div class="bubble">
         <img src="../assets/images/bubble.png" class="bubble__img">
@@ -18,10 +18,9 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
-// import gameState from '../assets/js/game-state'
 import countDownState from '../assets/js/game-state/state-countDown.js'
 import gameProcess from '../assets/js/game-process'
-import questionMsgProcess from '../assets/js/game-process/question-hostMsg.js'
+// import questionMsgProcess from '../assets/js/game-process/question-hostMsg.js'
 
 export default {
   name: 'NewbieTask',
@@ -36,7 +35,8 @@ export default {
   computed: {
     ...mapGetters({
       status: 'status',
-      questionStatus: 'question_status'
+      questionStatus: 'question_status',
+      isShowNewbieTask: 'isShowNewbieTask'
     })
   },
   mounted () {
@@ -44,33 +44,38 @@ export default {
   methods: {
     close () {
       this.$store.commit(type._UPDATE, {
-        isShowNewbieTask: false
+        isShowNewbieTask: false,
+        isTaskRespondence: false
       })
     },
     doTask () {
-      this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       this.$store.commit(type._UPDATE, {
+        isShowNewbieTask: false,
+        isTaskRespondence: true,
         startTimeOffset: 10
       })
-      questionMsgProcess.run({
-        validTime: 500
+      this.$store.commit(type.QUESTION_UPDATE, {
+        watchingMode: false
       })
       gameProcess.update({
-        watchingMode: false,
         offlineMode: true,
+        currentIndex: 1,
+        isExitQuit: true,
         questions: [{
-          ji: '0', js: 1, jc: '1 + 1 =', jo: ['1', '2', '3'], restTime: 10
+          ji: '0', js: 1, jc: '1 + 1 =', jo: ['1', '2', '3'], ja: 'c81e728d9d4c2f636f067f89cc14862c', jd: ['1 + 1 = 2'], restTime: 10
         },
         {
-          ji: '1', js: 2, jc: '1 + 2 = ', jo: ['2', '3', '4'], restTime: 10
+          ji: '1', js: 2, jc: '1 + 2 = ', jo: ['2', '3', '4'], ja: 'eccbc87e4b5ce2fe28308fd9f2a7baf3', jd: ['1 + 2 = 3'], restTime: 10
         },
         {
-          ji: '2', js: 3, jc: '1 + 3 = ', jo: ['4', '5', '6'], restTime: 10
-        }]
+          ji: '2', js: 3, jc: '1 + 3 = ', jo: ['4', '5', '6'], ja: 'a87ff679a2f3e71d9181a67b7542122c', jd: ['1 + 3 = 4'], restTime: 10
+        }
+        ]
       })
+      utils.storage.remove('millionaire-process')
+      utils.storage.remove('millionaire-user-answer')
       countDownState.run()
-      // this.$router.push({path: '/newbie-main'})
     }
   }
 }

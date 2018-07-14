@@ -3,9 +3,10 @@ import { MESSAGE_ANSWER } from '../listener-type'
 import im from '../im'
 import utils from '../utils'
 import questionProcess from './question'
+import awaitState from '../game-state/state-end'
 import resultMsgProcess from './result-hostMsg'
 import { getAnswerSummary } from '../api'
-import { QUESTION_UPDATE } from '../../../store/type'
+import { QUESTION_UPDATE, _UPDATE } from '../../../store/type'
 
 /**
  * 游戏进度-题目答案
@@ -118,7 +119,7 @@ const answerProcess = {
    * 进入下一进度
    */
   next () {
-    const {questions = [], currentIndex} = this.data
+    const {questions = [], currentIndex, isExitQuit} = this.data
     if (currentIndex < questions.length) {
       questionProcess.run({
         currentIndex: currentIndex + 1,
@@ -126,11 +127,19 @@ const answerProcess = {
         answerSummary: null
       })
     } else {
-      resultMsgProcess.run({
-        validTime: 0,
-        answerSummary: null,
-        currentIndex
-      })
+      if (isExitQuit) {
+        // 监听新手任务结束
+        awaitState.update()
+        this.$store.commit(_UPDATE, {
+          isTaskEnd: true
+        })
+      } else {
+        resultMsgProcess.run({
+          validTime: 0,
+          answerSummary: null,
+          currentIndex
+        })
+      }
     }
   },
   /**

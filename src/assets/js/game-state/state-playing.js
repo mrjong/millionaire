@@ -22,7 +22,6 @@ const playingState = {
    */
   update () {
     // 如果已经被淘汰，打开弹窗提示
-    console.log('kdjkdjfklsdjfaaaaaaaa' + this.$store.getters.watchingMode)
     if (this.$store.getters.watchingMode) {
       this.$store.dispatch(_OPEN_DIALOG, {
         htmlTitle: i18n.t('tip.lateJoin.title'),

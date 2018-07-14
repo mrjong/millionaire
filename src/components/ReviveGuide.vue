@@ -1,6 +1,6 @@
 <template>
   <div class="guide" v-if="FirstGuide && !isClose">
-    <span class="guide__close iconfont icon-cuowu" @click="isClose = true"></span>
+    <span class="guide__close iconfont icon-cuowu" @click.stop="isClose = true"></span>
     <p class="important ">{{$t('reviveGuide.title')}}</p>
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text1')}}</p>
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>

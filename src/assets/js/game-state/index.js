@@ -141,7 +141,6 @@ const gameState = {
   run () {
     this.update()
     const {s: isPlaying, r: isInRoom, ta: task} = this.data
-    console.log('aaaaa')
     if (isPlaying) {
       gameProcess.init(this.data, this.$store, PROCESS_QUESTION)
       this.playingState.run()

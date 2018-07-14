@@ -19,7 +19,6 @@ const Blank = () => import('@/views/Blank.vue')
 // const Video = () => import('@/views/Video.vue')
 // const SamllAwait = () => import('@/views/SmallAwait.vue')
 const Invite = () => import('@/views/Invite.vue')
-const NewbieMain = () => import('@/views/NewbieMain.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -113,11 +112,6 @@ const router = new Router({
       path: '/invite',
       name: 'invite',
       component: Invite
-    },
-    {
-      path: '/newbie-main',
-      name: 'newbie-main',
-      component: NewbieMain
     }
     // {
     //   path: '/small-await',

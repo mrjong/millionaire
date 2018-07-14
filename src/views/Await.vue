@@ -100,7 +100,7 @@
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
-    <newbie-task v-if="isShowNewbieTask"></newbie-task>
+    <newbie-task></newbie-task>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -158,8 +158,7 @@ export default {
       code: 'code',
       isAgreePolicy: 'isAgreePolicy',
       isRemider: 'isRemider',
-      watchingMode: 'watchingMode',
-      isShowNewbieTask: 'isShowNewbieTask'
+      watchingMode: 'watchingMode'
     }),
     targetDate () {
       if (this.startTime === -1) {

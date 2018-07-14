@@ -17,6 +17,7 @@ import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import * as api from '../assets/js/api'
+import awaitState from '../assets/js/game-state/state-end.js'
 export default {
   name: 'TaskResult',
   props: {
@@ -41,20 +42,20 @@ export default {
       if (utils.isOnline) {
         this.reportLift()
       }
+      awaitState.run()
       this.$router.push({path: '/'})
     },
     getExtraLift () {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
+      this.$store.commit(type._UPDATE, {
+        isTaskEnd: true
+      })
       if (utils.isOnline) {
         this.reportLift()
-        this.$router.push({path: '/'})
       } else {
         utils.login(() => {
-          utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
-          this.$store.dispatch(type._INIT)
           this.reportLift()
-          this.$router.push({path: '/'})
         })
       }
     },
@@ -62,35 +63,8 @@ export default {
       // 上报得复活卡
       this.isClose = true
       api.doTaskToLife().then(({data}) => {
-        // if (data.result === 1 && data.code === 0) {
-        //   // 上报成功
-        // } else {
-
-        // }
+        awaitState.run()
       })
-    },
-    earnCash  () {
-      this.$router.push({path: '/invite'})
-    },
-    freeze () {
-      document.querySelector('#app').style.overflow = 'hidden'
-    },
-    restore () {
-      document.querySelector('#app').style.overflow = 'visible'
-    },
-    preventDefault (event) {
-      event.preventDefault()
-    }
-  },
-  destroyed () {
-    this.restore()
-  },
-  watch: {
-    // 关闭之后恢复屏幕滚动
-    isClose (val) {
-      if (val) {
-        this.restore()
-      }
     }
   }
 }
@@ -102,7 +76,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 111;
+    z-index: 1111;
     padding: 80px 40px 50px;
     background-color: rgba(0, 0, 0, 0.9);
     overflow: auto;

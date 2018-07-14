@@ -67,7 +67,10 @@ export default new Vuex.Store({
     isRemider: false, // 是否订阅过消息
     lang: i18n.locale, // 本地语言
     isInputting: false, // 是否正在输入文字
-    isShowNewbieTask: false
+    isShowNewbieTask: false,
+    isUserGame: false, // 登录用户是否是第一次答题
+    isTaskEnd: false, // 新手任务是否结束
+    isTaskRespondence: false // 是否显示新手任务组件
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -94,9 +97,12 @@ export default new Vuex.Store({
     initialState: (state) => state.initialState,
     isAgreePolicy: (state) => state.isAgreePolicy,
     isRemider: (state) => state.isRemider,
+    isUserGame: (state) => state.isUserGame,
     lang: (state) => state.lang,
     isInputting: (state) => state.isInputting,
-    isShowNewbieTask: (state) => state.isShowNewbieTask
+    isShowNewbieTask: (state) => state.isShowNewbieTask,
+    isTaskEnd: (state) => state.isTaskEnd,
+    isTaskRespondence: (state) => state.isTaskRespondence
   },
   mutations: {
     /**

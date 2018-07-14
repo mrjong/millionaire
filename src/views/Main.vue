@@ -19,9 +19,14 @@
     </div>
     <count-down v-if="status === 2"></count-down>
     <winners-result v-if="status === 4"></winners-result>
-    <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
+    <keep-alive>
+      <component v-bind:is="anwseredComponent" @fail-tip="failTip" @error="onError"></component>
+    </keep-alive>
+    <!-- <respondence @fail-tip="failTip" @error="onError" v-if="status === 3 && questionStatus !== 8 && !isTaskRespondence"></respondence> -->
+    <!-- <task-respondence v-show="status === 3 && questionStatus !== 8 && isTaskRespondence"></task-respondence> -->
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <task-result v-if="status === 3 && isTaskEnd"></task-result>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
   </div>
@@ -34,12 +39,13 @@ import FailTipInvite from '../components/FailTipInvite'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
+import TaskRespondence from '../components/TaskRespondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
-// import { _UPDATE, _INIT } from '../store/type'
+import TaskResult from '../components/TaskResult'
 export default {
   name: 'Main',
   data () {
@@ -64,8 +70,17 @@ export default {
       status: 'status',
       questionStatus: 'question_status',
       isWon: 'isWon',
-      isPlayingMusic: 'isPlayingMusic'
-    })
+      isPlayingMusic: 'isPlayingMusic',
+      isTaskEnd: 'isTaskEnd',
+      isTaskRespondence: 'isTaskRespondence'
+    }),
+    anwseredComponent () {
+      if (this.status === 3 && this.questionStatus !== 8 && !this.isTaskRespondence) {
+        return Respondence
+      } else if (this.status === 3 && this.questionStatus !== 8 && this.isTaskRespondence) {
+        return TaskRespondence
+      }
+    }
   },
   created () {
     if (this.status === 1) {
@@ -120,7 +135,9 @@ export default {
     Compere,
     BalanceMark,
     FailTipInvite,
-    lang
+    lang,
+    TaskResult,
+    TaskRespondence
   }
 }
 </script>
