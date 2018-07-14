@@ -63,6 +63,8 @@ export default {
       }
       .highlight {
          font:600 26px 'Roboto', Arial, serif;
+         color: #fff;
+         text-decoration: underline;
       }
     }
   }
