@@ -208,6 +208,7 @@ export default {
   },
   methods: {
     downBrowser () {
+      utils.statistic('download_button', 1)
       setTimeout(function () {
         window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
       }, 500)
@@ -438,6 +439,11 @@ export default {
         }
       } else {
         this.$router.replace({path: '/'})
+      }
+    },
+    isShowBrowserTip: function (val) {
+      if (val) {
+        utils.statistic('download_notice', 0)
       }
     }
   }

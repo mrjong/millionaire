@@ -1,21 +1,20 @@
 <template>
   <div class="double-reward-card">
     <BackArrow class="double-reward-card__back"></BackArrow>
-      <div class="double-reward-rule">
-        <h2>HOW TO USE</h2>
-        <p>1. Double Prize Cards are only available after you won more than once at 10PM before today.</p>
-        <p>2. With it, you prize will double after you win at the 10PM game in 3 days.</p>
-        <p>3. A 'Doube Prize Card' can only be used after login, and it will expire after 3 days.</p>
-      </div>
-      <div class="double-reward-list">
-          <div class="double-reward-list_item"
-          v-for="user in userList"
-          :key="user.userId"
-          >
-              <div class="item_pic"><img :src="user.userPic" alt=""></div>
-              <div class="item_name ellipsis-1">{{user.userName}}</div>
-          </div>
-      </div>
+    <div class="double-reward-rule">
+      <h2>HOW TO USE</h2>
+      <p>1. Double Prize Cards are only available after you won more than once at 10PM before today.</p>
+      <p>2. With it, you prize will double after you win at the 10PM game in 3 days.</p>
+      <p>3. A 'Doube Prize Card' can only be used after login, and it will expire after 3 days.</p>
+    </div>
+    <div class="double-reward-list">
+        <div class="double-reward-list_item"
+        v-for="user in userList"
+        :key="user.userId"
+        >
+            <div class="item_pic"><img :src="user.userPic" alt=""></div>
+            <div class="item_name ellipsis-1" :class="{'highlight': user.isMe === 1 }">{{user.userName}}</div>
+        </div>
     </div>
   </div>
 </template>
@@ -23,25 +22,30 @@
 <script>
 import {doubelRewardList} from '../assets/js/api.js'
 import BackArrow from '../components/BackArrow'
+import utils from '../assets/js/utils.js'
 
 export default {
   name: 'DoubleRewardCard',
   data () {
     return {
-      userList: []
+      userList: [],
+      highlight: false
     }
   },
   components: {
     BackArrow
   },
   mounted () {
+    utils.statistic('double_bonus_page', 0)
     doubelRewardList().then(({data}) => {
+      console.log(data)
       if (data.result === 1 && data.code === 0) {
         this.userList = data.data.map(item => {
           let obj = {}
           obj.userName = item.un
           obj.userPic = item.up
           obj.userId = item.ud
+          obj.isMe = item.sf
           return obj
         })
       }
@@ -90,7 +94,6 @@ export default {
   &-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
     width: 660px;
     height: 500px;
     background-color: rgba(255,255,255, .16);
@@ -123,6 +126,10 @@ export default {
       color: #fff;
       max-width: 130px;
       float: left;
+    }
+
+    .highlight {
+      color: orange;
     }
   }
 }
