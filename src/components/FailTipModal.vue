@@ -5,10 +5,10 @@
       <div class="fail-tip-inner">
         <section class="fail-tip">
             <div class="fail-tip-text">
-            <p class="fail-tip-title">{{$('tip.failTipModal.title')}}</p>
-            <p class="fail-tip-desc">{{$('tip.failTipModal.desc')}}</p>
+            <p class="fail-tip-title">{{$t('tip.failTipModal.title')}}</p>
+            <p class="fail-tip-desc">{{$t('tip.failTipModal.desc')}}</p>
             </div>
-            <button @click="invite" class="btn-invite">{{$('tip.failTipModal.button')}}</button>
+            <button @click="invite" class="btn-invite">{{$t('tip.failTipModal.button')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -94,7 +94,7 @@ export default {
       background: none;
       background-image: url("../assets/images/orange-btn.png");
       background-repeat: no-repeat;
-      background-size: cover;
+      background-size: contain;
       outline: none;
       border: none;
       width: 480px;
