@@ -121,12 +121,15 @@ export default {
     overflow-y: scroll;
     margin-top: 110px;
     .more-button {
+      position: relative;
+      bottom: 20px;
       color: #fff;
       width: 100%;
       text-align: center;
-      font: 200 24px "Roboto", Arial, serif;
+      font: 200 26px "Roboto", Arial, serif;
       height: 40px;
       line-height: 40px;
+      font-weight: bold;
     }
   }
 
