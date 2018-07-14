@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive include="Main">
+    <keep-alive include="Main,DoubleRewardCard">
       <router-view/>
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>

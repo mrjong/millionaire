@@ -452,11 +452,13 @@ export const cancelReminder = function () {
   })
 }
 
-export const doubelRewardList = function () {
+export const doubelRewardList = function (offset, limit) {
   return axios.get(api.doubelRewardList, {
     params: {
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      offset,
+      limit
     }
   })
 }
