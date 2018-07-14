@@ -321,7 +321,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now>></a>',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now >></a>',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -387,8 +387,8 @@ const locale = {
       btn: 'Invite & Earn Cash'
     },
     downBrowser: {
-      title: 'Try \'Go!Millionaire Browser\' app to win cash easily.',
-      desc: 'Play QUIZ and win up to ₹1,000,000!',
+      title: 'Open \'Go!Millionaire\' APP to Win Cash.',
+      desc: 'Play Quiz and Win Up To ₹1,000,000!',
       btn: 'Open Now'
     },
     failTipModal: {

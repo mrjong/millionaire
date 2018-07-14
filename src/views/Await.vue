@@ -110,10 +110,9 @@
     </balance-mark>
     <div class="browser-tip" v-if="isShowBrowserTip">
       <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
-      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png" />
+      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"/>
       <div class="browser-tip__text">
-        <p style="font-weight: bold;">{{$t('tip.downBrowser.title')}}</p>
-        <p>{{$t('tip.downBrowser.desc')}}</p>
+        <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
       </div>
       <a class="browser-tip__button ellipsis-1" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
     </div>
@@ -808,11 +807,11 @@ export default {
       }
       img {
         width: 90px;
-        height: 90px;
+        height: 83px;
         margin: 0 10px;
       }
       &__text {
-        width: 68%;
+        width: 64%;
         line-height: 1.4;
         font: 200 24px 'Roboto,Arial,serif'
       }
@@ -822,7 +821,7 @@ export default {
         top: 50%;
         transform: translate(0,-50%);
         color: #fff;
-        width: 155px;
+        width: 150px;
         height: 58px;
         text-align: center;
         background: url('../assets/images/browser-tip-button.png') no-repeat;
@@ -837,6 +836,9 @@ export default {
     .await {
       &__reminder {
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      }
+      .browser-tip__text {
+        font-size: 12px;
       }
     }
   }
