@@ -15,12 +15,13 @@
             <div class="item_pic"><img :src="user.userPic" alt=""></div>
             <div class="item_name ellipsis-1" :class="{'highlight': user.isMe === 1 }">{{user.userName}}</div>
         </div>
+        <div class="more-button" @click="getMore" v-if="!isEnding">Get More</div>
     </div>
   </div>
 </template>
 
 <script>
-import {doubelRewardList} from '../assets/js/api.js'
+import { doubelRewardList } from '../assets/js/api.js'
 import BackArrow from '../components/BackArrow'
 import utils from '../assets/js/utils.js'
 
@@ -29,27 +30,44 @@ export default {
   data () {
     return {
       userList: [],
-      highlight: false
+      offset: 0,
+      limit: 10,
+      isLoading: false,
+      isEnding: false
     }
   },
   components: {
     BackArrow
   },
+  methods: {
+    getMore () {
+      if (this.isLoading) return
+      this.isLoading = true
+      doubelRewardList(this.offset, this.limit).then(({ data }) => {
+        console.log(data)
+        if (data.result === 1 && data.code === 0) {
+          let userList = data.data.map(item => {
+            let obj = {}
+            obj.userName = item.un
+            obj.userPic = item.up
+            obj.userId = item.ud
+            obj.isMe = item.sf
+            return obj
+          })
+          if (userList.length > 0) {
+            this.userList.push(...userList)
+            this.offset += this.limit
+          } else {
+            this.isEnding = true
+          }
+          this.isLoading = false
+        }
+      })
+    }
+  },
   mounted () {
     utils.statistic('double_bonus_page', 0)
-    doubelRewardList().then(({data}) => {
-      console.log(data)
-      if (data.result === 1 && data.code === 0) {
-        this.userList = data.data.map(item => {
-          let obj = {}
-          obj.userName = item.un
-          obj.userPic = item.up
-          obj.userId = item.ud
-          obj.isMe = item.sf
-          return obj
-        })
-      }
-    })
+    this.getMore()
   }
 }
 </script>
@@ -63,7 +81,7 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     padding: 0 20px 20px;
-    background-image: url('../assets/images/double-rule-bg.jpg');
+    background-image: url("../assets/images/double-rule-bg.jpg");
     background-size: cover;
     color: #fff;
 
@@ -71,18 +89,18 @@ export default {
       text-align: center;
       font-size: 32px;
       margin: 34px 0 28px;
-      font-family: 'Roboto', Arial, serif;
+      font-family: "Roboto", Arial, serif;
       font-weight: bold;
     }
 
     p {
-      font: normal 28px/1.8 'Roboto', Arial, serif;
+      font: normal 28px/1.8 "Roboto", Arial, serif;
     }
   }
   &-card {
     width: auto;
     height: 1681px;
-    background-image: url('../assets/images/double-reward-bg.jpg');
+    background-image: url("../assets/images/double-reward-bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     padding: 590px 30px 0;
@@ -97,11 +115,19 @@ export default {
     flex-wrap: wrap;
     width: 660px;
     height: 500px;
-    background-color: rgba(255,255,255, .16);
+    background-color: rgba(255, 255, 255, 0.16);
     border-radius: 10px;
     padding: 10px 30px 0;
     overflow-y: scroll;
     margin-top: 110px;
+    .more-button {
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      font: 200 24px "Roboto", Arial, serif;
+      height: 40px;
+      line-height: 40px;
+    }
   }
 
   &-list_item {
@@ -123,7 +149,7 @@ export default {
     }
 
     .item_name {
-      font: normal 24px/100px 'Roboto', Arial, serif;
+      font: normal 24px/100px "Roboto", Arial, serif;
       color: #fff;
       max-width: 130px;
       float: left;
