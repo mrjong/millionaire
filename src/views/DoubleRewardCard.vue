@@ -1,12 +1,14 @@
 <template>
   <div class="double-reward-card">
-    <div class="double-reward-list">
-      <div class="double-reward-list_item"
-      v-for="user in userList"
-      :key="user.userId"
-      >
-        <div class="item_pic"><img :src="user.userPic" alt=""></div>
-        <p class="item_name ellipsis-1">{{user.userName}}</p>
+    <BackArrow class="double-reward-card__back"></BackArrow>
+      <div class="double-reward-list">
+          <div class="double-reward-list_item"
+          v-for="user in userList"
+          :key="user.userId"
+          >
+              <div class="item_pic"><img :src="user.userPic" alt=""></div>
+              <div class="item_name ellipsis-1">{{user.userName}}</div>
+          </div>
       </div>
     </div>
   </div>
@@ -14,6 +16,7 @@
 
 <script>
 import {doubelRewardList} from '../assets/js/api.js'
+import BackArrow from '../components/BackArrow'
 
 export default {
   name: 'DoubleRewardCard',
@@ -22,6 +25,9 @@ export default {
       userList: [
       ]
     }
+  },
+  components: {
+    BackArrow
   },
   mounted () {
     doubelRewardList().then(({data}) => {
@@ -41,6 +47,7 @@ export default {
 
 <style lang="less" scoped>
 .double-reward {
+  position: relative;
   &-card {
     width: auto;
     height: 1681px;
@@ -48,6 +55,12 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     padding: 1200px 30px 0;
+  }
+  &-card__back {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    
   }
   &-list {
     display: flex;
