@@ -72,6 +72,7 @@ export default {
       font-size: 32px;
       margin: 34px 0 28px;
       font-family: 'Roboto', Arial, serif;
+      font-weight: bold;
     }
 
     p {
