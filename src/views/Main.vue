@@ -18,14 +18,14 @@
       </div>
     </div>
     <count-down v-if="status === 2"></count-down>
-    <winners-result v-if="status === 4"></winners-result>
+    <winners-result v-if="status === 4 && !isTaskRespondence"></winners-result>
     <keep-alive>
       <component v-bind:is="anwseredComponent" @fail-tip="failTip" @error="onError"></component>
     </keep-alive>
     <!-- <respondence @fail-tip="failTip" @error="onError" v-if="status === 3 && questionStatus !== 8 && !isTaskRespondence"></respondence> -->
     <!-- <task-respondence v-show="status === 3 && questionStatus !== 8 && isTaskRespondence"></task-respondence> -->
     <compere v-show="status === 3 && questionStatus === 8"></compere>
-    <chat-room></chat-room>
+    <chat-room v-if="!isTaskRespondence"></chat-room>
     <task-result v-if="status === 3 && isTaskEnd"></task-result>
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>

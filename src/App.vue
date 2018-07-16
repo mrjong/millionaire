@@ -40,6 +40,7 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
+      userInfo: 'userInfo',
       initialState: 'initialState'
     })
   },

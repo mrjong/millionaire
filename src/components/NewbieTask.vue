@@ -28,8 +28,7 @@ export default {
   },
   data () {
     return {
-      isClose: false,
-      FirstGuide: false
+      isClose: false
     }
   },
   computed: {
