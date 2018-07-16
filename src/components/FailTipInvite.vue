@@ -5,11 +5,11 @@
       <section class="fail-tip">
         <img class="icon" src="../../static/images/tip-fail.png">
         <span class="iconfont icon-cuowu close" @click="close"></span>
-        <p>Unwilling To Lose Bonuses?</p>
+        <p>{{$t('tip.anwserWrong.title')}}</p>
         <section class="fail-note" >
-          <p>Invite friends to join and play, earn cash  now!</p>
+          <p>{{$t('tip.anwserWrong.desp')}}</p>
         </section>
-        <button @click="invite" class="btn-invite">Invite & Earn Cash</button>
+        <button @click="invite" class="btn-invite">{{$t('tip.anwserWrong.btn')}}</button>
       </section>
     </modal>
     <revive-card :reviveObj="{isShare: showInviteTip, code: code}" v-if="showInviteTip" @shareClose="showInviteTip = false"></revive-card>
@@ -88,7 +88,7 @@ export default {
     }
 
     .btn-invite {
-      width: 407px;
+      width: 450px;
       height: 75px;
       border-radius: 46px;
       border: none;

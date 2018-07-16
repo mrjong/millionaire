@@ -4,28 +4,21 @@
       <p class="header" @click="goBack">
         <span class="iconfont icon-fanhui"></span>
       </p>
-      <p class="title">Extra Lives</p>
+      <p class="title">{{$t('shareDetail.title')}}</p>
     </div>
     <div class="share-detail-content">
       <img src="../assets/images/share-live.png" class="share-lives">
-      <p class="text">
-        You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game except the last question.
-      </p>
-      <p class="text">
-        You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.
-      </p>
-      <p class="code">
-        My Referral Code:
-        <span>{{code}}</span>
-      </p>
+      <p class="text">{{$t('shareDetail.describe1')}}</p>
+      <p class="text">{{$t('shareDetail.describe2')}}</p>
+      <p class="code">{{$t('shareDetail.text')}}<span>{{code}}</span></p>
       <div class="btn">
         <p class="btn__invite" @click="share">
           <span class="btn__invite__icon"></span>
-          <span class="btn__invite__text">Invite</span>
+          <span class="btn__invite__text">{{$t('shareDetail.share_btn')}}</span>
         </p>
       </div>
     </div>
-    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
+    <revive-card :reviveObj="reviveObj" @success="shareSuccess" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
     <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='okEvent'>
     </balance-mark>
   </div>
@@ -36,6 +29,7 @@ import utils from '../assets/js/utils'
 import ReviveCard from '../components/ReviveCard'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
+import { _UPDATE } from '../store/type'
 export default {
   name: 'ShareDetail',
   data () {
@@ -48,7 +42,7 @@ export default {
       dialogInfo: {
         htmlTitle: '',
         htmlText: '',
-        okBtnText: 'OK'
+        okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false
     }
@@ -74,13 +68,7 @@ export default {
       api.generateCode().then(({data}) => {
         if (data.result === 1) {
           this.code = data.data
-        } else {
-          this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
-          this.showDialog = true
         }
-      }).catch(() => {
-        this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
-        this.showDialog = true
       })
     },
     // 弹框ok
@@ -88,11 +76,20 @@ export default {
       this.showDialog = false
     },
     callbackFailed () {
-      this.dialogInfo.htmlText = 'Fail to submit, please try again later.'
+      this.dialogInfo.htmlText = this.$t('await.remider_pop.case3')
       this.showDialog = true
     },
     shareClose () {
       this.reviveObj.isShare = false
+    },
+    shareSuccess () {
+      api.DailyShare().then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          this.$store.commit(_UPDATE, {
+            lives: +data.data || 0
+          })
+        }
+      })
     }
   },
   components: {

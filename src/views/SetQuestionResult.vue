@@ -4,32 +4,32 @@
       <div class="back" @click='back'>
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
-      <p class="set-question__wrap__title">Set Questions Myself</p>
+      <p class="set-question__wrap__title">{{$t('setQuestionResult.title')}}</p>
       <div class="result-box">
         <img src="../assets/images/questions-res.png" alt="">
-        <p class="result-title">Your question has <br>been submitted.</p>
-        <p class="result-content">Thank you! Knowledge is power.
-We'll reeview all submissions and announce the seleted questions and its QUIZ MASTER on APUS Browser Facebook page every day.</p>
+        <p class="result-title">{{$t('setQuestionResult.text1')}}</p>
+        <p class="result-content">{{$t('setQuestionResult.text2')}}</p>
       </div>
       <div class="base">
         <a class="join-btn" @click='joinGroup' ref="toFbGroup">
           <span class="join-btn__icon iconfont icon-facebook"></span>
-          Follow Us</a>
+          {{$t('setQuestionResult.share_btn')}}
+        </a>
         <div class="require-box">
           <div class="require-box__title">
             <span class="require-box__title__icon iconfont icon-liwu"></span>
-            You will acquire:
+            {{$t('setQuestionResult.text3')}}
           </div>
           <div class="require-box__content">
-            1. Hints for quiz every day<br/>
-            2. More interesting contests to win prize<br>
-            3. Chance to join Quiz Master Group
+            {{$t('setQuestionResult.text4')}}<br/>
+            {{$t('setQuestionResult.text5')}}<br>
+            {{$t('setQuestionResult.text6')}}
           </div>
         </div>
       </div>
       <div class="submit-box">
         <div class="prue-btn" @click='submitOther'>
-          Submit another
+          {{$t('setQuestionResult.submit_btn')}}
         </div>
       </div>
     </div>

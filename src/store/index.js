@@ -12,6 +12,7 @@ import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
 import throttle from 'lodash.throttle'
 import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
+import i18n from '../i18n'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -25,7 +26,7 @@ export default new Vuex.Store({
     readyTime: 600000, // 准备时间 默认10分钟
     syncIntervalTime: 10000, // 同步结束时间间隔
     hostIntervalTime: 3000, // 规则轮播间隔
-    hostMsgList: [`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`], // 主持人消息列表
+    hostMsgList: i18n.t('stringWords'), // 主持人消息列表
     status: status._AWAIT, // 当前状态
     onlineAmount: 0, // 在线人数
     chatRoomId: '', // 聊天室ID
@@ -50,7 +51,7 @@ export default new Vuex.Store({
       htmlText: '',
       shouldSub: false,
       markType: 0,
-      okBtnText: 'OK',
+      okBtnText: i18n.t('await.referral_code_pop.ok'),
       okEvent: null,
       hintImg: './static/images/tip-fail.png',
       lastTime: 3000
@@ -62,7 +63,10 @@ export default new Vuex.Store({
     phoneNationCode: {code: '91', country: 'India'}, // 当前手机国家码
     isPlayingMusic: false, // 是否在播放音乐
     initialState: -1, // 初始化完成后的状态
-    isAgreePolicy: true // 是否同意过协议
+    isAgreePolicy: true, // 是否同意过协议
+    isRemider: false, // 是否订阅过消息
+    lang: i18n.locale, // 本地语言
+    isInputting: false // 是否正在输入文字
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -87,7 +91,10 @@ export default new Vuex.Store({
     phoneNationCode: (state) => state.phoneNationCode,
     isPlayingMusic: (state) => state.isPlayingMusic,
     initialState: (state) => state.initialState,
-    isAgreePolicy: (state) => state.isAgreePolicy
+    isAgreePolicy: (state) => state.isAgreePolicy,
+    isRemider: (state) => state.isRemider,
+    lang: (state) => state.lang,
+    isInputting: (state) => state.isInputting
   },
   mutations: {
     /**
@@ -117,10 +124,16 @@ export default new Vuex.Store({
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK',
+        okBtnText: i18n.t('await.referral_code_pop.ok'),
         hintImg: './static/images/tip-fail.png',
         lastTime: 3000
       }
+    },
+    /**
+     * 重置串词至默认串词
+     */
+    [type._RESET_HOSTMSGLIST] (state) {
+      state.hostMsgList = i18n.t('stringWords')
     }
   },
   actions: {
@@ -129,7 +142,7 @@ export default new Vuex.Store({
      * @param {any} {commit, dispatch, state}
      */
     [type._INIT] ({commit, dispatch, getters}, isRefreshToken = false) {
-      clearInterval(initTimer)
+      clearTimeout(initTimer)
       commit(type._UPDATE, {
         isRefreshedToken: isRefreshToken
       })
@@ -160,11 +173,11 @@ export default new Vuex.Store({
       // 添加网络状况监听器
       im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
         !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
-          htmlTitle: 'Please check your internet connection.',
-          htmlText: 'Otherwise your phone may hang or delay during the game if your internet is unstable.',
+          htmlTitle: i18n.t('tip.networkNotice.title'),
+          htmlText: i18n.t('tip.networkNotice.desp'),
           shouldSub: false,
           markType: 0,
-          okBtnText: 'OK'
+          okBtnText: i18n.t('tip.networkNotice.btn')
         })
         utils.statistic('NETWORK_UNAVAILABLE', 6)
       }, 30000))
@@ -204,7 +217,7 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._POLL_INIT] ({dispatch, getters}) {
-      setTimeout(() => {
+      initTimer = setTimeout(() => {
         getters.status === status._AWAIT && dispatch(type._INIT)
       }, getters.syncIntervalTime)
     },

@@ -20,6 +20,7 @@ const im = {
   isHandledMsg: true, // 消息是否被处理
   chatRoomId: '', // 聊天室ID
   token: '', // 用户token
+  userId: '', // 用户ID
   listeners: {}, // 监听器,
   messageTypes: [ // 消息类型列表
     {
@@ -147,8 +148,8 @@ const im = {
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             message.content.content = RongIMLib.RongIMEmoji.symbolToEmoji(message.content.content)
-            this.emitListener(type.MESSAGE_NORMAL, message)
-            console.warn(message.messageUId, message.sentTime, message.content.content)
+            message.senderUserId !== im.userId && this.emitListener(type.MESSAGE_NORMAL, message)
+            console.warn(message)
             break
           case type.MESSAGE_AMOUNT:
             this.emitListener(type.MESSAGE_AMOUNT, message)
@@ -188,6 +189,7 @@ const im = {
     RongIMClient.connect(token, {
       onSuccess: (userId) => {
         console.log('Connect successfully.' + userId, token)
+        this.userId = userId
         keepLiveMessageTimer = setInterval(() => {
           im.sendAliveMessage()
         }, 5000)

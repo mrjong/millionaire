@@ -1,5 +1,5 @@
 /* global PUBLIC_URL */
-import axios, { accountHost, env, reportHost} from './http'
+import axios, { accountHost, env, reportHost } from './http'
 import utils from './utils'
 
 const publicUrl = PUBLIC_URL
@@ -41,7 +41,12 @@ export const api = {
   inviteTotalBoard: '/cmp/itboard/', // 邀请好友总排行,
   myInviteBoard: '/cmp/myinvite/', // 我的邀请
   inviteLink: '/cmp/ic', // 生成分享facebook好友链接
-  checkInviteCode: '/cmp/ifc' // 验证分享好友码
+  checkInviteCode: '/cmp/ifc', // 验证分享好友码
+  updateNickname: '/v2/user/updateinfo', // 更新用户信息
+  uploadAvatar: '/v2/user/pic', // 上传头像
+  updateAvatarCache: '/cmp/ru', // 更新头像缓存
+  cancelReminder: '/cmp/cancel_remind/', // 取消订阅
+  doubelRewardList: '/cmp/gdb' // 获取双倍奖金
 }
 
 export const init = function (isRefreshToken) {
@@ -74,7 +79,7 @@ export const getRankInfo = function (type) {
 export const submitAnswer = function (uncommittedAnswers = [], isLastQuestion = false, isOnlySubmitReviveCardInfo = false) {
   const {offlineMode = false} = utils.storage.get('millionaire-process') || {}
   // 从本地同步复活卡信息
-  const {reviveCardInfo = {}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
+  const { reviveCardInfo = {} } = utils.storage.get('millionaire-uncommittedAnswers') || {}
   return axios.post(api.submitAnswer, {
     i: utils.raceId,
     as: isOnlySubmitReviveCardInfo ? [] : uncommittedAnswers,
@@ -154,7 +159,7 @@ export const pollMsg = function () {
 export const log = function (content) {
   return axios.post(api.log, {
     content: JSON.stringify(content)
-  }).then(() => {}).catch((err) => {
+  }).then(() => { }).catch((err) => {
     console.log('日志上报出错：', err)
   })
 }
@@ -184,11 +189,12 @@ export const DailyShare = function () {
   })
 }
 
-// 首次登陆增加额外生命
-export const addExtraLife = function () {
+// 增加额外生命
+export const addExtraLife = function (type = 0) {
   return axios.post(api.addExtraLife, {
     app_id: utils.app_id,
-    client_id: utils.clientId
+    client_id: utils.clientId,
+    tp: type
   })
 }
 
@@ -402,5 +408,57 @@ export const checkInviteCode = function (icode) {
     app_id: utils.app_id,
     client_id: utils.clientId,
     icode: icode
+  })
+}
+
+// 更新用户昵称
+
+export const updateNickname = function (name) {
+  return axios.post(api.updateNickname, {
+    app_id: utils.app_id,
+    nickname: name
+  }, {
+    baseURL: accountHost[env]
+  })
+}
+
+// 上传头像
+
+export const uploadAvatar = function (pic) {
+  return axios.post(api.uploadAvatar, {
+    app_id: utils.app_id,
+    pic_type: 'hpic',
+    pic: pic
+  }, {
+    baseURL: accountHost[env]
+  })
+}
+
+// 刷新个人信息缓存
+export const updateAvatarCache = function () {
+  return axios.get(api.updateAvatarCache, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 取消提醒
+export const cancelReminder = function () {
+  return axios.post(api.cancelReminder, {
+    app_id: utils.app_id,
+    client_id: utils.clientId
+  })
+}
+
+export const doubelRewardList = function (offset, limit) {
+  return axios.get(api.doubelRewardList, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      offset,
+      limit
+    }
   })
 }

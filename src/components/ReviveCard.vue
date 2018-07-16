@@ -3,10 +3,10 @@
     <div class="invitation-bomb">
       <span class="invitation-bomb__close iconfont icon-cuowu" @click="shareClose"></span>
       <p class="invitation-bomb__info">
-        {{reviveObj.title? reviveObj.title :'My Referral Code:'}}
+        {{reviveObj.title? reviveObj.title : $t('receiveCard.share_pop.text1')}}
         <span v-if="!reviveObj.title">{{reviveObj.code}}</span>
       </p>
-      <p class="invitation-bomb__hint">{{reviveObj.hint ? reviveObj.hint : 'Inviting friends to get it now!'}}</p>
+      <p class="invitation-bomb__hint">{{reviveObj.hint ? reviveObj.hint : $t('receiveCard.share_pop.text2')}}</p>
       <div class="invitation-bomb__channel">
         <div v-for="(val, idx) in shareObj"
         :key="idx"
@@ -60,10 +60,11 @@ export default {
     fbAndMess (val) {
       if (this.reviveObj.type === 'invite') {
         utils.statistic('invite_earn_share', 3, {to_destination_s: val}, 'invite_earn_page')
-        let title = `I'm playing 'Go! Millionaire', my referral code is ${this.code}，join us and win up to Rs.1,000,000 at 10PM every day!`
-        let desp = `Download Go!Millonaire Browser and use my referral code 345566, let keep winning cash every day!`
+        let title = this.$t('receiveCard.share_title', {code: this.code})
+        let desp = this.$t('receiveCard.share_descripe', {code: this.code})
         api.inviteLink().then(({data}) => {
           if (data.result === 1 && data.code === 0 && data.data) {
+            console.log(data.data)
             utils.share(this.callbackFn, val, '', encodeURIComponent(data.data), '', title, desp)
           } else {
             return false
@@ -81,6 +82,8 @@ export default {
       this.reviveObj.isShare = false
       if (!isSucceed) {
         this.$emit('callbackFailed')
+      } else {
+        this.$emit('success')
       }
     },
     shareClose () {

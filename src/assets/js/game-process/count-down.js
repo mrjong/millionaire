@@ -1,9 +1,8 @@
 import utils from '../utils'
 import { PROCESS_COUNT_DOWN, _AWAIT, _READY } from '../status'
 import { _UPDATE } from '../../../store/type'
-import { MESSAGE_HOST } from '../listener-type'
-import im from '../im'
 import questionProcess from './question'
+import playingState from '../game-state/state-playing'
 /**
  * 游戏进度-开场串词
  */
@@ -42,13 +41,10 @@ const countDownProcess = {
         this.$store.commit(_UPDATE, {
           startTimeOffset: 0
         })
-        // 倒计时结束后 比赛未开始展示串词
-        if (this.$store.getters.status === _AWAIT || this.$store.getters.status === _READY) {
-          im.emitListener(MESSAGE_HOST, {
-            content: {
-              content: JSON.stringify([`Welcome to 'Go! Millionaire' game! Answer questions and get them all right to win up to  ₹1,000,000 every day!`, `You just need to tap on the answer and keep them right! If answer incorrectly, you can use extra life. Now, get it ready. GO!`])
-            }
-          })
+        // 倒计时结束后 若比赛处于倒计时或者等待状态 比赛进入Plyaing状态
+        const {status} = this.$store.getters
+        if (status === _AWAIT || status === _READY) {
+          playingState.run()
         }
       } else {
         this.$store.commit(_UPDATE, {

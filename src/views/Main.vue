@@ -11,6 +11,7 @@
       <div class="main-container__top__logo" @click="back">
         <img src="../assets/images/logo.png" alt="millionaire">
       </div>
+      <lang class="main-container__top__lang"></lang>
       <div class="main-container__top__music" @click="isPlay">
         <img src="../assets/images/music-icon.png" v-if="isPlayingMusic">
         <img src="../assets/images/music_close-icon.png" v-else>
@@ -21,14 +22,17 @@
     <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room></chat-room>
+    <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
+    <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import * as type from '../store/type'
 import FailTipInvite from '../components/FailTipInvite'
+import FailTipModal from '../components/FailTipModal'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
@@ -36,7 +40,9 @@ import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
-import { _UPDATE } from '../store/type'
+import lang from '../components/Language'
+// import NewAnnouncement from '../components/NewAnnouncement'
+// import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -46,11 +52,11 @@ export default {
       showFailTip: false,
       index: 1, // 题目序号
       dialogInfo: {
-        htmlTitle: 'Failed to Submit',
+        htmlTitle: this.$t('tip.failtosubmit.title'),
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: 'OK',
+        okBtnText: this.$t('tip.failtosubmit.btn'),
         hintImg: '//static.apusapps.com/201803261933287074f92538.png'
       }
     }
@@ -90,12 +96,12 @@ export default {
     },
     isPlay () {
       if (!this.isPlayingMusic) {
-        this.$store.commit(_UPDATE, {
+        this.$store.commit(type._UPDATE, {
           isPlayingMusic: true
         })
         utils.playSound('bg')
       } else {
-        this.$store.commit(_UPDATE, {
+        this.$store.commit(type._UPDATE, {
           isPlayingMusic: false
         })
         utils.stopSound()
@@ -116,7 +122,9 @@ export default {
     WinnersResult,
     Compere,
     BalanceMark,
-    FailTipInvite
+    FailTipInvite,
+    lang,
+    FailTipModal
   }
 }
 </script>
@@ -135,7 +143,7 @@ export default {
       align-items: center;
       padding: 25px 25px 0;
       position: relative;
-      &__back{
+      &__back {
         width: 54px;
         height: 54px;
         background-color: rgba(255, 255, 255, 0.2);
@@ -143,9 +151,16 @@ export default {
         line-height: 54px;
         text-align: center;
         margin-right: 15px;
+        color: #fff;
+        font-family: 'Roboto', Arial, serif;
         &__icon {
           font-size: 24px;
         }
+      }
+      &__lang {
+        position: absolute;
+        right: 93px;
+        font-size: 26px;
       }
       &__online{
         padding: 0 18px;
