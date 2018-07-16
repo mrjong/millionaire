@@ -26,6 +26,8 @@
     <policy-link :class="{hide: isInputting}"></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
+    <ShareTipModal v-model="isShowShareTipModal" @close="isShowShareTipModal = false" @share="share"></ShareTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
   </div>
 </template>
 
@@ -37,10 +39,18 @@ import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import PolicyLink from '../components/PolicyLink'
+import ShareTipModal from '../components/ShareTipModal'
+import ReviveCard from '../components/ReviveCard'
+
 export default {
   name: 'BalanceDetail',
   data () {
     return {
+      reviveObj: {
+        code: '',
+        isShare: false
+      },
+      isShowShareTipModal: false,
       myPay: '',
       name: '',
       pan: '',
@@ -59,7 +69,8 @@ export default {
     ...mapGetters({
       userInfo: 'userInfo',
       isOnline: 'isOnline',
-      isInputting: 'isInputting'
+      isInputting: 'isInputting',
+      code: 'code'
     })
   },
   mounted () {
@@ -114,6 +125,7 @@ export default {
                 this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
+                this.isShowShareTipModal = true
               }
             } else { // 请求失败，判断code
               switch (+data.code) {
@@ -161,12 +173,25 @@ export default {
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
+    },
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.reviveObj.isShare = data.isShare
+      this.reviveObj.code = this.code
     }
   },
   components: {
     BalanceMark,
     Loading,
-    PolicyLink
+    PolicyLink,
+    ShareTipModal,
+    ReviveCard
   }
 }
 </script>

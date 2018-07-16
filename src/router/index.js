@@ -20,6 +20,7 @@ const Blank = () => import('@/views/Blank.vue')
 // const Video = () => import('@/views/Video.vue')
 // const SamllAwait = () => import('@/views/SmallAwait.vue')
 const Invite = () => import('@/views/Invite.vue')
+
 Vue.use(Router)
 
 const router = new Router({

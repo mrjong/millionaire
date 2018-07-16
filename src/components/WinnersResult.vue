@@ -42,26 +42,73 @@
         </div>
       </div>
     </div>
+    <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
+    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import WonTipModal from '../components/WonTipModal'
+import ReviveCard from './ReviveCard'
+import BalanceMark from './BalanceMark'
+
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {}
+    return {
+      isShowTipModal: false,
+      reviveObj: {
+        code: '',
+        isShare: false
+      },
+      markInfo: {
+        showMark: false,
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: ''
+      }
+    }
+  },
+  components: {
+    WonTipModal,
+    ReviveCard,
+    BalanceMark
   },
   computed: {
     ...mapGetters({
       respondence: 'result',
       currencyType: 'currencyType',
       watchingMode: 'watchingMode',
-      isWon: 'isWon'
+      isWon: 'isWon',
+      userInfo: 'userInfo',
+      code: 'code'
     })
   },
-  mounted () {},
-  methods: {}
+  mounted () {
+    let winners = this.respondence.winners
+    winners.map((winner) => {
+      if (winner.userId === this.userInfo.userId) {
+        // 如果当前玩家为赢家 则弹出分享弹框
+        this.isShowTipModal = true
+      }
+    })
+  },
+  methods: {
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.reviveObj.isShare = data.isShare
+      this.reviveObj.code = this.code
+    }
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">
