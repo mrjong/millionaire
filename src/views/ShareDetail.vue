@@ -18,7 +18,7 @@
         </p>
       </div>
     </div>
-    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
+    <revive-card :reviveObj="reviveObj" @success="shareSuccess" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
     <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='okEvent'>
     </balance-mark>
   </div>
@@ -29,6 +29,7 @@ import utils from '../assets/js/utils'
 import ReviveCard from '../components/ReviveCard'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
+import { _UPDATE } from '../store/type'
 export default {
   name: 'ShareDetail',
   data () {
@@ -80,6 +81,15 @@ export default {
     },
     shareClose () {
       this.reviveObj.isShare = false
+    },
+    shareSuccess () {
+      api.DailyShare().then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          this.$store.commit(_UPDATE, {
+            lives: +data.data || 0
+          })
+        }
+      })
     }
   },
   components: {

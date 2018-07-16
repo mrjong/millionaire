@@ -27,8 +27,9 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room v-if="!isTaskRespondence"></chat-room>
     <task-result v-if="status === 3 && isTaskEnd"></task-result>
+    <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
-    <fail-tip-invite v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-invite>
+    <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
   </div>
 </template>
 
@@ -36,6 +37,7 @@
 import {mapGetters} from 'vuex'
 import * as type from '../store/type'
 import FailTipInvite from '../components/FailTipInvite'
+import FailTipModal from '../components/FailTipModal'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
@@ -46,6 +48,8 @@ import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
 import TaskResult from '../components/TaskResult'
+// import NewAnnouncement from '../components/NewAnnouncement'
+// import { _UPDATE, _INIT } from '../store/type'
 export default {
   name: 'Main',
   data () {
@@ -137,7 +141,8 @@ export default {
     FailTipInvite,
     lang,
     TaskResult,
-    TaskRespondence
+    TaskRespondence,
+    FailTipModal
   }
 }
 </script>

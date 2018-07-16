@@ -82,6 +82,8 @@ export default {
       this.reviveObj.isShare = false
       if (!isSucceed) {
         this.$emit('callbackFailed')
+      } else {
+        this.$emit('success')
       }
     },
     shareClose () {

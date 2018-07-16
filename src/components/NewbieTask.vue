@@ -1,5 +1,5 @@
 <template>
-  <div class="task" v-if="isShowNewbieTask">
+  <div class="task" v-if="isShowNewbieTask" style="z-index: 111;">
     <span class="task__close iconfont icon-cuowu" @click="close"></span>
     <div class="task__content">
       <div class="bubble">

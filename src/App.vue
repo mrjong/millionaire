@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive include="Main">
+    <keep-alive include="Main,DoubleRewardCard">
       <router-view/>
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
@@ -102,7 +102,7 @@ export default {
         this.$store.commit(type._UPDATE, {
           isInputting: false
         })
-      } else {
+      } else if (this.windowInnerHeight - window.innerHeight >= 150) {
         this.$store.commit(type._UPDATE, {
           isInputting: true
         })
@@ -202,6 +202,7 @@ export default {
   },
   watch: {
     status: function (status, oldStatus) {
+      window.gameState = status
       if (status !== 1 && oldStatus === 1) {
         if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
           this.$router.push({path: '/main'})
@@ -221,16 +222,8 @@ export default {
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
-        // 启用网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: false
-        })
       } else {
         utils.playSound('bg')
-        // 禁止网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: true
-        })
       }
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {

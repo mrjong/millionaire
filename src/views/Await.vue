@@ -101,6 +101,7 @@
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
     <newbie-task></newbie-task>
+    <new-announcement></new-announcement>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"
@@ -108,6 +109,14 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+    <div class="browser-tip" v-if="isShowBrowserTip">
+      <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
+      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"/>
+      <div class="browser-tip__text">
+        <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
+      </div>
+      <a class="browser-tip__button ellipsis-1" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
+    </div>
   </div>
 </template>
 <script>
@@ -126,11 +135,13 @@ import PolicyBomb from '../components/PolicyBomb'
 import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
 import NewbieTask from '../components/NewbieTask'
+import NewAnnouncement from '../components/NewAnnouncement'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
     return {
+      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -197,6 +208,13 @@ export default {
     utils.statistic('wait_page', 0)
   },
   methods: {
+    downBrowser () {
+      utils.statistic('download_button', 1)
+      setTimeout(function () {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
+      }, 500)
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href)
+    },
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
@@ -403,7 +421,8 @@ export default {
     PolicyBomb,
     lang,
     PolicyLink,
-    NewbieTask
+    NewbieTask,
+    NewAnnouncement
   },
   watch: {
     lives: function (val, oldVal) {
@@ -422,6 +441,11 @@ export default {
         }
       } else {
         this.$router.replace({path: '/'})
+      }
+    },
+    isShowBrowserTip: function (val) {
+      if (val) {
+        utils.statistic('download_notice', 0)
       }
     }
   }
@@ -763,11 +787,61 @@ export default {
       justify-content: center;
       margin: 20px auto 0;
     }
+
+    .browser-tip {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 133px;
+      background: url('../assets/images/browser-tip-bg.png') no-repeat;
+      background-size: cover;
+      color: #fff;
+      padding-right: 10px;
+      z-index: 1;
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        opacity: 0.5;
+      }
+      img {
+        width: 90px;
+        height: 83px;
+        margin: 0 10px;
+      }
+      &__text {
+        width: 64%;
+        line-height: 1.4;
+        font: 200 24px 'Roboto,Arial,serif'
+      }
+      &__button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translate(0,-50%);
+        color: #fff;
+        width: 150px;
+        height: 58px;
+        text-align: center;
+        background: url('../assets/images/browser-tip-button.png') no-repeat;
+        background-size: 100% 100%;
+        margin-top: 10px;
+        font: 24px 'Roboto,Arial,serif';
+        line-height: 58px;
+      }
+    }
   }
   @media screen and (max-width: 321px) {
     .await {
       &__reminder {
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      }
+      .browser-tip__text {
+        font-size: 12px;
       }
     }
   }
