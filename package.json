@@ -85,5 +85,13 @@
     "> 1%",
     "last 10 versions",
     "not ie <= 8"
-  ]
+  ],
+  "guppy": {
+    "id": "millionaire",
+    "name": "millionaire",
+    "type": "other",
+    "color": "#00bfb5",
+    "icon": null,
+    "createdAt": 1531720783230
+  }
 }

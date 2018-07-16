@@ -71,14 +71,20 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-Vue.component('static-image', Image) // 初始化图片组件
+Vue.component('static-image', Image) // 初始化静态图片组件
 
-Vue.directive('bg-img', (el, {value = ''}) => {
-  // 将多个值以空格分割
-  const vals = value.split(' ')
-  const imgUrl = vals[0] || ''
-  const resetVal = vals.slice(1).join(',')
-  el.style.backgroundImage = `url('${utils.getImageUrl(imgUrl)}'), ${resetVal}`
+// 静态图片指令
+Vue.directive('bg-img', (el, {value = {}}) => {
+  const {name = '', width, height, style = '', ...extra} = value
+  if (!name) return
+  console.log(getComputedStyle(el)['background-image'])
+  const url = utils.getStaticImgUrl(name, width, height, extra)
+  const extraStyle = style ? `,${style}` : ''
+  const image = new window.Image()
+  image.src = url
+  image.onload = () => {
+    el.style.backgroundImage = `url('${url}')${extraStyle}`
+  }
 })
 /* eslint-disable no-new */
 export const vm = new Vue({

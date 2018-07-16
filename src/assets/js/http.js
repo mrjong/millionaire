@@ -29,13 +29,13 @@ export const reportHost = {
   prod: 'https://goo.gl/forms/cJWcOjqyVW2Pu2GA2'
 }
 
-// 图片访问域名
+// 静态资源图片访问域名
 export const imageHost = {
-  local: '//dev-thumbor.apuscn.com',
-  dev: '//dev-thumbor.apuscn.com',
-  test: '//dev-thumbor.apuscn.com',
-  check: '//dev-thumbor.apuscn.com',
-  prod: '//dev-thumbor.apuscn.com'
+  local: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  dev: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  test: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  check: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  prod: '//thumbor.apusapps.com/imageView/millionaire/images/'
 }[env]
 
 // im 连接AppKey

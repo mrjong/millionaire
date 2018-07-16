@@ -189,6 +189,19 @@ const utils = {
     const search = queryUrl.match(regx)
     return (search && decodeURIComponent(search[2])) || null
   },
+  /**
+   * 将参数对象字符串化为query字符串
+   * @param {*} [params={}]
+   * @returns
+   */
+  stringifyToQuery (params = {}) {
+    const keys = Object.keys(params)
+    let query = ''
+    keys.forEach((key, index) => {
+      query += index === 0 ? `?${key}=${params[key]}` : `&${key}=${params[key]}`
+    })
+    return query
+  },
   storage,
   app_id: clientParams ? clientParams.appId : '100110002',
   clientId: clientParams ? (clientParams.newClientId || clientParams.clientId) : '',
@@ -549,12 +562,26 @@ const utils = {
     return str
   },
   /**
-   * 获取图片URL
+   * 获取静态图片资源URL
    */
-  getImageUrl (name) {
+  getStaticImgUrl (name, width, height, extra = {}) {
+    if (!name) return
     const isSupportWebpFormat = !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0
-    const path = isSupportWebpFormat ? '/imageView/format/webp/source/millionaire/images/' : '/imageView/source/millionaire/images/'
-    return `${imageHost}${path}${name}`
+    const params = {...extra}
+    // 根据屏幕宽度对宽度做适配
+    const clientWidth = document.body.clientWidth
+    let scale = clientWidth / 720 > 1 ? 1 : clientWidth / 720
+    if (typeof width === 'number' && width > 0) {
+      params.w = parseInt(width * scale)
+    }
+    if (typeof height === 'number' && height > 0) {
+      params.h = parseInt(height * scale)
+    }
+    // 设置图片格式
+    if (isSupportWebpFormat) {
+      params.format = 'webp'
+    }
+    return `${imageHost}${name}${utils.stringifyToQuery(params)}`
   },
   /**
    * 清除分享参数

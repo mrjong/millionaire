@@ -1,6 +1,6 @@
 <template>
   <!-- 静态图片组件 -->
-  <img :src="src" alt="">
+  <img :src="src" :alt="alt">
 </template>
 <script>
 import utils from '../assets/js/utils'
@@ -10,11 +10,25 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    alt: {
+      type: String,
+      default: ''
+    },
+    width: {
+      type: Number
+    },
+    height: {
+      type: Number
+    },
+    extra: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
     src () {
-      return utils.getImageUrl(this.name)
+      return utils.getStaticImgUrl(this.name, this.width, this.height, this.extra)
     }
   }
 }
