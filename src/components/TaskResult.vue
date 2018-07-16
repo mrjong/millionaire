@@ -1,14 +1,13 @@
 <template>
   <div class="guide" v-if="!isClose">
     <span class="guide__close iconfont icon-cuowu" @click="close"></span>
-    <p class="important ">Congratulations!</p>
-    <p class="guide__text">The novice task has been completed!</p>
-    <p class="guide__text">Answer the three questions and get a Extra Live!</p>
+    <p class="important ">{{$t('newbieTask.result_page.title')}}</p>
+    <p class="guide__text">{{$t('newbieTask.result_page.text1')}}</p>
     <div class="guide__img">
       <img src="../assets/images/light.png" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
-    <div class="guide__btn get-more" @click="getExtraLift">Get More Extra Life</div>
+    <div class="guide__btn get-more" @click="getExtraLift">{{$t('newbieTask.result_page.btn')}}</div>
   </div>
 </template>
 
@@ -18,6 +17,7 @@ import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import * as api from '../assets/js/api'
 import awaitState from '../assets/js/game-state/state-end.js'
+import gameProcess from '../assets/js/game-process'
 export default {
   name: 'TaskResult',
   props: {
@@ -35,12 +35,16 @@ export default {
     })
   },
   mounted () {
+    utils.statistic('task_result_page', 0)
   },
   methods: {
     close () {
       this.isClose = true
       if (utils.isOnline) {
-        this.reportLift()
+        this.reportLift('online')
+        gameProcess.update({
+          isTaskStart: false
+        })
       }
       awaitState.run()
       this.$router.push({path: '/'})
@@ -48,21 +52,30 @@ export default {
     getExtraLift () {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
+      gameProcess.update({
+        isTaskStart: false
+      })
       this.$store.commit(type._UPDATE, {
         isTaskEnd: true
       })
       if (utils.isOnline) {
-        this.reportLift()
+        this.reportLift('online')
       } else {
         utils.login(() => {
-          this.reportLift()
+          this.reportLift('offline')
         })
       }
     },
-    reportLift () {
+    reportLift (type) {
       // 上报得复活卡
+      let state = type === 'online' ? 'wait_page' : 'sigh_up'
       this.isClose = true
       api.doTaskToLife().then(({data}) => {
+        if (data.result === 1 && data.code) {
+          utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
+        } else {
+          utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '0'})
+        }
         awaitState.run()
       })
     }
@@ -72,11 +85,11 @@ export default {
 <style scoped lang="less" type="text/less">
   .guide {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1111;
+    z-index: 111;
     padding: 80px 40px 50px;
     background-color: rgba(0, 0, 0, 0.9);
     overflow: auto;
@@ -99,6 +112,7 @@ export default {
       font-size: 30px;
       line-height: 45px;
       margin-bottom: 20px;
+      text-align: center;
       .dot{
         display: inline-block;
         width: 15px;
@@ -112,6 +126,7 @@ export default {
     &__img{
       width: 100%;
       position: relative;
+      margin-top: 100px;
       .light{
         max-width: 70%;
         width: 600px;
@@ -136,7 +151,7 @@ export default {
       text-align: center;
       line-height: 94px;
       border-radius: 46px;
-      margin: 50px auto 0;
+      margin: 200px auto 0;
       display: flex;
       justify-content: center;
       &__icon{
@@ -190,7 +205,7 @@ export default {
         width: 600px;
         height: 94px;
         line-height: 94px;
-        margin: 30px auto 0;
+        margin: 200px auto 0;
       }
       .important{
         font-size: 56px;

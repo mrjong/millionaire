@@ -4,13 +4,13 @@
     <div class="task__content">
       <div class="bubble">
         <img src="../assets/images/bubble.png" class="bubble__img">
-        <p class="bubble__text">Hi,i am the quiz master Supa.welcome to go!millionaire.Now Let us begin a Novice task,and then you'll <span class="important">get an extra life</span> as a gift.</p>
+        <p class="bubble__text" v-html="$t('newbieTask.start_page.desp')"></p>
       </div>
       <div class="supa">
         <img src="../assets/images/task-supa.png" class="spua__img">
       </div>
     </div>
-    <div class="task__btn" @click="doTask">Start Task Now</div>
+    <div class="task__btn" @click="doTask">{{$t('newbieTask.start_page.btn')}}</div>
   </div>
 </template>
 
@@ -40,6 +40,7 @@ export default {
     })
   },
   mounted () {
+    utils.statistic('task_page', 0)
   },
   methods: {
     close () {
@@ -49,7 +50,7 @@ export default {
       })
     },
     doTask () {
-      utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
+      utils.statistic('start_button', 1)
       this.$store.commit(type._UPDATE, {
         isShowNewbieTask: false,
         isTaskRespondence: true,
@@ -61,17 +62,10 @@ export default {
       gameProcess.update({
         offlineMode: true,
         currentIndex: 1,
-        isExitQuit: true,
-        questions: [{
-          ji: '0', js: 1, jc: '1 + 1 =', jo: ['1', '2', '3'], ja: 'c81e728d9d4c2f636f067f89cc14862c', jd: ['1 + 1 = 2'], restTime: 10
-        },
-        {
-          ji: '1', js: 2, jc: '1 + 2 = ', jo: ['2', '3', '4'], ja: 'eccbc87e4b5ce2fe28308fd9f2a7baf3', jd: ['1 + 2 = 3'], restTime: 10
-        },
-        {
-          ji: '2', js: 3, jc: '1 + 3 = ', jo: ['4', '5', '6'], ja: 'a87ff679a2f3e71d9181a67b7542122c', jd: ['1 + 3 = 4'], restTime: 10
-        }
-        ]
+        isTaskStart: true,
+        hostMsgInterval: 100,
+        firstQuestionInterval: 3000,
+        questions: this.$t('newbieTask.question')
       })
       utils.storage.remove('millionaire-process')
       utils.storage.remove('millionaire-user-answer')
@@ -80,7 +74,7 @@ export default {
   }
 }
 </script>
-<style scoped lang="less" type="text/less">
+<style lang="less" type="text/less">
   .task {
     width: 100%;
     min-height: 100%;

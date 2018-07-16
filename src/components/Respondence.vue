@@ -107,7 +107,7 @@ export default {
     ...mapActions({}),
     answer (e) {
       // 记录是匿名用户第一次答题
-      utils.storage.set('isAnonymousAnswer', true)
+      utils.storage.set('isAnswered', true)
       // 上报用户作答情况
       utils.statistic('QUESTION', 1, {
         id_s: `${this.index}`,

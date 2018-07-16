@@ -324,6 +324,22 @@ const locale = {
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
+  newbieTask: {
+    start_page: {
+      desp: 'Hey, welcome to \'Go! Millionaire\'. Here is an <span class="important">EXTRA LIFE</span> for you, finish the task to get it now.',
+      btn: 'Start the task'
+    },
+    result_page: {
+      title: 'Congrats!',
+      text1: 'Your task done. Here\'s the EXTRA LIFE.',
+      btn: 'Get More EXTRA LIVES'
+    },
+    question: [
+      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: '27634ff8002b12e75d98e07ccd005d18', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
+      {ji: '1', js: 2, jc: 'There is no ____ color in Indian national flag?', jo: ['Red', 'White', 'Green'], ja: 'ee38e4d5dd68c4e440825018d549cb47', jd: ['The National Flag of India is a horizontal rectangular tricolour of saffron, white and green', ' with the Ashoka Chakra, a 24-spoke wheel, in navy blue at its centre. There is no red on it.'], restTime: 10, si: 2500},
+      {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
+    ]
+  },
   // 全局提示
   tip: {
     userReviveCard: { // 使用复活卡

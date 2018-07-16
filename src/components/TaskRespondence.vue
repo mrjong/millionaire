@@ -17,13 +17,11 @@
               :key=idx
               :content="idx"
               :orderNumber="val && val.orderNumber"
-              :result="+ (val && val.answerNum) || 0"
-              :percent= "+(val && val.percent) || 0"
+              :percent= "+(val && val.percent)"
               :isRight="val && val.isRight"
               @answer="answer(val.answerText)"
               :is-click="isClick"
-              :myChick="userAnswer === val.answerText"
-              @setAllFontSize="setAllFontSize">
+              :myChick="userAnswer === val.answerText">
       </answer>
     </div>
     <!-- 答错或未答提示 -->
@@ -54,17 +52,11 @@ export default {
     ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion']),
     totalResult: function () {
       let result = {}
-      let totalNum = 0
       let optionsNumber = ['A', 'B', 'C']
-      if (this.question_result) {
-        for (let i in this.question_result) {
-          totalNum += Number(this.question_result[i]) || 0
-        }
-      }
       Array.prototype.slice.call(this.options).forEach((val, idx) => {
         result[optionsNumber[idx] + '. ' + val] = {
-          answerNum: (this.question_result && this.question_result[val]),
-          percent: this.question_result && this.computePercent(+this.question_result[val], totalNum),
+          answerNum: '',
+          percent: 100,
           isRight: this.correctAnswer && this.correctAnswer === val,
           answerText: val
         }
@@ -141,16 +133,6 @@ export default {
         circle.style.strokeDashoffset = 3.14 + 'rem'
         this.percent = utils.computePercent(this.question_result)
       }
-    },
-    setAllFontSize (textSize) {
-      if (this.fontSize >= textSize) {
-        this.fontSize = textSize
-      }
-      this.$refs.answerContainer.style.fontSize = this.fontSize + 'rem'
-      let iconAll = Array.prototype.slice.call(document.querySelectorAll('.resultIcon'))
-      iconAll.forEach((val) => {
-        val.style.fontSize = this.fontSize - 0.1 + 'rem'
-      })
     },
     /**
      * 重置问题状态

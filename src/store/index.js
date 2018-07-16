@@ -226,7 +226,9 @@ export default new Vuex.Store({
      */
     [type._POLL_INIT] ({dispatch, getters}) {
       initTimer = setTimeout(() => {
-        getters.status === status._AWAIT && dispatch(type._INIT)
+        if (getters.status === status._AWAIT && !question.isTaskStart) {
+          dispatch(type._INIT)
+        }
       }, getters.syncIntervalTime)
     },
     /**

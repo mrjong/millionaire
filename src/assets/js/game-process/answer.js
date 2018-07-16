@@ -119,7 +119,7 @@ const answerProcess = {
    * 进入下一进度
    */
   next () {
-    const {questions = [], currentIndex, isExitQuit} = this.data
+    const {questions = [], currentIndex, isTaskStart} = this.data
     if (currentIndex < questions.length) {
       questionProcess.run({
         currentIndex: currentIndex + 1,
@@ -127,7 +127,7 @@ const answerProcess = {
         answerSummary: null
       })
     } else {
-      if (isExitQuit) {
+      if (isTaskStart) {
         // 监听新手任务结束
         awaitState.update()
         this.$store.commit(_UPDATE, {

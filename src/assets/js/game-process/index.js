@@ -28,7 +28,7 @@ const gameProcess = {
     answerSummary: null, // 比赛结果汇总
     result: {}, // 比赛结果
     watchingMode: false, // 是否为观战模式
-    isExitQuit: false // 是否立即退出
+    isTaskStart: false // 是否立即退出
   },
   $store: null,
   /**
@@ -38,7 +38,7 @@ const gameProcess = {
    */
   init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
     const {ri: gameInfo = {}} = data
-    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000, isEQ: isExitQuit} = gameInfo
+    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000, isEQ: isTaskStart} = gameInfo
     this.update({
       id,
       currentState: initialState,
@@ -53,7 +53,7 @@ const gameProcess = {
       firstQuestionInterval,
       questionShowTime,
       answerShowTime,
-      isExitQuit
+      isTaskStart
     })
     this.$store = $store
     // 从本地同步进度信息

@@ -5,7 +5,7 @@
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
-    <revive-guide v-if="initialState === 1 || isUserGame || isAnonymousAnswer"></revive-guide>
+    <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
   </div>
 </template>
@@ -29,8 +29,7 @@ export default {
       showLogin: false,
       showGameDialog: true,
       windowInnerHeight: 0,
-      timeOffset: 0,
-      isAnonymousAnswer: utils.storage.get('isAnonymousAnswer')
+      timeOffset: 0
     }
   },
   computed: {
@@ -41,9 +40,7 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState',
-      userInfo: 'userInfo',
-      isUserGame: 'isUserGame'
+      initialState: 'initialState'
     })
   },
   beforeCreate () {
