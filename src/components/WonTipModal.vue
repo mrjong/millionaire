@@ -20,7 +20,7 @@
 <script>
 import Modal from './Modal.vue'
 export default {
-  name: 'fail-tip-modal',
+  name: 'won-tip-modal',
   data () {
     return {
       isClose: true
@@ -49,8 +49,14 @@ export default {
     Modal
   },
   watch: {
-    value (val) {
-      this.isClose = !val
+    // value (val) {
+    //   this.isClose = !val
+    // }
+    value: {
+      handler: function (val) {
+        this.isClose = !val
+      },
+      immediate: true
     }
   }
 }
@@ -70,7 +76,7 @@ export default {
     color: #fff;
     text-align: center;
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 15px;
 
     &-inner {
         display: flex;
@@ -85,7 +91,6 @@ export default {
 
     &-desc {
       font-size: 32px;
-      color: #fef163;
       line-height: 50px;
       margin: 0 30px;
     }

@@ -53,7 +53,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      code: 'code'
+      code: 'code',
+      userInfo: 'userInfo'
     })
   },
   methods: {
@@ -72,6 +73,18 @@ export default {
         }).catch((e) => {
           return false
         })
+      } else if (this.reviveObj.type === 'balance') {
+        // 提现成功分享
+        utils.statistic('balance_share', 3, {to_destination_s: val}, 'balance_share_page')
+        let title = this.$t('receiveCard.balance_share_title', {code: this.code})
+        let desp = this.$t('receiveCard.share_descripe', {code: this.code})
+        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716174012e498603fcb.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.bonusAmount}`), this.code, title, desp)
+      } else if (this.reviveObj.type === 'reward') {
+        // 赢钱成功分享
+        utils.statistic('reward_share', 3, {to_destination_s: val}, 'reward_share_page')
+        let title = this.$t('receiveCard.reward_share_title', {code: this.code})
+        let desp = this.$t('receiveCard.share_descripe', {code: this.code})
+        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716174013f2305eece6.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.bonusAmount}`), this.code, title, desp)
       } else {
         utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
         utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)

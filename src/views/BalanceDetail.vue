@@ -48,7 +48,8 @@ export default {
     return {
       reviveObj: {
         code: '',
-        isShare: false
+        isShare: false,
+        type: 'balance'
       },
       isShowShareTipModal: false,
       myPay: '',

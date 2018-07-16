@@ -297,7 +297,9 @@ const locale = {
     invite_pop: {
       text1: 'Invite  friends to earn cash quickly',
       text2: 'Each invitation can earn up to ₹10000'
-    }
+    },
+    balance_share_title: 'I withdrew cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!'
   },
   reviveGuide: { // 复活卡说明页
     title: 'Referral Code Available Now!',

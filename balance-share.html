@@ -113,7 +113,7 @@
       margin: 0 auto;
       text-align: center;
       font-weight: 300;
-      background: url('http://thumbor.apusapps.com/imageView/millionaire/balance-share-btn.png') no-repeat center;
+      background: url('http://thumbor.apusapps.com/imageView/millionaire/images/balance-share-btn.png') no-repeat center;
       background-size: cover;
       font-weight: 600;
     }
@@ -172,28 +172,28 @@
 </head>
 <body>
 <div class="container">
-  <img src="http://thumbor.apusapps.com/imageView/millionaire/balance-share-bg.jpg" class="container-bg">
+  <img src="http://thumbor.apusapps.com/imageView/millionaire/images/balance-share-bg.jpg" class="container-bg">
   <div class="logo">
     <img src="https://static.apusapps.com/await-logo.png">
   </div>
   <div class="title">
-    <img src="http://thumbor.apusapps.com/imageView/millionaire/balance-share-title.png" >
+    <img src="http://thumbor.apusapps.com/imageView/millionaire/images/balance-share-title.png" >
   </div>
   <div class="invite">
       <div class="person-pic">
-        <img src="http://thumbor.apusapps.com/imageView/millionaire/balance-share-person.png" alt="">
+        <img src="http://thumbor.apusapps.com/imageView/millionaire/images/balance-share-person.png" alt="">
       </div>
     <div class="head">
-      <img src="./src/assets/images/twitter.png" id="head">
+      <img src="" id="head">
     </div>
-    <div class="nickname" id="nickname">Kevin</div>
+    <div class="nickname" id="nickname"></div>
     <div class="text">
-      <p>I just won bonus <strong>₹250.88</strong> in Go!Million-</p>
+      <p>I just won bonus <strong id="money"></strong> in Go!Million-</p>
       <p>aire, come and join us,win cash together!</p>
     </div>
     <div class="text">
       <p class="referral-code">My Referral Code:</p>
-      <strong>76598432</strong>
+      <strong id="referral-code"></strong>
     </div>
     <p class="btn gp" onclick="goMillionaire()">Win Cash Togehter</p>
   </div>
@@ -210,7 +210,7 @@
   function goMillionaire () {
     ga('send', 'event', 'link', 'click', 'invite_earn_button');
     var link = window.location.protocol + '';
-    var referrerId = '334004';
+    var referrerId = '334005';
     var icode = '';
     var iversion = '';
     setTimeout(function () {
@@ -218,6 +218,22 @@
     }, 500);
     window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(link);
   }
+
+  function getUrlParameter (name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+  }
+  let avatar = document.querySelector('#head');
+  let nickName = document.querySelector('#nickname');
+  let money = document.querySelector('#money');
+  let referralCode = document.querySelector('#referral-code');
+
+  avatar.setAttribute('src', getUrlParameter('pic'));
+  nickName.innerHTML = getUrlParameter('name');
+  money.innerHTML = getUrlParameter('money');
+  referralCode.innerHTML = getUrlParameter('code');
 </script>
 </body>
 </html>

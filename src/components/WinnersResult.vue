@@ -58,10 +58,11 @@ export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      isShowTipModal: false,
+      isShowTipModal: true,
       reviveObj: {
         code: '',
-        isShare: false
+        isShare: false,
+        type: 'reward'
       },
       markInfo: {
         showMark: false,
@@ -88,13 +89,13 @@ export default {
     })
   },
   mounted () {
-    let winners = this.respondence.winners
-    winners.map((winner) => {
-      if (winner.userId === this.userInfo.userId) {
-        // 如果当前玩家为赢家 则弹出分享弹框
-        this.isShowTipModal = true
-      }
-    })
+    // let winners = this.respondence.winners
+    // winners.map((winner) => {
+    //   if (winner.userId === this.userInfo.userId) {
+    //     // 如果当前玩家为赢家 则弹出分享弹框
+    //     this.isShowTipModal = true
+    //   }
+    // })
   },
   methods: {
     callbackFailed () {
@@ -107,6 +108,15 @@ export default {
     share (data) {
       this.reviveObj.isShare = data.isShare
       this.reviveObj.code = this.code
+    }
+  },
+  watch: {
+    isWon: {
+      handler: function (val) {
+        console.log(val)
+        this.isShowTipModal = val
+      },
+      immediate: true
     }
   }
 }
