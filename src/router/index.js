@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import Main from '@/views/Main.vue'
 import Await from '@/views/Await.vue'
 import DoubleRewardCard from '@/views/DoubleRewardCard.vue'
+import Winner from '../components/WinnersResult.vue'
 const SetQuestion = () => import('@/views/SetQuestion.vue')
 const SetQuestionResult = () => import('@/views/SetQuestionResult.vue')
 const Rule = () => import('@/views/Rule.vue')
@@ -20,6 +21,7 @@ const Blank = () => import('@/views/Blank.vue')
 // const Video = () => import('@/views/Video.vue')
 // const SamllAwait = () => import('@/views/SmallAwait.vue')
 const Invite = () => import('@/views/Invite.vue')
+
 Vue.use(Router)
 
 const router = new Router({
@@ -118,6 +120,10 @@ const router = new Router({
       path: '/doubleRewardCard',
       name: 'doubleRewardCard',
       component: DoubleRewardCard
+    },
+    {
+      path: '/haha',
+      component: Winner
     }
     // {
     //   path: '/small-await',

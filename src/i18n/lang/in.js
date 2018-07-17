@@ -321,7 +321,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now  >></a>',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
@@ -410,6 +410,16 @@ const locale = {
       title: 'क्या आप बोनस खो रहे हैं?',
       desc: 'दोस्तों को शामिल होने और खेलने के लिए आमंत्रित करें₹10000 तक नकद कमाएं!',
       button: 'आमंत्रित करें और नकद कमाएं'
+    },
+    wonShareModal: {
+      title: 'बधाई! तुम जीते!',
+      desc: 'आपने अभी नकद ₹{money} जीता है, दोस्तों को शामिल होने और अधिक पैसे कमाने के लिए आमंत्रित किया है!',
+      btn: 'नकद आमंत्रित करें और कमाएं'
+    },
+    balanceShareModal: {
+      title: 'सफलतापूर्वक नकद निकालना',
+      desc: 'समीक्षा के बाद आपको नकद मिल जाएगी, दोस्तों को अधिक पैसा कमाने के लिए आमंत्रित करें!',
+      btn: 'नकद आमंत्रित करें और कमाएं'
     }
   }
 }

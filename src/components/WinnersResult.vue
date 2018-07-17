@@ -42,26 +42,42 @@
         </div>
       </div>
     </div>
+    <!-- <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark> -->
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import BalanceMark from './BalanceMark'
+
 export default {
   name: 'NoWinnersResult',
   data () {
-    return {}
+    return {
+    }
+  },
+  components: {
+    BalanceMark
   },
   computed: {
     ...mapGetters({
       respondence: 'result',
       currencyType: 'currencyType',
       watchingMode: 'watchingMode',
+      userInfo: 'userInfo',
+      code: 'code',
       isWon: 'isWon'
     })
   },
-  mounted () {},
-  methods: {}
+  mounted () {
+    // let winners = this.respondence.winners
+    // winners.map((winner) => {
+    //   if (winner.userId === this.userInfo.userId) {
+    //     // 如果当前玩家为赢家 则弹出分享弹框
+    //     this.isShowTipModal = true
+    //   }
+    // })
+  }
 }
 </script>
 <style scoped lang="less" type="text/less">

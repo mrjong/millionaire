@@ -297,7 +297,9 @@ const locale = {
     invite_pop: {
       text1: 'Invite  friends to earn cash quickly',
       text2: 'Each invitation can earn up to ₹10000'
-    }
+    },
+    balance_share_title: 'I withdrew cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!'
   },
   reviveGuide: { // 复活卡说明页
     title: 'Referral Code Available Now!',
@@ -321,7 +323,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now >></a>',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -370,7 +372,7 @@ const locale = {
     },
     failToUseReviveCard: { // 复活卡使用失败
       title: 'Extra Lives Use Failed', // 主题
-      desp: 'Your internet connection is disconnected or request to your server  timeout. Please check your internet connection.', // 描述
+      desp: 'Your internet connection is disconnected or request to your server timeout. Please check your internet connection.', // 描述
       btn: 'OK' // 按钮文案
     },
     eliminated: { // 点击选项已经被淘汰
@@ -411,6 +413,16 @@ const locale = {
       title: 'ARE YOU LOSING BONUS?',
       desc: 'Invite friends to join and play earn cash up to ₹10000!',
       button: 'Invite & Earn Cash'
+    },
+    wonShareModal: {
+      title: 'Congrats! You Won!',
+      desc: 'You just won cash ₹{money}, invite friends to join and earn more money!',
+      btn: 'Invite & Earn Cash'
+    },
+    balanceShareModal: {
+      title: 'Withdraw Cash Successfully',
+      desc: 'You\'ll get cash after reviewed, invite friends to earn more money!',
+      btn: 'Invite & Earn Cash'
     }
   }
 }
