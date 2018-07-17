@@ -41,14 +41,14 @@ export default {
       this.isClose = true
       if (utils.isOnline) {
         this.reportLift('online')
-        gameProcess.update({
-          isTaskStart: false
-        })
-        this.$store.commit(type._UPDATE, {
-          isShowTaskEnd: false,
-          isTaskRespondence: false
-        })
       }
+      gameProcess.update({
+        isTaskStart: false
+      })
+      this.$store.commit(type._UPDATE, {
+        isShowTaskEnd: false,
+        isTaskRespondence: false
+      })
       awaitState.run()
       this.$router.push({path: '/'})
     },
