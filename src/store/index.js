@@ -69,7 +69,7 @@ export default new Vuex.Store({
     isInputting: false, // 是否正在输入文字
     isShowNewbieTask: false,
     isUserGame: false, // 登录用户是否是第一次答题
-    isTaskEnd: false, // 新手任务是否结束
+    isShowTaskEnd: false, // 新手任务是否结束
     isTaskRespondence: false // 是否显示新手任务组件
   },
   getters: {
@@ -101,7 +101,7 @@ export default new Vuex.Store({
     lang: (state) => state.lang,
     isInputting: (state) => state.isInputting,
     isShowNewbieTask: (state) => state.isShowNewbieTask,
-    isTaskEnd: (state) => state.isTaskEnd,
+    isShowTaskEnd: (state) => state.isShowTaskEnd,
     isTaskRespondence: (state) => state.isTaskRespondence
   },
   mutations: {

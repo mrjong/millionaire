@@ -49,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion']),
+    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion', 'isTaskRespondence']),
     totalResult: function () {
       let result = {}
       let optionsNumber = ['A', 'B', 'C']
@@ -187,10 +187,13 @@ export default {
           this.answerErrorTip = true
           setTimeout(() => {
             this.answerErrorTip = false
-            awaitState.update()
-            this.$store.commit(type._UPDATE, {
-              isTaskEnd: true
-            })
+            if (this.isTaskRespondence) {
+              awaitState.update()
+              console.log('我在新手任务--打错了')
+              this.$store.commit(type._UPDATE, {
+                isShowTaskEnd: true
+              })
+            }
           }, 3000)
         }
       }
