@@ -91,6 +91,7 @@ export default {
     this.getPhoneNationCode()
   },
   mounted () {
+    console.log(this)
     // 利用resize事件判断是否调起软键盘
     this.windowInnerHeight = window.innerHeight
     window.addEventListener('resize', () => {

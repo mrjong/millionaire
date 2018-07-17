@@ -11,9 +11,10 @@ import http from './assets/js/http'
 import store from './store'
 import i18n from './i18n'
 import 'core-js/modules/es6.promise'
-import im from './assets/js/im'
+// import im from './assets/js/im'
 import { _OPEN_DIALOG } from './store/type'
-im.init()
+
+// im.init()
 
 window.onload = function () {
   // 初始化打点
@@ -73,19 +74,6 @@ router.beforeEach((to, from, next) => {
 
 Vue.component('static-image', Image) // 初始化静态图片组件
 
-// 静态图片指令
-Vue.directive('bg-img', (el, {value = {}}) => {
-  const {name = '', width, height, style = '', ...extra} = value
-  if (!name) return
-  console.log(getComputedStyle(el)['background-image'])
-  const url = utils.getStaticImgUrl(name, width, height, extra)
-  const extraStyle = style ? `,${style}` : ''
-  const image = new window.Image()
-  image.src = url
-  image.onload = () => {
-    el.style.backgroundImage = `url('${url}')${extraStyle}`
-  }
-})
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',

@@ -53,7 +53,16 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
+        loader: 'thumbor-loader',
+        options: {
+          limit: 10000,
+          name: '[name].[ext]',
+          publicPath: 'https://thumbor.apusapps.com/imageView/millionaire/images/'
+        }
+      },
+      {
+        test: /\.(svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
