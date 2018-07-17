@@ -78,13 +78,13 @@ export default {
         utils.statistic('balance_share', 3, {to_destination_s: val}, 'balance_share_page')
         let title = this.$t('receiveCard.balance_share_title', {code: this.code})
         let desp = this.$t('receiveCard.share_descripe', {code: this.code})
-        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716183804dcefcfe1c0.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.bonusAmount}`), this.code, title, desp)
+        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716183804dcefcfe1c0.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.balance}`), this.code, title, desp)
       } else if (this.reviveObj.type === 'reward') {
         // 赢钱成功分享
         utils.statistic('reward_share', 3, {to_destination_s: val}, 'reward_share_page')
         let title = this.$t('receiveCard.reward_share_title', {code: this.code})
         let desp = this.$t('receiveCard.share_descripe', {code: this.code})
-        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716183804524ef09d7b.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.bonusAmount}`), this.code, title, desp)
+        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716183804524ef09d7b.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.myselfBonusAmount}`), this.code, title, desp)
       } else {
         utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
         utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html?referrer=invite'), this.code)

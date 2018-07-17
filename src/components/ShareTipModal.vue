@@ -5,10 +5,10 @@
       <div class="fail-tip-inner">
         <section class="fail-tip">
             <div class="fail-tip-text">
-            <p class="fail-tip-title">WIthdrawal Cash Success</p>
-            <p class="fail-tip-desc">You just withdrawal cash  ₹20, share and invite friends to join, and get more rewards!</p>
+            <p class="fail-tip-title">{{$t('tip.balanceShareModal.title')}}</p>
+            <p class="fail-tip-desc">{{$t('tip.balanceShareModal.desc')}}</p>
             </div>
-            <button @click="share" class="btn-share">Share & Earn Cash</button>
+            <button @click="share" class="btn-share">{{$t('tip.balanceShareModal.btn')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -19,8 +19,10 @@
 </template>
 <script>
 import Modal from './Modal.vue'
+import {mapGetters} from 'vuex'
+
 export default {
-  name: 'fail-tip-modal',
+  name: 'balance-share-modal',
   data () {
     return {
       isClose: true
@@ -31,6 +33,11 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
   },
   methods: {
     share () {
@@ -60,7 +67,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 77px 0 53px;
+    padding: 67px 0 53px;
     background-image: url("../assets/images/share-modal-bg.png");
     background-position: top;
     background-repeat: no-repeat;
@@ -84,9 +91,9 @@ export default {
     }
 
     &-desc {
-      font-size: 32px;
+      font-size: 30px;
       color: #fef163;
-      line-height: 50px;
+      line-height: 40px;
       margin: 0 30px;
     }
     .btn-share {

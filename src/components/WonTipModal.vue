@@ -5,10 +5,10 @@
       <div class="fail-tip-inner">
         <section class="fail-tip">
             <div class="fail-tip-text">
-            <p class="fail-tip-title">WON THE BONUS</p>
-            <p class="fail-tip-desc">You won bonus ₹20,  share and invite friends to join,  get more rewards!</p>
+            <p class="fail-tip-title">{{$t('tip.wonShareModal.title')}}</p>
+            <p class="fail-tip-desc">{{$t('tip.wonShareModal.desc', {money: (userInfo.myselfBonusAmount)})}}</p>
             </div>
-            <button @click="share" class="btn-share">Share & Earn Cash</button>
+            <button @click="share" class="btn-share">{{$t('tip.wonShareModal.btn')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -19,6 +19,7 @@
 </template>
 <script>
 import Modal from './Modal.vue'
+import {mapGetters} from 'vuex'
 export default {
   name: 'won-tip-modal',
   data () {
@@ -31,6 +32,11 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
   },
   methods: {
     share () {
@@ -66,7 +72,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 77px 0 53px;
+    padding: 67px 0 53px;
     background-image: url("../assets/images/winner-share-bg.jpg");
     background-position: top;
     background-repeat: no-repeat;
@@ -90,8 +96,8 @@ export default {
     }
 
     &-desc {
-      font-size: 32px;
-      line-height: 50px;
+      font-size: 30px;
+      line-height: 40px;
       margin: 0 30px;
     }
     .btn-share {

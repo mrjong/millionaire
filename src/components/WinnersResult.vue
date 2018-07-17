@@ -42,40 +42,21 @@
         </div>
       </div>
     </div>
-    <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
-    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
-    <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
+    <!-- <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark> -->
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import WonTipModal from '../components/WonTipModal'
-import ReviveCard from './ReviveCard'
 import BalanceMark from './BalanceMark'
 
 export default {
   name: 'NoWinnersResult',
   data () {
     return {
-      isShowTipModal: true,
-      reviveObj: {
-        code: '',
-        isShare: false,
-        type: 'reward'
-      },
-      markInfo: {
-        showMark: false,
-        htmlText: '',
-        shouldSub: false,
-        markType: 0,
-        okBtnText: ''
-      }
     }
   },
   components: {
-    WonTipModal,
-    ReviveCard,
     BalanceMark
   },
   computed: {
@@ -83,9 +64,9 @@ export default {
       respondence: 'result',
       currencyType: 'currencyType',
       watchingMode: 'watchingMode',
-      isWon: 'isWon',
       userInfo: 'userInfo',
-      code: 'code'
+      code: 'code',
+      isWon: 'isWon'
     })
   },
   mounted () {
@@ -96,28 +77,6 @@ export default {
     //     this.isShowTipModal = true
     //   }
     // })
-  },
-  methods: {
-    callbackFailed () {
-      this.markInfo.htmlText = 'Fail to submit, please try again later.'
-      this.markInfo.showMark = true
-    },
-    shareClose () {
-      this.reviveObj.isShare = false
-    },
-    share (data) {
-      this.reviveObj.isShare = data.isShare
-      this.reviveObj.code = this.code
-    }
-  },
-  watch: {
-    isWon: {
-      handler: function (val) {
-        console.log(val)
-        this.isShowTipModal = val
-      },
-      immediate: true
-    }
   }
 }
 </script>

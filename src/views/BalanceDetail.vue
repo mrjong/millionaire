@@ -47,7 +47,8 @@ export default {
   data () {
     return {
       reviveObj: {
-        code: '',
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
         isShare: false,
         type: 'balance'
       },
@@ -123,7 +124,7 @@ export default {
             this.showLoading = false
             if (+data.result === 1) { // 请求成功 code必为0
               if (+data.code === 0) {
-                this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
+                // this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
                 this.isShowShareTipModal = true
@@ -183,8 +184,9 @@ export default {
       this.reviveObj.isShare = false
     },
     share (data) {
-      this.reviveObj.isShare = data.isShare
-      this.reviveObj.code = this.code
+      this.$router.push('invite')
+      // this.reviveObj.isShare = data.isShare
+      // this.reviveObj.code = this.code
     }
   },
   components: {
