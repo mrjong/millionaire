@@ -17,7 +17,8 @@ const state = {
   bonusAmount: 0, // 奖金数量
   income: 0, // 总收益,
   incomeShow: '0', // 总收益展示,
-  icode: '' // 好友验证码
+  icode: '', // 好友验证码
+  myselfBonusAmount: 0 // 本场比赛自己赢得的奖金数
 }
 
 const getters = {

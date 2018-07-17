@@ -136,7 +136,7 @@ const actions = {
     // 取出未提交成功的答案一起提交
     let {id: raceId, uncommittedAnswers, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
     const {id, userAnswer, index, questionCount} = getters
-    if (raceId !== utils.raceId) { // 必须为当前比赛
+    if (!raceId || raceId !== utils.raceId) { // 必须为当前比赛
       uncommittedAnswers = []
       utils.storage.remove('millionaire-uncommittedAnswers')
     }
@@ -230,7 +230,6 @@ const actions = {
 
         // 判断答案是否正确
         const isCorrect = md5Map[correctAnswer] === getters.userAnswer
-
         utils.statistic('ANSWER', 0, {
           flag_s: `${getters.index}`,
           text_s: `${getters.watchingMode ? 1 : 0}`,
