@@ -6,7 +6,7 @@
         <p class="no-winner-result__title__text">{{$t('winnersResult.no_winner')}}</p>
       </div>
       <p class= 'no-winner-result__bonus'>{{currencyType}}{{respondence.bonusAmount}}</p>
-      <p class='no-winner-result__tip'>{{$t('winnersResult.tip')}}</p>
+      <p class='no-winner-result__tip'>{{$t('winnersResult.result_tip')}}</p>
     </div>
     <div class="has-winner-result" v-else>
        <p class="has-winner-result__title" v-if="!isWon">

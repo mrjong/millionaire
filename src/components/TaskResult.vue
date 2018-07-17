@@ -1,17 +1,13 @@
 <template>
-  <div class="guide" v-if="FirstGuide && (!isAnswered || isUserGame) && !isClose ">
-    <span class="guide__close iconfont icon-cuowu" @click.stop="isClose = true"></span>
-    <p class="important ">{{$t('reviveGuide.title')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text1')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>
-    <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text3')}}</p>
+  <div class="guide" v-if="!isClose">
+    <span class="guide__close iconfont icon-cuowu" @click="close"></span>
+    <p class="important ">{{$t('newbieTask.result_page.title')}}</p>
+    <p class="guide__text">{{$t('newbieTask.result_page.text1')}}</p>
     <div class="guide__img">
       <img src="../assets/images/light.png" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
-    <div class="guide__btn" @click="toShareDetail">
-      <p class="guide__btn__icon">+1</p>
-      {{$t('reviveGuide.btn')}}</div>
+    <div class="guide__btn get-more" @click="getExtraLift">{{$t('newbieTask.result_page.btn')}}</div>
   </div>
 </template>
 
@@ -19,72 +15,73 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
+import * as api from '../assets/js/api'
+import awaitState from '../assets/js/game-state/state-end.js'
+import gameProcess from '../assets/js/game-process'
 export default {
-  name: 'ReviveGuide',
+  name: 'TaskResult',
   props: {
   },
   data () {
     return {
-      isClose: false,
-      FirstGuide: false,
-      isAnswered: false
+      isClose: false
     }
   },
   computed: {
     ...mapGetters({
       status: 'status',
-      questionStatus: 'question_status',
-      isUserGame: 'isUserGame'
+      questionStatus: 'question_status'
     })
   },
   mounted () {
-    if (utils.storage.get('isAnswered') === undefined) {
-      this.isAnswered = false
-    } else {
-      this.isAnswered = utils.storage.get('isAnswered')
-    }
-    utils.statistic('referral_code_guide', 0)
-    if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
-      this.FirstGuide = true
-      utils.storage.set('millionaire-NoFirstGuide', true)
-    } else {
-      this.FirstGuide = false
-    }
-    // 显示之后禁止屏幕滚动
-    if (this.FirstGuide && (!this.isAnswered || this.isUserGame)) {
-      this.freeze()
-    } else {
-      this.restore()
-    }
+    utils.statistic('task_result_page', 0)
   },
   methods: {
-    toShareDetail () {
+    close () {
       this.isClose = true
-      utils.statistic('get_life_button', 1, {to_destination_s: 'task_page'}, 'wait_page')
-      // 跳新手任务
-      this.$store.commit(type._UPDATE, {
-        isShowNewbieTask: true
-      })
-    },
-    freeze () {
-      document.querySelector('#app').style.overflow = 'hidden'
-    },
-    restore () {
-      document.querySelector('#app').style.overflow = 'visible'
-    },
-    preventDefault (event) {
-      event.preventDefault()
-    }
-  },
-  destroyed () {
-    this.restore()
-  },
-  watch: {
-    // 关闭之后恢复屏幕滚动
-    isClose (val) {
-      if (val) {
-        this.restore()
+      if (utils.isOnline) {
+        this.reportLift('online')
       }
+      gameProcess.update({
+        isTaskStart: false
+      })
+      this.$store.commit(type._UPDATE, {
+        isShowTaskEnd: false,
+        isTaskRespondence: false
+      })
+      awaitState.run()
+      this.$router.push({path: '/'})
+    },
+    getExtraLift () {
+      this.isClose = true
+      utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
+      gameProcess.update({
+        isTaskStart: false
+      })
+      this.$store.commit(type._UPDATE, {
+        isShowTaskEnd: false,
+        isTaskRespondence: false
+      })
+      if (utils.isOnline) {
+        this.reportLift('online')
+      } else {
+        utils.login(() => {
+          this.reportLift('offline')
+        })
+      }
+    },
+    reportLift (type) {
+      // 上报得复活卡
+      let state = type === 'online' ? 'wait_page' : 'sigh_up'
+      this.isClose = true
+      api.doTaskToLife().then(({data}) => {
+        if (data.result === 1 && data.code) {
+          utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
+        } else {
+          utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '0'})
+        }
+        awaitState.run()
+      })
     }
   }
 }
@@ -92,7 +89,7 @@ export default {
 <style scoped lang="less" type="text/less">
   .guide {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -119,6 +116,7 @@ export default {
       font-size: 30px;
       line-height: 45px;
       margin-bottom: 20px;
+      text-align: center;
       .dot{
         display: inline-block;
         width: 15px;
@@ -132,6 +130,7 @@ export default {
     &__img{
       width: 100%;
       position: relative;
+      margin-top: 100px;
       .light{
         max-width: 70%;
         width: 600px;
@@ -156,7 +155,7 @@ export default {
       text-align: center;
       line-height: 94px;
       border-radius: 46px;
-      margin: 50px auto 0;
+      margin: 200px auto 0;
       display: flex;
       justify-content: center;
       &__icon{
@@ -170,6 +169,9 @@ export default {
         font-size: 22px;
         margin-right: 15px;
       }
+    }
+    .get-more{
+      background-color: #e03c79
     }
     .important{
       color: #e03c79;
@@ -207,7 +209,7 @@ export default {
         width: 600px;
         height: 94px;
         line-height: 94px;
-        margin: 30px auto 0;
+        margin: 200px auto 0;
       }
       .important{
         font-size: 56px;

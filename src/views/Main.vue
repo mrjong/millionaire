@@ -18,10 +18,15 @@
       </div>
     </div>
     <count-down v-if="status === 2"></count-down>
-    <winners-result v-if="status === 4"></winners-result>
-    <respondence @fail-tip="failTip" @error="onError" v-show="status === 3 && questionStatus !== 8"></respondence>
+    <winners-result v-if="status === 4 && !isTaskRespondence"></winners-result>
+    <keep-alive>
+      <component v-bind:is="anwseredComponent" @fail-tip="failTip" @error="onError"></component>
+    </keep-alive>
+    <!-- <respondence @fail-tip="failTip" @error="onError" v-if="status === 3 && questionStatus !== 8 && !isTaskRespondence"></respondence> -->
+    <!-- <task-respondence v-show="status === 3 && questionStatus !== 8 && isTaskRespondence"></task-respondence> -->
     <compere v-show="status === 3 && questionStatus === 8"></compere>
-    <chat-room></chat-room>
+    <chat-room v-if="!isTaskRespondence"></chat-room>
+    <task-result v-if="status === 3 && isShowTaskEnd"></task-result>
     <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
@@ -36,11 +41,13 @@ import FailTipModal from '../components/FailTipModal'
 import ChatRoom from '../components/ChatRoom'
 import CountDown from '../components/CountDown.vue'
 import Respondence from '../components/Respondence'
+import TaskRespondence from '../components/TaskRespondence'
 import WinnersResult from '../components/WinnersResult'
 import Compere from '../components/Compere'
 import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
+import TaskResult from '../components/TaskResult'
 // import NewAnnouncement from '../components/NewAnnouncement'
 // import { _UPDATE, _INIT } from '../store/type'
 export default {
@@ -67,8 +74,17 @@ export default {
       status: 'status',
       questionStatus: 'question_status',
       isWon: 'isWon',
-      isPlayingMusic: 'isPlayingMusic'
-    })
+      isPlayingMusic: 'isPlayingMusic',
+      isShowTaskEnd: 'isShowTaskEnd',
+      isTaskRespondence: 'isTaskRespondence'
+    }),
+    anwseredComponent () {
+      if (this.status === 3 && this.questionStatus !== 8 && !this.isTaskRespondence) {
+        return Respondence
+      } else if (this.status === 3 && this.questionStatus !== 8 && this.isTaskRespondence) {
+        return TaskRespondence
+      }
+    }
   },
   created () {
     if (this.status === 1) {
@@ -124,6 +140,8 @@ export default {
     BalanceMark,
     FailTipInvite,
     lang,
+    TaskResult,
+    TaskRespondence,
     FailTipModal
   }
 }

@@ -59,8 +59,8 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      initialState: 'initialState'
     })
   },
   beforeCreate () {
@@ -264,8 +264,7 @@ export default {
           .then(({data}) => {
             if (+data.result === 1) {
               let dataObj = data.data
-              console.log(dataObj)
-              const isWon = !!dataObj.result_code
+              const isWon = dataObj.result_code
               this.showLogin = isWon && !this.isOnline
               // 展示you won的同时弹出分享弹框
               this.isShowTipModal = isWon && this.isOnline
