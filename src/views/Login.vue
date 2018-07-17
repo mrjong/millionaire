@@ -60,7 +60,7 @@ export default {
       phoneNumber: '',
       code: '',
       isAgree: true,
-      isTaskEnd: 'isTaskEnd'
+      isShowTaskEnd: 'isShowTaskEnd'
     }
   },
   computed: {
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     back () {
-      if (this.isTaskEnd) {
+      if (!this.isShowTaskEnd) {
         console.log('退出后停止游戏')
         awaitState.run()
       }

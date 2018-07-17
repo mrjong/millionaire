@@ -230,7 +230,7 @@ export default {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
-              const isWon = !!data.data
+              const isWon = data.result_code
               this.showLogin = isWon && !this.isOnline
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon

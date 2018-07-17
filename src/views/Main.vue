@@ -26,7 +26,7 @@
     <!-- <task-respondence v-show="status === 3 && questionStatus !== 8 && isTaskRespondence"></task-respondence> -->
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room v-if="!isTaskRespondence"></chat-room>
-    <task-result v-if="status === 3 && isTaskEnd"></task-result>
+    <task-result v-if="status === 3 && isShowTaskEnd"></task-result>
     <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
@@ -75,7 +75,7 @@ export default {
       questionStatus: 'question_status',
       isWon: 'isWon',
       isPlayingMusic: 'isPlayingMusic',
-      isTaskEnd: 'isTaskEnd',
+      isShowTaskEnd: 'isShowTaskEnd',
       isTaskRespondence: 'isTaskRespondence'
     }),
     anwseredComponent () {
