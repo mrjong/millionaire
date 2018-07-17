@@ -189,7 +189,6 @@ export default {
             this.answerErrorTip = false
             if (this.isTaskRespondence) {
               awaitState.update()
-              console.log('我在新手任务--打错了')
               this.$store.commit(type._UPDATE, {
                 isShowTaskEnd: true
               })
