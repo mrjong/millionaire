@@ -72,7 +72,6 @@ export default {
   methods: {
     back () {
       if (!this.isShowTaskEnd) {
-        console.log('退出后停止游戏')
         awaitState.run()
       }
       this.$router.replace('/')
