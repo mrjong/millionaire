@@ -1,11 +1,11 @@
 <template>
   <div class="base-info">
     <div class="base-info__user">
-        <div class="base-info__user__head" :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login">
+        <!-- <div class="base-info__user__head" :style="{backgroundImage:'url('+ baseInfo.avatar +')'}" @click="login">
           <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
-        </div>
-        <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p>
-      </div>
+        </div> -->
+        <!-- <p class="base-info__user__name" @click="login">{{baseInfo.userName}}</p> -->
+    </div>
     <div class="base-info__other">
       <router-link to="/balance" class="balance-router" >
         <div class="base-info__other__balance" @click="routerStatistic('take_cash_page')">
@@ -23,6 +23,27 @@
         </div>
       </router-link>
     </div>
+    <div class="base-info__btn">
+      <div class="invitation-code">
+        <div class="extra-lives">
+          <div style="position: relative;">
+            <span class="extra-lives__icon"></span>
+            <living class="invite-living" v-if="inviteLiving"></living>
+          </div>
+          <span class="extra-lives__text">{{$t('await.extra_lives_text')}} {{lives}}</span>
+        </div>
+      </div>
+      <div class="get-lives">
+        <div class="invitation-code__btn" @click="toExtraLiveRules">{{$t('await.get_more_text')}}</div>
+      </div>
+      <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
+        <p class="share-success__text">SUCCESS</p>
+        <div class="share-success__base">
+          <img src="../assets/images/heart-light.png" class="heart">
+        </div>
+        <p class="share-success__num">+1</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,38 +51,60 @@
 import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import { _INIT } from '../store/type'
+import Living from './Living'
+
 export default {
   name: 'BaseInfo',
   props: {
     baseInfo: Object
   },
   data () {
-    return {}
+    return {
+      inviteLiving: false,
+      isSucceed: false
+    }
+  },
+  components: {
+    Living
   },
   computed: {
-    ...mapGetters(['isOnline'])
+    ...mapGetters(['isOnline', 'code', 'lives'])
   },
-  mounted () {},
+  watch: {
+    // 复活卡心心抖动效果
+    lives: function (val, oldVal) {
+      if (val > oldVal) {
+        this.inviteLiving = true
+        setTimeout(() => {
+          this.inviteLiving = false
+        }, 3000)
+      }
+    }
+  },
   methods: {
     routerStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
     },
-    login () {
-      if (!this.isOnline) {
-        if (utils.pageType === 'h5') {
-          utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
-        } else {
-          utils.statistic('wait_page', 1, {to_destination_s: 'loggin_page'}, 'wait_page')
+    login (path) {
+      utils.login(() => {
+        this.logout = false
+        utils.statistic('wait_page', 1, {'result_code_s': '1'}, 'wait_page')
+        this.$store.dispatch(_INIT)
+        if (path) {
+          this.$router.push({path: path, query: {'code': this.code}})
         }
-        utils.login(() => {
-          this.$store.dispatch(_INIT).then(() => {
-          }, (err) => {
-            console.log('点击头像登陆失败:', err)
-          })
-        })
+      })
+    },
+    // 按钮打点
+    btnStatistic (destination) {
+      utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    },
+    toExtraLiveRules () {
+      this.btnStatistic('referral_code_page')
+      if (utils.isOnline) {
+        this.$router.push({path: '/share-detail', query: {'code': this.code}})
       } else {
-        utils.statistic('wait_page', 1, {to_destination_s: 'user_profile'}, 'wait_page')
-        this.$router.push({path: '/user-center'})
+        this.login('/share-detail')
       }
     }
   }
@@ -74,13 +117,11 @@ export default {
     background-color: #ffffff;
     border-radius: 24px;
     margin:0 auto 25px;
-    padding: 0.5px;
-    padding-bottom: 40px;
-    padding-top:30px;
+    padding: 62px 0 46px;
     position: relative;
     &__user{
-      text-align: center;
-      margin-bottom: 40px;
+      // text-align: center;
+      // margin-bottom: 40px;
       &__head{
         width:150px;
         height:150px;
@@ -112,6 +153,7 @@ export default {
     &__other{
       display: flex;
       justify-content: center;
+      padding-bottom: 60px;
       .balance-router, .balance-rank{
         width: 50%;
         display: block;
@@ -134,10 +176,11 @@ export default {
         }
         .num{
           font-size: 56px;
-          margin-top: 26px;
+          margin-top: 36px;
           color: #241262;
           text-align: center;
           font: 700 56px 'Roboto Condensed', Arial, sans-serif;
+          line-height: 1;
         }
       }
     }
@@ -150,6 +193,128 @@ export default {
         margin: 0 auto;
         font-family: 'Roboto', Arial, serif;
         font-weight: 400;
+      }
+    }
+
+    &__btn{
+      border-top: 1px solid #DFDDE9;
+      position: relative;
+      max-width: 93%;
+      width: 6.7rem;
+      display: flex;
+      margin:0 25px;
+      padding-top: 60px;
+      justify-content: space-between;
+      background-color: #fff;
+      align-self: center;
+ 
+      .invitation-code, .get-lives{
+        display: flex;
+        align-items: center;
+        max-width: 48%;
+        width: 322px;
+        background-color:#fff;
+        font-family: "Roboto";
+        .extra-lives{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          color: #241262;
+          height: 36px;
+          span{
+            display: block;
+            height: 37px;
+            line-height: 37px;
+          }
+          .invite-living{
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 50px;
+          }
+          &__icon{
+            width: 44px;
+            height: 36px;
+            color: #f4387c;
+            font-size: 40px;
+            align-self: center;
+            background: url("../assets/images/lives-icon.png") no-repeat center;
+            background-size: contain;
+          }
+          &__text{
+            font-size: 28px;
+            margin: 0 0 0 12px;
+            color: #241262;
+          }
+        }
+         .get-more-text{
+            font-size: 28px;
+            margin: 0 0 0 33px;
+            color: #f4387c;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            &__icon{
+              color: #f4387c;
+              font-size: 20px;
+            }
+         }
+        &__btn{
+          width: 186px;
+          height: 68px;
+          line-height: 68px;
+          color: #fff;
+          font-size: 26px;
+          text-align: center;
+          background-color: #f4387c;
+          border-radius: 46px;
+          margin: 0 auto;
+          box-shadow: 4px 8px 8px 0px rgba(228, 78, 129, 0.4);
+        }
+      }
+      .share-success{
+        width: 400px;
+        height: 400px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 24px;
+        background-color:rgba(15, 26, 114, 0.8);
+        padding: 25px;
+        font-weight: 'Roboto';
+        &__text{
+          color:#fa74a5;
+          text-align: center;
+          font-size: 32px;
+          font-weight: bold;
+          transform: translateY(40px)
+        }
+        .heart{
+          width: 85%;
+          margin: 0 auto;
+        }
+        &__num{
+          color: #fff;
+          font-size:48px;
+          text-align: center;
+          font-weight: bold;
+          transform: translateY(-40px)
+        }
+      }
+      .get-lives{
+        color: #fff;
+        font-size: 28px;
+        transition:opacity 300ms linear 2s;
+        .revive-rule{
+          font-weight: 300;
+          margin-top: 20px;
+          font-size: 22px;
+          color: #fff;
+        }
+        &__text{
+          margin-bottom: 20px;
+        }
       }
     }
   }

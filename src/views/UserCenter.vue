@@ -5,42 +5,50 @@
       <p class="title">{{$t('userCenter.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
       <p class="edit" >
-        <span @click="edit" v-if="!isEditable">{{$t('userCenter.edit')}}</span>
-        <span @click="save" v-else>{{$t('userCenter.save')}}</span>
+        <!-- <span @click="edit" v-if="!isEditable">{{$t('userCenter.edit')}}</span> -->
+        <span @click="save" v-if="isEditable">{{$t('userCenter.save')}}</span>
       </p>
     </div>
     <div class="user__head">
-      <label for="uploadPic">
+      <label for="uploadPic" class="user__head__avatar">
         <img :src="userInfo.avatar" id="img">
         <input type="file" id="uploadPic" name="pic" @change="uploadPic" hidden>
       </label>
+      <div class="user__head__name">
+        <div style="display:flex;">
+          <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput" :style="{width: nickInputWidth + 'px'}">
+          <span class="name__text" v-else style="height: 24px;">{{userInfo.userName}}</span>
+          <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
+        </div>
+        <span class="referral-code"><span style="opacity: 0.6">Referral Code:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
+      </div>
     </div>
     <div class="user__wrap">
-      <p class="name">
-        <span class="name__icon iconfont icon-nicheng"></span>
-        <span class="name__tip">{{$t('userCenter.name')}}</span>
-        <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput">
-        <span class="name__text" v-else>{{userInfo.userName}}</span>
-      </p>
+      <!-- <p class="name"></p> -->
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text">{{phone}}</span>
-      </p>
-      <p class="code">
-        <span class="code__icon iconfont icon-yaoqingma"></span>
-        <span class="code__tip">{{$t('userCenter.code')}}</span>
-        <span class="code__text">{{code}}</span>
+        <span class="paytm__text" style="font-size: 32px">{{phone}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
-        <span class="cash-history__icon iconfont icon-cashhistory"></span>
+        <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+      </p>
+      <p class="cash-history" @click="jump('balance-record')">
+        <span class="cash-history__icon iconfont icon-wenjuan"></span>
+        <span class="cash-history__tip">Feedback</span>
         <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
         <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
+      </p>
+      <p class="cash-history" @click="jump('balance-record')">
+        <span class="cash-history__icon iconfont icon-Likeus"></span>
+        <span class="cash-history__tip">Like Us</span>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
     <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
@@ -65,6 +73,7 @@ export default {
   name: 'Contact',
   data () {
     return {
+      nickInputWidth: '',
       nickname: '',
       isEditable: false,
       loading: false,
@@ -97,6 +106,8 @@ export default {
     edit () {
       this.isEditable = true
       this.nickname = this.userInfo.userName
+      let nicknameTextDom = document.querySelector('.name__text')
+      this.nickInputWidth = nicknameTextDom.offsetWidth
       setTimeout(() => {
         this.$refs.nickInput.focus()
       }, 200)
@@ -316,9 +327,37 @@ export default {
     }
   }
   &__head {
-    width: 133px;
-    height: 133px;
-    margin: 80px auto 40px;
+    display: flex;
+    margin-top: 83px;
+    color: #fff;
+    // width: 133px;
+    // height: 133px;
+    // margin: 80px auto 40px;
+    &__avatar {
+      width: 107px;
+      height: 107px;
+      margin-right: 40px;
+    }
+    &__name {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-size: 32px;
+      font-family: 'Roboto', Arial, sans-serif;
+      #nickInput {
+        outline: none;
+        border: none;
+        background: none;
+      }
+      .icon_edit {
+        margin-left: 20px;
+        margin-top: 8px;
+        font-size: 28px;
+      }
+      .referral-code {
+        font-size: 28px;
+      }
+    }
     img {
       width: 100%;
       height: 100%;
@@ -326,14 +365,6 @@ export default {
     }
   }
   &__wrap {
-    .name__nick {
-      background: none;
-      outline: none;
-      border: none;
-      overflow: hidden;
-      width: 250px;
-      text-align: right;
-    }
     .name,
     .paytm,
     .code,
@@ -343,17 +374,17 @@ export default {
       justify-content: space-between;
       max-width: 100%;
       width: 657px;
-      height: 93px;
+      height: 90px;
       text-align: center;
       color: #fff;
       font: 32px "Roboto", Arial, serif;
-      line-height: 93px;
+      line-height: 90px;
+      margin-top: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      margin-top: 26px;
       position: relative;
       &__icon {
         height: 100%;
-        font-size: 36px;
+        font-size: 32px;
         display: block;
         border-radius: 50%;
         position: absolute;
@@ -368,7 +399,7 @@ export default {
         line-height: 93px;
       }
       &__text {
-        font: 32px "Roboto", Arial, serif;
+        font: 24px "Roboto", Arial, serif;
         line-height: 93px;
       }
       .mail {
@@ -394,14 +425,14 @@ export default {
   .logout-btn {
     max-width: 100%;
     width: 657px;
-    height: 93px;
+    height: 92px;
     border-radius: 46px;
     text-align: center;
     color: #fff;
     font: 32px "Roboto", Arial, serif;
-    line-height: 93px;
+    line-height: 92px;
     background-color: rgba(255, 255, 255, 0.5);
-    margin-top: 100px;
+    margin-top: 340px;
   }
 }
 </style>

@@ -5,7 +5,7 @@
         {{$t('await.next_time_text')}}
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
+      <div class="game-living"  @click="toGamePage" v-if="false">
         <p class="living-text">{{$t('await.living')}}</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
@@ -14,6 +14,7 @@
       </div>
       <p class="hint__time__hour" v-else>
         {{nextTime[1]}}
+        <!-- <a class="" href="javascript:;"><img src="../assets/images/icon-clock.png" alt=""></a> -->
       </p>
     </div>
     <div class="hint__line"></div>
@@ -95,11 +96,11 @@ export default {
         }
       }
       &__hour,&__number{
-        height: 70px;
+        height: 41px;
         margin-top: 25px;
         color: #ffb227;
         font: 700 56px 'Roboto Condensed', Arial, serif;
-        line-height: 70px;
+        line-height: 41px;
       }
       &__hour{
         color: #fff;
