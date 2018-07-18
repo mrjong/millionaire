@@ -1,7 +1,7 @@
 /* global */
 import IM from 'im'
 import * as type from './listener-type'
-import {pollMsg} from './api'
+import {pollMsg, getIMServerAddress} from './api'
 import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
@@ -9,9 +9,8 @@ import { _INIT } from '../../store/type'
 import gameProcess from './game-process'
 import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
-let keepLiveMessageTimer = null
-
 const im = {
+  serverAddress: null,
   pullMsgId: '', // 消息ID
   pullMsgTimer: null, // 拉取消息定时器
   pullMsgInterval: 1000, // 拉取消息间隔
@@ -89,6 +88,16 @@ const im = {
       console.log('重新连接:', im.token)
       im.connect(im.token)
     })
+    // 获取IM服务器地址
+    getIMServerAddress().then(({data}) => {
+      if (+data.result === 1 && +data.code === 0) {
+        im.serverAddress = data.data || ''
+      } else {
+        console.error(`获取IM服务器地址失败: ${data.message || ''}`)
+      }
+    }, err => {
+      console.log(`获取IM服务地址出错:`, err)
+    })
   },
 
   /**
@@ -96,24 +105,27 @@ const im = {
    * @param {any} token
    */
   connect (token) {
+    const {serverAddress} = im
+    if (!serverAddress) {
+      console.log('连接失败: IM服务器地址为空')
+      return false
+    }
     // im.disconnect() // 先断开链接
     this.token = token
     IM.connect({
       token,
-      serverAdress: '10.10.80.19:8888/websocket',
+      serverAddress,
       onconnect (err, {userId}) {
         if (!err) {
           console.log('连接成功' + userId, token)
           im.userId = userId
-          console.log('连接成功', im)
           im.emitListener(type.CONNECT_SUCCESS, userId)
         } else {
           console.log('连接失败：', err)
         }
       },
       ondisconnect () {
-        console.log('断开连接')
-        im.emitListener(type.NETWORK_UNAVAILABLE)
+        console.log('IM断开连接')
       },
       onmessage: (message) => {
         // 判断消息类型
@@ -154,7 +166,6 @@ const im = {
    */
   disconnect () {
     try {
-      clearInterval(keepLiveMessageTimer)
       IM.disconnect()
     } catch (err) {
       console.log('disconnect 失败：', err)
@@ -173,15 +184,14 @@ const im = {
    */
   joinChatRoom (chatRoomId, count = 0) {
     this.chatRoomId = chatRoomId
-    console.log('加入聊天室：')
     IM.joinChatRoom({
       id: chatRoomId,
-      onsuccess () {
-        console.log('加入聊天室成功')
+      onsuccess (msg) {
+        console.log('加入聊天室成功', msg)
         im.emitListener(type.CHATROOM_JOIN_SUCCESS)
       },
       onerror (error) {
-        console.log('加入聊天室失败')
+        console.log('加入聊天室失败', error)
         im.emitListener(type.CHATROOM_JOIN_FAIL, error)
       },
       onsendmessage (err, msg) {
@@ -350,7 +360,8 @@ const im = {
    * @param {any} name 用户名
    */
   sendMessage (content, avatar, name) {
-    const msg = { content: content, user: {avatar, name} }
+    content = escape(content)
+    const msg = { content, user: {avatar, name} }
     IM.sendChatRoomMsg(msg)
   },
 

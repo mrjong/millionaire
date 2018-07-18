@@ -3218,9 +3218,9 @@ ignore@^3.3.3, ignore@^3.3.5, ignore@^3.3.6:
   version "3.3.7"
   resolved "https://npm.apuscn.com/ignore/-/ignore-3.3.7.tgz#612289bfb3c220e186a58118618d5be8c1bab021"
 
-im@1.0.4:
-  version "1.0.4"
-  resolved "https://npm.apuscn.com/im/-/im-1.0.4.tgz#acb80d39c6f9670e394820c1c189bbbc9070dde9"
+im@1.0.6:
+  version "1.0.6"
+  resolved "https://npm.apuscn.com/im/-/im-1.0.6.tgz#318b18a3f1148f07b18ce36db4daad34058b8b6a"
 
 image-size@~0.5.0:
   version "0.5.5"

@@ -45,7 +45,8 @@ export const api = {
   updateNickname: '/v2/user/updateinfo', // 更新用户信息
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
-  cancelReminder: '/cmp/cancel_remind/' // 取消订阅
+  cancelReminder: '/cmp/cancel_remind/', // 取消订阅
+  getIMServerAddress: '/cmp/im_url/' // 获取IM服务器地址
 }
 
 export const init = function (isRefreshToken) {
@@ -446,4 +447,9 @@ export const cancelReminder = function () {
     app_id: utils.app_id,
     client_id: utils.clientId
   })
+}
+
+// 获取IM服务器地址
+export const getIMServerAddress = function () {
+  return axios.get(api.getIMServerAddress)
 }
