@@ -74,6 +74,17 @@ router.beforeEach((to, from, next) => {
 
 Vue.component('static-image', Image) // 初始化静态图片组件
 
+Vue.directive('webp', (el, {modifiers = {}, value = ''}) => {
+  if (modifiers.bg) {
+    el.style.backgroundImage = value.replace(/url\(.+?\)/g, (val) => {
+      const imgUrl = val.slice(5, -2)
+      return `url(${utils.getWebpImgUrl(imgUrl)})`
+    })
+  } else {
+    el.src = utils.getWebpImgUrl(value)
+  }
+})
+
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',

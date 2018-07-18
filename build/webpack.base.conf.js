@@ -54,18 +54,17 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: 'thumbor-loader',
+        loader: 'url-loader',
         options: {
-          limit: 10000,
-          name: '[name].[ext]',
-          publicPath: 'https://thumbor.apusapps.com/imageView/millionaire/images/'
+          limit: 5000,
+          name: utils.assetsPath('images/[name].[ext]')
         }
       },
       {
         test: /\.(svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 5000,
           name: utils.assetsPath('images/[name].[ext]')
         }
       },
