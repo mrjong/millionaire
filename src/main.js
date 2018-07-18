@@ -60,7 +60,6 @@ if (!utils.clientId) {
 utils.loadSounds()
 Vue.config.productionTip = false
 Vue.prototype.$http = http
-Vue.config.devtools = true
 Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {
   if (!utils.isOnline && !utils.clientId && to.name !== 'login') {

@@ -66,7 +66,11 @@ export default new Vuex.Store({
     isAgreePolicy: true, // 是否同意过协议
     isRemider: false, // 是否订阅过消息
     lang: i18n.locale, // 本地语言
-    isInputting: false // 是否正在输入文字
+    isInputting: false, // 是否正在输入文字
+    isShowNewbieTask: false,
+    isUserGame: false, // 登录用户是否是第一次答题
+    isShowTaskEnd: false, // 新手任务是否结束
+    isTaskRespondence: false // 是否显示新手任务组件
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -93,8 +97,12 @@ export default new Vuex.Store({
     initialState: (state) => state.initialState,
     isAgreePolicy: (state) => state.isAgreePolicy,
     isRemider: (state) => state.isRemider,
+    isUserGame: (state) => state.isUserGame,
     lang: (state) => state.lang,
-    isInputting: (state) => state.isInputting
+    isInputting: (state) => state.isInputting,
+    isShowNewbieTask: (state) => state.isShowNewbieTask,
+    isShowTaskEnd: (state) => state.isShowTaskEnd,
+    isTaskRespondence: (state) => state.isTaskRespondence
   },
   mutations: {
     /**
@@ -218,7 +226,9 @@ export default new Vuex.Store({
      */
     [type._POLL_INIT] ({dispatch, getters}) {
       initTimer = setTimeout(() => {
-        getters.status === status._AWAIT && dispatch(type._INIT)
+        if (getters.status === status._AWAIT && !question.isTaskStart) {
+          dispatch(type._INIT)
+        }
       }, getters.syncIntervalTime)
     },
     /**

@@ -7,6 +7,8 @@
     <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
+    <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
   </div>
 </template>
 
@@ -21,6 +23,9 @@ import * as api from './assets/js/api'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
+import WonTipModal from './components/WonTipModal'
+import ReviveCard from './components/ReviveCard'
+
 export default {
   name: 'App',
   data () {
@@ -29,7 +34,21 @@ export default {
       showLogin: false,
       showGameDialog: true,
       windowInnerHeight: 0,
-      timeOffset: 0
+      timeOffset: 0,
+      reviveObj: {
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
+        isShare: false,
+        type: 'reward'
+      },
+      markInfo: {
+        showMark: false,
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: ''
+      },
+      isShowTipModal: false
     }
   },
   computed: {
@@ -40,8 +59,8 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      initialState: 'initialState'
     })
   },
   beforeCreate () {
@@ -192,13 +211,27 @@ export default {
           })
         }
       }
+    },
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.$router.push('/invite')
+      // this.reviveObj.isShare = data.isShare
+      // this.reviveObj.code = this.code
     }
   },
   components: {
     loading,
     LoginTip,
     BalanceMark,
-    ReviveGuide
+    ReviveGuide,
+    WonTipModal,
+    ReviveCard
   },
   watch: {
     status: function (status, oldStatus) {
@@ -230,8 +263,15 @@ export default {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
-              const isWon = !!data.data
+              let dataObj = data.data
+              const isWon = dataObj.result_code
               this.showLogin = isWon && !this.isOnline
+              // 展示you won的同时弹出分享弹框
+              this.isShowTipModal = isWon && this.isOnline
+              this.$store.dispatch(type.HOME_UPDATE, {
+                myselfBonusAmount: dataObj.show_bonus
+              })
+              console.log(isWon)
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon
               })
