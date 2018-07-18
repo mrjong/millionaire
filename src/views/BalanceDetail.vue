@@ -2,33 +2,32 @@
   <div class="balance-detail">
     <div class="balance-detail__title">
       <p class="balance-detail__title__back iconfont icon-fanhui" @click="goBack"></p>
-      <p class="balance-detail__title__nickname">Cash Out</p>
+      <p class="balance-detail__title__nickname">{{$t('balanceDetail.title')}}</p>
     </div>
     <div class="balance-detail__info">
-      <p class="balance-detail__info__title">Withdraw Cash</p>
+      <p class="balance-detail__info__title">{{$t('balanceDetail.withdraw_cash_text')}}</p>
       <p class="balance-detail__info__money">{{userInfo.currencyType}}{{userInfo.balanceShow}}</p>
     </div>
     <div class="balance-detail__operate">
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" placeholder="Name" maxlength="100" v-model="name">
+        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.name')" maxlength="100" v-model="name">
       </p>
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" placeholder="Permanent Account Number" v-model="pan">
+        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.p_number')" v-model="pan">
       </p>
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" placeholder="Paytm Account" v-model="myPay">
+        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
       </p>
-      <p class="balance-detail__operate__wrap__hint">Notice: The info above will be submitted to paytm for cash out. Currently, only India rupee are available to be withdrawn in our game.</p>
+      <p class="balance-detail__operate__wrap__hint">{{$t('balanceDetail.noitce')}}</p>
     </div>
     <div>
-      <p class="balance-detail__operate__btn" @click="cashOut">Cash Out</p>
+      <p :class="['balance-detail__operate__btn', {hide: isInputting}]" @click="cashOut">{{$t('balanceDetail.cash_out_btn')}}</p>
     </div>
-    <p class="bottom-text">
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/user_privacy.html'>User Agreement</a> &
-      <a href='http://privacy.apusapps.com/policy/virtual_apusapps_activity/ALL/en/619/privacy.html'>Privacy Policy</a>
-    </p>
+    <policy-link :class="{hide: isInputting}"></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
+    <ShareTipModal v-model="isShowShareTipModal" @close="isShowShareTipModal = false" @share="share"></ShareTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
   </div>
 </template>
 
@@ -39,10 +38,21 @@ import Loading from '../components/Loading'
 import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
+import PolicyLink from '../components/PolicyLink'
+import ShareTipModal from '../components/ShareTipModal'
+import ReviveCard from '../components/ReviveCard'
+
 export default {
   name: 'BalanceDetail',
   data () {
     return {
+      reviveObj: {
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
+        isShare: false,
+        type: 'balance'
+      },
+      isShowShareTipModal: false,
       myPay: '',
       name: '',
       pan: '',
@@ -51,7 +61,7 @@ export default {
         htmlText: '',
         shouldSub: false,
         markType: 0,
-        okBtnText: ''
+        okBtnText: this.$t('balanceDetail.balance_pop.ok')
       },
       withdraw: 150, // 可提现金额(按元展示，按分比较)
       showLoading: false
@@ -60,7 +70,9 @@ export default {
   computed: {
     ...mapGetters({
       userInfo: 'userInfo',
-      isOnline: 'isOnline'
+      isOnline: 'isOnline',
+      isInputting: 'isInputting',
+      code: 'code'
     })
   },
   mounted () {
@@ -69,7 +81,7 @@ export default {
   methods: {
     cashOut () {
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
-        this.changeMarkInfo(true, false, 0, `Sorry you need a minimum balance of ${this.userInfo.currencyType} ${this.withdraw} to cash out. Win more games to get it!`)
+        this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
         const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
@@ -78,18 +90,18 @@ export default {
         const isPass = panRule.test(this.pan)
         const passRule = phone.test(this.myPay)
         if (!isNamePass) {
-          this.changeMarkInfo(true, false, 0, `Please enter the right name`)
+          this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_name'))
           return false
         }
         if (!isPass) {
-          this.changeMarkInfo(true, false, 0, `Please enter a right PAN ID`)
+          this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_p_number'))
           return false
         }
         if (!passRule) {
-          this.changeMarkInfo(true, false, 0, `Please enter a valid Paytm account!`)
+          this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_ptm'))
           return false
         } else {
-          this.changeMarkInfo(true, true, 1, `Your Paytm account is <p><b>${this.myPay}</b></p>Do you want to cash out now?`)
+          this.changeMarkInfo(true, true, 1, this.$t('balanceDetail.balance_pop.text', {myPay: this.myPay}))
         }
       }
     },
@@ -112,24 +124,25 @@ export default {
             this.showLoading = false
             if (+data.result === 1) { // 请求成功 code必为0
               if (+data.code === 0) {
-                this.changeMarkInfo(true, false, 0, `Success! You’ll receive your balance after reviewing.`)
+                // this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
+                this.isShowShareTipModal = true
               }
             } else { // 请求失败，判断code
               switch (+data.code) {
                 case 3106: {
-                  this.changeMarkInfo(true, false, 0, `Records about your account doesn't exist.`)
+                  this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_faild1'))
                   takeCash = 'bad_account'
                   break
                 }
                 case 3116: {
-                  this.changeMarkInfo(true, false, 0, `Your account balance is not enough.`)
+                  this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_faild2'))
                   takeCash = 'no_enough_money'
                   break
                 }
                 default: {
-                  this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+                  this.changeMarkInfo(true, false, 1, this.$t('balanceDetail.balance_pop.submit_faild3'), 'Retry')
                   takeCash = 'network_error'
                 }
               }
@@ -138,7 +151,7 @@ export default {
               result_code_s: takeCash
             })
           }, (error) => {
-            this.changeMarkInfo(true, false, 1, `Loading error, please check your internet now.`, 'Retry')
+            this.changeMarkInfo(true, false, 1, this.$t('balanceDetail.balance_pop.submit_faild3'), 'Retry')
             takeCash = 'network_error'
             console.log('提现失败:', error)
             utils.statistic('', 1, {
@@ -154,7 +167,7 @@ export default {
       this.$router.go(-1)
     },
     changeMarkInfo (showMark, shouldSub, markType, htmlText, okBtnText) {
-      const okBtnInnerText = okBtnText || 'OK'
+      const okBtnInnerText = okBtnText || this.$t('balanceDetail.balance_pop.ok')
       this.markInfo = {
         showMark: showMark,
         shouldSub: shouldSub,
@@ -162,11 +175,26 @@ export default {
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
+    },
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.$router.push('invite')
+      // this.reviveObj.isShare = data.isShare
+      // this.reviveObj.code = this.code
     }
   },
   components: {
     BalanceMark,
-    Loading
+    Loading,
+    PolicyLink,
+    ShareTipModal,
+    ReviveCard
   }
 }
 </script>
@@ -288,15 +316,6 @@ export default {
       font: 300 36px/94px 'Roboto', Arial, serif;
       margin-bottom: 50px;
     }
-  }
-}
-.bottom-text{
-  margin-bottom: 25px;
-  font: 200 24px 'Roboto', Arial, serif;
-  color: #fff;
-  text-align: center;
-  a{
-    color:#fff;
   }
 }
 </style>

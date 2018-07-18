@@ -1,6 +1,7 @@
 <template>
   <div class="notices">
-    <img src="../assets/images/notices-title.png" alt="" class="title">
+    <img src="../assets/images/notices-title-hi.png" alt="" class="title" v-if="$i18n.locale === 'hi'">
+    <img src="../assets/images/notices-title.png" alt="" class="title" v-else>
     <!-- 排行榜前三名 -->
     <div class="topThree flex-box" v-if="rankInfo[mode].cache">
       <section class="second">
@@ -52,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rankInfo', 'currencyType'])
+    ...mapGetters(['rankInfo', 'currencyType', 'lang'])
   },
   created () {
     this.getRank()
@@ -84,6 +85,7 @@ export default {
      * 轮播
      */
     swiper () {
+      clearInterval(timer)
       const {listSize, winnerList} = this
       let pointer = listSize
       this.list = this.winnerList.slice(pointer - listSize, pointer)
@@ -100,6 +102,11 @@ export default {
         }, 3000)
       }
     }
+  },
+  watch: {
+    lang () {
+      this.getList()
+    }
   }
 }
 </script>
@@ -111,6 +118,7 @@ export default {
     margin: 25px auto;
     border: 1px solid #3e407d;
     border-radius: 26px;
+    overflow: hidden;
     .title {
       width: 514px;
       margin: 40px auto 53px;

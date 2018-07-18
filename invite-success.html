@@ -171,7 +171,7 @@
       <p>Download Go!Millonaire Browser and </p>
     </div>
     <p class="light">Sign Up to Join Us!</p>
-    <p class="btn gp" onclick="goMillionaire()">Invite & Earn Cash Now</p>
+    <p class="btn gp" onclick="goMillionaire()">Earn Cash Together</p>
   </div>
 </div>
 <script>
@@ -190,7 +190,7 @@
     var icode = '';
     var iversion = '';
     setTimeout(function () {
-      window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D'+ referrerId +'%26icode%3D'+ icode +'%26iversion%3D' + iversion;
+      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D'+ referrerId +'%26icode%3D'+ icode +'%26iversion%3D' + iversion;
     }, 500);
     window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(link);
   }

@@ -7,6 +7,7 @@ import im from '../../assets/js/im'
 import { MESSAGE_QUESTION, MESSAGE_ANSWER } from '../../assets/js/listener-type'
 import { submitAnswer } from '../../assets/js/api'
 import md5 from 'md5'
+import i18n from '../../i18n'
 
 const state = {
   status: status.QUESTION_AWAIT, // 状态
@@ -126,25 +127,28 @@ const actions = {
     utils.playSound('go')
   },
   /**
-   *  提交答案
-   * @param {any} {getters}
+   * 提交答案
+   * @param {*} {commit, getters}
+   * @param {*} isOnlySubmitReviveCardInfo 是否只提交复活卡信息
+   * @returns
    */
-  [type.QUESTION_SUBMIT] ({commit, getters}) {
+  [type.QUESTION_SUBMIT] ({commit, getters}, isOnlySubmitReviveCardInfo) {
     // 取出未提交成功的答案一起提交
     let {id: raceId, uncommittedAnswers, reviveCardInfo = {lives: 0, maxRecoveryCount: 0, records: []}} = utils.storage.get('millionaire-uncommittedAnswers') || {}
     const {id, userAnswer, index, questionCount} = getters
-    if (raceId !== utils.raceId) { // 必须为当前比赛
+    if (!raceId || raceId !== utils.raceId) { // 必须为当前比赛
       uncommittedAnswers = []
       utils.storage.remove('millionaire-uncommittedAnswers')
     }
     uncommittedAnswers.push({
       i: id,
       s: index,
-      a: md5(userAnswer)
+      a: md5(userAnswer),
+      l: i18n.locale
     })
     return new Promise((resolve, reject) => {
       /* eslint-disable prefer-promise-reject-errors */
-      submitAnswer(uncommittedAnswers, index === questionCount).then(({data}) => {
+      submitAnswer(uncommittedAnswers, index === questionCount, isOnlySubmitReviveCardInfo).then(({data}) => {
         if (+data.result === 1) {
           switch (+data.code) {
             case 0: {
@@ -159,8 +163,8 @@ const actions = {
           switch (+data.code) {
             case 1005: {
               reject({
-                htmlTitle: 'Game over',
-                htmlText: 'Sorry for that you are already eliminated. Please check your internet connection.'
+                htmlTitle: i18n.t('tip.timeoutToSubmit.title'),
+                htmlText: i18n.t('tip.timeoutToSubmit.desp')
               })
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
@@ -169,7 +173,7 @@ const actions = {
             }
             case 1006:
             case 1007: {
-              reject(`Oops, you have already failed on the ${utils.formatIndex(index)} question.`)
+              reject(i18n.t('tip.failtosubmit.desp', {index}))
               commit(type.QUESTION_UPDATE, {
                 watchingMode: true
               })
@@ -225,8 +229,7 @@ const actions = {
         const {a: correctAnswer} = answer
 
         // 判断答案是否正确
-        let isCorrect = md5Map[correctAnswer] === getters.userAnswer
-
+        const isCorrect = md5Map[correctAnswer] === getters.userAnswer
         utils.statistic('ANSWER', 0, {
           flag_s: `${getters.index}`,
           text_s: `${getters.watchingMode ? 1 : 0}`,

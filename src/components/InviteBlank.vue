@@ -2,7 +2,7 @@
   <div class="invite-blank">
     <div class="img">
       <img src="../assets/images/invite-no-data.png"/>
-      <p>No Friends invited. <br>Invite friends to earn cash right now!</p>
+      <p>{{$t('invite.no_list_title')}}<br>{{$t('invite.no_list_text')}}</p>
     </div>
   </div>
 </template>

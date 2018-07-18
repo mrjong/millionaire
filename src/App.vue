@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <keep-alive include="Main">
+    <keep-alive include="Main,DoubleRewardCard">
       <router-view/>
     </keep-alive>
     <balance-mark style="text-align:center;" v-show="showDialog" :data-info="dialogInfo" @okEvent='closeDialog'></balance-mark>
     <login-tip v-show="showLogin" @loginTipClose="showLogin = false" @loginTipOpen="showLogin = true" desp="Congrats! You won! If you want to cash out your balance, please login now. Otherwise, your balance will be reset to zero after 24 hours."></login-tip>
     <revive-guide v-if="initialState === 1"></revive-guide>
     <loading v-if="loading"></loading>
+    <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
   </div>
 </template>
 
@@ -21,13 +23,32 @@ import * as api from './assets/js/api'
 import LoginTip from './components/LoginTip'
 import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
+import WonTipModal from './components/WonTipModal'
+import ReviveCard from './components/ReviveCard'
+
 export default {
   name: 'App',
   data () {
     return {
       loading: false,
       showLogin: false,
-      showGameDialog: true
+      showGameDialog: true,
+      windowInnerHeight: 0,
+      timeOffset: 0,
+      reviveObj: {
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
+        isShare: false,
+        type: 'reward'
+      },
+      markInfo: {
+        showMark: false,
+        htmlText: '',
+        shouldSub: false,
+        markType: 0,
+        okBtnText: ''
+      },
+      isShowTipModal: false
     }
   },
   computed: {
@@ -38,8 +59,8 @@ export default {
       questionStatus: 'question_status',
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
-      initialState: 'initialState',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      initialState: 'initialState'
     })
   },
   beforeCreate () {
@@ -88,6 +109,27 @@ export default {
     this.init()
     this.getPhoneNationCode()
   },
+  mounted () {
+    // 利用resize事件判断是否调起软键盘
+    this.windowInnerHeight = window.innerHeight
+    window.addEventListener('resize', () => {
+      if (Date.now() - this.timeOffset < 500) {
+        this.timeOffset = Date.now()
+        return false
+      }
+      if (window.innerHeight - this.windowInnerHeight >= 150) {
+        this.$store.commit(type._UPDATE, {
+          isInputting: false
+        })
+      } else if (this.windowInnerHeight - window.innerHeight >= 150) {
+        this.$store.commit(type._UPDATE, {
+          isInputting: true
+        })
+      }
+      this.windowInnerHeight = window.innerHeight
+      this.timeOffset = Date.now()
+    })
+  },
   methods: {
     init () {
       this.$store.dispatch(type._INIT_LISTENER)
@@ -99,7 +141,7 @@ export default {
       if (this.dialogInfo.okEvent) {
         this.dialogInfo.okEvent()
       }
-      this.$store.dispatch(type._CLOSE_DIALOG)
+      this.$store.commit(type._CLOSE_DIALOG)
     },
     /**
      * 获取手机号国家码
@@ -169,16 +211,31 @@ export default {
           })
         }
       }
+    },
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.$router.push('/invite')
+      // this.reviveObj.isShare = data.isShare
+      // this.reviveObj.code = this.code
     }
   },
   components: {
     loading,
     LoginTip,
     BalanceMark,
-    ReviveGuide
+    ReviveGuide,
+    WonTipModal,
+    ReviveCard
   },
   watch: {
     status: function (status, oldStatus) {
+      window.gameState = status
       if (status !== 1 && oldStatus === 1) {
         if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
           this.$router.push({path: '/main'})
@@ -198,24 +255,23 @@ export default {
       // 比赛开始时，播放背景音乐
       if (status !== 3 || this.$route.path !== '/main') {
         utils.stopSound('bg')
-        // 启用网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: false
-        })
       } else {
         utils.playSound('bg')
-        // 禁止网络状况提示
-        this.$store.commit(type._UPDATE, {
-          disableNetworkTip: true
-        })
       }
       // 是否展示you won
       if (+status === 4 && !this.watchingMode) {
         api.ifSelfWon()
           .then(({data}) => {
             if (+data.result === 1) {
-              const isWon = !!data.data
+              let dataObj = data.data
+              const isWon = dataObj.result_code
               this.showLogin = isWon && !this.isOnline
+              // 展示you won的同时弹出分享弹框
+              this.isShowTipModal = isWon && this.isOnline
+              this.$store.dispatch(type.HOME_UPDATE, {
+                myselfBonusAmount: dataObj.show_bonus
+              })
+              console.log(isWon)
               this.$store.dispatch(type.QUESTION_YOU_WON, {
                 isWon
               })

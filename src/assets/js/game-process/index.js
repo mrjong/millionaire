@@ -27,7 +27,8 @@ const gameProcess = {
     heartBeatInterval: 1000, // 心跳时间
     answerSummary: null, // 比赛结果汇总
     result: {}, // 比赛结果
-    watchingMode: false // 是否为观战模式
+    watchingMode: false, // 是否为观战模式
+    isTaskStart: false // 是否立即退出
   },
   $store: null,
   /**
@@ -37,7 +38,7 @@ const gameProcess = {
    */
   init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
     const {ri: gameInfo = {}} = data
-    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000} = gameInfo
+    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000, isEQ: isTaskStart} = gameInfo
     this.update({
       id,
       currentState: initialState,
@@ -51,13 +52,19 @@ const gameProcess = {
       hostMsgInterval,
       firstQuestionInterval,
       questionShowTime,
-      answerShowTime
+      answerShowTime,
+      isTaskStart
     })
     this.$store = $store
     // 从本地同步进度信息
     const cachedProcess = utils.storage.get('millionaire-process')
     if (cachedProcess && cachedProcess.id === id) {
-      this.update(cachedProcess)
+      this.update({...cachedProcess,
+        ...{
+          questions,
+          beginHostMsgList,
+          resultHostMsgList
+        }})
     } else {
       this.stop()
       utils.storage.remove('millionaire-process')
@@ -68,6 +75,7 @@ const gameProcess = {
     questionMsgProcess.init(this.data, $store)
     resultMsgProcess.init(this.data, $store)
     resultProcess.init(this.data, $store)
+    this.cacheProcessInfo()
     // 若离线模式已经开启，则直接开始运行
     if (this.data.offlineMode) {
       this.run()

@@ -4,7 +4,7 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
-import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo} from './api'
+import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo, addExtraLife} from './api'
 import {host, env} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
@@ -72,7 +72,13 @@ const utils = {
       vm.$store.commit(_UPDATE, {
         isOnline: true
       })
-      isSyncInfo && utils.syncAccountInfo()
+      addExtraLife().then(({data}) => {
+        if (+data.result === 1 && +data.code === 0) {
+          vm.$store.commit(_UPDATE, {
+            lives: +data.data || 0
+          })
+        }
+      })
       callback()
       // 登录是否同意过协议
       queryAgreePolicy().then(({data}) => {
@@ -205,7 +211,7 @@ const utils = {
    * @static
    * @memberof Utils
    */
-  statistic (name = '', event = 0, params = {}, from = '') {
+  statistic (name = '', event = 0, params = {}, from = utils.getQuery('referrer') || 'default') {
     let eventType
     switch (+event) {
       case 0: // ALEX_SHOW
@@ -285,7 +291,7 @@ const utils = {
     /* eslint-disable no-useless-escape */
     const shareTitle = title || `I'm playing 'Go! Millionaire', my referral code is ${code}，join us and win up to 1000000 at 10PM every day!`
     const shareDesp = desp || `Open the game link and use my referral code ${code}, let keep winning cash every day!`
-    const shareLink = `${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
+    const shareLink = `${window.location.protocol}${host[env]}${api.sharePage}?shareUrl=${encodeURIComponent(link)}&title=${encodeURIComponent(shareTitle)}&desp=${encodeURIComponent(shareDesp)}`
     const handler = function (shareLink, originUrl) {
       window.shareSuccessCallback = callback
       callback(true, packageName)
@@ -522,7 +528,6 @@ const utils = {
   toFbBrowser () {
     const isFbApp = window.njordGame && window.njordGame.isPackageInstalled('com.facebook.katana')
     if (isFbApp) {
-      console.log('isFbApp')
       window.location.href = 'fb://page/1814960232131059'
     } else {
       setTimeout(() => {
@@ -548,6 +553,14 @@ const utils = {
    */
   clearShareParams () {
     ma_js_i && ma_js_i.clearSharedParam && ma_js_i.clearSharedParam()
+  },
+  /**
+   * 是否安装应用
+   * @param {*} packageName 包名
+   * @returns
+   */
+  isInstall (packageName) {
+    return njordGame && njordGame.isPackageInstalled && njordGame.isPackageInstalled(packageName)
   }
 }
 
