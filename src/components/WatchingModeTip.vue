@@ -5,7 +5,7 @@
     </section>
   </transition>
 </template>
-<style lang="less">
+<style lang="less" scoped>
   .watching-tip {
     width: 213px;
     height: 71px;
@@ -71,16 +71,12 @@
 </style>
 <script>
 export default {
-  name: 'AnswerErrorTip', // 答题错误提示
+  name: 'WatchingModeTip', // 答题错误提示
   data () {
     return {
     }
   },
   props: {
-    type: {
-      type: String,
-      default: 'out'
-    },
     value: {
       type: Boolean,
       default: false

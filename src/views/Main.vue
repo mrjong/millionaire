@@ -27,7 +27,7 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room v-if="!isTaskRespondence"></chat-room>
     <task-result v-if="status === 3 && isShowTaskEnd"></task-result>
-    <bouns-tip v-if="hasBounsBox && utils.isOnline"></bouns-tip>
+    <bouns-tip v-if="hasBounsBox && isOnline"></bouns-tip>
     <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
@@ -81,7 +81,8 @@ export default {
       isPlayingMusic: 'isPlayingMusic',
       isShowTaskEnd: 'isShowTaskEnd',
       isTaskRespondence: 'isTaskRespondence',
-      hasBounsBox: 'hasBounsBox'
+      hasBounsBox: 'hasBounsBox',
+      isOnline: 'isOnline'
     }),
     anwseredComponent () {
       if (this.status === 3 && this.questionStatus !== 8 && !this.isTaskRespondence) {

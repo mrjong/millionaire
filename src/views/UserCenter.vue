@@ -33,7 +33,7 @@
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
-        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-wenjuan"></span>
@@ -43,7 +43,7 @@
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
-        <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
+        <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Likeus"></span>
@@ -198,7 +198,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/(jpe?g|png|webp)$/.test(file.type)) {
+        if (!/^image\/[jpeg|png|gif]/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
@@ -404,7 +404,6 @@ export default {
       &__text {
         font: 24px "Roboto", Arial, serif;
         line-height: 93px;
-        max-width: 350px;
       }
       .mail {
         background: url("../assets/images/icon-small-gmail.png") no-repeat
