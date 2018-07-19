@@ -341,6 +341,33 @@ const locale = {
       {ji: '2', js: 3, jc: 'भारत का राष्ट्रीय फूल क्या है?', jo: ['कमल', 'गुलाब', 'चमेली'], ja: '110572472111ea9fd77bbd94c234b753', jd: ['कमल भारत का राष्ट्रीय फूल है। यह एक पवित्र फूल है और भारतीय संस्कृति का शुभ प्रतीक रहा है।'], restTime: 10}
     ]
   },
+  bounsTip: [
+    {
+      title: 'opps !',
+      desp: ' The treasure chest is empty! ',
+      btnText: 'Invite & earn'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'Get reward {currencyType}{money}!',
+      btnText: 'Get cash'
+    },
+    {
+      title: 'Congrats !',
+      desp: ' Get an extra life !',
+      btnText: 'Get extra life'
+    },
+    {
+      title: 'Wow ! ',
+      desp: 'You received a treasure chest!',
+      btnText: 'Open Now'
+    },
+    {
+      title: 'Sorry ! ',
+      desp: 'Failed to open it, please check your network!',
+      btnText: ''
+    }
+  ],
   tip: {
     userReviveCard: { // 使用复活卡
       title: 'आपके पास अतिरिक्त जीवन है!', // 主题
