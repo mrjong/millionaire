@@ -23,6 +23,7 @@
         </div>
       </router-link>
     </div>
+    <div class="split-line"></div>
     <div class="base-info__btn">
       <div class="invitation-code">
         <div class="extra-lives">
@@ -36,13 +37,13 @@
       <div class="get-lives">
         <div class="invitation-code__btn" @click="toExtraLiveRules">{{$t('await.get_more_text')}}</div>
       </div>
-      <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
+      <!-- <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
         <div class="share-success__base">
           <img src="../assets/images/heart-light.png" class="heart">
         </div>
         <p class="share-success__num">+1</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -60,8 +61,7 @@ export default {
   },
   data () {
     return {
-      inviteLiving: false,
-      isSucceed: false
+      inviteLiving: false
     }
   },
   components: {
@@ -197,7 +197,6 @@ export default {
     }
 
     &__btn{
-      border-top: 1px solid #DFDDE9;
       position: relative;
       max-width: 93%;
       width: 6.7rem;
@@ -207,7 +206,6 @@ export default {
       justify-content: space-between;
       background-color: #fff;
       align-self: center;
- 
       .invitation-code, .get-lives{
         display: flex;
         align-items: center;
@@ -269,7 +267,7 @@ export default {
           background-color: #f4387c;
           border-radius: 46px;
           margin: 0 auto;
-          box-shadow: 4px 8px 8px 0px rgba(228, 78, 129, 0.4);
+          box-shadow: 0px 8px 8px 0px rgba(228, 78, 129, 0.2);
         }
       }
       .share-success{
@@ -317,6 +315,13 @@ export default {
         }
       }
     }
+  }
+  .split-line {
+    width: 70%;
+    height: 2px;
+    background: #e0ddea;
+    opacity: .5;
+    margin: 0 auto;
   }
   @media screen and (max-width: 321px){
    .base-info{

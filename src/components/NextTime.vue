@@ -14,7 +14,7 @@
       </div>
       <p class="hint__time__hour" v-else>
         {{nextTime[1]}}
-        <!-- <a class="" href="javascript:;"><img src="../assets/images/icon-clock.png" alt=""></a> -->
+        <span class="icon-naozhong iconfont icon-naozhong" v-if="nextTime[0] !== ''" @click="reminder"></span>
       </p>
     </div>
     <div class="hint__line"></div>
@@ -65,6 +65,9 @@ export default {
   methods: {
     toGamePage () {
       this.$router.push({path: '/main'})
+    },
+    reminder () {
+      this.$emit('reminderEvent')
     }
   },
   watch: {
@@ -104,6 +107,12 @@ export default {
       }
       &__hour{
         color: #fff;
+        .icon-naozhong {
+          position: relative;
+          top: -3px;
+          font-size: 40px;
+          margin-left: 10px;
+        }
       }
       .game-living{
         width: 200px;

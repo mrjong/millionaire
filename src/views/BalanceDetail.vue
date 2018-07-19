@@ -16,7 +16,7 @@
         <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.p_number')" v-model="pan">
       </p>
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
+        <input type="number" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
       </p>
       <p class="balance-detail__operate__wrap__hint">{{$t('balanceDetail.noitce')}}</p>
     </div>
@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     cashOut () {
+      console.log()
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
@@ -97,7 +98,7 @@ export default {
           this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_p_number'))
           return false
         }
-        if (!passRule) {
+        if (!passRule || this.myPay.length >= 10) {
           this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_ptm'))
           return false
         } else {

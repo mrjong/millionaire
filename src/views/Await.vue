@@ -17,10 +17,10 @@
     <div class="await__title">
       <img src="../assets/images/await-logo.png">
     </div>
-    <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
+    <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType" @reminderEvent="Reminder(isRemider ? 'cancel_reminder':'set_reminder')"></next-time>
     <!-- <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div> -->
 
-    <div class="await__reminder" @click="inputInvitation">Apply Referral Code</div>
+    <div class="await__reminder" @click="inputInvitation">{{$t('await.referral_code_btn')}}</div>
 
     <base-info :baseInfo="userInfo"></base-info>
     <!-- <div class="await__btn">
@@ -160,7 +160,6 @@ export default {
         okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false,
-      isSucceed: false,
       logout: false,
       isReminderPop: false,
       isChangeReminder: false
@@ -202,15 +201,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(type.HOME_UPDATE)
-    const isFirst = utils.storage.get('millionaire-isFirstShare')
-    if (isFirst) {
-      this.isSucceed = true
-      setTimeout(() => {
-        this.isSucceed = false
-        utils('millionaire-isFirstShare', false)
-      }, 3000)
-    }
     utils.statistic('wait_page', 0)
   },
   methods: {
@@ -373,7 +363,8 @@ export default {
     },
     // 头像登录逻辑
     loginAvatar () {
-      if (!this.isOnline) {
+      console.log(utils.isOnline)
+      if (!utils.isOnline) {
         if (utils.pageType === 'h5') {
           utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
         } else {
@@ -505,6 +496,8 @@ export default {
       &__avatar {
         width: 67px;
         height: 67px;
+        border-radius: 50%;
+        overflow: hidden;
         img {
           width: 100%;
           height: 100%
@@ -793,7 +786,7 @@ export default {
       justify-content: space-between;
       margin: 0 25px 25px;
       .item {
-        width: 48%;
+        width: 48.3%;
         position: relative;
         span {
           color: #fff;

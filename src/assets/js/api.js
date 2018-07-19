@@ -384,11 +384,13 @@ export const inviteTotalBoard = function () {
 
 // 我的邀请排行
 
-export const myInviteBoard = function () {
+export const myInviteBoard = function (offset, limit) {
   return axios.get(api.myInviteBoard, {
     params: {
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      offset: offset,
+      limit: limit
     }
   })
 }

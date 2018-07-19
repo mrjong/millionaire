@@ -28,7 +28,7 @@
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text" style="font-size: 32px">{{phone}}</span>
+        <span class="paytm__text" style="font-size: 16px">{{phone}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
@@ -351,7 +351,7 @@ export default {
       }
       .icon_edit {
         margin-left: 20px;
-        margin-top: 8px;
+        margin-top: 3px;
         font-size: 28px;
       }
       .referral-code {

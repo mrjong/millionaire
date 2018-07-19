@@ -20,7 +20,7 @@ const locale = {
     play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
-    ses_question_btn: 'Set Questions Myself',
+    ses_question_btn: 'Set Questions',
     referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
@@ -323,7 +323,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday,you\'ll be the lucky one!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
