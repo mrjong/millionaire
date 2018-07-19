@@ -47,6 +47,7 @@ export const api = {
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
+  getBounsId: '/cmp/gb', // 获得宝箱id
   getBounsBox: '/cmp/ub/' // 获得宝箱
 }
 
@@ -466,6 +467,16 @@ export const doubelRewardList = function (offset, limit) {
   })
 }
 
+// 获得宝箱id
+
+export const getBounsId = function () {
+  return axios.get(api.getBounsId, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
 // 获得宝箱中奖品
 export const getBounsBox = function (id) {
   return axios.post(api.getBounsBox, {

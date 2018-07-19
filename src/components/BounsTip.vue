@@ -1,14 +1,15 @@
 <template>
-  <div class="bouns" v-if="!isClose || hasBounsBox">
+  <div class="bouns" v-if="!isClose && hasBounsBox" style="z-index: 9999">
     <span class="bouns__close iconfont icon-cuowu" @click="close"></span>
     <p class="important ">{{bounsData[bounsType].title}}</p>
-    <p class="bouns__text">{{bounsData[bounsType].desp}}</p>
-    <div class="bouns__img">
+    <p class="bouns__text" v-if="bounsType !== 1">{{bounsData[bounsType].desp}}</p>
+    <p class="bouns__text" v-else>{{$t('bounsTip[1].desp', {currencyType: this.userInfo.currencyType, money: this.money})}}</p>
+    <div class="bouns__img" v-if="bounsType !== 4">
       <img src="../assets/images/light.png" class="bg-light" v-if="bounsType === 2">
       <img src="../assets/images/countdown-light.png" class="bg-light" v-else-if="bounsType === 1 || bounsType === 3">
       <img :src="`./static/images/bouns-${bounsType}.png`" class="lives">
     </div>
-    <div class="bouns__btn" @click="toShareDetail">{{bounsData[bounsType].btnText}}</div>
+    <div class="bouns__btn" @click="toShareDetail" v-if="bounsType !== 4">{{bounsData[bounsType].btnText}}</div>
   </div>
 </template>
 
@@ -26,29 +27,9 @@ export default {
       isClose: false,
       FirstGuide: false,
       isAnswered: false,
-      bounsData: [
-        {
-          title: 'opps !',
-          desp: ' The treasure chest is empty! ',
-          btnText: 'Invite & earn'
-        },
-        {
-          title: 'Congrats !',
-          desp: '',
-          btnText: 'Get cash'
-        },
-        {
-          title: 'Congrats !',
-          desp: ' Get an extra life !',
-          btnText: 'Get extra life'
-        },
-        {
-          title: 'Wow ! ',
-          desp: 'You received a treasure chest!',
-          btnText: 'Open Now'
-        }
-      ],
-      bounsType: 3
+      bounsData: this.$t('bounsTip'),
+      bounsType: 3,
+      money: 0
     }
   },
   computed: {
@@ -62,7 +43,7 @@ export default {
     })
   },
   mounted () {
-    utils.statistic('referral_code_guide', 0)
+    utils.statistic('treasure_box_page', 0)
   },
   methods: {
     close () {
@@ -72,31 +53,55 @@ export default {
       })
     },
     toShareDetail () {
-      // this.isClose = true
       if (this.bounsType === 3) {
-        this.$store.commit(type._UPDATE, {
-          hasBounsBox: false
-        })
         api.getBounsBox(this.bounsBoxId).then(({data}) => {
-          // 处理宝箱类型
-          if (data.result === 1 && data.code === 0 && data.success) {
-            data.boxType = this.bounsData
-            if (data.boxType === 1) {
-              this.bounsData.desp = 'Get reward ' + this.userInfo.currencyType + data.money + '!'
+          if (data.result === 1 && data.code === 0 && data.data.success) {
+            this.bounsType = data.data.boxType
+            if (data.data.boxType === 1 && data.data.money) {
+              this.money = data.data.money
             }
           } else {
             // 开箱失败
+            this.bounsType = 4
           }
-        }).catch()
+        }).catch(
+          this.bounsType = 4
+        )
+        return false
       } else if (this.bounsType === 2) {
+        this.isClose = true
+        this.$store.commit(type._UPDATE, {
+          hasBounsBox: false
+        })
         this.$router.replace({path: '/share-detail'})
       } else {
+        this.isClose = true
+        this.$store.commit(type._UPDATE, {
+          hasBounsBox: false
+        })
         this.$router.replace({path: '/invite'})
       }
-      utils.statistic('get_life_button', 1, {to_destination_s: 'task_page'}, 'wait_page')
+      const btn = this.bounsType === 3 ? 'open_button' : (this.bounsType === 0 ? 'earn_money_button' : (this.bounsType === 1 ? 'earn_money_button' : 'get_life_button'))
+      utils.statistic(btn, 1)
     }
   },
   watch: {
+    bounsType (type) {
+      if (type === 0) {
+        utils.statistic('treasure_empty_page', 0)
+      } else if (type === 1) {
+        utils.statistic('treasure_cash_page', 0)
+      } else if (type === 2) {
+        utils.statistic('treasure_life_page', 0)
+      }
+    },
+    status (status) {
+      if (status === 1) {
+        this.$store.commit(type._UPDATE, {
+          hasBounsBox: false
+        })
+      }
+    }
   }
 }
 </script>
@@ -153,7 +158,7 @@ export default {
         position: absolute;
         margin: 0 auto 0;
         transform-origin: center center;
-        animation: light 2s linear infinite
+        animation: light 1s linear infinite
       }
       .lives{
         width:300px;

@@ -343,6 +343,33 @@ const locale = {
       {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
     ]
   },
+  bounsTip: [
+    {
+      title: 'Opps !',
+      desp: 'it\'s empty! Try it tomorrow!',
+      btnText: 'Invite & earn'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got {currencyType}{money}! Keep Going!',
+      btnText: 'Invite & earn'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got an EXTRA LIFE.',
+      btnText: 'Get More'
+    },
+    {
+      title: 'Wow ! ',
+      desp: 'A TREASURE BOX received! ',
+      btnText: 'OPEN'
+    },
+    {
+      title: 'Sorry ! ',
+      desp: 'Failed to open it',
+      btnText: ''
+    }
+  ],
   // 全局提示
   tip: {
     userReviveCard: { // 使用复活卡
