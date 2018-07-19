@@ -1,8 +1,8 @@
 <template>
-  <div class="balance-wrap">
+  <div class="balance-wrap">\
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
-      <p class="balance-wrap__title__nickname">{{userInfo.userName}}</p>
+      <p class="balance-wrap__title__nickname ellipsis-1">{{userInfo.userName}}</p>
       <router-link to="/balance-record" @click="history" v-if="isOnline">
         <p class="balance-wrap__title__history">{{$t('balance.history')}}</p>
       </router-link>
