@@ -46,7 +46,6 @@ export const api = {
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
-  doTaskToLife: '/cmp/lc', // 做新手任务得复活卡
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsBox: '/cmp/ub/' // 获得宝箱
 }
@@ -454,13 +453,6 @@ export const cancelReminder = function () {
   })
 }
 
-export const doTaskToLife = function () {
-  return axios.post(api.doTaskToLife, {
-    app_id: utils.app_id,
-    client_id: utils.clientId,
-    tp: 1
-  })
-}
 export const doubelRewardList = function (offset, limit) {
   return axios.get(api.doubelRewardList, {
     params: {
