@@ -85,7 +85,7 @@ export default {
         this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
         // const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{10}$/
-        const phone = /^[789]\d{10}$/
+        const phone = /^[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
         const nameRule = /^([A-Za-z]+\s?)*[A-Za-z]{1,64}$/
         const isNamePass = nameRule.test(this.name)
@@ -99,7 +99,7 @@ export default {
           this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_p_number'))
           return false
         }
-        if (!passRule || this.myPay.length >= 10) {
+        if (!passRule) {
           this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_ptm'))
           return false
         } else {
