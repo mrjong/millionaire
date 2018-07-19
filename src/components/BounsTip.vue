@@ -5,8 +5,8 @@
     <p class="bouns__text">{{bounsData[bounsType].desp}}</p>
     <div class="bouns__img">
       <img src="../assets/images/light.png" class="bg-light" v-if="bounsType === 2">
-      <img src="../assets/images/countdown-light.png" class="bg-light" v-else>
-      <img :src="'../assets/images/bouns-' + bounsType + '.png'" class="lives">
+      <img src="../assets/images/countdown-light.png" class="bg-light" v-else-if="bounsType === 1 || bounsType === 3">
+      <img :src="`./static/images/bouns-${bounsType}.png`" class="lives">
     </div>
     <div class="bouns__btn" @click="toShareDetail">{{bounsData[bounsType].btnText}}</div>
   </div>
@@ -72,7 +72,7 @@ export default {
       })
     },
     toShareDetail () {
-      this.isClose = true
+      // this.isClose = true
       if (this.bounsType === 3) {
         this.$store.commit(type._UPDATE, {
           hasBounsBox: false
@@ -156,7 +156,7 @@ export default {
         animation: light 2s linear infinite
       }
       .lives{
-        width:200px;
+        width:300px;
         position: relative;
         z-index: 11;
         background-size: cover;
@@ -200,7 +200,7 @@ export default {
           margin: 0 auto;
         }
         .lives{
-          width:150px;
+          width:250px;
         }
       }
       &__btn{
