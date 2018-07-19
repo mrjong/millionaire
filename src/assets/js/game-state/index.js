@@ -54,7 +54,7 @@ const gameState = {
     const startTime = +info.sr || -1
     const startTimeOffset = +info.ls || 0
     this.$store.commit(_UPDATE, {
-      hostIntervalTime: +hostIntervalTime > 0 ? hostIntervalTime : 3000,
+      hostIntervalTime: +hostIntervalTime > 0 ? +hostIntervalTime : 3000,
       lives,
       code,
       gameType,
