@@ -102,8 +102,8 @@ export default {
         height: 41px;
         margin-top: 25px;
         color: #ffb227;
-        font: 700 56px 'Roboto Condensed', Arial, serif;
-        line-height: 41px;
+        font: 700 50px 'Roboto Condensed', Arial, serif;
+        line-height: 70px;
       }
       &__hour{
         color: #fff;
