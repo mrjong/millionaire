@@ -345,28 +345,28 @@ const locale = {
   },
   bounsTip: [
     {
-      title: 'opps !',
-      desp: ' The treasure chest is empty! ',
+      title: 'Opps !',
+      desp: 'it\'s empty! Try it tomorrow!',
       btnText: 'Invite & earn'
     },
     {
       title: 'Congrats !',
-      desp: 'Get reward {currencyType}{money}!',
-      btnText: 'Get cash'
+      desp: 'You got {currencyType}{money}! Keep Going!',
+      btnText: 'Invite & earn'
     },
     {
       title: 'Congrats !',
-      desp: ' Get an extra life !',
-      btnText: 'Get extra life'
+      desp: 'You got an EXTRA LIFE.',
+      btnText: 'Get More'
     },
     {
       title: 'Wow ! ',
-      desp: 'You received a treasure chest!',
-      btnText: 'Open Now'
+      desp: 'A TREASURE BOX received! ',
+      btnText: 'OPEN'
     },
     {
       title: 'Sorry ! ',
-      desp: 'Failed to open it, please check your network!',
+      desp: 'Failed to open it',
       btnText: ''
     }
   ],

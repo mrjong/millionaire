@@ -343,28 +343,29 @@ const locale = {
   },
   bounsTip: [
     {
-      title: 'opps !',
-      desp: ' The treasure chest is empty! ',
-      btnText: 'Invite & earn'
+      title: 'ओह',
+      desp: 'यह खाली है! कल कोशिश करे!',
+      btnText: 'आमंत्रित करें और नकद कमाएं'
     },
     {
-      title: 'Congrats !',
-      desp: 'Get reward {currencyType}{money}!',
-      btnText: 'Get cash'
+      title: 'बधाई हो',
+      desp: 'आपको {currencyType}{money} मिल गया हैं। बढ़ते रहें!!',
+      btnText: 'आमंत्रित करें और नकद कमाएं'
     },
     {
-      title: 'Congrats !',
-      desp: ' Get an extra life !',
-      btnText: 'Get extra life'
+      title: 'बधाई हो।',
+      desp: 'आपको एक अतिरिक्त जीवन मिलता है।',
+      btnText: 'अधिक पाना'
+
     },
     {
-      title: 'Wow ! ',
-      desp: 'You received a treasure chest!',
-      btnText: 'Open Now'
+      title: 'बधाई हो।',
+      desp: 'एक खसना प्राप्त हुआ',
+      btnText: 'खोलेइसे'
     },
     {
-      title: 'Sorry ! ',
-      desp: 'Failed to open it, please check your network!',
+      title: 'क्षमा करें',
+      desp: 'इसे खोलने में विफल रहे',
       btnText: ''
     }
   ],
