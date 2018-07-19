@@ -455,7 +455,7 @@ export const cancelReminder = function () {
 }
 
 export const doTaskToLife = function () {
-  return axios.post(api.doTaskToLife, {
+  return axios.post(api.addExtraLife, {
     app_id: utils.app_id,
     client_id: utils.clientId,
     tp: 1
