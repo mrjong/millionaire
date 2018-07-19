@@ -12,7 +12,10 @@
         </router-link>
         <lang class="await__top__lang"></lang>
       </div>
-      <div class="await__top__avatar" @click="loginAvatar"><img :src="userInfo.avatar" alt=""></div>
+      <!-- <div class="await__top__avatar" @click="loginAvatar"><img :src="userInfo.avatar" alt=""></div> -->
+      <div class="await__top__avatar" :style="{backgroundImage:'url('+ userInfo.avatar +')'}" @click="loginAvatar">
+        <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+      </div>
     </div>
     <div class="await__title">
       <img src="../assets/images/await-logo.png">
@@ -48,7 +51,7 @@
       </div>
     </div> -->
     <div class="characters">
-      <div class="item"><img src="../assets/images/team-battle.png"><span>Team Battle<em class="scale-text">Coming soon</em></span></div>
+      <div class="item"><img src="../assets/images/team-battle.png"><span>Team Battle <br><em class="scale-text">Coming soon</em></span></div>
       <div class="item" @click="getSetQuestion"><img src="../assets/images/set-question.png"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
@@ -460,6 +463,7 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
+    height: 100%;
     background-image: url("../assets/images/await-bg-1.jpg");
     background-position: top;
     background-repeat: no-repeat;
@@ -494,13 +498,30 @@ export default {
         font-size: 26px;
       }
       &__avatar {
-        width: 67px;
-        height: 67px;
+        // width: 67px;
+        // height: 67px;
+        // border-radius: 50%;
+        // overflow: hidden;
+        // img {
+        //   width: 100%;
+        //   height: 100%
+        // }
+        width:67px;
+        height:67px;
         border-radius: 50%;
+        background: no-repeat center;
+        background-size: cover;
+        position: relative;
         overflow: hidden;
-        img {
+        .login-text{
           width: 100%;
-          height: 100%
+          height: 50%;
+          position: absolute;
+          bottom: 0;
+          color: #ffffff;
+          text-align: center;
+          font: 20px 'Roboto Condensed', Arial, sans-serif;
+          transform: scale(.8);
         }
       }
       &__logo{
@@ -794,6 +815,7 @@ export default {
           top: 26px;
           left: 24px;
           font-size: 28px;
+          font-family: 'Roboto', Arial, serif;
         }
         .scale-text {
           position: relative;

@@ -117,30 +117,11 @@ export default {
     background-color: #ffffff;
     border-radius: 24px;
     margin:0 auto 25px;
-    padding: 62px 0 46px;
+    padding: 50px 0 50px;
     position: relative;
     &__user{
-      // text-align: center;
-      // margin-bottom: 40px;
       &__head{
-        width:150px;
-        height:150px;
-        border-radius: 50%;
-        background: no-repeat center;
-        background-size: cover;
-        margin: 0 auto;
-        position: relative;
-        overflow: hidden;
-        .login-text{
-          width: 100%;
-          height: 40%;
-          padding-top: 10px;
-          position: absolute;
-          bottom: 0;
-          color: #ffffff;
-          text-align: center;
-          font: 34px 'Roboto Condensed', Arial, sans-serif;
-        }
+        
       }
       &__name{
         color: #241262;
@@ -153,7 +134,7 @@ export default {
     &__other{
       display: flex;
       justify-content: center;
-      padding-bottom: 60px;
+      padding-bottom: 30px;
       .balance-router, .balance-rank{
         width: 50%;
         display: block;
