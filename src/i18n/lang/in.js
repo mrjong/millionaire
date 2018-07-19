@@ -21,6 +21,7 @@ const locale = {
     play_card_step3: 'ग़लत जवाब देने पर <span class="special">अतिरिक्त जीवन</span> का उपयोग करें। इसे पाने के लिए नए उपयोगकर्ता को आमंत्रित करें!',
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
     ses_question_btn: 'प्रश्न सेट करें',
+    teamBattle: '<span>टीम रण<br><em class="scale-text">जल्द आ रहा है</em></span>',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',

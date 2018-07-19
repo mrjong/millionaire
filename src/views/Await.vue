@@ -51,7 +51,7 @@
       </div>
     </div> -->
     <div class="characters">
-      <div class="item"><img src="../assets/images/team-battle.png"><span>Team Battle <br><em class="scale-text">Coming soon</em></span></div>
+      <div class="item"><img src="../assets/images/team-battle.png"><span v-html="$t('await.teamBattle')"></span></div>
       <div class="item" @click="getSetQuestion"><img src="../assets/images/set-question.png"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
@@ -177,7 +177,8 @@ export default {
       code: 'code',
       isAgreePolicy: 'isAgreePolicy',
       isRemider: 'isRemider',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      isOnline: 'isOnline'
     }),
     targetDate () {
       if (this.startTime === -1) {

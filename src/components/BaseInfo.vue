@@ -120,9 +120,6 @@ export default {
     padding: 50px 0 50px;
     position: relative;
     &__user{
-      &__head{
-        
-      }
       &__name{
         color: #241262;
         font: 500 36px 'Roboto', sans-serif;
