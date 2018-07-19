@@ -46,7 +46,9 @@ export const api = {
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
-  doubelRewardList: '/cmp/gdb' // 获取双倍奖金
+  doTaskToLife: '/cmp/lc', // 做新手任务得复活卡
+  doubelRewardList: '/cmp/gdb', // 获取双倍奖金
+  getBounsBox: '/cmp/ub/' // 获得宝箱
 }
 
 export const init = function (isRefreshToken) {
@@ -467,5 +469,14 @@ export const doubelRewardList = function (offset, limit) {
       offset,
       limit
     }
+  })
+}
+
+// 获得宝箱中奖品
+export const getBounsBox = function (id) {
+  return axios.post(api.getBounsBox, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    boxId: id
   })
 }
