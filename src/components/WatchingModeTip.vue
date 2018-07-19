@@ -1,7 +1,7 @@
 <template>
   <transition name="watching-tip-fade">
     <section class="watching-tip" v-show="value">
-      <p class="out">{{$t('main.anwser_out_text')}}</p>
+      <p class="out">{{$t('main.watching')}}</p>
     </section>
   </transition>
 </template>

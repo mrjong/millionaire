@@ -165,7 +165,8 @@ const locale = {
     send_btn: 'भेजें',
     viewing: 'देखे',
     anwser_out_text: 'बाहर',
-    anwser_incorrect_text: ' ग़लत'
+    anwser_incorrect_text: ' ग़लत',
+    watching: 'इलिमने'
   },
   anwser_rank: {
     week_tap: 'साप्ताहिक रैंक',

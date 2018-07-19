@@ -165,7 +165,8 @@ const locale = {
     send_btn: 'Send',
     viewing: 'Viewing',
     anwser_out_text: 'Out',
-    anwser_incorrect_text: 'Incorrect'
+    anwser_incorrect_text: 'Incorrect',
+    watching: 'eliminated'
   },
   anwser_rank: { // 答题排行榜
     week_tap: 'Weekly Rank',
