@@ -27,9 +27,11 @@
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room v-if="!isTaskRespondence"></chat-room>
     <task-result v-if="status === 3 && isShowTaskEnd"></task-result>
+    <bouns-tip v-if="true"></bouns-tip>
     <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>
     <fail-tip-modal v-model="showFailTip" :index="index" @close="showFailTip = false"></fail-tip-modal>
+    <watching-mode-tip></watching-mode-tip>
   </div>
 </template>
 
@@ -48,6 +50,8 @@ import BalanceMark from '../components/BalanceMark'
 import utils from '../assets/js/utils'
 import lang from '../components/Language'
 import TaskResult from '../components/TaskResult'
+import WatchingModeTip from '../components/WatchingModeTip.vue'
+import BounsTip from '../components/BounsTip'
 // import NewAnnouncement from '../components/NewAnnouncement'
 // import { _UPDATE, _INIT } from '../store/type'
 export default {
@@ -76,7 +80,8 @@ export default {
       isWon: 'isWon',
       isPlayingMusic: 'isPlayingMusic',
       isShowTaskEnd: 'isShowTaskEnd',
-      isTaskRespondence: 'isTaskRespondence'
+      isTaskRespondence: 'isTaskRespondence',
+      hasBounsBox: 'hasBounsBox'
     }),
     anwseredComponent () {
       if (this.status === 3 && this.questionStatus !== 8 && !this.isTaskRespondence) {
@@ -142,7 +147,9 @@ export default {
     lang,
     TaskResult,
     TaskRespondence,
-    FailTipModal
+    FailTipModal,
+    WatchingModeTip,
+    BounsTip
   }
 }
 </script>

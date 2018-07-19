@@ -5,7 +5,7 @@ import {pollMsg} from './api'
 import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
-import { _INIT } from '../../store/type'
+import { _INIT, _UPDATE } from '../../store/type'
 import gameProcess from './game-process'
 import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
@@ -360,6 +360,12 @@ const im = {
     im.isHandledMsg = false
     const {i: msgId, t: msgType, d: msg, l: validTime = 0} = data
     const cachedGameProcessData = utils.storage.get('millionaire-process') || {}
+    if (msg.box && msg.box.id) {
+      vm.$store.commit(_UPDATE, {
+        hasBounsBox: true,
+        bounsBoxId: msg.box.id
+      })
+    }
     if (cachedGameProcessData.offlineMode) {
       im.pullMsgId = ''
       im.isHandledMsg = true
