@@ -5,7 +5,7 @@
         {{$t('await.next_time_text')}}
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <div class="game-living"  @click="toGamePage" v-if="false">
+      <div class="game-living"  @click="toGamePage" v-if="isPlaying">
         <p class="living-text">{{$t('await.living')}}</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
