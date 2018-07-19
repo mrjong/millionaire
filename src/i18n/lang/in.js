@@ -20,7 +20,7 @@ const locale = {
     play_card_step2: 'सभी 12 सवालों का जवाब दें, <span class="special"> ₹ 1,000,000 </span> तक जीतें!',
     play_card_step3: 'ग़लत जवाब देने पर <span class="special">अतिरिक्त जीवन</span> का उपयोग करें। इसे पाने के लिए नए उपयोगकर्ता को आमंत्रित करें!',
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
-    ses_question_btn: 'खुद से प्रश्न सेट करें',
+    ses_question_btn: 'प्रश्न सेट करें',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',
@@ -321,7 +321,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday,you\'ll be the lucky one!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
