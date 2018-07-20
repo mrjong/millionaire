@@ -99,7 +99,6 @@ export default {
         }
       }
       &__hour,&__number{
-        height: 41px;
         margin-top: 25px;
         color: #ffb227;
         font: 700 50px 'Roboto Condensed', Arial, serif;

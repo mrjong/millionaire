@@ -21,7 +21,7 @@ const locale = {
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
     ses_question_btn: 'Set Questions',
-    teamBattle: '<span>Team Battle <br><em class="scale-text">Coming soon</em></span>',
+    teamBattle: 'Team Battle',
     referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
@@ -259,6 +259,7 @@ const locale = {
     submit_btn: 'Submit another'
   },
   userCenter: { // 个人中心
+    like_us: 'Like Us',
     title: 'User Profile',
     save: 'Save ',
     edit: 'Edit',
@@ -325,7 +326,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday,you\'ll be the lucky one!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday, you\'ll be the lucky one!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],

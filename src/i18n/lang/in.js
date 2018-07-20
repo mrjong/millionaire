@@ -11,7 +11,7 @@ const locale = {
     remider_tip: 'मुझे रोज़ाना याद दिलाएं',
     userinfo_blance_text: 'शेष',
     userinfo_rank_text: 'साप्ताहिक रैंक',
-    extra_lives_text: 'अतिरिक्त जीवन',
+    extra_lives_text: 'अतिरिक्त जीवन:',
     get_more_text: 'अधिक पाना',
     referral_code_btn: 'रेफ़रल कोड लागू करें',
     invite_btn: 'आमंत्रित करें और नकद कमाएं',
@@ -21,7 +21,7 @@ const locale = {
     play_card_step3: 'ग़लत जवाब देने पर <span class="special">अतिरिक्त जीवन</span> का उपयोग करें। इसे पाने के लिए नए उपयोगकर्ता को आमंत्रित करें!',
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
     ses_question_btn: 'प्रश्न सेट करें',
-    teamBattle: '<span>टीम रण<br><em class="scale-text">जल्द आ रहा है</em></span>',
+    teamBattle: 'टीम रण',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',
@@ -259,6 +259,7 @@ const locale = {
     submit_btn: 'जमा करें दूसरा'
   },
   userCenter: {
+    like_us: 'हमारी तरह',
     title: 'उपयोगकर्ता प्रोफ़ाइल',
     save: 'सेव ',
     edit: 'संपादित करें',
@@ -323,7 +324,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday,you\'ll be the lucky one!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday, you\'ll be the lucky one!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],

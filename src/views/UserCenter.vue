@@ -16,11 +16,11 @@
       </label>
       <div class="user__head__name">
         <div style="display:flex;">
-          <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput" :style="{width: nickInputWidth + 'px'}">
-          <span class="name__text ellipsis-1" v-else style="height: 24px;">{{userInfo.userName}}</span>
+          <input type="text" v-if="isEditable" class="input_name" v-model="nickname" ref="nickInput" :style="{width: nickInputWidth + 'px'}">
+          <span class="show_name ellipsis-1" v-else>{{userInfo.userName}}</span>
           <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
         </div>
-        <span class="referral-code"><span style="opacity: 0.6">Referral Code:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
+        <span class="referral-code"><span style="opacity: 0.6">{{$t('userCenter.code')}}:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
       </div>
     </div>
     <div class="user__wrap">
@@ -35,19 +35,21 @@
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
         <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
-      <p class="cash-history" @click="jump('balance-record')">
+      <!-- <p class="cash-history" @click="jump('')">
         <span class="cash-history__icon iconfont icon-wenjuan"></span>
         <span class="cash-history__tip">Feedback</span>
         <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+      </p> -->
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
         <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
-      <p class="cash-history" @click="jump('balance-record')">
+      <p class="cash-history" @click="likeToFb('like_page')">
         <span class="cash-history__icon iconfont icon-Likeus"></span>
-        <span class="cash-history__tip">Like Us</span>
+        <span class="cash-history__tip">{{$t('userCenter.like_us')}}</span>
         <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
@@ -106,8 +108,6 @@ export default {
     edit () {
       this.isEditable = true
       this.nickname = this.userInfo.userName
-      let nicknameTextDom = document.querySelector('.name__text')
-      this.nickInputWidth = nicknameTextDom.offsetWidth
       setTimeout(() => {
         this.$refs.nickInput.focus()
       }, 200)
@@ -222,6 +222,11 @@ export default {
         this.$router.push({ path: '/contact' })
       }
     },
+    // facebook 点赞
+    likeToFb (val) {
+      utils.statistic('like_page', 1, {to_destination_s: val}, 'like_page')
+      utils.toFbBrowser()
+    },
     logOut () {
       // 退出登录
       this.isLogout = true
@@ -324,16 +329,13 @@ export default {
       line-height: 51.5px;
       right: 0;
       color: #fff;
-      font-size: 28px;
+      font: 28px 'Roboto Condensed', Arial, sans-serif;
     }
   }
   &__head {
     display: flex;
-    margin-top: 83px;
+    margin: 83px 0;
     color: #fff;
-    // width: 133px;
-    // height: 133px;
-    // margin: 80px auto 40px;
     &__avatar {
       width: 107px;
       height: 107px;
@@ -345,13 +347,21 @@ export default {
       justify-content: space-around;
       font-size: 32px;
       font-family: 'Roboto', Arial, sans-serif;
-      #nickInput {
+      .input_name {
         outline: none;
         border: none;
         background: none;
+        height: 40px;
+        line-height: 40px;
+        width: 160px;
+      }
+      .show_name {
+        width: 160px;
+        height: 40px;
+        line-height: 40px;
       }
       .icon_edit {
-        margin-left: 20px;
+        margin-left: 8px;
         margin-top: 3px;
         font-size: 28px;
       }
