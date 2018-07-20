@@ -187,7 +187,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/(jpe?g|png|webp)$/.test(file.type)) {
+        if (!/^image\/(jpg|png)$/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
