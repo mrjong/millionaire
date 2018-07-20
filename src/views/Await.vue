@@ -13,9 +13,10 @@
         <lang class="await__top__lang"></lang>
       </div>
       <!-- <div class="await__top__avatar" @click="loginAvatar"><img :src="userInfo.avatar" alt=""></div> -->
-      <div class="await__top__avatar" :style="{backgroundImage:'url('+ userInfo.avatar +')'}" @click="loginAvatar">
-        <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p>
+      <div class="await__top__avatar" :style="{backgroundImage:'url('+ userInfo.avatar +')'}" @click="loginAvatar" v-if="isOnline">
+        <!-- <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p> -->
       </div>
+      <div class="await__top__avatar__text" v-if="!isOnline" @click="loginAvatar">{{$t('await.login_text')}}</div>
     </div>
     <div class="await__title">
       <img src="../assets/images/await-logo.png">
@@ -464,7 +465,6 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    height: 100%;
     background-image: url("../assets/images/await-bg-1.jpg");
     background-position: top;
     background-repeat: no-repeat;
@@ -499,30 +499,16 @@ export default {
         font-size: 26px;
       }
       &__avatar {
-        // width: 67px;
-        // height: 67px;
-        // border-radius: 50%;
-        // overflow: hidden;
-        // img {
-        //   width: 100%;
-        //   height: 100%
-        // }
         width:67px;
         height:67px;
         border-radius: 50%;
         background: no-repeat center;
         background-size: cover;
-        position: relative;
         overflow: hidden;
-        .login-text{
-          width: 100%;
-          height: 50%;
-          position: absolute;
-          bottom: 0;
+        &__text{
           color: #ffffff;
           text-align: center;
-          font: 20px 'Roboto Condensed', Arial, sans-serif;
-          transform: scale(.8);
+          font: 28px 'Roboto Condensed', Arial, sans-serif;
         }
       }
       &__logo{
@@ -809,6 +795,7 @@ export default {
       margin: 0 25px 25px;
       .item {
         width: 48.3%;
+        height: 160px;
         position: relative;
         span {
           color: #fff;

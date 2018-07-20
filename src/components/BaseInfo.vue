@@ -303,7 +303,7 @@ export default {
   }
   @media screen and (max-width: 321px){
    .base-info{
-     margin:80px auto 25px;
+    //  margin:80px auto 25px;
      padding-bottom: 80px;
       &__other{
         margin-top: 20px;

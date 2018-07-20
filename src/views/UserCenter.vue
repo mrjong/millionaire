@@ -16,8 +16,8 @@
       </label>
       <div class="user__head__name">
         <div style="display:flex;">
-          <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput" :style="{width: nickInputWidth + 'px'}">
-          <span class="name__text" v-else style="height: 24px;">{{userInfo.userName}}</span>
+          <input type="text" v-if="isEditable" class="input_name" v-model="nickname" ref="nickInput" :style="{width: nickInputWidth + 'px'}">
+          <span class="show_name ellipsis-1" v-else>{{userInfo.userName}}</span>
           <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
         </div>
         <span class="referral-code"><span style="opacity: 0.6">Referral Code:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
@@ -106,8 +106,8 @@ export default {
     edit () {
       this.isEditable = true
       this.nickname = this.userInfo.userName
-      let nicknameTextDom = document.querySelector('.name__text')
-      this.nickInputWidth = nicknameTextDom.offsetWidth
+      // let nicknameTextDom = document.querySelector('.name__text')
+      // this.nickInputWidth = nicknameTextDom.offsetWidth
       setTimeout(() => {
         this.$refs.nickInput.focus()
       }, 200)
@@ -323,16 +323,13 @@ export default {
       line-height: 51.5px;
       right: 0;
       color: #fff;
-      font-size: 28px;
+      font: 28px 'Roboto Condensed', Arial, sans-serif;
     }
   }
   &__head {
     display: flex;
     margin-top: 83px;
     color: #fff;
-    // width: 133px;
-    // height: 133px;
-    // margin: 80px auto 40px;
     &__avatar {
       width: 107px;
       height: 107px;
@@ -344,13 +341,20 @@ export default {
       justify-content: space-around;
       font-size: 32px;
       font-family: 'Roboto', Arial, sans-serif;
-      #nickInput {
+      .input_name {
         outline: none;
         border: none;
         background: none;
+        height: 40px;
+        line-height: 40px;
+        width: 160px;
+      }
+      .show_name {
+        width: 160px;
+        height: 40px;
+        line-height: 40px;
       }
       .icon_edit {
-        margin-left: 20px;
         margin-top: 3px;
         font-size: 28px;
       }
