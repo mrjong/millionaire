@@ -356,6 +356,7 @@ export default {
         max-width: 230px;
       }
       .show_name {
+        max-width: 230px;
         width: 160px;
         height: 40px;
         line-height: 40px;
