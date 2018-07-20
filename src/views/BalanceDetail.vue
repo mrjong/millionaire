@@ -16,7 +16,7 @@
         <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.p_number')" v-model="pan">
       </p>
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
+        <input type="number" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
       </p>
       <p class="balance-detail__operate__wrap__hint">{{$t('balanceDetail.noitce')}}</p>
     </div>
@@ -83,7 +83,8 @@ export default {
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
-        const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
+        // const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{10}$/
+        const phone = /^[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
         const nameRule = /^([A-Za-z]+\s?)*[A-Za-z]{1,64}$/
         const isNamePass = nameRule.test(this.name)
