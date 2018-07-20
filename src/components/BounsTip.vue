@@ -64,9 +64,10 @@ export default {
             // 开箱失败
             this.bounsType = 4
           }
-        }).catch(
+        }).catch((e) => {
+          console.log('bounsError' + e)
           this.bounsType = 4
-        )
+        })
         return false
       } else if (this.bounsType === 2) {
         this.isClose = true
