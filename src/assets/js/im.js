@@ -371,7 +371,7 @@ const im = {
       switch (msgType) {
         case 1: { // 串词消息
           const {si: intervalTime} = msg || {}
-          getBounsId().then(({data}) => {
+          utils.isOnline && getBounsId().then(({data}) => {
             if (data.result === 1 && data.code === 0 && data.data.success) {
               vm.$store.commit(_UPDATE, {
                 hasBounsBox: true,
