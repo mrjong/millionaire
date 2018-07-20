@@ -349,13 +349,13 @@ const locale = {
   bounsTip: [
     {
       title: 'Opps !',
-      desp: 'it\'s empty! Try it tomorrow!',
-      btnText: 'Invite & earn'
+      desp: 'It\'s empty! Try it tomorrow!',
+      btnText: 'Invite & Earn Cash'
     },
     {
       title: 'Congrats !',
       desp: 'You got {currencyType}{money}! Keep Going!',
-      btnText: 'Invite & earn'
+      btnText: 'Invite & Earn Cash'
     },
     {
       title: 'Congrats !',
