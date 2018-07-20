@@ -17,7 +17,7 @@
       <div class="user__head__name">
         <div style="display:flex;">
           <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput" :style="{width: nickInputWidth + 'px'}">
-          <span class="name__text" v-else style="height: 24px;">{{userInfo.userName}}</span>
+          <span class="name__text ellipsis-1" v-else style="height: 24px;">{{userInfo.userName}}</span>
           <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
         </div>
         <span class="referral-code"><span style="opacity: 0.6">Referral Code:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
@@ -28,27 +28,27 @@
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text" style="font-size: 16px">{{phone}}</span>
+        <span class="paytm__text ellipsis-1" style="font-size: 16px">{{phone}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-wenjuan"></span>
         <span class="cash-history__tip">Feedback</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
-        <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Likeus"></span>
         <span class="cash-history__tip">Like Us</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
     <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
@@ -180,6 +180,7 @@ export default {
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
                   lastTime: 3000
                 })
+                preview.src = this.userInfo.avatar
               } else {
                 api.updateAvatarCache().then(res => {})
                 this.loading = false
@@ -198,7 +199,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/[jpeg|png|gif]/.test(file.type)) {
+        if (!/^image\/(jpg|png)/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,

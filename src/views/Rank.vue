@@ -34,7 +34,7 @@
       </section>
     </div>
     <section class="triangle" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3"></section>
-    <div class="rank-items" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
+    <div class="rank-items" ref="rankItems" v-if="rankInfo[mode].cache && rankInfo[mode].list.length > 3">
       <rank-item v-for="(item, index) in rankInfo[mode].list.slice(3)" :key="index" :avatar="item.upic" :amount="item.amount" :rank="item.rank" :name="item.nick">
       </rank-item>
     </div>
@@ -78,7 +78,6 @@ export default {
       this.$store.dispatch(RANK_UPDATE, mode).then(() => {
         this.loading = false
       }, (err) => {
-        // TODO: 提示错误
         this.loading = false
         console.log(err)
       })
@@ -86,6 +85,9 @@ export default {
   },
   created () {
     this.getRank()
+  },
+  updated () {
+    this.$refs['rankItems'] && this.$refs['rankItems'].scrollTo(0, 0)
   },
   watch: {
     mode () {

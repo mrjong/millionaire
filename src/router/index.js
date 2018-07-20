@@ -120,7 +120,10 @@ const router = new Router({
       name: 'doubleRewardCard',
       component: DoubleRewardCard
     }
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })
 
 export default router
