@@ -63,7 +63,6 @@ export default {
         offlineMode: true,
         currentIndex: 1,
         isTaskStart: true,
-        hostMsgInterval: 100,
         firstQuestionInterval: 3000,
         questions: this.$t('newbieTask.question')
       })

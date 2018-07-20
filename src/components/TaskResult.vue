@@ -74,7 +74,7 @@ export default {
       // 上报得复活卡
       let state = type === 'online' ? 'wait_page' : 'sigh_up'
       this.isClose = true
-      api.doTaskToLife().then(({data}) => {
+      api.addExtraLife(1).then(({data}) => {
         if (data.result === 1 && data.code) {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
         } else {

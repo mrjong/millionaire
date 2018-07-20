@@ -119,12 +119,10 @@ const router = new Router({
       name: 'doubleRewardCard',
       component: DoubleRewardCard
     }
-    // {
-    //   path: '/small-await',
-    //   name: 'small-await',
-    //   component: SamllAwait
-    // }
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })
 
 export default router

@@ -1,11 +1,11 @@
 /* global RongIMLib RongIMClient */
 import * as type from './listener-type'
 import {appKey} from './http'
-import {pollMsg} from './api'
+import {pollMsg, getBounsId} from './api'
 import utils from './utils'
 import {vm} from '../../main'
 import throttle from 'lodash.throttle'
-import { _INIT } from '../../store/type'
+import { _INIT, _UPDATE } from '../../store/type'
 import gameProcess from './game-process'
 import { PROCESS_RESULT_HOSTMSG, PROCESS_QUESTION_HOSTMSG, PROCESS_QUESTION, PROCESS_ANSWER, PROCESS_RESULT } from './status'
 
@@ -371,6 +371,14 @@ const im = {
       switch (msgType) {
         case 1: { // 串词消息
           const {si: intervalTime} = msg || {}
+          utils.isOnline && getBounsId().then(({data}) => {
+            if (data.result === 1 && data.code === 0 && data.data.success) {
+              vm.$store.commit(_UPDATE, {
+                hasBounsBox: true,
+                bounsBoxId: data.data.boxId
+              })
+            }
+          })
           gameProcess.update({
             currentState: PROCESS_RESULT_HOSTMSG,
             hostMsgInterval: intervalTime

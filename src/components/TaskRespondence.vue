@@ -79,6 +79,9 @@ export default {
         style_s: `${this.isOnline ? 1 : 0}`,
         type_s: utils.pageType
       })
+      if (this.isClick) {
+        return false
+      }
       if (this.question_status === 5) {
         if (!this.watchingMode) {
           // 可以点击
