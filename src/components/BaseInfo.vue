@@ -221,6 +221,7 @@ export default {
             font-size: 28px;
             margin: 0 0 0 12px;
             color: #241262;
+            font-family: 'Roboto Condensed', Arial, sans-serif;
           }
         }
          .get-more-text{
@@ -246,6 +247,7 @@ export default {
           border-radius: 46px;
           margin: 0 auto;
           box-shadow: 0px 8px 8px 0px rgba(228, 78, 129, 0.2);
+          font-family: 'Roboto Condensed', Arial, sans-serif;
         }
       }
       .share-success{
