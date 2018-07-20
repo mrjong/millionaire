@@ -131,7 +131,7 @@ export default {
     }
     .important{
       color: #ffdd00;
-      font-size: 53px;
+      font: 53px 'Roboto', Arial, serif;
       font-weight: bold;
       margin: 150px 0 40px;
       text-align: center;
@@ -139,7 +139,7 @@ export default {
     }
     &__text{
       color: #ffdd00;
-      font-size: 42px;
+      font: 42px 'Roboto', Arial, serif;
       line-height: 45px;
       margin-bottom: 20px;
       text-align: center;
@@ -174,7 +174,7 @@ export default {
       left: 50%;
       transform: translate(-50%, 0);
       color: #fff;
-      font-size: 32px;
+      font: 32px 'Roboto', Arial, serif;
       max-width:100%;
       width: 483px;
       height: 94px;
