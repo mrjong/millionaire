@@ -75,9 +75,9 @@ export default {
         }
         case 'ins' : {
           setTimeout(() => {
-            window.location.href = 'https://www.instagram.com/apusgomillionaire/'
+            window.location.href = 'https://www.instagram.com/gomillionairego/'
           }, 5)
-          window.location.href = 'instagram://user?username=apusgomillionaire'
+          window.location.href = 'instagram://user?username=gomillionairego'
         }
       }
     }
