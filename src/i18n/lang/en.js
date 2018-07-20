@@ -326,7 +326,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati! Do you want to open a TREASURE BOX? Join us at 10PM everyday, you\'ll be the lucky one!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati, here is a TREASURE BOX for you！Join Quiz at 10PM everyday, you\'ll get the lucky cash!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
