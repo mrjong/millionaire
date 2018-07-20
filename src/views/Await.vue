@@ -52,7 +52,7 @@
       </div>
     </div> -->
     <div class="characters">
-      <div class="item"><img src="../assets/images/team-battle.png"><span v-html="$t('await.teamBattle')"></span></div>
+      <div class="item"><img src="../assets/images/team-battle.png"><span>{{$t('await.teamBattle')}} <br><em class="scale-text">{{$t('await.come_soon')}}</em></span></div>
       <div class="item" @click="getSetQuestion"><img src="../assets/images/set-question.png"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
@@ -219,11 +219,6 @@ export default {
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
-    },
-    // facebook 点赞
-    likeToFb (val) {
-      this.btnStatistic(val)
-      utils.toFbBrowser()
     },
     // 调起输入邀请码弹框
     inputInvitation () {

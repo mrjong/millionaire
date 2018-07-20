@@ -20,7 +20,7 @@
           <span class="show_name ellipsis-1" v-else>{{userInfo.userName}}</span>
           <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
         </div>
-        <span class="referral-code"><span style="opacity: 0.6">Referral Code:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
+        <span class="referral-code"><span style="opacity: 0.6">{{$t('userCenter.code')}}:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
       </div>
     </div>
     <div class="user__wrap">
@@ -28,27 +28,29 @@
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text" style="font-size: 16px">{{phone}}</span>
+        <span class="paytm__text ellipsis-1" style="font-size: 16px">{{phone}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
-      <p class="cash-history" @click="jump('balance-record')">
+      <!-- <p class="cash-history" @click="jump('')">
         <span class="cash-history__icon iconfont icon-wenjuan"></span>
         <span class="cash-history__tip">Feedback</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+      </p> -->
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
-        <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
-      <p class="cash-history" @click="jump('balance-record')">
+      <p class="cash-history" @click="likeToFb('like_page')">
         <span class="cash-history__icon iconfont icon-Likeus"></span>
-        <span class="cash-history__tip">Like Us</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__tip">{{$t('userCenter.like_us')}}</span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
     <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
@@ -106,8 +108,6 @@ export default {
     edit () {
       this.isEditable = true
       this.nickname = this.userInfo.userName
-      // let nicknameTextDom = document.querySelector('.name__text')
-      // this.nickInputWidth = nicknameTextDom.offsetWidth
       setTimeout(() => {
         this.$refs.nickInput.focus()
       }, 200)
@@ -180,6 +180,7 @@ export default {
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
                   lastTime: 3000
                 })
+                preview.src = this.userInfo.avatar
               } else {
                 api.updateAvatarCache().then(res => {})
                 this.loading = false
@@ -198,7 +199,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/[jpeg|png|gif]/.test(file.type)) {
+        if (!/^image\/(jpg|png)/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
@@ -220,6 +221,11 @@ export default {
         utils.statistic('contact_us', 1, {}, 'user_profile_page')
         this.$router.push({ path: '/contact' })
       }
+    },
+    // facebook 点赞
+    likeToFb (val) {
+      utils.statistic('like_page', 1, {to_destination_s: val}, 'like_page')
+      utils.toFbBrowser()
     },
     logOut () {
       // 退出登录
@@ -328,7 +334,7 @@ export default {
   }
   &__head {
     display: flex;
-    margin-top: 83px;
+    margin: 83px 0;
     color: #fff;
     &__avatar {
       width: 107px;
@@ -355,6 +361,7 @@ export default {
         line-height: 40px;
       }
       .icon_edit {
+        margin-left: 8px;
         margin-top: 3px;
         font-size: 28px;
       }
