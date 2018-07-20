@@ -356,10 +356,9 @@ export default {
         max-width: 230px;
       }
       .show_name {
-        max-width: 230px;
-        width: 160px;
         height: 40px;
         line-height: 40px;
+        max-width: 230px;
       }
       .icon_edit {
         margin-left: 8px;
