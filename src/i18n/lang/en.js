@@ -350,12 +350,12 @@ const locale = {
     {
       title: 'Opps !',
       desp: 'It\'s empty! Try it tomorrow!',
-      btnText: 'Invite & earn'
+      btnText: 'Invite & Earn Cash'
     },
     {
       title: 'Congrats !',
       desp: 'You got {currencyType}{money}! Keep Going!',
-      btnText: 'Invite & earn'
+      btnText: 'Invite & Earn Cash'
     },
     {
       title: 'Congrats !',

@@ -334,7 +334,7 @@ export default {
   }
   &__head {
     display: flex;
-    margin: 83px 0;
+    margin: 80px 0 60px;
     color: #fff;
     &__avatar {
       width: 107px;
@@ -353,7 +353,7 @@ export default {
         background: none;
         height: 40px;
         line-height: 40px;
-        width: 160px;
+        max-width: 230px;
       }
       .show_name {
         width: 160px;
@@ -446,7 +446,7 @@ export default {
     font: 32px "Roboto", Arial, serif;
     line-height: 92px;
     background-color: rgba(255, 255, 255, 0.5);
-    margin-top: 340px;
+    margin-top: 240px;
   }
 }
 </style>
