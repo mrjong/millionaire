@@ -1,8 +1,8 @@
 <template>
-  <div class="announcement" v-if="isClose && newAnnouncement < 3">
-    <span class="iconfont icon-cuowu close" @click="close" ></span>
-    <div class="content" v-html="$t('NewAnnouncement')"></div>
-  </div>
+    <div class="announcement" v-if="isClose && newAnnouncement < 3">
+      <span class="iconfont icon-cuowu close" @click="close" ></span>
+      <div class="content" v-html="$t('NewAnnouncement')"></div>
+    </div>
 </template>
 
 <script>
@@ -22,32 +22,61 @@ export default {
       return utils.storage.get('millionaire-life-newAnnouncement')
     }
   },
+  mounted () {
+    // let announcement = document.querySelector('.announcement')
+  },
   methods: {
     close () {
       this.isClose = false
+      // this.isShowAgain = false
       utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
     }
   }
 }
 </script>
-<style lang="less" type="text/less">
+<style lang="less" type="text/less" scoped>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-100%)
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px)
+      }
+    }
   .announcement{
     width: 100%;
     height: 160px;
     background: url('../assets/images/top-pop-bg.jpg') no-repeat center;
     background-size: cover;
-    position: fixed;
-    top:0;
-    left: 0;
+    position: absolute;
+    top:0px;
+    left: 0px;
     z-index: 1110;
     display: flex;
     align-items: center;
+    animation: fadeIn 3s 1;
+    animation-fill-mode: forwards;
+    // transform: translateY(-160px);
+    // &-fade-enter-active {
+    //   transition: all 2s;
+    // }
+    // &-fade-enter {
+    //   
+    //   opacity: 0;
+    // }
     .close{
       position: absolute;
       top: 25px;
-      right: 25px;
+      right: 15px;
       transform: translate(0,-50%);
       font-size: 25px;
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
     }
     .content{
       padding: 0 50px 0 70px;
