@@ -19,28 +19,28 @@
       <p class="name">
         <span class="name__icon iconfont icon-nicheng"></span>
         <span class="name__tip">{{$t('userCenter.name')}}</span>
-        <input type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput">
-        <span class="name__text" v-else>{{userInfo.userName}}</span>
+        <input maxlength="20" type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput">
+        <span class="name__text ellipsis-1" v-else>{{userInfo.userName}}</span>
       </p>
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text">{{phone}}</span>
+        <span class="paytm__text ellipsis-1">{{phone}}</span>
       </p>
       <p class="code">
         <span class="code__icon iconfont icon-yaoqingma"></span>
         <span class="code__tip">{{$t('userCenter.code')}}</span>
-        <span class="code__text">{{code}}</span>
+        <span class="code__text ellipsis-1">{{code}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
         <span class="cash-history__icon iconfont icon-cashhistory"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
-        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
-        <span class="contact__text iconfont icon-LIVINGyoujiantou"></span>
+        <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
     <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
@@ -159,7 +159,6 @@ export default {
             let newFile = new File([blob], file.name, { type: file.type })
             // 执行上传操作
             api.uploadAvatar(newFile).then(({ data }) => {
-              console.log(data)
               if (+data.error_code !== 0) {
                 this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
@@ -170,6 +169,7 @@ export default {
                   lastTime: 3000
                 })
               } else {
+                preview.src = reader.result
                 api.updateAvatarCache().then(res => {})
                 this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
@@ -187,7 +187,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/[jpeg|png|gif]/.test(file.type)) {
+        if (file.name.endsWith('jpeg') || !/^image\/(jpe?g|png)$/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
@@ -197,7 +197,6 @@ export default {
           })
         } else {
           img.src = reader.result
-          preview.src = reader.result
         }
       }
     },
@@ -370,6 +369,7 @@ export default {
       &__text {
         font: 32px "Roboto", Arial, serif;
         line-height: 93px;
+        max-width: 350px;
       }
       .mail {
         background: url("../assets/images/icon-small-gmail.png") no-repeat
