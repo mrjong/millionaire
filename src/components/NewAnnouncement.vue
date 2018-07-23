@@ -22,13 +22,9 @@ export default {
       return utils.storage.get('millionaire-life-newAnnouncement')
     }
   },
-  mounted () {
-    // let announcement = document.querySelector('.announcement')
-  },
   methods: {
     close () {
       this.isClose = false
-      // this.isShowAgain = false
       utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
     }
   }
@@ -58,14 +54,6 @@ export default {
     align-items: center;
     animation: fadeIn 3s 1;
     animation-fill-mode: forwards;
-    // transform: translateY(-160px);
-    // &-fade-enter-active {
-    //   transition: all 2s;
-    // }
-    // &-fade-enter {
-    //   
-    //   opacity: 0;
-    // }
     .close{
       position: absolute;
       top: 25px;
