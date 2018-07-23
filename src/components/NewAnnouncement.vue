@@ -16,16 +16,16 @@ export default {
   },
   computed: {
     newAnnouncement: function () {
-      if (!utils.storage.get('millionaire-newAnnouncement')) {
-        utils.storage.set('millionaire-newAnnouncement', 0)
+      if (!utils.storage.get('millionaire-life-newAnnouncement')) {
+        utils.storage.set('millionaire-life-newAnnouncement', 0)
       }
-      return utils.storage.get('millionaire-newAnnouncement')
+      return utils.storage.get('millionaire-life-newAnnouncement')
     }
   },
   methods: {
     close () {
       this.isClose = false
-      utils.storage.set('millionaire-newAnnouncement', utils.storage.get('millionaire-newAnnouncement') + 1)
+      utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
     }
   }
 }

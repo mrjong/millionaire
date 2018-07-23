@@ -18,16 +18,17 @@ const gameProcess = {
     beginHostMsgList: [], // 开场串词
     questions: [], // 题目
     resultHostMsgList: [], // 结束串词
-    hostMsgInterval: 4000, // 串词展示时间
+    hostMsgInterval: 3000, // 串词展示时间
     firstQuestionInterval: 30000, // 第一题开始前等待时间
-    questionShowTime: 13000, // 题目展示时间
+    questionShowTime: 15000, // 题目展示时间
     answerShowTime: 10000, // 答案展示时间
     validTime: 0, // 有效时间
     offlineMode: false, // 是否开启离线模式
     heartBeatInterval: 1000, // 心跳时间
     answerSummary: null, // 比赛结果汇总
     result: {}, // 比赛结果
-    watchingMode: false // 是否为观战模式
+    watchingMode: false, // 是否为观战模式
+    isTaskStart: false // 是否立即退出
   },
   $store: null,
   /**
@@ -37,7 +38,7 @@ const gameProcess = {
    */
   init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
     const {ri: gameInfo = {}} = data
-    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 4000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 13000, tas: answerShowTime = 10000} = gameInfo
+    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 3000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 15000, tas: answerShowTime = 10000, isEQ: isTaskStart} = gameInfo
     this.update({
       id,
       currentState: initialState,
@@ -48,10 +49,11 @@ const gameProcess = {
       questions,
       beginHostMsgList,
       resultHostMsgList,
-      hostMsgInterval,
+      hostMsgInterval: +hostMsgInterval > 0 ? +hostMsgInterval : 3000,
       firstQuestionInterval,
-      questionShowTime,
-      answerShowTime
+      questionShowTime: +questionShowTime > 0 ? +questionShowTime : 15000,
+      answerShowTime: +answerShowTime > 0 ? +answerShowTime : 10000,
+      isTaskStart
     })
     this.$store = $store
     // 从本地同步进度信息

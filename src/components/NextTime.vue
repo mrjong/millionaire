@@ -5,7 +5,7 @@
         {{$t('await.next_time_text')}}
         <span class="hint__time__text__day"> {{nextTime[0]}}</span>
       </p>
-      <div class="game-living"  @click="toGamePage" v-if = 'isPlaying'>
+      <div class="game-living"  @click="toGamePage" v-if="isPlaying">
         <p class="living-text">{{$t('await.living')}}</p>
         <div class="game-playing">
           <span class="living-icon iconfont icon-LIVINGyoujiantou left"></span>
@@ -14,6 +14,7 @@
       </div>
       <p class="hint__time__hour" v-else>
         {{nextTime[1]}}
+        <span class="icon-naozhong iconfont icon-naozhong" v-if="nextTime[0] !== ''" @click="reminder"></span>
       </p>
     </div>
     <div class="hint__line"></div>
@@ -64,6 +65,9 @@ export default {
   methods: {
     toGamePage () {
       this.$router.push({path: '/main'})
+    },
+    reminder () {
+      this.$emit('reminderEvent')
     }
   },
   watch: {
@@ -95,14 +99,19 @@ export default {
         }
       }
       &__hour,&__number{
-        height: 70px;
         margin-top: 25px;
         color: #ffb227;
-        font: 700 56px 'Roboto Condensed', Arial, serif;
+        font: 700 50px 'Roboto Condensed', Arial, serif;
         line-height: 70px;
       }
       &__hour{
         color: #fff;
+        .icon-naozhong {
+          position: relative;
+          top: -3px;
+          font-size: 40px;
+          margin-left: 10px;
+        }
       }
       .game-living{
         width: 200px;

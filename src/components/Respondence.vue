@@ -36,6 +36,7 @@
     </div>
     <!-- 答错或未答提示 -->
     <answer-error-tip v-model="answerErrorTip" :type="answerErrorType"></answer-error-tip>
+    <watching-mode-tip v-model="watchingTip"></watching-mode-tip>
     <!-- 使用复活卡提示 -->
     <modal v-model="extraLifeTip">
       <section class="tip-extra-life">
@@ -57,6 +58,7 @@ import {mapGetters, mapActions} from 'vuex'
 import Answer from '../components/Answer.vue'
 import Modal from '../components/Modal.vue'
 import AnswerErrorTip from '../components/AnswerErrorTip.vue'
+import WatchingModeTip from '../components/WatchingModeTip.vue'
 import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
@@ -73,7 +75,8 @@ export default {
       fontSize: 28,
       countdownStyle: 'color: #fff;',
       isLiving: false,
-      isUsedRecoveryCard: false // 是否使用过复活卡
+      isUsedRecoveryCard: false, // 是否使用过复活卡
+      watchingTip: false
     }
   },
   computed: {
@@ -106,6 +109,8 @@ export default {
   methods: {
     ...mapActions({}),
     answer (e) {
+      // 记录是匿名用户第一次答题
+      utils.storage.set('isAnswered', true)
       // 上报用户作答情况
       utils.statistic('QUESTION', 1, {
         id_s: `${this.index}`,
@@ -114,13 +119,20 @@ export default {
         type_s: utils.pageType
       })
       if (this.watchingMode || this.isClick) {
-        this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
-          htmlTitle: this.$t('tip.eliminated.title'),
-          htmlText: this.$t('tip.eliminated.desp'),
-          shouldSub: false,
-          markType: 0,
-          okBtnText: this.$t('tip.eliminated.btn')
-        })
+        // 震动提示
+        // this.watchingMode && this.$store.dispatch(type._OPEN_DIALOG, {
+        //   htmlTitle: this.$t('tip.eliminated.title'),
+        //   htmlText: this.$t('tip.eliminated.desp'),
+        //   shouldSub: false,
+        //   markType: 0,
+        //   okBtnText: this.$t('tip.eliminated.btn')
+        // })
+        if (this.watchingMode) {
+          this.watchingTip = true
+        }
+        setTimeout(() => {
+          this.watchingTip = false
+        }, 1000)
         return false
       }
       if (this.question_status === 5) {
@@ -428,7 +440,8 @@ export default {
     Viewing,
     Living,
     Modal,
-    AnswerErrorTip
+    AnswerErrorTip,
+    WatchingModeTip
   }
 }
 </script>

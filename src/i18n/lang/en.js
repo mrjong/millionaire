@@ -20,7 +20,8 @@ const locale = {
     play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
-    ses_question_btn: 'Set Questions Myself',
+    ses_question_btn: 'Set Questions',
+    teamBattle: 'Team Battle',
     referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
@@ -164,7 +165,8 @@ const locale = {
     send_btn: 'Send',
     viewing: 'Viewing',
     anwser_out_text: 'Out',
-    anwser_incorrect_text: 'Incorrect'
+    anwser_incorrect_text: 'Incorrect',
+    watching: 'Eliminated'
   },
   anwser_rank: { // 答题排行榜
     week_tap: 'Weekly Rank',
@@ -257,6 +259,7 @@ const locale = {
     submit_btn: 'Submit another'
   },
   userCenter: { // 个人中心
+    like_us: 'Like Us',
     title: 'User Profile',
     save: 'Save ',
     edit: 'Edit',
@@ -297,7 +300,9 @@ const locale = {
     invite_pop: {
       text1: 'Invite  friends to earn cash quickly',
       text2: 'Each invitation can earn up to ₹10000'
-    }
+    },
+    balance_share_title: 'I withdrew cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!'
   },
   reviveGuide: { // 复活卡说明页
     title: 'Referral Code Available Now!',
@@ -321,10 +326,53 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, we give \'Double Prize Card\' to some users, check to see if you are the lucky one. <a class="highlight" href="#/doubleRewardCard">Check Now >></a>',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati, here is a TREASURE BOX for you！Join Quiz at 10PM everyday, you\'ll get the lucky cash!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
+  newbieTask: {
+    start_page: {
+      desp: 'Hey, welcome to \'Go! Millionaire\'. Here is an <span class="important">EXTRA LIFE</span> for you, finish the task to get it now.',
+      btn: 'Start the task'
+    },
+    result_page: {
+      title: 'Congrats!',
+      text1: 'Your task done. Here\'s the EXTRA LIFE.',
+      btn: 'Get More EXTRA LIVES'
+    },
+    question: [
+      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: '27634ff8002b12e75d98e07ccd005d18', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
+      {ji: '1', js: 2, jc: 'There is no ____ color in Indian national flag?', jo: ['Red', 'White', 'Green'], ja: 'ee38e4d5dd68c4e440825018d549cb47', jd: ['The National Flag of India is a horizontal rectangular tricolour of saffron, white and green', ' with the Ashoka Chakra, a 24-spoke wheel, in navy blue at its centre. There is no red on it.'], restTime: 10, si: 2500},
+      {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
+    ]
+  },
+  bounsTip: [
+    {
+      title: 'Opps !',
+      desp: 'It\'s empty! Try it tomorrow!',
+      btnText: 'Invite & Earn Cash'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got {currencyType}{money}! Keep Going!',
+      btnText: 'Invite & Earn Cash'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got an EXTRA LIFE.',
+      btnText: 'Get More'
+    },
+    {
+      title: 'Wow ! ',
+      desp: 'A TREASURE BOX received! ',
+      btnText: 'OPEN'
+    },
+    {
+      title: 'Sorry ! ',
+      desp: 'Failed to open it',
+      btnText: ''
+    }
+  ],
   // 全局提示
   tip: {
     userReviveCard: { // 使用复活卡
@@ -354,7 +402,7 @@ const locale = {
     },
     failToUseReviveCard: { // 复活卡使用失败
       title: 'Extra Lives Use Failed', // 主题
-      desp: 'Your internet connection is disconnected or request to your server  timeout. Please check your internet connection.', // 描述
+      desp: 'Your internet connection is disconnected or request to your server timeout. Please check your internet connection.', // 描述
       btn: 'OK' // 按钮文案
     },
     eliminated: { // 点击选项已经被淘汰
@@ -395,6 +443,16 @@ const locale = {
       title: 'ARE YOU LOSING BONUS?',
       desc: 'Invite friends to join and play earn cash up to ₹10000!',
       button: 'Invite & Earn Cash'
+    },
+    wonShareModal: {
+      title: 'Congrats! You Won!',
+      desc: 'You just won cash ₹{money}, invite friends to join and earn more money!',
+      btn: 'Invite & Earn Cash'
+    },
+    balanceShareModal: {
+      title: 'Withdraw Cash Successfully',
+      desc: 'You\'ll get cash after reviewed, invite friends to earn more money!',
+      btn: 'Invite & Earn Cash'
     }
   }
 }
