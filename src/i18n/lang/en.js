@@ -112,7 +112,7 @@ const locale = {
   invite: { // 邀请助力
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
-    steps_title: 'How To Earn',
+    steps_title: 'Invited a freshman can active ₹100 ',
     rank_text1: 'Invite {number} freshmen',
     rank_text2: 'Earn',
     rank_text3: 'Get Reward',
@@ -129,12 +129,17 @@ const locale = {
       '6. You can not get cash/live from the friend who already registered before.'
     ],
     steps: [
-      'Invite your friends to play',
-      'Ask your friends to do sign up and play',
-      'You can earn Rs.10, when your friends has played this game'
+      'Invite friends to play once',
+      'Invite friends to play for 3 times',
+      'Invite friends to play for 5 times'
+    ],
+    rewards: [
+      'Invite 100 friends',
+      'Invite 200 friends',
+      'Invite 500 friends'
     ],
     rank_text: [
-      'Weekly Rank', 'Total Rank', 'My Invite'
+      'My Invite', 'Weekly Rank', 'Total Rank'
     ],
     no_list_title: 'No Friends invited',
     no_list_text: '. Invite friends to earn cash right now!'

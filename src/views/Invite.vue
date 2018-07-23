@@ -16,47 +16,71 @@
       <p class="invite__step__title">{{$t('invite.steps_title')}}</p>
       <div class="invite__step__content">
         <div class="icon-img">
+          <span class="icon-youjiantou iconfont arrows1"></span>
+          <span class="icon-youjiantou iconfont arrows2"></span>
           <div class="icon">
-            <img src="../assets/images/invite-icon1.png">
+            <img src="../assets/images/coin1.png">
           </div>
           <div class="icon">
-            <img src="../assets/images/invite-icon2.png">
+            <img src="../assets/images/coin2.png">
           </div>
           <div class="icon">
-            <img src="../assets/images/invite-icon3.png">
+            <img src="../assets/images/coin3.png">
           </div>
         </div>
-        <div class="num-img">
-          <div class="num">
-            <img src="../assets/images/invite-step1.png">
-          </div>
-          <div class="num">
-            <img src="../assets/images/invite-step2.png">
-          </div>
-          <div class="num">
-            <img src="../assets/images/invite-step3.png">
-          </div>
+        <div class="num-money">
+          <p class="text">+10</p>
+          <p class="text">+20</p>
+          <p class="text">+30</p>
         </div>
         <div class="step-text">
           <p class="text" v-for="(val, idx) in $t('invite.steps')" :key="idx">{{val}}</p>
         </div>
       </div>
     </div>
+    <div class="invite__mytask">
+      <p class="invite__mytask__title">{{$t('invite.steps_title')}}</p>
+      <div class="invite__mytask__content">
+        <div class="icon-img">
+          <span class="icon-youjiantou iconfont arrows1"></span>
+          <span class="icon-youjiantou iconfont arrows2"></span>
+          <div class="progress-ball">
+          </div>
+          <div class="progress-ball">
+          </div>
+          <div class="progress-ball">
+          </div>
+        </div>
+        <div class="num-money">
+          <p class="text">10 Friends</p>
+          <p class="text">6 Friends</p>
+          <p class="text">3 Friends</p>
+        </div>
+        <div class="step-text">
+          <p class="text" v-for="(val, idx) in 3" :key="idx">play {{val}} times</p>
+        </div>
+      </div>
+    </div>
+    <div class="invite__rewards">
+      <p class="invite__rewards__title">{{$t('invite.steps_title')}}</p>
+      <div class="invite__rewards__content">
+        <div class="icon-img reward-icon" >
+          <div class="icon" v-for="(i,idx) in 3" :key="idx">
+            <img src="../assets/images/coin-icon.png">
+            <span class="text">+ 100</span>
+          </div>
+        </div>
+        <div class="rewards-text">
+          <p class="text" v-for="(val, idx) in $t('invite.rewards')" :key="idx">{{val}}</p>
+        </div>
+        <div class="invite__rewards__btn">You'll get ₹5 if your friends invited new user to play</div>
+      </div>
+    </div>
     <div class="invite__list">
       <div class="tap">
         <p class="title" @click="changeTap(idx)" :class="{'tap-active': idx === index}" v-for="(val, idx) in tap" :key="idx">{{val}}</p>
       </div>
-      <div class="content1" v-if="index === 0">
-        <top-three v-if="!isHaveData" :BoardData="weekTopThree"></top-three>
-        <invite-rank-item v-if="!isHaveData" v-for="(val, idx) in weekData" :key="idx" :BoardData=val></invite-rank-item>
-        <invite-blank v-if="isHaveData"></invite-blank>
-      </div>
-      <div class="content2" v-if="index === 1">
-        <top-three v-if="!isHaveData" :BoardData="totalTopThree"></top-three>
-        <invite-rank-item v-if="!isHaveData" v-for="(val, idx) in totalData" :key="idx" :BoardData="val"></invite-rank-item>
-        <invite-blank v-if="isHaveData"></invite-blank>
-      </div>
-      <div class="content3" v-if="index === 2">
+      <div class="content3" v-if="index === 0">
         <div class="my-invite" v-if="myInviteData.length > 0">
           <div class="my-info bg-reset bg-center" v-webp.bg="`url('invite-user-bg.png')`" v-if="myInviteInfo">
             <img :src="myInviteInfo.upic" class="head">
@@ -84,6 +108,16 @@
           <div class="hint">{{$t('invite.rank_hint')}}</div>
         </div>
         <invite-blank v-else></invite-blank>
+      </div>
+      <div class="content1" v-if="index === 1">
+        <top-three v-if="!isHaveData" :BoardData="weekTopThree"></top-three>
+        <invite-rank-item v-if="!isHaveData" v-for="(val, idx) in weekData" :key="idx" :BoardData=val></invite-rank-item>
+        <invite-blank v-if="isHaveData"></invite-blank>
+      </div>
+      <div class="content2" v-if="index === 2">
+        <top-three v-if="!isHaveData" :BoardData="totalTopThree"></top-three>
+        <invite-rank-item v-if="!isHaveData" v-for="(val, idx) in totalData" :key="idx" :BoardData="val"></invite-rank-item>
+        <invite-blank v-if="isHaveData"></invite-blank>
       </div>
     </div>
     <revive-card :reviveObj="reviveObj" @shareClose="shareClose"></revive-card>
@@ -147,7 +181,7 @@ export default {
   },
   mounted () {
     utils.statistic('invite_earn_page', 0)
-    this.getData(0)
+    this.getMyInviteData()
   },
   methods: {
     getMoreInvite () {
@@ -158,7 +192,7 @@ export default {
     },
     changeTap (idx) {
       this.index = idx
-      if (idx !== 2) {
+      if (idx !== 0) {
         this.getData(idx)
       } else {
         this.getMyInviteData()
@@ -325,9 +359,9 @@ export default {
         }
       }
     }
-    &__step{
+    &__step, &__rewards, &__mytask{
       width: 680px;
-      min-height: 450px;
+      min-height: 400px;
       max-width: 100%;
       background-color: #fff;
       border-radius: 24px;
@@ -336,7 +370,7 @@ export default {
       &__title{
         margin-bottom: 30px;
         color: #201a98;
-        font: 34px 'Roboto', Arial, serif;
+        font:600 32px 'Roboto', Arial, serif;
         text-align: center;
       }
       &__content{
@@ -347,28 +381,65 @@ export default {
           justify-content: center;
           justify-content: center;
           align-items: flex-start;
+          position: relative;
+          .arrows1, .arrows2 {
+            position:absolute;
+            top: 50%;
+            left: 30%;
+            transform: translate(0,-50%);
+            font-size: 34px;
+            color:#fbb631;
+            opacity: 0.5;
+          }
+          .arrows2{
+            left: 64%;
+          }
           .icon{
             flex: 1;
             align-self: center;
-            margin-bottom: 20px;
             img{
               width: 115px;
-              height: 120px;
               margin: 0 auto;
             }
           }
+          .progress-ball {
+            align-self: center;
+            width: 153px;
+            height: 153px;
+            border-radius: 50%;
+            background-color:#f8f8f8;
+          }
         }
-        .num-img {
+        .reward-icon{
+          .icon{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+              width: 95px;
+              height: 71px;
+              margin: 0 10px 0 0;
+            }
+            .text{
+            color: #fa8d36;
+            font: 600 28px 'Roboto', Arial, serif;
+          }
+          }
+        }
+        .num-money {
           width: 100%;
           display: flex;
           flex-direction: row;
           justify-content: center;
           justify-content: center;
           align-items: flex-start;
-          margin-bottom: 15px;
-          .num {
+          margin: 15px 0;
+          .text {
             flex: 1;
             align-self: center;
+            color: #fa8d36;
+            font: 600 36px 'Roboto', Arial, serif;
+            text-align: center;
             img {
               width: 60px;
               height: 60px;
@@ -376,7 +447,7 @@ export default {
             }
           }
         }
-        .step-text {
+        .step-text ,.rewards-text{
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -385,6 +456,33 @@ export default {
           .text{
             line-height: 30px;
             width: 90%;
+            text-align: center;
+          }
+        }
+        .rewards-text{
+          margin-top: 20px;
+        }
+      }
+      &__btn {
+        width: 630px;
+        height: 76px;
+        font: 400 24px "Roboto", Arial, serif;
+        line-height: 76px;
+        text-align: center;
+        color: #fff;
+        border-radius:46px;
+        background:linear-gradient(left, #f6cd46 , #fc642b);
+        margin-top: 45px;
+      }
+    }
+    &__mytask{
+      &__content{
+        .icon-img{
+          justify-content: space-around;
+        }
+        .num-money{
+          .text{
+            font-size: 28px;
           }
         }
       }
