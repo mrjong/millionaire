@@ -57,14 +57,14 @@
         <invite-blank v-if="isHaveData"></invite-blank>
       </div>
       <div class="content3" v-if="index === 2">
-        <div class="my-invite" v-if="!isHaveData">
+        <div class="my-invite" v-if="myInviteData.length > 0">
           <div class="my-info" v-if="myInviteInfo">
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
             <p class="number">{{$t('invite.rank_text1', {number: myInviteInfo.sc})}}</p>
             <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{myInviteInfo.amountFmt}}</p>
           </div>
-          <div class="item" v-if="myInviteData">
+          <div class="item" v-if="myInviteData.length > 0">
             <div class="rank-item" v-for="(val, idx) in myInviteData" :key="idx">
               <p class="index">{{val.rank}}</p>
               <div class="head">
@@ -79,6 +79,7 @@
                 <p class="number">{{val.status === 1 ? $t('invite.rank_text3') : $t('invite.rank_text4')}}</p>
               </div>
             </div>
+            <div class="more-button" @click="getMoreInvite" v-if="isShowMoreBtn">Get More</div>
           </div>
           <div class="hint">{{$t('invite.rank_hint')}}</div>
         </div>
@@ -133,7 +134,10 @@ export default {
       myInviteInfo: {},
       myInviteData: [],
       isHaveData: false,
-      isLoading: false
+      isLoading: false,
+      isShowMoreBtn: true,
+      offset: 0,
+      limit: 10
     }
   },
   computed: {
@@ -146,6 +150,9 @@ export default {
     this.getData(0)
   },
   methods: {
+    getMoreInvite () {
+      this.getMyInviteData()
+    },
     back () {
       this.$router.go(-1)
     },
@@ -158,14 +165,21 @@ export default {
       }
     },
     getMyInviteData () {
+      if (this.isLoading) return
       this.isLoading = true
-      api.myInviteBoard().then(({data}) => {
+      api.myInviteBoard(this.offset, this.limit).then(({data}) => {
         this.isLoading = false
         if (data.result === 1 && data.code === 0) {
-          if (data.data.list.length > 0) {
+          let dataLength = data.data.list.length
+          if (dataLength > 0) {
+            if (dataLength < this.limit) {
+              this.isShowMoreBtn = false
+            }
             this.isHaveData = false
             this.myInviteInfo = data.data.me
-            this.myInviteData = data.data.list
+            let myInviteData = data.data.list
+            this.myInviteData.push(...myInviteData)
+            this.offset += this.limit
           } else {
             this.isHaveData = true
           }
@@ -451,8 +465,17 @@ export default {
           }
         }
         .item {
-          padding:20px;
-          overflow-y: scroll;
+          padding:20px 20px 0;
+          .more-button {
+            margin-top: 15px;
+            color: #ccc;
+            width: 100%;
+            text-align: center;
+            font: 200 26px "Roboto", Arial, serif;
+            height: 40px;
+            line-height: 40px;
+            font-weight: bold;
+          }
           .rank-item {
             box-sizing: content-box;
             padding-top: 20px;

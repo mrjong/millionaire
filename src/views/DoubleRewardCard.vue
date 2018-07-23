@@ -44,7 +44,6 @@ export default {
       if (this.isLoading) return
       this.isLoading = true
       doubelRewardList(this.offset, this.limit).then(({ data }) => {
-        console.log(data)
         if (data.result === 1 && data.code === 0) {
           let userList = data.data.map(item => {
             let obj = {}

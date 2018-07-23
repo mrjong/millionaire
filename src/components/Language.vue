@@ -46,16 +46,17 @@ export default {
 <style lang="less">
   .select-language {
     .icon-lang {
-      width: 54px;
-      height: 54px;
-      background-color: rgba(255, 255, 255, 0.2);
+      width: 52px;
+      height: 52px;
       border-radius: 50px;
+      border: 1px solid #fff;
       font-size: 24px;
       text-align: center;
       align-self: center;
       line-height: 54px;
       color: #fff;
       font-family: 'Roboto', Arial, serif;
+      margin-left: 20px;
     }
   }
 </style>

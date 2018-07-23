@@ -37,20 +37,8 @@ const mutations = {
   }
 }
 
-const actions = {
-  /**
-   * 更新用户信息
-   * @param {any} {commit}
-   * @param {any} userInfo
-   */
-  [type.HOME_UPDATE] ({commit}, userInfo) {
-    commit(type.HOME_UPDATE, userInfo)
-  }
-}
-
 export default {
   state,
   getters,
-  mutations,
-  actions
+  mutations
 }
