@@ -81,7 +81,7 @@ export default {
     }
     .horn{
       position: absolute;
-      top: 35px;
+      top: 50px;
       left: 25px;
       font-size: 28px;
     }
