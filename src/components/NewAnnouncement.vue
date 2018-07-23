@@ -1,6 +1,7 @@
 <template>
     <div class="announcement" v-if="isClose && newAnnouncement < 3">
       <span class="iconfont icon-cuowu close" @click="close" ></span>
+      <span class="iconfont icon-laba horn"></span>
       <div class="content" v-html="$t('NewAnnouncement')"></div>
     </div>
 </template>
@@ -72,17 +73,17 @@ export default {
       font:200 24px 'Roboto', Arial, serif;
       position: relative;
       line-height: 35px;
-      .horn{
-        position: absolute;
-        top: 5px;
-        left: 25px;
-        font-size: 28px;
-      }
       .highlight {
          font:600 26px 'Roboto', Arial, serif;
          color: #fff;
          text-decoration: underline;
       }
+    }
+    .horn{
+      position: absolute;
+      top: 50px;
+      left: 25px;
+      font-size: 28px;
     }
   }
 </style>
