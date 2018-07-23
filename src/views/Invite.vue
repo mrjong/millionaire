@@ -1,14 +1,14 @@
 <template>
-  <div class="invite">
+  <div class="invite bg-reset" v-webp.bg="`url('invite-bg.jpg')`">
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
     <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
     <div class="invite__title">
-      <img src="../assets/images/invite-title-hi.png" class="invite__title__img" v-if="$i18n.locale === 'hi'">
-      <img src="../assets/images/invite-title-en.png" class="invite__title__img" v-else>
+      <img v-webp="'invite-title-hi.png'" class="invite__title__img" v-if="$i18n.locale === 'hi'">
+      <img v-webp="'invite-title-en.png'" class="invite__title__img" v-else>
     </div>
     <div class="invite__btn">
       <div class="invite__btn__click" @click="inviteEarn">
-        <img src="../assets/images/invite-btn.png">
+        <img v-webp="'invite-btn.png'">
         <p>{{$t('invite.invite_btn')}}</p>
       </div>
     </div>
@@ -58,7 +58,7 @@
       </div>
       <div class="content3" v-if="index === 2">
         <div class="my-invite" v-if="myInviteData.length > 0">
-          <div class="my-info" v-if="myInviteInfo">
+          <div class="my-info bg-reset bg-center" v-webp.bg="`url('invite-user-bg.png')`" v-if="myInviteInfo">
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
             <p class="number">{{$t('invite.rank_text1', {number: myInviteInfo.sc})}}</p>
@@ -266,10 +266,6 @@ export default {
   .invite{
     width: 100%;
     min-height: 100%;
-    background-image: url("../assets/images/invite-bg.jpg");
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
     padding: 0 20px 30px;
     position: relative;
     &__back,&__rule {

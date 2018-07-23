@@ -1,5 +1,5 @@
 <template>
-  <div class="user">
+  <div class="user bg-reset" v-webp.bg="`url('await-bg.jpg')`">
     <loading v-if="loading"></loading>
     <div class="header">
       <p class="title">{{$t('userCenter.title')}}</p>
@@ -123,7 +123,7 @@ export default {
               markType: 0,
               okBtnText: this.$t('userCenter.edit_pop.ok'),
               lastTime: 3000,
-              hintImg: './static/images/tip-success.png'
+              hintImg: utils.getWebpImgUrl('tip-success.png')
             })
 
             this.$store.commit(type.HOME_UPDATE, {
@@ -189,7 +189,7 @@ export default {
                   shouldSub: false,
                   markType: 0,
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
-                  hintImg: './static/images/tip-success.png',
+                  hintImg: utils.getWebpImgUrl('tip-success.png'),
                   lastTime: 3000
                 })
               }
@@ -292,8 +292,6 @@ export default {
 .user {
   width: 100%;
   min-height: 100%;
-  background: url("../assets/images/await-bg.jpg") no-repeat top left;
-  background-size: cover;
   padding: 3.7% 3.7% 0;
   display: flex;
   flex-direction: column;

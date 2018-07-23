@@ -1,8 +1,8 @@
 <template>
-  <div class="policy" ref=policyContainer @scroll="scrollEnter">
+  <div class="policy bg-reset" ref=policyContainer @scroll="scrollEnter" v-webp.bg="`url('balance-bg.jpg')`">
     <p class="header iconfont icon-close_big" @click="close"></p>
     <div class="content" ref="policyContent">
-      <img src="../assets/images/await-logo.png" class="logo">
+      <img v-webp="'await-logo.png'" class="logo">
       <p class="title">About 'Go! Millionaire'</p>
       <p class="paragraph1">Go! Millionaire is developed and serviced by APUS.In order to provide better game experience and protect your personal data, please read the following agreements carefully:</p>
       <div class="service">
@@ -118,8 +118,6 @@ export default {
 .policy {
   width: 100%;
   height: 100%;
-  background: url('../assets/images/balance-bg.jpg') no-repeat top left;
-  background-size: cover;
   overflow-y: scroll;
   .header {
     width: 50px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="announcement" v-if="isClose && newAnnouncement < 3">
+  <div class="announcement bg-reset bg-center" v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isClose && newAnnouncement < 3">
     <span class="iconfont icon-cuowu close" @click="close" ></span>
     <div class="content" v-html="$t('NewAnnouncement')"></div>
   </div>
@@ -34,8 +34,6 @@ export default {
   .announcement{
     width: 100%;
     height: 160px;
-    background: url('../assets/images/top-pop-bg.jpg') no-repeat center;
-    background-size: cover;
     position: fixed;
     top:0;
     left: 0;

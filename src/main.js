@@ -3,18 +3,16 @@
 import Fingerprint2 from 'fingerprintjs2'
 import Vue from 'vue'
 import App from './App'
-import Image from './components/StaticImage.vue'
 import router from './router'
 import utils from './assets/js/utils'
-// import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
 import i18n from './i18n'
 import 'core-js/modules/es6.promise'
-// import im from './assets/js/im'
+import im from './assets/js/im'
 import { _OPEN_DIALOG } from './store/type'
 
-// im.init()
+im.init()
 
 window.onload = function () {
   // 初始化打点
@@ -71,8 +69,6 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-Vue.component('static-image', Image) // 初始化静态图片组件
-
 Vue.directive('webp', (el, {modifiers = {}, value = ''}) => {
   if (modifiers.bg) {
     el.style.backgroundImage = value.replace(/url\(.+?\)/g, (val) => {
@@ -104,7 +100,7 @@ if ('serviceWorker' in navigator) {
           htmlText: i18n.t('tip.versionUpdate.desp'),
           lastTime: 5000,
           okBtnText: i18n.t('tip.versionUpdate.btn'),
-          hintImg: './static/images/tip-update.png'
+          hintImg: utils.getWebpImgUrl('tip-update.png')
         })
       }
       console.log('Service Worker registered35: ', registration)

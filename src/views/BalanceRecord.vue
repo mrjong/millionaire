@@ -1,5 +1,5 @@
 <template>
-  <div class="record">
+  <div class="record bg-reset" v-webp.bg="`url('set-question-bg.jpg')`">
     <div class="record__top" ref="recordTop">
       <div class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="no-list"  :style="{height:recordWrapHeight + 'px'}" v-else-if="balanceRecordList.length === 0 && !loading">
-        <img src="../assets/images/no-history.png" class="no-list__img">
+        <img v-webp="'no-history.png'" class="no-list__img">
         <p>{{recordType ? $t('balanceRecord.no_cash') : $t('balanceRecord.no_withdrawal')}}</p>
       </div>
     </div>
@@ -219,8 +219,6 @@ export default {
 .record{
   width: 100%;
   min-height: 100%;
-  background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
-  background-size: cover;
   color: #fff;
   background-color: #fff;
   &__top{

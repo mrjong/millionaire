@@ -1,5 +1,5 @@
 <template>
-  <div class="balance-detail">
+  <div class="balance-detail bg-reset" v-webp.bg="`url('balance-bg.jpg')`">
     <div class="balance-detail__title">
       <p class="balance-detail__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-detail__title__nickname">{{$t('balanceDetail.title')}}</p>
@@ -204,8 +204,6 @@ export default {
 .balance-detail {
   width: 100%;
   height: 100%;
-  background: url('../assets/images/balance-bg.jpg') no-repeat top left;
-  background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
   display: flex;
