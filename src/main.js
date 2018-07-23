@@ -59,7 +59,6 @@ if (!utils.clientId) {
 // 读取声音
 utils.loadSounds()
 Vue.config.productionTip = false
-Vue.config.devtools = true
 Vue.prototype.$http = http
 Vue.prototype.$statisticEntry = statisticEntry
 router.beforeEach((to, from, next) => {

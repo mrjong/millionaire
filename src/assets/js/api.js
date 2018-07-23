@@ -46,7 +46,10 @@ export const api = {
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
-  getIMServerAddress: '/cmp/im_url/' // 获取IM服务器地址
+  getIMServerAddress: '/cmp/im_url/', // 获取IM服务器地址
+  doubelRewardList: '/cmp/gdb', // 获取双倍奖金
+  getBounsId: '/cmp/gb', // 获得宝箱id
+  getBounsBox: '/cmp/ub/' // 获得宝箱
 }
 
 export const init = function (isRefreshToken) {
@@ -189,11 +192,12 @@ export const DailyShare = function () {
   })
 }
 
-// 首次登陆增加额外生命
-export const addExtraLife = function () {
+// 增加额外生命
+export const addExtraLife = function (type = 0) {
   return axios.post(api.addExtraLife, {
     app_id: utils.app_id,
-    client_id: utils.clientId
+    client_id: utils.clientId,
+    tp: type
   })
 }
 
@@ -382,11 +386,13 @@ export const inviteTotalBoard = function () {
 
 // 我的邀请排行
 
-export const myInviteBoard = function () {
+export const myInviteBoard = function (offset, limit) {
   return axios.get(api.myInviteBoard, {
     params: {
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      offset: offset,
+      limit: limit
     }
   })
 }
@@ -433,6 +439,7 @@ export const uploadAvatar = function (pic) {
   })
 }
 
+// 刷新个人信息缓存
 export const updateAvatarCache = function () {
   return axios.get(api.updateAvatarCache, {
     params: {
@@ -442,6 +449,7 @@ export const updateAvatarCache = function () {
   })
 }
 
+// 取消提醒
 export const cancelReminder = function () {
   return axios.post(api.cancelReminder, {
     app_id: utils.app_id,
@@ -452,4 +460,33 @@ export const cancelReminder = function () {
 // 获取IM服务器地址
 export const getIMServerAddress = function () {
   return axios.get(api.getIMServerAddress)
+}
+
+export const doubelRewardList = function (offset, limit) {
+  return axios.get(api.doubelRewardList, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      offset,
+      limit
+    }
+  })
+}
+
+// 获得宝箱id
+export const getBounsId = function () {
+  return axios.get(api.getBounsId, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+// 获得宝箱中奖品
+export const getBounsBox = function (id) {
+  return axios.post(api.getBounsBox, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    boxId: id
+  })
 }

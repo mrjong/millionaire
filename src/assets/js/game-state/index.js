@@ -49,12 +49,12 @@ const gameState = {
    */
   update_global () {
     const {data: info} = this
-    const {ri: gameInfo = {}, cn: lives = 0, cd: code, m: chatRoomInfo = {}, sub: isRemider = false} = info
+    const {ri: gameInfo = {}, cn: lives = 0, cd: code, m: chatRoomInfo = {}, sub: isRemider = false, nt: isUserGame = false} = info
     const {si: hostIntervalTime = 3000, t: gameType} = gameInfo
     const startTime = +info.sr || -1
     const startTimeOffset = +info.ls || 0
     this.$store.commit(_UPDATE, {
-      hostIntervalTime,
+      hostIntervalTime: +hostIntervalTime > 0 ? +hostIntervalTime : 3000,
       lives,
       code,
       gameType,
@@ -64,7 +64,8 @@ const gameState = {
       onlineAmount: chatRoomInfo.is || '',
       chatRoomId: chatRoomInfo.rn || '',
       imToken: chatRoomInfo.it || '',
-      isRemider
+      isRemider,
+      isUserGame
     })
 
     // 从本地同步复活卡信息
@@ -139,14 +140,15 @@ const gameState = {
    */
   run () {
     this.update()
-    const {s: isPlaying, r: isInRoom} = this.data
+    const {s: isPlaying, r: isInRoom, ta: task} = this.data
     if (isPlaying) {
       gameProcess.init(this.data, this.$store, PROCESS_QUESTION)
       this.playingState.run()
     } else {
       // 是否进入倒计时
-      if (isInRoom) {
-        gameProcess.init(this.data, this.$store)
+      gameProcess.init(this.data, this.$store)
+      if (isInRoom || task) {
+        // gameProcess.init(this.data, this.$store)
         this.countDownState.run()
       } else {
         this.awaitState.run()

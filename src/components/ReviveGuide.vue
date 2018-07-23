@@ -1,6 +1,6 @@
 <template>
-  <div class="guide" v-if="FirstGuide && !isClose">
-    <span class="guide__close iconfont icon-cuowu" @click="isClose = true"></span>
+  <div class="guide" v-if="FirstGuide && (!isAnswered || isUserGame) && !isClose ">
+    <span class="guide__close iconfont icon-cuowu" @click.stop="isClose = true"></span>
     <p class="important ">{{$t('reviveGuide.title')}}</p>
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text1')}}</p>
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>
@@ -26,16 +26,24 @@ export default {
   data () {
     return {
       isClose: false,
-      FirstGuide: false
+      FirstGuide: false,
+      isAnswered: false
     }
   },
   computed: {
     ...mapGetters({
       status: 'status',
-      questionStatus: 'question_status'
+      questionStatus: 'question_status',
+      isUserGame: 'isUserGame'
     })
   },
   mounted () {
+    if (utils.storage.get('isAnswered') === undefined) {
+      this.isAnswered = false
+    } else {
+      this.isAnswered = utils.storage.get('isAnswered')
+    }
+    utils.statistic('referral_code_guide', 0)
     if (!utils.storage.get('millionaire-NoFirstGuide') && this.$route.path === '/') {
       this.FirstGuide = true
       utils.storage.set('millionaire-NoFirstGuide', true)
@@ -43,7 +51,7 @@ export default {
       this.FirstGuide = false
     }
     // 显示之后禁止屏幕滚动
-    if (this.FirstGuide) {
+    if (this.FirstGuide && (!this.isAnswered || this.isUserGame)) {
       this.freeze()
     } else {
       this.restore()
@@ -52,18 +60,11 @@ export default {
   methods: {
     toShareDetail () {
       this.isClose = true
-      utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
-      if (utils.isOnline) {
-        this.isClose = true
-        this.$router.push({path: '/share-detail'})
-      } else {
-        this.isClose = true
-        utils.login(() => {
-          utils.statistic('reviveguide_page', 1, {'result_code_s': '1'}, 'await_page')
-          this.$store.dispatch(type._INIT)
-          this.$router.push({path: '/share-detail'})
-        })
-      }
+      utils.statistic('get_life_button', 1, {to_destination_s: 'task_page'}, 'wait_page')
+      // 跳新手任务
+      this.$store.commit(type._UPDATE, {
+        isShowNewbieTask: true
+      })
     },
     freeze () {
       document.querySelector('#app').style.overflow = 'hidden'

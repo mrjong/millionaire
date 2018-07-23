@@ -1,6 +1,6 @@
 {
   "name": "millionaire",
-  "version": "1.2.0.1200",
+  "version": "2.6.4",
   "description": "A Vue.js project",
   "author": "liuweiwei <3240590062>",
   "private": true,
@@ -13,7 +13,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "fingerprintjs2": "^1.6.1",
-    "im": "1.0.6",
+    "im": "1.0.7",
     "lodash.throttle": "^4.1.1",
     "md5": "^2.2.1",
     "store": "^2.0.12",

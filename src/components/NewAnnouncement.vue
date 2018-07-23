@@ -16,16 +16,16 @@ export default {
   },
   computed: {
     newAnnouncement: function () {
-      if (!utils.storage.get('newAnnouncement')) {
-        utils.storage.set('newAnnouncement', 0)
+      if (!utils.storage.get('millionaire-life-newAnnouncement')) {
+        utils.storage.set('millionaire-life-newAnnouncement', 0)
       }
-      return utils.storage.get('newAnnouncement')
+      return utils.storage.get('millionaire-life-newAnnouncement')
     }
   },
   methods: {
     close () {
       this.isClose = false
-      utils.storage.set('newAnnouncement', utils.storage.get('newAnnouncement') + 1)
+      utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
     }
   }
 }
@@ -63,6 +63,8 @@ export default {
       }
       .highlight {
          font:600 26px 'Roboto', Arial, serif;
+         color: #fff;
+         text-decoration: underline;
       }
     }
   }

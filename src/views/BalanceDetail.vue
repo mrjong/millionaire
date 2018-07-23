@@ -16,7 +16,7 @@
         <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.p_number')" v-model="pan">
       </p>
       <p class="balance-detail__operate__wrap__input">
-        <input type="text" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
+        <input type="number" class="balance-detail__operate__input" :placeholder="$t('balanceDetail.paytm')" v-model="myPay">
       </p>
       <p class="balance-detail__operate__wrap__hint">{{$t('balanceDetail.noitce')}}</p>
     </div>
@@ -26,6 +26,8 @@
     <policy-link :class="{hide: isInputting}"></policy-link>
     <balance-mark v-if="markInfo.showMark" :data-info="markInfo" @okEvent='okEvent' @cancelEvent = 'cancelEvent'></balance-mark>
     <loading v-if="showLoading"></loading>
+    <ShareTipModal v-model="isShowShareTipModal" @close="isShowShareTipModal = false" @share="share"></ShareTipModal>
+    <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
   </div>
 </template>
 
@@ -37,10 +39,20 @@ import * as api from '../assets/js/api'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import PolicyLink from '../components/PolicyLink'
+import ShareTipModal from '../components/ShareTipModal'
+import ReviveCard from '../components/ReviveCard'
+
 export default {
   name: 'BalanceDetail',
   data () {
     return {
+      reviveObj: {
+        title: this.$t('receiveCard.invite_pop.text1'),
+        hint: this.$t('receiveCard.invite_pop.text2'),
+        isShare: false,
+        type: 'balance'
+      },
+      isShowShareTipModal: false,
       myPay: '',
       name: '',
       pan: '',
@@ -59,7 +71,8 @@ export default {
     ...mapGetters({
       userInfo: 'userInfo',
       isOnline: 'isOnline',
-      isInputting: 'isInputting'
+      isInputting: 'isInputting',
+      code: 'code'
     })
   },
   mounted () {
@@ -67,10 +80,12 @@ export default {
   },
   methods: {
     cashOut () {
+      console.log()
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
-        const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/
+        // const phone = /^(\+91[-\s]?)?[0]?(91)?[789]\d{10}$/
+        const phone = /^[789]\d{9}$/
         const panRule = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/
         const nameRule = /^([A-Za-z]+\s?)*[A-Za-z]{1,64}$/
         const isNamePass = nameRule.test(this.name)
@@ -111,9 +126,10 @@ export default {
             this.showLoading = false
             if (+data.result === 1) { // 请求成功 code必为0
               if (+data.code === 0) {
-                this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
+                // this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.submit_success'))
                 this.$store.dispatch(type._INIT)
                 takeCash = 'success'
+                this.isShowShareTipModal = true
               }
             } else { // 请求失败，判断code
               switch (+data.code) {
@@ -161,12 +177,26 @@ export default {
         htmlText: htmlText,
         okBtnText: okBtnInnerText
       }
+    },
+    callbackFailed () {
+      this.markInfo.htmlText = 'Fail to submit, please try again later.'
+      this.markInfo.showMark = true
+    },
+    shareClose () {
+      this.reviveObj.isShare = false
+    },
+    share (data) {
+      this.$router.push('invite')
+      // this.reviveObj.isShare = data.isShare
+      // this.reviveObj.code = this.code
     }
   },
   components: {
     BalanceMark,
     Loading,
-    PolicyLink
+    PolicyLink,
+    ShareTipModal,
+    ReviveCard
   }
 }
 </script>

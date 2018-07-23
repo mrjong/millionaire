@@ -17,7 +17,8 @@ const state = {
   bonusAmount: 0, // 奖金数量
   income: 0, // 总收益,
   incomeShow: '0', // 总收益展示,
-  icode: '' // 好友验证码
+  icode: '', // 好友验证码
+  myselfBonusAmount: 0 // 本场比赛自己赢得的奖金数
 }
 
 const getters = {
@@ -36,20 +37,8 @@ const mutations = {
   }
 }
 
-const actions = {
-  /**
-   * 更新用户信息
-   * @param {any} {commit}
-   * @param {any} userInfo
-   */
-  [type.HOME_UPDATE] ({commit}, userInfo) {
-    commit(type.HOME_UPDATE, userInfo)
-  }
-}
-
 export default {
   state,
   getters,
-  mutations,
-  actions
+  mutations
 }

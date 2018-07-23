@@ -1,25 +1,33 @@
 <template>
   <div class="await">
     <div class="await__top">
-      <a class="await__top__like icon-dianzan iconfont"
+      <!-- <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"
          @click="likeToFb('like_page')">
-      </a>
+      </a> -->
       <div style="display: flex;">
-        <lang class="await__top__lang"></lang>
         <router-link to="/rule">
           <div class="await__top__instructions icon-youxishuoming iconfont"
                @click="btnStatistic('help_page')"></div>
         </router-link>
+        <lang class="await__top__lang"></lang>
       </div>
+      <!-- <div class="await__top__avatar" @click="loginAvatar"><img :src="userInfo.avatar" alt=""></div> -->
+      <div class="await__top__avatar" :style="{backgroundImage:'url('+ userInfo.avatar +')'}" @click="loginAvatar" v-if="isOnline">
+        <!-- <p class="login-text" v-if="!isOnline">{{$t('await.login_text')}}</p> -->
+      </div>
+      <div class="await__top__avatar__text" v-if="!isOnline" @click="loginAvatar">{{$t('await.login_text')}}</div>
     </div>
     <div class="await__title">
       <img src="../assets/images/await-logo.png">
     </div>
-    <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType"></next-time>
-    <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div>
+    <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType" @reminderEvent="Reminder(isRemider ? 'cancel_reminder':'set_reminder')"></next-time>
+    <!-- <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div> -->
+
+    <div class="await__reminder" @click="inputInvitation">{{$t('await.referral_code_btn')}}</div>
+
     <base-info :baseInfo="userInfo"></base-info>
-    <div class="await__btn">
+    <!-- <div class="await__btn">
       <div class="invitation-code">
         <div class="extra-lives">
           <div style="position: relative;">
@@ -42,16 +50,20 @@
         </div>
         <p class="share-success__num">+1</p>
       </div>
+    </div> -->
+    <div class="characters">
+      <div class="item"><img src="../assets/images/team-battle.png"><span>{{$t('await.teamBattle')}} <br><em class="scale-text">{{$t('await.come_soon')}}</em></span></div>
+      <div class="item" @click="getSetQuestion"><img src="../assets/images/set-question.png"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
       <img src="../assets/images/invite-btn.png">
       <p>{{$t('await.invite_btn')}}</p>
     </div>
-    <div class="notice">
+    <!-- <div class="notice">
       <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
-    </div>
+    </div> -->
     <!-- <div class="game-area">
       <div class="game-icon">
         <a href="http://h5game.subcdn.com/03/" @click="btnStatistic('H5game_Box')">
@@ -86,20 +98,21 @@
         </a>
       </div>
     </div> -->
-    <router-link to="/rule">
+    <!-- <router-link to="/rule">
       <how-play-card></how-play-card>
-    </router-link>
-    <div class="await__set" @click="getSetQuestion">
+    </router-link> -->
+    <!-- <div class="await__set" @click="getSetQuestion">
       <span class="await__set__icon icon-yonghuchuti_qianzise iconfont"></span>
       <p class="await__set__text">{{$t('await.ses_question_btn')}}</p>
-    </div>
-    <div class="apus-logo">
+    </div> -->
+    <!-- <div class="apus-logo">
       <img src="../assets/images/apus-logo-white.png" class="icon">
-    </div>
+    </div> -->
     <policy-link></policy-link>
     <reminder-bomb @ReminderClose="ReminderClose" @ReminderOk="ReminderOk"
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
+    <newbie-task></newbie-task>
     <new-announcement></new-announcement>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
@@ -108,6 +121,14 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
+    <div class="browser-tip" v-if="isShowBrowserTip">
+      <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
+      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"/>
+      <div class="browser-tip__text">
+        <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
+      </div>
+      <a class="browser-tip__button ellipsis-1" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
+    </div>
   </div>
 </template>
 <script>
@@ -118,19 +139,20 @@ import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import BalanceMark from '../components/BalanceMark'
 import * as api from '../assets/js/api'
-import Living from '../components/Living'
 import HowPlayCard from '../components/HowPlayCard'
 import Notices from '../components/Notices'
 import ReminderBomb from '../components/ReminderBomb'
 import PolicyBomb from '../components/PolicyBomb'
 import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
+import NewbieTask from '../components/NewbieTask'
 import NewAnnouncement from '../components/NewAnnouncement'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
   data () {
     return {
+      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -142,9 +164,7 @@ export default {
         okBtnText: this.$t('await.referral_code_pop.ok')
       },
       showDialog: false,
-      isSucceed: false,
       logout: false,
-      inviteLiving: false,
       isReminderPop: false,
       isChangeReminder: false
     }
@@ -158,7 +178,8 @@ export default {
       code: 'code',
       isAgreePolicy: 'isAgreePolicy',
       isRemider: 'isRemider',
-      watchingMode: 'watchingMode'
+      watchingMode: 'watchingMode',
+      isOnline: 'isOnline'
     }),
     targetDate () {
       if (this.startTime === -1) {
@@ -185,26 +206,19 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(type.HOME_UPDATE)
-    const isFirst = utils.storage.get('millionaire-isFirstShare')
-    if (isFirst) {
-      this.isSucceed = true
-      setTimeout(() => {
-        this.isSucceed = false
-        utils('millionaire-isFirstShare', false)
-      }, 3000)
-    }
     utils.statistic('wait_page', 0)
   },
   methods: {
+    downBrowser () {
+      utils.statistic('download_button', 1)
+      setTimeout(function () {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
+      }, 500)
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href)
+    },
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
-    },
-    // facebook 点赞
-    likeToFb (val) {
-      this.btnStatistic(val)
-      utils.toFbBrowser()
     },
     // 调起输入邀请码弹框
     inputInvitation () {
@@ -347,6 +361,26 @@ export default {
         }
       })
     },
+    // 头像登录逻辑
+    loginAvatar () {
+      console.log(utils.isOnline)
+      if (!utils.isOnline) {
+        if (utils.pageType === 'h5') {
+          utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
+        } else {
+          utils.statistic('wait_page', 1, {to_destination_s: 'loggin_page'}, 'wait_page')
+        }
+        utils.login(() => {
+          this.$store.dispatch(type._INIT).then(() => {
+          }, (err) => {
+            console.log('点击头像登陆失败:', err)
+          })
+        })
+      } else {
+        utils.statistic('wait_page', 1, {to_destination_s: 'user_profile'}, 'wait_page')
+        this.$router.push({path: '/user-center'})
+      }
+    },
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
@@ -396,25 +430,16 @@ export default {
     NextTime,
     BaseInfo,
     BalanceMark,
-    Living,
     HowPlayCard,
     Notices,
     ReminderBomb,
     PolicyBomb,
     lang,
     PolicyLink,
+    NewbieTask,
     NewAnnouncement
   },
   watch: {
-    lives: function (val, oldVal) {
-      console.log('新code= ' + val + '旧code= ' + oldVal)
-      if (val > oldVal) {
-        this.inviteLiving = true
-        setTimeout(() => {
-          this.inviteLiving = false
-        }, 3000)
-      }
-    },
     status: function (status, oldStatus) {
       if (status === 2) {
         if ((this.userInfo.icode && utils.isOnline) || !this.userInfo.icode) {
@@ -423,6 +448,11 @@ export default {
       } else {
         this.$router.replace({path: '/'})
       }
+    },
+    isShowBrowserTip: function (val) {
+      if (val) {
+        utils.statistic('download_notice', 0)
+      }
     }
   }
 }
@@ -430,22 +460,23 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    background-image: url("../assets/images/await-bg.png"), -webkit-linear-gradient(top,#0e0842,#1b208c);
+    background-image: url("../assets/images/await-bg-1.jpg");
     background-position: top;
     background-repeat: no-repeat;
-    background-size: cover;
-    padding-bottom: 30px;
+    background-size: 100% 100%;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     &__top{
       display: flex;
-      padding: 25px 25px 0;
+      padding: 24px 24px 0;
       justify-content: space-between;
-      &__like, &__instructions{
-        width: 54px;
-        height: 54px;
+      align-items: center;
+      margin-bottom: -40px;
+      &__instructions{
+        width: 52px;
+        height: 52px;
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 50px;
         font-size: 24px;
@@ -455,15 +486,25 @@ export default {
         color: #fff;
         font-family: 'Roboto', Arial, serif;
       }
-      &__like{
-        display: block;
-      }
       &__instructions{
         font-size: 28px;
       }
       &__lang {
         margin-right: 20px;
         font-size: 26px;
+      }
+      &__avatar {
+        width:67px;
+        height:67px;
+        border-radius: 50%;
+        background: no-repeat center;
+        background-size: cover;
+        overflow: hidden;
+        &__text{
+          color: #ffffff;
+          text-align: center;
+          font: 28px 'Roboto Condensed', Arial, sans-serif;
+        }
       }
       &__logo{
         width: 168px;
@@ -474,13 +515,12 @@ export default {
       }
     }
     &__title{
-      width: 300px;
-      height: 130px;
-      margin: 0 auto 40px;
+      width: 275px;
+      height: 118px;
+      margin: 0 auto 35px;
       img{
-        max-width: 100%;
-        width: 300px;
-        height: 130px;
+        width: 100%;
+        height: 100%;
       }
     }
     &__reminder {
@@ -488,12 +528,13 @@ export default {
       padding: 0 40px;
       height: 67px;
       color: #fff;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
-      font-size: 32px;
       line-height: 67px;
       text-align: center;
-      margin: 40px auto;
-      border-radius: 46px;
+      margin: 40px auto 73px;
+      border: 2px solid #fff;
+      border-radius: 34px;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 28px;
     }
     &__btn{
       max-width: 93%;
@@ -743,6 +784,36 @@ export default {
       left: 0;
       z-index: 0;
     }
+    .characters {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 25px 25px;
+      .item {
+        width: 48.3%;
+        height: 160px;
+        position: relative;
+        span {
+          color: #fff;
+          position: absolute;
+          top: 26px;
+          left: 24px;
+          font-size: 28px;
+          font-family: 'Roboto', Arial, serif;
+        }
+        .scale-text {
+          position: relative;
+          display: inline-block;
+          margin-top: 12px;
+          transform: scale(0.8);
+          opacity: .7;
+          left: -16px;
+        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
     .game-area{
       width: 100%;
       display: flex;
@@ -763,11 +834,61 @@ export default {
       justify-content: center;
       margin: 20px auto 0;
     }
+
+    .browser-tip {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 133px;
+      background: url('../assets/images/browser-tip-bg.png') no-repeat;
+      background-size: cover;
+      color: #fff;
+      padding-right: 10px;
+      z-index: 1;
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        opacity: 0.5;
+      }
+      img {
+        width: 90px;
+        height: 83px;
+        margin: 0 10px;
+      }
+      &__text {
+        width: 64%;
+        line-height: 1.4;
+        font: 200 24px 'Roboto,Arial,serif'
+      }
+      &__button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translate(0,-50%);
+        color: #fff;
+        width: 150px;
+        height: 58px;
+        text-align: center;
+        background: url('../assets/images/browser-tip-button.png') no-repeat;
+        background-size: 100% 100%;
+        margin-top: 10px;
+        font: 24px 'Roboto,Arial,serif';
+        line-height: 58px;
+      }
+    }
   }
   @media screen and (max-width: 321px) {
     .await {
       &__reminder {
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      }
+      .browser-tip__text {
+        font-size: 12px;
       }
     }
   }
