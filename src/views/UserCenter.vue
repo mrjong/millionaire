@@ -5,42 +5,52 @@
       <p class="title">{{$t('userCenter.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
       <p class="edit" >
-        <span @click="edit" v-if="!isEditable">{{$t('userCenter.edit')}}</span>
-        <span @click="save" v-else>{{$t('userCenter.save')}}</span>
+        <!-- <span @click="edit" v-if="!isEditable">{{$t('userCenter.edit')}}</span> -->
+        <span @click="save" v-if="isEditable">{{$t('userCenter.save')}}</span>
       </p>
     </div>
     <div class="user__head">
-      <label for="uploadPic">
+      <label for="uploadPic" class="user__head__avatar">
         <img :src="userInfo.avatar" id="img">
         <input type="file" id="uploadPic" name="pic" @change="uploadPic" hidden>
       </label>
+      <div class="user__head__name">
+        <div style="display:flex;">
+          <input type="text" v-if="isEditable" class="input_name" v-model="nickname" ref="nickInput" :style="{width: nickInputWidth + 'px'}">
+          <span class="show_name ellipsis-1" v-else>{{userInfo.userName}}</span>
+          <span class="icon_edit iconfont icon-yonghuchuti_baise" @click="edit"></span>
+        </div>
+        <span class="referral-code"><span style="opacity: 0.6">{{$t('userCenter.code')}}:</span> <em style="color: #f5b63d; opacity: 1">{{code}}</em></span>
+      </div>
     </div>
     <div class="user__wrap">
-      <p class="name">
-        <span class="name__icon iconfont icon-nicheng"></span>
-        <span class="name__tip">{{$t('userCenter.name')}}</span>
-        <input maxlength="20" type="text" v-if="isEditable" class="name__nick" v-model="nickname" ref="nickInput" id="nickInput">
-        <span class="name__text ellipsis-1" v-else>{{userInfo.userName}}</span>
-      </p>
+      <!-- <p class="name"></p> -->
       <p class="paytm">
         <span class="paytm__icon iconfont icon-shouji"></span>
         <span class="paytm__tip">{{$t('userCenter.tel')}}</span>
-        <span class="paytm__text ellipsis-1">{{phone}}</span>
-      </p>
-      <p class="code">
-        <span class="code__icon iconfont icon-yaoqingma"></span>
-        <span class="code__tip">{{$t('userCenter.code')}}</span>
-        <span class="code__text ellipsis-1">{{code}}</span>
+        <span class="paytm__text ellipsis-1" style="font-size: 16px">{{phone}}</span>
       </p>
       <p class="cash-history" @click="jump('balance-record')">
-        <span class="cash-history__icon iconfont icon-cashhistory"></span>
+        <span class="cash-history__icon iconfont icon-Cashhistoryxin"></span>
         <span class="cash-history__tip">{{$t('userCenter.cash_history')}}</span>
         <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
+      <!-- <p class="cash-history" @click="jump('')">
+        <span class="cash-history__icon iconfont icon-wenjuan"></span>
+        <span class="cash-history__tip">Feedback</span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
+      </p>
+        <span class="cash-history__text iconfont icon-LIVINGyoujiantou"></span>
+      </p> -->
       <p class="contact" @click="jump('contact')">
         <span class="contact__icon iconfont icon-lianxiwomen"></span>
         <span class="contact__tip">{{$t('userCenter.contact')}}</span>
         <span class="contact__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
+      </p>
+      <p class="cash-history" @click="likeToFb('like_page')">
+        <span class="cash-history__icon iconfont icon-Likeus"></span>
+        <span class="cash-history__tip">{{$t('userCenter.like_us')}}</span>
+        <span class="cash-history__text ellipsis-1 iconfont icon-LIVINGyoujiantou"></span>
       </p>
     </div>
     <div class="logout-btn" @click="logOut">{{$t('userCenter.logout_btn')}}</div>
@@ -65,6 +75,7 @@ export default {
   name: 'Contact',
   data () {
     return {
+      nickInputWidth: '',
       nickname: '',
       isEditable: false,
       loading: false,
@@ -168,6 +179,7 @@ export default {
                   okBtnText: this.$t('userCenter.edit_pop.ok'),
                   lastTime: 3000
                 })
+                preview.src = this.userInfo.avatar
               } else {
                 preview.src = reader.result
                 api.updateAvatarCache().then(res => {})
@@ -208,6 +220,11 @@ export default {
         utils.statistic('contact_us', 1, {}, 'user_profile_page')
         this.$router.push({ path: '/contact' })
       }
+    },
+    // facebook 点赞
+    likeToFb (val) {
+      utils.statistic('like_page', 1, {to_destination_s: val}, 'like_page')
+      utils.toFbBrowser()
     },
     logOut () {
       // 退出登录
@@ -311,13 +328,46 @@ export default {
       line-height: 51.5px;
       right: 0;
       color: #fff;
-      font-size: 28px;
+      font: 28px 'Roboto Condensed', Arial, sans-serif;
     }
   }
   &__head {
-    width: 133px;
-    height: 133px;
-    margin: 80px auto 40px;
+    display: flex;
+    margin: 80px 0 60px;
+    color: #fff;
+    &__avatar {
+      width: 107px;
+      height: 107px;
+      margin-right: 40px;
+    }
+    &__name {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-size: 32px;
+      font-family: 'Roboto', Arial, sans-serif;
+      .input_name {
+        outline: none;
+        border: none;
+        background: none;
+        height: 40px;
+        line-height: 40px;
+        max-width: 230px;
+      }
+      .show_name {
+        height: 40px;
+        line-height: 40px;
+        max-width: 230px;
+      }
+      .icon_edit {
+        margin-left: 8px;
+        margin-top: 3px;
+        font-size: 28px;
+      }
+      .referral-code {
+        font-size: 28px;
+      }
+    }
     img {
       width: 100%;
       height: 100%;
@@ -325,13 +375,8 @@ export default {
     }
   }
   &__wrap {
-    .name__nick {
-      background: none;
-      outline: none;
-      border: none;
-      overflow: hidden;
-      width: 250px;
-      text-align: right;
+    .paytm {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
     .name,
     .paytm,
@@ -342,17 +387,17 @@ export default {
       justify-content: space-between;
       max-width: 100%;
       width: 657px;
-      height: 93px;
+      height: 90px;
       text-align: center;
       color: #fff;
       font: 32px "Roboto", Arial, serif;
-      line-height: 93px;
+      line-height: 90px;
+      margin-top: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      margin-top: 26px;
       position: relative;
       &__icon {
         height: 100%;
-        font-size: 36px;
+        font-size: 32px;
         display: block;
         border-radius: 50%;
         position: absolute;
@@ -367,9 +412,8 @@ export default {
         line-height: 93px;
       }
       &__text {
-        font: 32px "Roboto", Arial, serif;
+        font: 24px "Roboto", Arial, serif;
         line-height: 93px;
-        max-width: 350px;
       }
       .mail {
         background: url("../assets/images/icon-small-gmail.png") no-repeat
@@ -394,14 +438,14 @@ export default {
   .logout-btn {
     max-width: 100%;
     width: 657px;
-    height: 93px;
+    height: 92px;
     border-radius: 46px;
     text-align: center;
     color: #fff;
     font: 32px "Roboto", Arial, serif;
-    line-height: 93px;
+    line-height: 92px;
     background-color: rgba(255, 255, 255, 0.5);
-    margin-top: 100px;
+    margin-top: 240px;
   }
 }
 </style>
