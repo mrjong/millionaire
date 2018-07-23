@@ -170,7 +170,6 @@ export default {
             let newFile = new File([blob], file.name, { type: file.type })
             // 执行上传操作
             api.uploadAvatar(newFile).then(({ data }) => {
-              console.log(data)
               if (+data.error_code !== 0) {
                 this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
@@ -182,6 +181,7 @@ export default {
                 })
                 preview.src = this.userInfo.avatar
               } else {
+                preview.src = reader.result
                 api.updateAvatarCache().then(res => {})
                 this.loading = false
                 this.$store.dispatch(type._OPEN_DIALOG, {
@@ -199,7 +199,7 @@ export default {
       }
 
       reader.onload = (e) => {
-        if (!/^image\/(jpg|png)/.test(file.type)) {
+        if (file.name.endsWith('jpeg') || !/^image\/(jpe?g|png)$/.test(file.type)) {
           this.$store.dispatch(type._OPEN_DIALOG, {
             htmlText: this.$t('userCenter.edit_pop.picture_format_error'),
             shouldSub: false,
@@ -209,7 +209,6 @@ export default {
           })
         } else {
           img.src = reader.result
-          preview.src = reader.result
         }
       }
     },
