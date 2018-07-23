@@ -302,6 +302,8 @@ export default {
     min-height: 100%;
     padding: 0 20px 30px;
     position: relative;
+    background-color: #2c1bb8;
+    background-size: contain;
     &__back,&__rule {
       position: absolute;
       top: 25px;
