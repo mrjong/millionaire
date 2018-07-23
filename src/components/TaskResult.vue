@@ -75,7 +75,7 @@ export default {
       let state = type === 'online' ? 'wait_page' : 'sigh_up'
       this.isClose = true
       api.addExtraLife(1).then(({data}) => {
-        if (data.result === 1 && data.code) {
+        if (data.result === 1 && data.code === 0) {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
         } else {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '0'})
