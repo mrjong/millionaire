@@ -11,7 +11,7 @@ const locale = {
     remider_tip: 'मुझे रोज़ाना याद दिलाएं',
     userinfo_blance_text: 'शेष',
     userinfo_rank_text: 'साप्ताहिक रैंक',
-    extra_lives_text: 'अतिरिक्त जीवन',
+    extra_lives_text: 'अतिरिक्त जीवन:',
     get_more_text: 'अधिक पाना',
     referral_code_btn: 'रेफ़रल कोड लागू करें',
     invite_btn: 'आमंत्रित करें और नकद कमाएं',
@@ -20,7 +20,8 @@ const locale = {
     play_card_step2: 'सभी 12 सवालों का जवाब दें, <span class="special"> ₹ 1,000,000 </span> तक जीतें!',
     play_card_step3: 'ग़लत जवाब देने पर <span class="special">अतिरिक्त जीवन</span> का उपयोग करें। इसे पाने के लिए नए उपयोगकर्ता को आमंत्रित करें!',
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
-    ses_question_btn: 'खुद से प्रश्न सेट करें',
+    ses_question_btn: 'प्रश्न सेट करें',
+    teamBattle: 'टीम रण',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',
@@ -164,7 +165,8 @@ const locale = {
     send_btn: 'भेजें',
     viewing: 'देखे',
     anwser_out_text: 'बाहर',
-    anwser_incorrect_text: ' ग़लत'
+    anwser_incorrect_text: ' ग़लत',
+    watching: 'इलिमने'
   },
   anwser_rank: {
     week_tap: 'साप्ताहिक रैंक',
@@ -257,6 +259,7 @@ const locale = {
     submit_btn: 'जमा करें दूसरा'
   },
   userCenter: {
+    like_us: 'हमारी तरह',
     title: 'उपयोगकर्ता प्रोफ़ाइल',
     save: 'सेव ',
     edit: 'संपादित करें',
@@ -321,7 +324,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
+  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati, here is a TREASURE BOX for you！Join Quiz at 10PM everyday, you\'ll get the lucky cash!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
@@ -341,6 +344,34 @@ const locale = {
       {ji: '2', js: 3, jc: 'भारत का राष्ट्रीय फूल क्या है?', jo: ['कमल', 'गुलाब', 'चमेली'], ja: '110572472111ea9fd77bbd94c234b753', jd: ['कमल भारत का राष्ट्रीय फूल है। यह एक पवित्र फूल है और भारतीय संस्कृति का शुभ प्रतीक रहा है।'], restTime: 10}
     ]
   },
+  bounsTip: [
+    {
+      title: 'ओह',
+      desp: 'यह खाली है! कल कोशिश करे!',
+      btnText: 'आमंत्रित करें और नकद कमाएं'
+    },
+    {
+      title: 'बधाई हो',
+      desp: 'आपको {currencyType}{money} मिल गया हैं। बढ़ते रहें!!',
+      btnText: 'आमंत्रित करें और नकद कमाएं'
+    },
+    {
+      title: 'बधाई हो।',
+      desp: 'आपको एक अतिरिक्त जीवन मिलता है।',
+      btnText: 'अधिक पाना'
+
+    },
+    {
+      title: 'बधाई हो।',
+      desp: 'एक खसना प्राप्त हुआ',
+      btnText: 'खोलेइसे'
+    },
+    {
+      title: 'क्षमा करें',
+      desp: 'इसे खोलने में विफल रहे',
+      btnText: ''
+    }
+  ],
   tip: {
     userReviveCard: { // 使用复活卡
       title: 'आपके पास अतिरिक्त जीवन है!', // 主题

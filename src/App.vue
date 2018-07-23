@@ -271,8 +271,7 @@ export default {
               this.$store.dispatch(type.HOME_UPDATE, {
                 myselfBonusAmount: dataObj.show_bonus
               })
-              console.log(isWon)
-              this.$store.dispatch(type.QUESTION_YOU_WON, {
+              this.$store.commit(type.QUESTION_UPDATE, {
                 isWon
               })
             }
