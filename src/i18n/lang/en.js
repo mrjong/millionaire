@@ -341,7 +341,7 @@ const locale = {
       btn: 'Get More EXTRA LIVES'
     },
     question: [
-      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: '27634ff8002b12e75d98e07ccd005d18', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
+      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: 'e1f238e1860b16d1139607d92f612098', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
       {ji: '1', js: 2, jc: 'There is no ____ color in Indian national flag?', jo: ['Red', 'White', 'Green'], ja: 'ee38e4d5dd68c4e440825018d549cb47', jd: ['The National Flag of India is a horizontal rectangular tricolour of saffron, white and green', ' with the Ashoka Chakra, a 24-spoke wheel, in navy blue at its centre. There is no red on it.'], restTime: 10, si: 2500},
       {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
     ]
