@@ -130,7 +130,7 @@ const locale = {
     ],
     steps: [
       'Invite your friends to play',
-      'Ask your friends to do sign up and play',
+      'Ask your friends to sign up and play 10PM Quiz',
       'You can earn Rs.10, when your friends has played this game'
     ],
     rank_text: [
