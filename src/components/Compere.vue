@@ -5,11 +5,11 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__notice">
-      <img src="../assets/images/small-awiat-title-hi.png" v-if="$i18n.locale === 'hi'">
-      <img src="../assets/images/small-awiat-title-en.png" v-else>
+      <img v-webp="'small-awiat-title-hi.png'" v-if="$i18n.locale === 'hi'">
+      <img v-webp="'small-awiat-title-en.png'" v-else>
     </div>
     <!-- <div class="compere-container__supa">
-       <p class="supa" :style="supaStyle"></p>
+       <p class="supa bg-reset" v-webp.bg="`url('supaes.png')`" :style="supaStyle"></p>
        <img src="../assets/images/supa-desk.png" alt="" class="supa-desk">
     </div> -->
   </div>
@@ -107,8 +107,6 @@ export default {
     .supa {
       width: 186px;
       height: 256px;
-      background: url(../assets/images/supaes.png) no-repeat;
-      background-size: cover;
     }
     .supa-desk {
       width: 100%;

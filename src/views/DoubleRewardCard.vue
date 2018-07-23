@@ -1,7 +1,7 @@
 <template>
-  <div class="double-reward-card">
+  <div class="double-reward-card bg-reset" v-webp.bg="`url('double-reward-bg.jpg')`">
     <BackArrow class="double-reward-card__back"></BackArrow>
-    <div class="double-reward-rule">
+    <div class="double-reward-rule bg-cover" v-webp.bg="`url('double-rule-bg.jpg')`">
       <h2>HOW TO USE</h2>
       <p>1. Double Prize Cards are only available after you won more than once at 10PM before today.</p>
       <p>2. With it, you prize will double after you win at the 10PM game in 3 days.</p>
@@ -80,8 +80,6 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     padding: 0 20px 20px;
-    background-image: url("../assets/images/double-rule-bg.jpg");
-    background-size: cover;
     color: #fff;
 
     h2 {
@@ -99,9 +97,6 @@ export default {
   &-card {
     width: auto;
     height: 1681px;
-    background-image: url("../assets/images/double-reward-bg.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
     padding: 590px 30px 0;
   }
   &-card__back {

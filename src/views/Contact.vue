@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-container">
+  <div class="contact-container bg-reset" v-webp.bg="`url('await-bg.jpg')`">
     <div class="header">
       <p class="title">{{$t('contact.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
@@ -94,8 +94,6 @@ export default {
 <style scoped lang="less" type="text/less">
   .contact-container {
     height: 100%;
-    background: url("../assets/images/await-bg.jpg") no-repeat top left;
-    background-size: cover;
     padding: 3.7% 3.7% 0;
     display: flex;
     flex-direction: column;

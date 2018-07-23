@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" @click="showCountryList = false">
+  <div class="login-container bg-reset" v-webp.bg="`url('await-bg.jpg')`" @click="showCountryList = false">
     <header>
       <p class="title">{{$t('login.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>
@@ -227,8 +227,6 @@ export default {
   .login-container {
     width: 100%;
     height: 100%;
-    background: url("../assets/images/await-bg.jpg") no-repeat top left;
-    background-size: cover;
     padding: 3.7% 3.7% 0;
     display: flex;
     flex-direction: column;

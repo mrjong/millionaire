@@ -11,6 +11,7 @@ export const host = {
   prod: '//millionaire-api.apusapps.com'
 }
 
+// 账号系统域名
 export const accountHost = {
   local: '//test-accounts.apuscn.com',
   dev: '//test-accounts.apuscn.com',
@@ -19,6 +20,7 @@ export const accountHost = {
   prod: '//account.apusapps.com'
 }
 
+// 调查问卷访问链接
 export const reportHost = {
   local: 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2',
   dev: 'https://goo.gl/forms/Raj3BeNmBjvuI5Ng2',
@@ -27,6 +29,16 @@ export const reportHost = {
   prod: 'https://goo.gl/forms/cJWcOjqyVW2Pu2GA2'
 }
 
+// 静态资源图片访问域名
+export const imageHost = {
+  local: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  dev: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  test: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  check: '//thumbor.apusapps.com/imageView/millionaire/images/',
+  prod: '//thumbor.apusapps.com/imageView/millionaire/images/'
+}[env]
+
+// im 连接AppKey
 const imAppKey = {
   local: 'p5tvi9dsphpf4',
   dev: 'pvxdm17jp3vvr',

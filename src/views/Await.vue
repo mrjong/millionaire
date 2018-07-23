@@ -1,5 +1,5 @@
 <template>
-  <div class="await">
+  <div class="await bg-reset" v-webp.bg="`url('await-bg-1.jpg')`">
     <div class="await__top">
       <!-- <a class="await__top__like icon-dianzan iconfont"
          ref="toFbBrowser"
@@ -19,7 +19,7 @@
       <div class="await__top__avatar__text" v-if="!isOnline" @click="loginAvatar">{{$t('await.login_text')}}</div>
     </div>
     <div class="await__title">
-      <img src="../assets/images/await-logo.png">
+      <img v-webp="'await-logo.png'">
     </div>
     <next-time :nextTime="targetDate" :money="userInfo.bonusAmount" :currencyType="userInfo.currencyType" @reminderEvent="Reminder(isRemider ? 'cancel_reminder':'set_reminder')"></next-time>
     <!-- <div class="await__reminder" @click="Reminder(isRemider ? 'cancel_reminder':'set_reminder')">{{isRemider ? $t('await.cancel_reminder_btn') : $t('await.set_reminder_btn')}}</div> -->
@@ -46,20 +46,20 @@
       <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
         <div class="share-success__base">
-          <img src="../assets/images/heart-light.png" class="heart">
+          <img v-webp="'heart-light.png'" class="heart">
         </div>
         <p class="share-success__num">+1</p>
       </div>
     </div> -->
     <div class="characters">
-      <div class="item"><img src="../assets/images/team-battle.png"><span>{{$t('await.teamBattle')}} <br><em class="scale-text">{{$t('await.come_soon')}}</em></span></div>
-      <div class="item" @click="getSetQuestion"><img src="../assets/images/set-question.png"><span>{{$t('await.ses_question_btn')}}</span></div>
+      <div class="item"><img v-webp="'team-battle.png'"><span>{{$t('await.teamBattle')}} <br><em class="scale-text">{{$t('await.come_soon')}}</em></span></div>
+      <div class="item" @click="getSetQuestion"><img v-webp="'set-question.png'"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
-      <img src="../assets/images/invite-btn.png">
+      <img v-webp="'invite-btn.png'">
       <p>{{$t('await.invite_btn')}}</p>
     </div>
-    <!-- <div class="notice">
+    <!-- <div class="notice bg-noRepeat bg-center bg-contain" v-webp.bg="`url('notice-bg.png')`">
       <router-link to="/rank" style="width: 100%;">
         <notices></notices>
       </router-link>
@@ -121,13 +121,13 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
-    <div class="browser-tip" v-if="isShowBrowserTip">
+    <div class="browser-tip bg-noRepeat bg-cover" v-webp.bg="`url('browser-tip-bg.png')`" v-if="isShowBrowserTip">
       <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
-      <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"/>
+      <img class="browser-tip__icon" v-webp="'browser-tip-icon.png'"/>
       <div class="browser-tip__text">
         <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
       </div>
-      <a class="browser-tip__button ellipsis-1" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
+      <a class="browser-tip__button bg-noRepeat ellipsis-1" v-webp.bg="`url('browser-tip-button.png')`" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
     </div>
   </div>
 </template>
@@ -460,10 +460,7 @@ export default {
 <style scoped lang="less" type="text/less">
   .await{
     width: 100%;
-    background-image: url("../assets/images/await-bg-1.jpg");
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    min-height: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -772,8 +769,6 @@ export default {
     }
     .notice{
       width: 100%;
-      background: url("../assets/images/notice-bg.png") no-repeat center;
-      background-size: contain;
       display: flex;
       justify-content: center;
     }
@@ -843,8 +838,6 @@ export default {
       left: 0;
       width: 100%;
       height: 133px;
-      background: url('../assets/images/browser-tip-bg.png') no-repeat;
-      background-size: cover;
       color: #fff;
       padding-right: 10px;
       z-index: 1;
@@ -874,7 +867,6 @@ export default {
         width: 150px;
         height: 58px;
         text-align: center;
-        background: url('../assets/images/browser-tip-button.png') no-repeat;
         background-size: 100% 100%;
         margin-top: 10px;
         font: 24px 'Roboto,Arial,serif';

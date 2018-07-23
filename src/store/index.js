@@ -53,7 +53,7 @@ export default new Vuex.Store({
       markType: 0,
       okBtnText: i18n.t('await.referral_code_pop.ok'),
       okEvent: null,
-      hintImg: './static/images/tip-fail.png',
+      hintImg: utils.getWebpImgUrl('tip-fail.png'),
       lastTime: 3000
     },
     lives: 0,
@@ -137,7 +137,7 @@ export default new Vuex.Store({
         shouldSub: false,
         markType: 0,
         okBtnText: i18n.t('await.referral_code_pop.ok'),
-        hintImg: './static/images/tip-fail.png',
+        hintImg: utils.getWebpImgUrl('tip-fail.png'),
         lastTime: 3000
       }
     },

@@ -5,13 +5,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import utils from './assets/js/utils'
-// import axios from 'axios'
 import http from './assets/js/http'
 import store from './store'
 import i18n from './i18n'
 import 'core-js/modules/es6.promise'
 import im from './assets/js/im'
 import { _OPEN_DIALOG } from './store/type'
+
 im.init()
 
 window.onload = function () {
@@ -69,6 +69,17 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+Vue.directive('webp', (el, {modifiers = {}, value = ''}) => {
+  if (modifiers.bg) {
+    el.style.backgroundImage = value.replace(/url\(.+?\)/g, (val) => {
+      const imgUrl = val.slice(5, -2)
+      return `url(${utils.getWebpImgUrl(imgUrl)})`
+    })
+  } else {
+    el.src = utils.getWebpImgUrl(value)
+  }
+})
+
 /* eslint-disable no-new */
 export const vm = new Vue({
   el: '#app',
@@ -89,7 +100,7 @@ if ('serviceWorker' in navigator) {
           htmlText: i18n.t('tip.versionUpdate.desp'),
           lastTime: 5000,
           okBtnText: i18n.t('tip.versionUpdate.btn'),
-          hintImg: './static/images/tip-update.png'
+          hintImg: utils.getWebpImgUrl('tip-update.png')
         })
       }
       console.log('Service Worker registered35: ', registration)

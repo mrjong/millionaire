@@ -4,7 +4,7 @@
     <p class="important ">{{$t('newbieTask.result_page.title')}}</p>
     <p class="guide__text">{{$t('newbieTask.result_page.text1')}}</p>
     <div class="guide__img">
-      <img src="../assets/images/light.png" class="light">
+      <img v-webp="'light.png'" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
     <div class="guide__btn get-more" @click="getExtraLift">{{$t('newbieTask.result_page.btn')}}</div>

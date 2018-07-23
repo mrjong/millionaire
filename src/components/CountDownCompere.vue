@@ -5,8 +5,8 @@
        {{compereMsg}}
     </p>
     <div class="compere-container__supa">
-       <img src="../assets/images/countdown-light.png" class="bg-light">
-       <div class="countdown-supa" :style="supaStyle"></div>
+       <img v-webp="'countdown-light.png'" class="bg-light">
+       <div class="countdown-supa bg-reset" v-webp.bg="`url('countdown-supa.png')`" :style="supaStyle"></div>
     </div>
   </div>
 </template>
@@ -102,8 +102,6 @@ export default {
       z-index: 11;
       width: 232px;
       height: 324px;
-      background: url(../assets/images/countdown-supa.png) no-repeat;
-      background-size: cover;
       margin: 45px auto 0;
     }
     .supa-desk {

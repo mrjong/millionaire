@@ -1,7 +1,7 @@
 <template>
   <div class="play-card">
     <p class="title">{{$t('await.play_card_title')}}</p>
-    <img src="../assets/images/how-play-card.png" class="rule">
+    <img v-webp="'how-play-card.png'" class="rule">
     <div class="content">
       <p class="text text1" v-html="$t('await.play_card_step1', {time: '10PM'})"></p>
       <p class="text text2" v-html="$t('await.play_card_step2', {money: '₹1,000,000!'})"></p>
