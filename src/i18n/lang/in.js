@@ -324,7 +324,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati, here is a TREASURE BOX for you！Join Quiz at 10PM everyday, you\'ll get the lucky cash!',
+  NewAnnouncement: 'Hey, Happy July Quiz Carnival this week! All logined users can get Rs 10 after first playing 10PM Quiz. Come on!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
