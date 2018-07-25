@@ -71,6 +71,17 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@webpack-contrib/schema-utils@^1.0.0-beta.0":
+  version "1.0.0-beta.0"
+  resolved "https://npm.apuscn.com/@webpack-contrib%2fschema-utils/-/schema-utils-1.0.0-beta.0.tgz#bf9638c9464d177b48209e84209e23bee2eb4f65"
+  dependencies:
+    ajv "^6.1.0"
+    ajv-keywords "^3.1.0"
+    chalk "^2.3.2"
+    strip-ansi "^4.0.0"
+    text-table "^0.2.0"
+    webpack-log "^1.1.2"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://npm.apuscn.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -173,6 +184,12 @@ ansi-styles@^2.2.1:
 ansi-styles@^3.2.0:
   version "3.2.0"
   resolved "https://npm.apuscn.com/ansi-styles/-/ansi-styles-3.2.0.tgz#c159b8d5be0f9e5a6f346dab94f16ce022161b88"
+  dependencies:
+    color-convert "^1.9.0"
+
+ansi-styles@^3.2.1:
+  version "3.2.1"
+  resolved "https://npm.apuscn.com/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
   dependencies:
     color-convert "^1.9.0"
 
@@ -1305,6 +1322,14 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1:
     ansi-styles "^3.2.0"
     escape-string-regexp "^1.0.5"
     supports-color "^5.2.0"
+
+chalk@^2.3.2:
+  version "2.4.1"
+  resolved "https://npm.apuscn.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
+  dependencies:
+    ansi-styles "^3.2.1"
+    escape-string-regexp "^1.0.5"
+    supports-color "^5.3.0"
 
 chardet@^0.4.0:
   version "0.4.2"
@@ -2975,6 +3000,10 @@ has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://npm.apuscn.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
 
+has-symbols@^1.0.0:
+  version "1.0.0"
+  resolved "https://npm.apuscn.com/has-symbols/-/has-symbols-1.0.0.tgz#ba1a8f1af2a0fc39650f5c850367704122063b44"
+
 has-unicode@^2.0.0:
   version "2.0.1"
   resolved "https://npm.apuscn.com/has-unicode/-/has-unicode-2.0.1.tgz#e0e6fe6a28cf51138855e086d1691e771de2a8b9"
@@ -3874,6 +3903,13 @@ loglevel@^1.4.1:
   version "1.6.1"
   resolved "https://npm.apuscn.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
 
+loglevelnext@^1.0.1:
+  version "1.0.5"
+  resolved "https://npm.apuscn.com/loglevelnext/-/loglevelnext-1.0.5.tgz#36fc4f5996d6640f539ff203ba819641680d75a2"
+  dependencies:
+    es6-symbol "^3.1.1"
+    object.assign "^4.1.0"
+
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://npm.apuscn.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -4038,10 +4074,6 @@ mime-types@^2.1.12, mime-types@~2.1.16, mime-types@~2.1.17, mime-types@~2.1.18, 
   dependencies:
     mime-db "~1.33.0"
 
-mime@1.3.x:
-  version "1.3.6"
-  resolved "https://npm.apuscn.com/mime/-/mime-1.3.6.tgz#591d84d3653a6b0b4a3b9df8de5aa8108e72e5e0"
-
 mime@1.4.1:
   version "1.4.1"
   resolved "https://npm.apuscn.com/mime/-/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
@@ -4049,6 +4081,10 @@ mime@1.4.1:
 mime@^1.4.1, mime@^1.5.0:
   version "1.6.0"
   resolved "https://npm.apuscn.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
+
+mime@^2.0.3, mime@^2.3.1:
+  version "2.3.1"
+  resolved "https://npm.apuscn.com/mime/-/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -4320,6 +4356,10 @@ object-hash@^1.1.4:
   version "1.2.0"
   resolved "https://npm.apuscn.com/object-hash/-/object-hash-1.2.0.tgz#e96af0e96981996a1d47f88ead8f74f1ebc4422b"
 
+object-keys@^1.0.11:
+  version "1.0.12"
+  resolved "https://npm.apuscn.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
+
 object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://npm.apuscn.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
@@ -4329,6 +4369,15 @@ object-visit@^1.0.0:
   resolved "https://npm.apuscn.com/object-visit/-/object-visit-1.0.1.tgz#f79c4493af0c5377b59fe39d395e41042dd045bb"
   dependencies:
     isobject "^3.0.0"
+
+object.assign@^4.1.0:
+  version "4.1.0"
+  resolved "https://npm.apuscn.com/object.assign/-/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
+  dependencies:
+    define-properties "^1.1.2"
+    function-bind "^1.1.1"
+    has-symbols "^1.0.0"
+    object-keys "^1.0.11"
 
 object.omit@^2.0.0:
   version "2.0.1"
@@ -5461,7 +5510,7 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
-schema-utils@^0.4.0, schema-utils@^0.4.2, schema-utils@^0.4.5:
+schema-utils@^0.4.0, schema-utils@^0.4.2, schema-utils@^0.4.3, schema-utils@^0.4.5:
   version "0.4.5"
   resolved "https://npm.apuscn.com/schema-utils/-/schema-utils-0.4.5.tgz#21836f0608aac17b78f9e3e24daff14a5ca13a3e"
   dependencies:
@@ -5920,6 +5969,12 @@ supports-color@^5.1.0, supports-color@^5.2.0:
   dependencies:
     has-flag "^3.0.0"
 
+supports-color@^5.3.0:
+  version "5.4.0"
+  resolved "https://npm.apuscn.com/supports-color/-/supports-color-5.4.0.tgz#1c6b337402c2137605efe19f10fec390f6faab54"
+  dependencies:
+    has-flag "^3.0.0"
+
 svgo@^0.7.0:
   version "0.7.2"
   resolved "https://npm.apuscn.com/svgo/-/svgo-0.7.2.tgz#9f5772413952135c6fefbf40afe6a4faa88b4bb5"
@@ -5986,6 +6041,15 @@ through2@^2.0.0:
 through@^2.3.6:
   version "2.3.8"
   resolved "https://npm.apuscn.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
+
+thumbor-loader@^1.1.16:
+  version "1.1.16"
+  resolved "https://npm.apuscn.com/thumbor-loader/-/thumbor-loader-1.1.16.tgz#76659d23ba9c27e4a1dff75e66bff00a76268d34"
+  dependencies:
+    "@webpack-contrib/schema-utils" "^1.0.0-beta.0"
+    loader-utils "^1.0.2"
+    mime "^2.3.1"
+    schema-utils "^0.4.5"
 
 thunky@^1.0.2:
   version "1.0.2"
@@ -6228,12 +6292,13 @@ url-join@^2.0.2:
   version "2.0.5"
   resolved "https://npm.apuscn.com/url-join/-/url-join-2.0.5.tgz#5af22f18c052a000a48d7b82c5e9c2e2feeda728"
 
-url-loader@^0.5.8:
-  version "0.5.9"
-  resolved "https://npm.apuscn.com/url-loader/-/url-loader-0.5.9.tgz#cc8fea82c7b906e7777019250869e569e995c295"
+url-loader@^1.0.1:
+  version "1.0.1"
+  resolved "https://npm.apuscn.com/url-loader/-/url-loader-1.0.1.tgz#61bc53f1f184d7343da2728a1289ef8722ea45ee"
   dependencies:
-    loader-utils "^1.0.2"
-    mime "1.3.x"
+    loader-utils "^1.1.0"
+    mime "^2.0.3"
+    schema-utils "^0.4.3"
 
 url-parse@1.0.x:
   version "1.0.5"
@@ -6289,6 +6354,10 @@ utils-merge@1.0.1:
 uuid@^3.0.0, uuid@^3.0.1:
   version "3.2.1"
   resolved "https://npm.apuscn.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
+
+uuid@^3.1.0:
+  version "3.3.2"
+  resolved "https://npm.apuscn.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"
@@ -6458,6 +6527,15 @@ webpack-dev-server@^2.9.1:
     supports-color "^5.1.0"
     webpack-dev-middleware "1.12.2"
     yargs "6.6.0"
+
+webpack-log@^1.1.2:
+  version "1.2.0"
+  resolved "https://npm.apuscn.com/webpack-log/-/webpack-log-1.2.0.tgz#a4b34cda6b22b518dbb0ab32e567962d5c72a43d"
+  dependencies:
+    chalk "^2.1.0"
+    log-symbols "^2.1.0"
+    loglevelnext "^1.0.1"
+    uuid "^3.1.0"
 
 webpack-merge@^4.1.0:
   version "4.1.2"

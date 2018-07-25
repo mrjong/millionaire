@@ -3,7 +3,7 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <section class="fail-tip">
-        <img class="icon" src="../../static/images/tip-fail.png">
+        <img class="icon" v-webp="'tip-fail.png'">
         <span class="iconfont icon-cuowu close" @click="close"></span>
         <p>{{$t('tip.anwserWrong.title')}}</p>
         <section class="fail-note" >

@@ -6,8 +6,8 @@
     <p class="bouns__text" v-else>{{$t('bounsTip[1].desp', {currencyType: this.userInfo.currencyType, money: this.money})}}</p>
     <div class="bouns__img" v-if="bounsType !== 4">
       <img src="../assets/images/light.png" class="bg-light" v-if="bounsType === 2">
-      <img src="../assets/images/countdown-light.png" class="bg-light" v-else-if="bounsType === 1 || bounsType === 3">
-      <img :src="`./static/images/bouns-${bounsType}.png`" class="lives">
+      <img v-webp="'countdown-light.png'" class="bg-light" v-else-if="bounsType === 1 || bounsType === 3">
+      <img v-webp="`bouns-${bounsType}.png`" class="lives">
     </div>
     <div class="bouns__btn" @click="toShareDetail" v-if="bounsType !== 4">{{bounsData[bounsType].btnText}}</div>
   </div>

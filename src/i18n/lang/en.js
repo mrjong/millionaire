@@ -22,6 +22,7 @@ const locale = {
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
     ses_question_btn: 'Set Questions',
     teamBattle: 'Team Battle',
+    carnival_text: 'Quiz Carnival',
     referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
@@ -289,6 +290,21 @@ const locale = {
     describe2: 'You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.',
     text: 'My Referral Code:',
     share_btn: 'Invite'
+  },
+  carnival: {
+    share_tip_title: 'Happy July Quiz Carnival  ',
+    share_tip_hint: 'Rs. 500,000 for Sunday Carnival Night',
+    date: 'Duration: July 25th - July 29th',
+    btn: 'Invite Now',
+    text: [
+      '<span class="circle"></span><span class="light">₹500,000</span> for Sunday Carnival Night',
+      '<span class="circle"></span>Get <span class="light">₹10</span> after inviting a new user to play at 10pm',
+      '<span class="circle"></span>New User can earned <span class="light">₹10</span> after first playing game at 10pm',
+      '<span class="circle"></span><span class="light">A TREASURE BOX </span>with cash prize for you at the 12th question @10pm',
+      '<span class="circle"></span><span class="light">An EXTRA LIFE</span> for new logged in users'
+    ],
+    share_title: 'Happy July Quiz Carnival in Go!Millionaire，Rs 500,000 is coming for this Sunday Carnival Night!',
+    share_desp: 'Dear, invite you to join Happy July Quiz Carnival in Go!Millionaire，win Rs 500,000 prize together!'
   },
   receiveCard: { // 分享社交app弹框
     share_title: 'I\'m playing \'Go! Millionaire\', my referral code is {code}，join us and win up to Rs.1,000,000 at 10PM every day!',

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-reset" v-webp.bg="`url('main-bg.jpg')`">
     <keep-alive include="Main,DoubleRewardCard">
       <router-view/>
     </keep-alive>
@@ -297,8 +297,6 @@ export default {
   html,body,#app{
     width:100%;
     height:100%;
-    background: url('./assets/images/main-bg.jpg') no-repeat top left;
-    background-size: cover;
   }
 
 /* latin-ext */

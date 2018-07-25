@@ -8,7 +8,7 @@
         <p>Practice Game</p>
       </div>
       <div class="practice__top__logo" @click="back">
-        <img src="../assets/images/logo.png" alt="millionaire">
+        <img v-webp="'logo.png'" alt="millionaire">
       </div>
     </div>
     <div class= "practice__card">

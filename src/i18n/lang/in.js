@@ -22,6 +22,7 @@ const locale = {
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
     ses_question_btn: 'प्रश्न सेट करें',
     teamBattle: 'टीम रण',
+    carnival_text: 'क्विज़ कार्निवल ',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',
@@ -289,6 +290,21 @@ const locale = {
     describe2: 'आप इसे एक नए उपयोगकर्ता को आमंत्रित करने के माध्यम से प्राप्त कर सकते हैं। हर बार जब वह आपके रेफ़रल कोड के साथ साइन अप करता है और हमारे खेल को खेलता है, तो आप दोनों को एक लाइव मिलता है।',
     text: 'मेरा रेफ़रल कोड:',
     share_btn: 'आमंत्रण'
+  },
+  carnival: {
+    share_tip_title: 'मुबारक हो, जुलाई क्विज़ कार्निवल में!!!',
+    share_tip_hint: 'रविवार कार्निवल नाइट के लिए 500,000 रुपये',
+    date: 'अवधि : 25 जुलाई - 2 9 जुलाई',
+    btn: 'अभी आमंत्रित करें',
+    text: [
+      '<span class="circle"></span>रविवार कार्निवल नाइट के लिए <span class="light">500,000</span> रुपये(10pm)',
+      '<span class="circle"></span>एक नए उपयोगकर्ता को आमंत्रित करने के बाद <span class="light">रु 10</span> प्राप्त करें, 10 बजे खेलने के लिए !!!',
+      '<span class="circle"></span>नयें उपयोगकर्ता <span class="light">रु 10</span> कामा सक्ते हैं, पहले आपको गेम खेलना है रात को 10 बजे',
+      '<span class="circle"></span><span class="light">खजाना का डिब्बा </span>आपके लिए नकद पुरस्कार के साथ 12 वीं प्रश्न @ 10 बजे',
+      '<span class="circle"></span>नए लॉग इन उपयोगकर्ताओं के लिए एक <span class="light">अतिरिक्त जीवन</span>'
+    ],
+    share_title: 'Happy July Quiz Carnival in Go!Millionaire，Rs 500,000 is coming for this Sunday Carnival Night!',
+    share_desp: 'Dear, invite you to join Happy July Quiz Carnival in Go!Millionaire，win Rs 500,000 prize together!'
   },
   receiveCard: {
     share_title: 'I\'m playing \'Go! Millionaire\', my referral code is {code}，join us and win up to Rs.1,000,000 at 10PM every day!',

@@ -3,7 +3,7 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <div class="fail-tip-inner">
-        <section class="fail-tip">
+        <section class="fail-tip bg-reset" v-webp.bg="`url('modal-bg.png')`">
             <div class="fail-tip-text">
             <p class="fail-tip-title">{{$t('tip.failTipModal.title')}}</p>
             <p class="fail-tip-desc">{{$t('tip.failTipModal.desc')}}</p>
@@ -64,10 +64,6 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     padding: 77px 0 53px;
-    background-image: url("../assets/images/modal-bg.png");
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
     width: 550px;
     height: 660px;
     color: #fff;
