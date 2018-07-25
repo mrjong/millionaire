@@ -1,4 +1,4 @@
-/* global RongIMLib */
+/* global */
 
 /* 监听器类型 */
 
@@ -15,16 +15,15 @@ export const MESSAGE_SEND_FAIL = 'MESSAGE_SEND_FAIL' // 消息发送失败
 export const MESSAGE_EXTRA_LIFE = 'ResurrectionMessage' // 复活卡相关信息
 
 // 连接状态类
-export const CONNECTED = RongIMLib.ConnectionStatus.CONNECTED
 export const CONNECT_SUCCESS = 'CONNECT_SUCCESS'
 export const CONNECTED_ERROR = 'CONNECTED_ERROR'
 export const INVALID_TOKEN = 'INVALID_TOKEN' // token 无效
-export const CONNECTING = RongIMLib.ConnectionStatus.CONNECTING
 export const CONNECTED_TIMEOUT = 'CONNECTED_TIMEOUT'
-export const DISCONNECTED = RongIMLib.ConnectionStatus.DISCONNECTED
-export const KICKED_OFFLINE_BY_OTHER_CLIENT = RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT // 其他设备登陆
-export const DOMAIN_INCORRECT = RongIMLib.ConnectionStatus.DOMAIN_INCORRECT // 域名不正确
-export const NETWORK_UNAVAILABLE = RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE // 网络错误
+export const DISCONNECTED = 'DISCONNECTED'
+export const KICKED_OFFLINE_BY_OTHER_CLIENT = 'KICKED_OFFLINE_BY_OTHER_CLIENT' // 其他设备登陆
+export const DOMAIN_INCORRECT = 'DOMAIN_INCORRECT' // 域名不正确
+export const NETWORK_UNAVAILABLE = 'NETWORK_UNAVAILABLE' // 网络错误
+export const GET_SERVER_ADDRESS_SUCCESS = 'GET_SERVER_ADDRESS_SUCCESS' // 获取IM服务器地址成功
 
 // 聊天室相关
 export const CHATROOM_JOIN_SUCCESS = 'CHATROOM_JOIN_SUCCESS' // 加入聊天室成功
