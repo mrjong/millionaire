@@ -342,7 +342,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Hey, Happy July Quiz Carnival this week! All logined users can get Rs 10 after first playing 10PM Quiz. Come on!',
+  NewAnnouncement: 'Dear, invite you to join Happy July Quiz Carnival! Rs 500,000 is coming for this Sunday Night!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
