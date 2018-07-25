@@ -75,23 +75,11 @@ const im = {
       this.listeners[type[prop]] = null
     }
 
-    // 监听离线在线状态
-    window.addEventListener('offline', () => {
-      im.isSupportOnlineEvent = true
-      console.log('断开连接:')
-      im.emitListener(type.NETWORK_UNAVAILABLE)
-      im.disconnect()
-    })
-
-    window.addEventListener('online', () => {
-      im.isSupportOnlineEvent = true
-      console.log('重新连接:', im.token)
-      im.connect(im.token)
-    })
     // 获取IM服务器地址
     getIMServerAddress().then(({data}) => {
       if (+data.result === 1 && +data.code === 0) {
         im.serverAddress = data.data || ''
+        im.emitListener(type.GET_SERVER_ADDRESS_SUCCESS)
       } else {
         console.error(`获取IM服务器地址失败: ${data.message || ''}`)
       }
@@ -108,6 +96,10 @@ const im = {
     const {serverAddress} = im
     if (!serverAddress) {
       console.log('连接失败: IM服务器地址为空')
+      im.addListener(type.GET_SERVER_ADDRESS_SUCCESS, () => {
+        im.connect(token)
+        im.removeLister(type.GET_SERVER_ADDRESS_SUCCESS)
+      })
       return false
     }
     // im.disconnect() // 先断开链接
