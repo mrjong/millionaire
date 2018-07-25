@@ -46,6 +46,7 @@ export const api = {
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
+  getIMServerAddress: '/cmp/im_url/', // 获取IM服务器地址
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsId: '/cmp/gb', // 获得宝箱id
   getBounsBox: '/cmp/ub/' // 获得宝箱
@@ -456,6 +457,11 @@ export const cancelReminder = function () {
   })
 }
 
+// 获取IM服务器地址
+export const getIMServerAddress = function () {
+  return axios.get(api.getIMServerAddress)
+}
+
 export const doubelRewardList = function (offset, limit) {
   return axios.get(api.doubelRewardList, {
     params: {
@@ -468,7 +474,6 @@ export const doubelRewardList = function (offset, limit) {
 }
 
 // 获得宝箱id
-
 export const getBounsId = function () {
   return axios.get(api.getBounsId, {
     params: {
