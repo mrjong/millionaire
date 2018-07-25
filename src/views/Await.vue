@@ -113,7 +113,9 @@
      :isReminderPop="isReminderPop"></reminder-bomb>
     <policy-bomb v-if="!isAgreePolicy && isWeb === 'h5'"></policy-bomb>
     <newbie-task></newbie-task>
-    <new-announcement></new-announcement>
+    <keep-alive>
+      <new-announcement></new-announcement>
+    </keep-alive>
     <!-- <video-button></video-button> -->
     <balance-mark v-if="showDialog"
                   :data-info="dialogInfo"

@@ -112,7 +112,12 @@ const locale = {
   invite: { // 邀请助力
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
-    steps_title: 'Invited a freshman can active ₹100 ',
+    steps_title: '100 rupees can be activated once invited a new user',
+    invite_hint: 'You\'ll get Rs. 5 if your friends invited new user to play',
+    invite_friend: '{num} Friends',
+    invite_times: 'play {times} times',
+    invite_copy: 'Help your friends activate',
+    invite_anwser: 'Accumulated answer {times} time',
     rank_text1: 'Invite {number} freshmen',
     rank_text2: 'Earn',
     rank_text3: 'Get Reward',
@@ -121,12 +126,17 @@ const locale = {
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [ // 规则说明
-      '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
+      '1. You can invite friends through Facebook, WhatsApp,twitter etc.;',
       '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
       '4. You have to submit your PAN ID when you withdraw;',
       '5. The cash will be transferred in 7 days;',
       '6. You can not get cash/live from the friend who already registered before.'
+    ],
+    task_rule: [
+      '1. You can earn Rs. 10 after inviting 1 new user to play in one game.',
+      '2. If your friends play our game for another 3 times, you\'ll earn Rs. 12.',
+      '3. If your friends play our game for another 5 times, you\'ll earn Rs. 15.'
     ],
     steps: [
       'Invite friends to play once',
@@ -142,7 +152,9 @@ const locale = {
       'My Invite', 'Weekly Rank', 'Total Rank'
     ],
     no_list_title: 'No Friends invited',
-    no_list_text: '. Invite friends to earn cash right now!'
+    no_list_text: '. Invite friends to earn cash right now!',
+    copyright: 'GOM reserves all the rights of final interpretation',
+    get_more: 'Get More'
   },
   login: { // 登录页面
     title: 'Sign Up',
@@ -331,7 +343,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Hey, Crorepati, here is a TREASURE BOX for you！Join Quiz at 10PM everyday, you\'ll get the lucky cash!',
+  NewAnnouncement: 'Hey, Happy July Quiz Carnival this week! All logined users can get Rs 10 after first playing 10PM Quiz. Come on!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -346,7 +358,7 @@ const locale = {
       btn: 'Get More EXTRA LIVES'
     },
     question: [
-      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: '27634ff8002b12e75d98e07ccd005d18', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
+      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: 'e1f238e1860b16d1139607d92f612098', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
       {ji: '1', js: 2, jc: 'There is no ____ color in Indian national flag?', jo: ['Red', 'White', 'Green'], ja: 'ee38e4d5dd68c4e440825018d549cb47', jd: ['The National Flag of India is a horizontal rectangular tricolour of saffron, white and green', ' with the Ashoka Chakra, a 24-spoke wheel, in navy blue at its centre. There is no red on it.'], restTime: 10, si: 2500},
       {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
     ]

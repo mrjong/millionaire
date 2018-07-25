@@ -48,7 +48,8 @@ export const api = {
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsId: '/cmp/gb', // 获得宝箱id
-  getBounsBox: '/cmp/ub/' // 获得宝箱
+  getBounsBox: '/cmp/ub/', // 获得宝箱
+  myInviteData: '/cmp/sef/' // 我邀请的好友答题
 }
 
 export const init = function (isRefreshToken) {
@@ -483,5 +484,16 @@ export const getBounsBox = function (id) {
     app_id: utils.app_id,
     client_id: utils.clientId,
     boxId: id
+  })
+}
+
+// 我邀请的好友答题
+
+export const myInviteData = function () {
+  return axios.get(api.myInviteData, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
   })
 }

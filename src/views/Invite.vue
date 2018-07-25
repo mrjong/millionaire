@@ -1,7 +1,7 @@
 <template>
   <div class="invite bg-reset" v-webp.bg="`url('invite-bg.jpg')`">
     <p class="invite__back icon-fanhui iconfont" @click="back"></p>
-    <p class="invite__rule" @click="showDialog = true">{{$t('invite.rule_bnt')}}</p>
+    <p class="invite__rule" @click="rule">{{$t('invite.rule_bnt')}}</p>
     <div class="invite__title">
       <img v-webp="'invite-title-hi.png'" class="invite__title__img" v-if="$i18n.locale === 'hi'">
       <img v-webp="'invite-title-en.png'" class="invite__title__img" v-else>
@@ -13,25 +13,17 @@
       </div>
     </div>
     <div class="invite__step">
-      <p class="invite__step__title">{{$t('invite.steps_title')}}</p>
+      <p class="invite__step__title">{{$t('invite.steps_title')}} <span class="icon-shuoming iconfont instruct" @click="instruct"></span></p>
       <div class="invite__step__content">
         <div class="icon-img">
           <span class="icon-youjiantou iconfont arrows1"></span>
           <span class="icon-youjiantou iconfont arrows2"></span>
-          <div class="icon">
-            <img src="../assets/images/coin1.png">
-          </div>
-          <div class="icon">
-            <img src="../assets/images/coin2.png">
-          </div>
-          <div class="icon">
-            <img src="../assets/images/coin3.png">
+          <div class="icon" v-for="i in 3" :key="i">
+            <img v-webp="`coin${i}.png`">
           </div>
         </div>
         <div class="num-money">
-          <p class="text">+10</p>
-          <p class="text">+20</p>
-          <p class="text">+30</p>
+          <p class="text" v-for="i in 3" :key="i">+ {{userInfo.currencyType}} {{i === 3? 15 : 8 + 2*i}}</p>
         </div>
         <div class="step-text">
           <p class="text" v-for="(val, idx) in $t('invite.steps')" :key="idx">{{val}}</p>
@@ -44,28 +36,25 @@
         <div class="icon-img">
           <span class="icon-youjiantou iconfont arrows1"></span>
           <span class="icon-youjiantou iconfont arrows2"></span>
-          <div class="progress-ball">
-          </div>
-          <div class="progress-ball">
-          </div>
-          <div class="progress-ball">
+          <div class="progress-ball" v-for="i in 3" :key="i">
+            <span class="total-money" :class=" `progress${i}`">{{myInviteNum['a' + i] ? myInviteNum['a' + i] : 0}} x {{userInfo.currencyType}}{{i === 3? 15 : 8 + 2*i}}</span>
+            <img v-webp="`progress${i}.png`">
           </div>
         </div>
         <div class="num-money">
-          <p class="text">10 Friends</p>
-          <p class="text">6 Friends</p>
-          <p class="text">3 Friends</p>
+          <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_friend', {'num': myInviteNum['a' + i] ? myInviteNum['a' + i] : 0})}}</p>
         </div>
         <div class="step-text">
-          <p class="text" v-for="(val, idx) in 3" :key="idx">play {{val}} times</p>
+          <p class="text" v-for="(val, idx) in 3" :key="idx">{{$t('invite.invite_times', {'times': val})}}</p>
         </div>
       </div>
     </div>
-    <div class="invite__rewards">
+    <div class="invite__rewards__btn">{{$t('invite.invite_hint')}}</div>
+    <!-- <div class="invite__rewards">
       <p class="invite__rewards__title">{{$t('invite.steps_title')}}</p>
       <div class="invite__rewards__content">
         <div class="icon-img reward-icon" >
-          <div class="icon" v-for="(i,idx) in 3" :key="idx">
+          <div class="icon" v-for="i in 3" :key="i">
             <img src="../assets/images/coin-icon.png">
             <span class="text">+ 100</span>
           </div>
@@ -73,9 +62,8 @@
         <div class="rewards-text">
           <p class="text" v-for="(val, idx) in $t('invite.rewards')" :key="idx">{{val}}</p>
         </div>
-        <div class="invite__rewards__btn">You'll get ₹5 if your friends invited new user to play</div>
       </div>
-    </div>
+    </div> -->
     <div class="invite__list">
       <div class="tap">
         <p class="title" @click="changeTap(idx)" :class="{'tap-active': idx === index}" v-for="(val, idx) in tap" :key="idx">{{val}}</p>
@@ -96,14 +84,14 @@
               </div>
               <div class="userinfo">
                 <p class="nickname">{{val.nick}}</p>
-                <p class="date">{{val.status === 1? $t('invite.rank_text5', {time: ' ' + val.bd}): $t('invite.rank_text6', {time: ' ' + val.bd})}}</p>
+                <p class="date">{{$t('invite.invite_anwser', {'time': val.as ? val.as: 0})}}</p>
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
-                <p class="number">{{val.status === 1 ? $t('invite.rank_text3') : $t('invite.rank_text4')}}</p>
+                <p class="number" @click="copy">{{$t('invite.invite_copy')}}</p>
               </div>
             </div>
-            <div class="more-button" @click="getMoreInvite" v-if="isShowMoreBtn">Get More</div>
+            <div class="more-button" @click="getMoreInvite" v-if="isShowMoreBtn">{{$t('invite.get_more')}}</div>
           </div>
           <div class="hint">{{$t('invite.rank_hint')}}</div>
         </div>
@@ -120,6 +108,7 @@
         <invite-blank v-if="isHaveData"></invite-blank>
       </div>
     </div>
+    <p class="copyright">{{$t('invite.copyright')}}</p>
     <revive-card :reviveObj="reviveObj" @shareClose="shareClose"></revive-card>
     <loading v-if="isLoading"></loading>
     <balance-mark v-if="showDialog" :data-info="dialogInfo" @okEvent='okEvent'></balance-mark>
@@ -141,13 +130,8 @@ export default {
   data () {
     return {
       dialogInfo: {
-        htmlTitle: this.$t('invite.rule_bnt'),
-        htmlText: `<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[0]')}</p>
-<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[1]')}</p>
-<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[2]')}</p>
-<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[3]')}</p>
-<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[4]')}</p>
-<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[5]')}</p>`,
+        htmlTitle: '',
+        htmlText: '',
         shouldSub: false,
         markType: false,
         okBtnText: this.$t('tip.lateJoin.btn')
@@ -167,11 +151,13 @@ export default {
       totalData: [],
       myInviteInfo: {},
       myInviteData: [],
+      myInviteNum: {},
       isHaveData: false,
       isLoading: false,
       isShowMoreBtn: true,
       offset: 0,
-      limit: 10
+      limit: 10,
+      isCopy: false
     }
   },
   computed: {
@@ -182,6 +168,7 @@ export default {
   mounted () {
     utils.statistic('invite_earn_page', 0)
     this.getMyInviteData()
+    this.myInvite()
   },
   methods: {
     getMoreInvite () {
@@ -189,6 +176,34 @@ export default {
     },
     back () {
       this.$router.go(-1)
+    },
+    instruct () {
+      this.showDialog = true
+      this.dialogInfo.htmlTitle = this.$t('invite.rule_bnt')
+      this.dialogInfo.okBtnText = this.$t('tip.lateJoin.btn')
+      this.dialogInfo.htmlText = `
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[0]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[1]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[2]')}</p>`
+    },
+    rule () {
+      this.showDialog = true
+      this.dialogInfo.htmlTitle = this.$t('invite.rule_bnt')
+      this.dialogInfo.okBtnText = this.$t('tip.lateJoin.btn')
+      this.dialogInfo.htmlText = `<p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[0]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[1]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[2]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[3]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[4]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[5]')}</p>`
+    },
+    copy () {
+      this.statistic('help_active_buttion', 1)
+      this.showDialog = true
+      this.dialogInfo.htmlTitle = 'come on'
+      this.dialogInfo.htmlText = '复制这段话'
+      this.dialogInfo.okBtnText = 'COPY'
+      this.isCopy = true
     },
     changeTap (idx) {
       this.index = idx
@@ -276,12 +291,31 @@ export default {
         })
       }
     },
+    myInvite () {
+      api.myInviteData().then((data) => {
+        console.log(data)
+        if (data.result === 1 && data.code === 0) {
+          this.myInviteNum = data.data
+        }
+      }).catch()
+    },
     shareClose () {
       this.reviveObj.isShare = false
     },
     // 弹框ok
     okEvent (a, b) {
       this.showDialog = false
+      if (this.isCopy) {
+        this.isCopy = false
+        // 复制一段话
+        let input = document.createElement('input')
+        input.value = 'kkkkkkkkkkkkkkkkkkkkkkkkkkmessage'
+        document.body.appendChild(input)
+        input.select()
+        input.setSelectionRange(0, input.value.length)
+        document.execCommand('Copy')
+        document.body.removeChild(input)
+      }
     }
   },
   components: {
@@ -374,6 +408,10 @@ export default {
         color: #201a98;
         font:600 32px 'Roboto', Arial, serif;
         text-align: center;
+        .instruct{
+          color: #201a98;
+          font-size: 28px;
+        }
       }
       &__content{
         .icon-img {
@@ -410,6 +448,34 @@ export default {
             height: 153px;
             border-radius: 50%;
             background-color:#f8f8f8;
+            overflow: hidden;
+            position: relative;
+            img{
+              width: 100%;
+              height: 100%;
+            }
+            .total-money{
+              width: 100%;
+              position: absolute;
+              left: 50%;
+              transform: translate(-50%, 0);
+              color: #fa8d36;
+              font: 600 28px 'Roboto', Arial, serif;
+              text-align: center;
+            }
+            .progress1{
+              top: 50%;
+              transform: translate(-50%,-50%)
+            }
+            .progress2{
+              top: 20%;
+              transform: translate(-50%,0)
+            }
+            .progress3{
+              top: 20%;
+              transform: translate(-50%,0);
+              color:#fff;
+            }
           }
         }
         .reward-icon{
@@ -423,9 +489,9 @@ export default {
               margin: 0 10px 0 0;
             }
             .text{
-            color: #fa8d36;
-            font: 600 28px 'Roboto', Arial, serif;
-          }
+              color: #fa8d36;
+              font: 600 28px 'Roboto', Arial, serif;
+            }
           }
         }
         .num-money {
@@ -474,7 +540,8 @@ export default {
         color: #fff;
         border-radius:46px;
         background:linear-gradient(left, #f6cd46 , #fc642b);
-        margin-top: 45px;
+        background:-webkit-linear-gradient(left, #f6cd46 , #fc642b);
+        margin: 45px auto 0;
       }
     }
     &__mytask{
@@ -554,7 +621,7 @@ export default {
             line-height: 43px;
             margin-top: 10px;
             text-align: center;
-            background-color: #ffb03e;
+            background-color: #fb7730;
             color:#fff;
             border-radius: 24px;
             margin: 20px auto;
@@ -605,7 +672,6 @@ export default {
               flex-direction: column;
               justify-content: center;
               p{
-                height: 40px;
                 font: 24px 'Roboto', Arial, serif;
                 line-height: 20px;
                 line-height: 37px;
@@ -619,8 +685,15 @@ export default {
               flex-direction: column;
               justify-content: center;
               .number{
-                color: #201a98;
                 font: 24px 'Roboto', Arial, serif;
+                height: 40px;
+                line-height: 43px;
+                margin-top: 10px;
+                text-align: center;
+                background-color: #ffb03e;
+                color: #fff;
+                border-radius: 24px;
+                padding: 0 15px;
               }
               .money {
                 height: 40px;
@@ -639,6 +712,11 @@ export default {
           text-align: center;
         }
       }
+    }
+    .copyright{
+      color: #fff;
+      text-align: center;
+      font: 24px 'Roboto', Arial, serif;
     }
   }
 </style>
