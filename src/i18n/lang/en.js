@@ -116,8 +116,9 @@ const locale = {
     invite_hint: 'You\'ll get Rs. 5 if your friends invited new user to play',
     invite_friend: '{num} Friends',
     invite_times: 'play {times} times',
-    invite_copy: 'Help your friends activate',
+    invite_copy: 'Earn More ',
     invite_anwser: 'Accumulated answer {times} time',
+    invite_task: 'My Invitation task',
     rank_text1: 'Invite {number} freshmen',
     rank_text2: 'Earn',
     rank_text3: 'Get Reward',
@@ -151,6 +152,11 @@ const locale = {
     rank_text: [
       'My Invite', 'Weekly Rank', 'Total Rank'
     ],
+    copy_tip: {
+      hint: 'Ask friends to keep joining quiz, you can get more bonuses.Click to copy the following sentence and send it to your friends.',
+      content: 'Hi, I have already won {money} rupees in this quiz. Tonight at 10PM, don\'t forget to join together.',
+      btn: 'Click to Copy'
+    },
     no_list_title: 'No Friends invited',
     no_list_text: '. Invite friends to earn cash right now!',
     copyright: 'GOM reserves all the rights of final interpretation',

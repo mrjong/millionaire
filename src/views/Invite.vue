@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="invite__mytask">
-      <p class="invite__mytask__title">{{$t('invite.steps_title')}}</p>
+      <p class="invite__mytask__title">{{$t('invite.invite_task')}}</p>
       <div class="invite__mytask__content">
         <div class="icon-img">
           <span class="icon-youjiantou iconfont arrows1"></span>
@@ -45,7 +45,7 @@
           <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_friend', {'num': myInviteNum['a' + i] ? myInviteNum['a' + i] : 0})}}</p>
         </div>
         <div class="step-text">
-          <p class="text" v-for="(val, idx) in 3" :key="idx">{{$t('invite.invite_times', {'times': val})}}</p>
+          <p class="text" v-for="(val, idx) in 3" :key="idx">{{$t('invite.invite_times', {'times': val*val})}}</p>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
               </div>
               <div class="userinfo">
                 <p class="nickname">{{val.nick}}</p>
-                <p class="date">{{$t('invite.invite_anwser', {'time': val.as ? val.as: 0})}}</p>
+                <p class="date">{{$t('invite.invite_times', {'times': val.as ? val.as: 0})}}</p>
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
@@ -198,11 +198,11 @@ export default {
       <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.rule[5]')}</p>`
     },
     copy () {
-      this.statistic('help_active_buttion', 1)
+      utils.statistic('help_active_buttion', 1)
       this.showDialog = true
-      this.dialogInfo.htmlTitle = 'come on'
-      this.dialogInfo.htmlText = '复制这段话'
-      this.dialogInfo.okBtnText = 'COPY'
+      this.dialogInfo.htmlTitle = this.$t('invite.copy_tip.hint')
+      this.dialogInfo.htmlText = `<p class="copy">${this.$t('invite.copy_tip.content', {'money': this.myInviteInfo.amountFmt})}</p>`
+      this.dialogInfo.okBtnText = this.$t('invite.copy_tip.btn')
       this.isCopy = true
     },
     changeTap (idx) {
@@ -309,7 +309,7 @@ export default {
         this.isCopy = false
         // 复制一段话
         let input = document.createElement('input')
-        input.value = 'kkkkkkkkkkkkkkkkkkkkkkkkkkmessage'
+        input.value = this.$t('invite.copy_tip.content', {'money': this.myInviteInfo.amountFmt})
         document.body.appendChild(input)
         input.select()
         input.setSelectionRange(0, input.value.length)
@@ -532,13 +532,12 @@ export default {
         }
       }
       &__btn {
-        width: 630px;
-        height: 76px;
+        width: 680px;
+        padding: 30px;
         font: 400 24px "Roboto", Arial, serif;
-        line-height: 76px;
         text-align: center;
         color: #fff;
-        border-radius:46px;
+        border-radius:26px;
         background:linear-gradient(left, #f6cd46 , #fc642b);
         background:-webkit-linear-gradient(left, #f6cd46 , #fc642b);
         margin: 45px auto 0;
