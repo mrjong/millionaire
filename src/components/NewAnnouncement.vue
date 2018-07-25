@@ -2,7 +2,7 @@
     <div class="announcement  bg-reset bg-center"  v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isClose && newAnnouncement < 3">
       <span class="iconfont icon-cuowu close" @click="close" ></span>
       <span class="iconfont icon-laba horn"></span>
-      <div class="content" v-html="$t('NewAnnouncement')"></div>
+      <div class="content">{{$t('NewAnnouncement')}} <span class="to-carnival" @click="toCarnival">More >></span></div>
     </div>
 </template>
 
@@ -17,16 +17,19 @@ export default {
   },
   computed: {
     newAnnouncement: function () {
-      if (!utils.storage.get('millionaire-life-newAnnouncement')) {
-        utils.storage.set('millionaire-life-newAnnouncement', 0)
+      if (!utils.storage.get('millionaire-carnival-newAnnouncement')) {
+        utils.storage.set('millionaire-carnival-newAnnouncement', 0)
       }
-      return utils.storage.get('millionaire-life-newAnnouncement')
+      return utils.storage.get('millionaire-carnival-newAnnouncement')
     }
   },
   methods: {
     close () {
       this.isClose = false
-      utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
+      utils.storage.set('millionaire-carnival-newAnnouncement', utils.storage.get('millionaire-carnival-newAnnouncement') + 1)
+    },
+    toCarnival () {
+      this.$router.push({path: '/carnival'})
     }
   }
 }
@@ -82,6 +85,10 @@ export default {
       top: 50px;
       left: 25px;
       font-size: 28px;
+    }
+    .to-carnival{
+      font-weight: 600;
+      text-decoration: underline
     }
   }
 </style>
