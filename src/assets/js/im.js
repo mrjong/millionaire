@@ -107,6 +107,7 @@ const im = {
     IM.connect({
       token,
       serverAddress,
+      debug: true,
       onconnect (err, {userId}) {
         if (!err) {
           console.log('连接成功' + userId, token)
