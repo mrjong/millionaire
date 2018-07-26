@@ -49,7 +49,7 @@ export const api = {
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsId: '/cmp/gb', // 获得宝箱id
   getBounsBox: '/cmp/ub/', // 获得宝箱
-  myInviteData: '/cmp/sef/' // 我邀请的好友答题
+  myInviteTask: '/cmp/sef/' // 我邀请好友答题任务
 }
 
 export const init = function (isRefreshToken) {
@@ -489,8 +489,8 @@ export const getBounsBox = function (id) {
 
 // 我邀请的好友答题
 
-export const myInviteData = function () {
-  return axios.get(api.myInviteData, {
+export const myInviteTask = function () {
+  return axios.get(api.myInviteTask, {
     params: {
       app_id: utils.app_id,
       client_id: utils.clientId

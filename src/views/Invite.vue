@@ -37,12 +37,12 @@
           <span class="icon-youjiantou iconfont arrows1"></span>
           <span class="icon-youjiantou iconfont arrows2"></span>
           <div class="progress-ball" v-for="i in 3" :key="i">
-            <span class="total-money" :class=" `progress${i}`">{{myInviteNum['a' + i] ? myInviteNum['a' + i] : 0}} x {{userInfo.currencyType}}{{i === 3? 15 : 8 + 2*i}}</span>
+            <span class="total-money" :class=" `progress${i}`">{{myInviteNum && myInviteNum['a' + i] ? myInviteNum['a' + i] : 0}} x {{userInfo.currencyType}}{{i === 3? 15 : 8 + 2*i}}</span>
             <img v-webp="`progress${i}.png`">
           </div>
         </div>
         <div class="num-money">
-          <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_friend', {'num': myInviteNum['a' + i] ? myInviteNum['a' + i] : 0})}}</p>
+          <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_friend', {'num': myInviteNum && myInviteNum['a' + i] ? myInviteNum['a' + i] : 0})}}</p>
         </div>
         <div class="step-text">
           <p class="text" v-for="(val, idx) in 3" :key="idx">{{$t('invite.invite_times', {'times': val*val})}}</p>
@@ -88,7 +88,8 @@
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
-                <p class="number" @click="copy">{{$t('invite.invite_copy')}}</p>
+                <p class="number invite-name" v-if="val.type === 4">{{val. pnick}}</p>
+                <p class="number" @click="copy" v-else>{{$t('invite.invite_copy')}}</p>
               </div>
             </div>
             <div class="more-button" @click="getMoreInvite" v-if="isShowMoreBtn">{{$t('invite.get_more')}}</div>
@@ -168,7 +169,7 @@ export default {
   mounted () {
     utils.statistic('invite_earn_page', 0)
     this.getMyInviteData()
-    this.myInvite()
+    this.myInviteTask()
   },
   methods: {
     getMoreInvite () {
@@ -242,7 +243,7 @@ export default {
     },
     getData (index) {
       this.isLoading = true
-      if (index === 0) {
+      if (index === 1) {
         api.inviteWeeklyBoard().then(({data}) => {
           this.isLoading = false
           if (data.result === 1 && data.code === 0 && data.data.length > 0) {
@@ -260,7 +261,7 @@ export default {
           this.isHaveData = true
           this.isLoading = false
         })
-      } else if (index === 1) {
+      } else if (index === 2) {
         api.inviteTotalBoard().then(({data}) => {
           this.isLoading = false
           if (data.result === 1 && data.code === 0 && data.data.length > 0) {
@@ -291,9 +292,9 @@ export default {
         })
       }
     },
-    myInvite () {
-      api.myInviteData().then(({data}) => {
-        if (data.result === 1 && data.code === 0) {
+    myInviteTask () {
+      api.myInviteTask().then(({data}) => {
+        if (data.result === 1 && data.code === 0 && data.data) {
           this.myInviteNum = data.data
         }
       }).catch()
@@ -683,6 +684,8 @@ export default {
               flex-direction: column;
               justify-content: center;
               .number{
+                min-width: 125px;
+                max-width: 180px;
                 font: 24px 'Roboto', Arial, serif;
                 height: 40px;
                 line-height: 43px;
@@ -691,7 +694,13 @@ export default {
                 background-color: #ffb03e;
                 color: #fff;
                 border-radius: 24px;
-                padding: 0 15px;
+                padding: 0 20px;
+              }
+              .invite-name{
+                background-color: #ff93ba;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
               }
               .money {
                 height: 40px;
