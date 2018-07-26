@@ -561,6 +561,34 @@ const utils = {
    */
   isInstall (packageName) {
     return njordGame && njordGame.isPackageInstalled && njordGame.isPackageInstalled(packageName)
+  },
+  /**
+   * 获取弹窗显示状态
+   * @param {*} key 弹窗提示key值
+   * @param {*} limit 显示上限次数
+   */
+  getDialogTip (key, limit = Infinity) {
+    const tip = utils.storage.get('millionaire-tip-show') || {}
+    const dialog = tip[key] || {}
+    if (window[`tip-${key}-is-view`]) {
+      return false
+    }
+    if (dialog.count >= limit) {
+      return false
+    }
+    return true
+  },
+  /**
+   * 设置弹窗显示状态为已显示
+   * @param {*} key 弹窗提示key值
+   */
+  setDialogTip (key) {
+    const tip = utils.storage.get('millionaire-tip-show') || {}
+    const dialog = tip[key] || {}
+    window[`tip-${key}-is-view`] = true
+    dialog.count = (+dialog.count || 0) + 1
+    tip[key] = dialog
+    utils.storage.set('millionaire-tip-show', tip)
   }
 }
 

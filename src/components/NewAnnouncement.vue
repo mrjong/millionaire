@@ -1,6 +1,6 @@
 <template>
-    <div class="announcement" v-if="isClose && newAnnouncement < 3">
-      <span class="iconfont icon-cuowu close" @click="close" ></span>
+    <div class="announcement" v-if="isShowAnnouncement">
+      <span class="iconfont icon-cuowu close" @click="closeAnnouncement" ></span>
       <span class="iconfont icon-laba horn"></span>
       <div class="content" v-html="$t('NewAnnouncement')"></div>
     </div>
@@ -12,21 +12,13 @@ export default {
   name: 'NewAnnouncement',
   data () {
     return {
-      isClose: true
-    }
-  },
-  computed: {
-    newAnnouncement: function () {
-      if (!utils.storage.get('millionaire-life-newAnnouncement')) {
-        utils.storage.set('millionaire-life-newAnnouncement', 0)
-      }
-      return utils.storage.get('millionaire-life-newAnnouncement')
+      isShowAnnouncement: utils.getDialogTip('life-newAnnouncement', 3)
     }
   },
   methods: {
-    close () {
-      this.isClose = false
-      utils.storage.set('millionaire-life-newAnnouncement', utils.storage.get('millionaire-life-newAnnouncement') + 1)
+    closeAnnouncement () {
+      this.isShowAnnouncement = false
+      utils.setDialogTip('life-newAnnouncement')
     }
   }
 }

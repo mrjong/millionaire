@@ -89,9 +89,6 @@ export default {
   created () {
     this.getRank()
   },
-  updated () {
-    this.$refs['rankItems'] && this.$refs['rankItems'].scrollTo(0, 0)
-  },
   watch: {
     mode () {
       this.getRank()

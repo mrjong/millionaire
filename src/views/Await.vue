@@ -124,7 +124,7 @@
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
     <div class="browser-tip" v-if="isShowBrowserTip">
-      <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
+      <span class="iconfont icon-cuowu close" @click="closeBrowserTip"></span>
       <img class="browser-tip__icon" src="../assets/images/browser-tip-icon.png"/>
       <div class="browser-tip__text">
         <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
@@ -154,7 +154,7 @@ export default {
   name: 'Await',
   data () {
     return {
-      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
+      isShowBrowserTip: utils.getDialogTip('browserDownload') && !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -426,6 +426,10 @@ export default {
           }
         }).catch()
       }
+    },
+    closeBrowserTip () {
+      this.isShowBrowserTip = false
+      utils.setDialogTip('browserDownload')
     }
   },
   components: {
