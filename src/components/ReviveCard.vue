@@ -91,7 +91,7 @@ export default {
       } else if (this.reviveObj.type === 'carnival') {
         if (this.shareConent) {
           utils.statistic('invite_now_button', 3, {to_destination_s: val}, 'reward_share_page')
-          utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html'), '', this.shareConent.title, this.shareConent.desp)
+          utils.share(this.callbackFn, val, '', encodeURIComponent('http://millionaire.apusapps.com/index.html#/carnival'), '', this.shareConent.title, this.shareConent.desp)
         }
       } else {
         utils.statistic('millionaire', 1, {to_destination_s: val}, 'share-detail_page')
