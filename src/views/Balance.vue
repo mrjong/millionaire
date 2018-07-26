@@ -29,7 +29,7 @@
     </div>
     <policy-link></policy-link>
     <div class="invite-activity-btn" @click="invite">
-      <img v-webp="'balance-invite-btn.png'"  v-if="$i18n.locale === 'hi'">
+      <img v-webp="'balance-invite-btn-hi.png'"  v-if="$i18n.locale === 'hi'">
       <img v-webp="'balance-invite-btn.png'"  v-else>
     </div>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>

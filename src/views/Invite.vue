@@ -73,7 +73,7 @@
           <div class="my-info bg-reset bg-center" v-webp.bg="`url('invite-user-bg.png')`" v-if="myInviteInfo">
             <img :src="myInviteInfo.upic" class="head">
             <p class="nickname">{{myInviteInfo.nick}}</p>
-            <p class="number">{{$t('invite.rank_text1', {number: myInviteInfo.sc})}}</p>
+            <p class="number">{{$t('invite.rank_text1', {number: myInviteInfo.pc})}}</p>
             <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{myInviteInfo.amountFmt}}</p>
           </div>
           <div class="item" v-if="myInviteData.length > 0">
@@ -84,7 +84,7 @@
               </div>
               <div class="userinfo">
                 <p class="nickname">{{val.nick}}</p>
-                <p class="date">{{$t('invite.invite_times', {'times': val.as ? val.as: 0})}}</p>
+                <p class="date">{{$t('invite.invite_times', {'times': val.an ? val.an: 0})}}</p>
               </div>
               <div class="invite-data">
                 <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
@@ -292,10 +292,11 @@ export default {
       }
     },
     myInvite () {
-      api.myInviteData().then((data) => {
+      api.myInviteData().then(({data}) => {
         console.log(data)
         if (data.result === 1 && data.code === 0) {
           this.myInviteNum = data.data
+          console.log(this.myInviteNum)
         }
       }).catch()
     },
