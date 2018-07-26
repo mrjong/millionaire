@@ -20,7 +20,8 @@ const locale = {
     play_card_step2: 'Answer all 12 questions right, win up to <span class="special">₹1,000,000!</span>',
     play_card_step3: 'Use<span class="special"> EXTRA LIFE </span>when answering incorrectly. Invite new user to get it!',
     play_card_step4: 'Answer it,quiz it,win up to <span class="special">₹1,000,000!</span>',
-    ses_question_btn: 'Set Questions Myself',
+    ses_question_btn: 'Set Questions',
+    teamBattle: 'Team Battle',
     referral_code_pop: { // 输入邀请码弹框及相关case
       title: 'APPLY REFERRAL CODE',
       description: 'Enter a friend\'s Referral Code to get an extra life.',
@@ -129,7 +130,7 @@ const locale = {
     ],
     steps: [
       'Invite your friends to play',
-      'Ask your friends to do sign up and play',
+      'Ask your friends to sign up and play 10PM Quiz',
       'You can earn Rs.10, when your friends has played this game'
     ],
     rank_text: [
@@ -164,7 +165,8 @@ const locale = {
     send_btn: 'Send',
     viewing: 'Viewing',
     anwser_out_text: 'Out',
-    anwser_incorrect_text: 'Incorrect'
+    anwser_incorrect_text: 'Incorrect',
+    watching: 'Eliminated'
   },
   anwser_rank: { // 答题排行榜
     week_tap: 'Weekly Rank',
@@ -257,6 +259,7 @@ const locale = {
     submit_btn: 'Submit another'
   },
   userCenter: { // 个人中心
+    like_us: 'Like Us',
     title: 'User Profile',
     save: 'Save ',
     edit: 'Edit',
@@ -323,7 +326,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: '<span class="iconfont icon-laba horn"></span>Dear, extra lives can be used at the last question! More extra lives, more chances to win! Win bonus at 10 PM!',
+  NewAnnouncement: 'Hey, Happy July Quiz Carnival this week! All logined users can get Rs 10 after first playing 10PM Quiz. Come on!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -338,11 +341,38 @@ const locale = {
       btn: 'Get More EXTRA LIVES'
     },
     question: [
-      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: '27634ff8002b12e75d98e07ccd005d18', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
+      {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: 'e1f238e1860b16d1139607d92f612098', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
       {ji: '1', js: 2, jc: 'There is no ____ color in Indian national flag?', jo: ['Red', 'White', 'Green'], ja: 'ee38e4d5dd68c4e440825018d549cb47', jd: ['The National Flag of India is a horizontal rectangular tricolour of saffron, white and green', ' with the Ashoka Chakra, a 24-spoke wheel, in navy blue at its centre. There is no red on it.'], restTime: 10, si: 2500},
       {ji: '2', js: 3, jc: 'What is the national flower of India?', jo: ['Lotus', 'Rose', 'Jasmine'], ja: '040a7f2f238655e0b4e7d943ad3a21ec', jd: ['Lotus is the National Flower of India. It is a sacred flower and has been an auspicious symbol of Indian culture.'], restTime: 10, si: 2500}
     ]
   },
+  bounsTip: [
+    {
+      title: 'Opps !',
+      desp: 'It\'s empty! Try it tomorrow!',
+      btnText: 'Invite & Earn Cash'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got {currencyType}{money}! Keep Going!',
+      btnText: 'Invite & Earn Cash'
+    },
+    {
+      title: 'Congrats !',
+      desp: 'You got an EXTRA LIFE.',
+      btnText: 'Get More'
+    },
+    {
+      title: 'Wow ! ',
+      desp: 'A TREASURE BOX received! ',
+      btnText: 'OPEN'
+    },
+    {
+      title: 'Sorry ! ',
+      desp: 'Failed to open it',
+      btnText: ''
+    }
+  ],
   // 全局提示
   tip: {
     userReviveCard: { // 使用复活卡

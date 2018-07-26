@@ -268,11 +268,10 @@ export default {
               this.showLogin = isWon && !this.isOnline
               // 展示you won的同时弹出分享弹框
               this.isShowTipModal = isWon && this.isOnline
-              this.$store.dispatch(type.HOME_UPDATE, {
+              this.$store.commit(type.HOME_UPDATE, {
                 myselfBonusAmount: dataObj.show_bonus
               })
-              console.log(isWon)
-              this.$store.dispatch(type.QUESTION_YOU_WON, {
+              this.$store.commit(type.QUESTION_UPDATE, {
                 isWon
               })
             }

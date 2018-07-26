@@ -70,7 +70,9 @@ export default new Vuex.Store({
     isShowNewbieTask: false,
     isUserGame: false, // 登录用户是否是第一次答题
     isShowTaskEnd: false, // 新手任务是否结束
-    isTaskRespondence: false // 是否显示新手任务组件
+    isTaskRespondence: false, // 是否显示新手任务组件
+    hasBounsBox: false,
+    bounsBoxId: ''
   },
   getters: {
     isOnline: (state) => state.isOnline,
@@ -102,7 +104,9 @@ export default new Vuex.Store({
     isInputting: (state) => state.isInputting,
     isShowNewbieTask: (state) => state.isShowNewbieTask,
     isShowTaskEnd: (state) => state.isShowTaskEnd,
-    isTaskRespondence: (state) => state.isTaskRespondence
+    isTaskRespondence: (state) => state.isTaskRespondence,
+    hasBounsBox: (status) => status.hasBounsBox, // 是否有宝箱
+    bounsBoxId: (status) => status.bounsBoxId // 宝箱id
   },
   mutations: {
     /**

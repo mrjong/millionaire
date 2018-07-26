@@ -46,8 +46,9 @@ export const api = {
   uploadAvatar: '/v2/user/pic', // 上传头像
   updateAvatarCache: '/cmp/ru', // 更新头像缓存
   cancelReminder: '/cmp/cancel_remind/', // 取消订阅
-  doTaskToLife: '/cmp/lc', // 做新手任务得复活卡
-  doubelRewardList: '/cmp/gdb' // 获取双倍奖金
+  doubelRewardList: '/cmp/gdb', // 获取双倍奖金
+  getBounsId: '/cmp/gb', // 获得宝箱id
+  getBounsBox: '/cmp/ub/' // 获得宝箱
 }
 
 export const init = function (isRefreshToken) {
@@ -384,11 +385,13 @@ export const inviteTotalBoard = function () {
 
 // 我的邀请排行
 
-export const myInviteBoard = function () {
+export const myInviteBoard = function (offset, limit) {
   return axios.get(api.myInviteBoard, {
     params: {
       app_id: utils.app_id,
-      client_id: utils.clientId
+      client_id: utils.clientId,
+      offset: offset,
+      limit: limit
     }
   })
 }
@@ -453,13 +456,6 @@ export const cancelReminder = function () {
   })
 }
 
-export const doTaskToLife = function () {
-  return axios.post(api.doTaskToLife, {
-    app_id: utils.app_id,
-    client_id: utils.clientId,
-    tp: 1
-  })
-}
 export const doubelRewardList = function (offset, limit) {
   return axios.get(api.doubelRewardList, {
     params: {
@@ -468,5 +464,24 @@ export const doubelRewardList = function (offset, limit) {
       offset,
       limit
     }
+  })
+}
+
+// 获得宝箱id
+
+export const getBounsId = function () {
+  return axios.get(api.getBounsId, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+// 获得宝箱中奖品
+export const getBounsBox = function (id) {
+  return axios.post(api.getBounsBox, {
+    app_id: utils.app_id,
+    client_id: utils.clientId,
+    boxId: id
   })
 }

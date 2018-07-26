@@ -81,7 +81,6 @@ export default {
       this.$store.dispatch(RANK_UPDATE, mode).then(() => {
         this.loading = false
       }, (err) => {
-        // TODO: 提示错误
         this.loading = false
         console.log(err)
       })
@@ -89,6 +88,9 @@ export default {
   },
   created () {
     this.getRank()
+  },
+  updated () {
+    this.$refs['rankItems'] && this.$refs['rankItems'].scrollTo(0, 0)
   },
   watch: {
     mode () {
