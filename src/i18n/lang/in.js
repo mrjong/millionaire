@@ -120,7 +120,7 @@ const locale = {
     invite_anwser: 'कुल उत्तर एक बार {times}',
     invite_task: 'मेरा निमंत्रण कार्य',
     rank_text1: '{number}नए उपयोगकर्ता को आमंत्रित करें',
-    rank_text2: 'कमाएं',
+    rank_text2: 'कमाएं ',
     rank_text3: 'इनाम मिलना',
     rank_text4: 'अभी तक नहीं खे',
     rank_text5: '{time} को खेला गया',

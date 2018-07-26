@@ -293,10 +293,8 @@ export default {
     },
     myInvite () {
       api.myInviteData().then(({data}) => {
-        console.log(data)
         if (data.result === 1 && data.code === 0) {
           this.myInviteNum = data.data
-          console.log(this.myInviteNum)
         }
       }).catch()
     },

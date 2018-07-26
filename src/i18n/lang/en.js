@@ -120,7 +120,7 @@ const locale = {
     invite_anwser: 'Accumulated answer {times} time',
     invite_task: 'My Invitation task',
     rank_text1: 'Invite {number} freshmen',
-    rank_text2: 'Earn',
+    rank_text2: 'Earn ',
     rank_text3: 'Get Reward',
     rank_text4: 'Not play yet',
     rank_text5: ' Played on {time}',
