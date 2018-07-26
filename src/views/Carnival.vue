@@ -1,5 +1,5 @@
 <template>
-  <div class="carnival" v-webp.bg="`url('${$i18n.locale === 'hi'? 'carnival-hi-bg.jpg' :'carnival-bg.jpg'}')`">
+  <div class="carnival" v-webp.bg="`url('${$i18n.locale === 'hi'? 'carnival-hi-bg-2.jpg' :'carnival-bg.jpg'}')`">
     <div class="top">
       <p class="header" @click="goBack">
         <span class="iconfont icon-fanhui"></span>
