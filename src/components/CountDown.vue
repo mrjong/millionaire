@@ -5,11 +5,10 @@
       <count-down-compere></count-down-compere>
     </div>
     <div class="count-down-container__animation" v-show = 'startTime <= 10 && startTime !== 0'>
-      <img class="count-down-container__animation__down" src="../assets/images/left.png"/>
+      <img class="count-down-container__animation__down" v-webp="'left.png'"/>
       <img v-for="i in 10" :key="i" class="count-down-container__animation__number"
-           ref="animationNumber"
-           :src="`./static/images/${i}.png`" v-show="startTime === i"/>
-      <img class="count-down-container__animation__top" src="../assets/images/right.png"/>
+           ref="animationNumber" v-webp="`${i}.png?w=750&h=750`" v-show="startTime === i"/>
+      <img class="count-down-container__animation__top" v-webp="'right.png'"/>
     </div>
   </div>
 </template>

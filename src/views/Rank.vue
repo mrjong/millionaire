@@ -1,5 +1,5 @@
 <template>
-  <div class="rank flex-box">
+  <div class="rank flex-box bg-reset" v-webp="`url('rank-bg.jpg')`">
     <header class="flex-box flex-justify-center flex-align-center">
       <button class="back iconfont icon-fanhui" @click="back">
       </button>
@@ -100,8 +100,6 @@ export default {
   .rank {
     width: 100%;
     height: 100%;
-    background: url('../assets/images/rank-bg.jpg') top no-repeat;
-    background-size: cover;
     flex-direction: column;
     position: relative;
 

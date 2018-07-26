@@ -1,5 +1,5 @@
 <template>
-  <div class="balance-wrap">
+  <div class="balance-wrap bg-reset" v-webp.bg="`url('balance-bg.jpg')`">
     <div class="balance-wrap__title">
       <p class="balance-wrap__title__back iconfont icon-fanhui" @click="goBack"></p>
       <p class="balance-wrap__title__nickname ellipsis-1">{{userInfo.userName}}</p>
@@ -95,8 +95,6 @@ export default {
 .balance-wrap {
   width: 100%;
   height: 100%;
-  background: url('../assets/images/balance-bg.jpg') no-repeat top left;
-  background-size: cover;
   padding: 0 25px;
   box-sizing: border-box;
   display: flex;

@@ -2,7 +2,7 @@
   <div class="blank">
     <div class="content">
       <p class="back iconfont icon-fanhui" @click="close"></p>
-      <img src="../assets/images/cry-supa.png" class="img">
+      <img v-webp="'cry-supa.png'" class="img">
       <p class="title">{{$t('blank.text1')}}</p>
       <p class="hint">{{$t('blank.text2')}}</p>
     </div>
