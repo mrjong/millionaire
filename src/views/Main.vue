@@ -1,5 +1,5 @@
  <template>
-  <div class="main-container">
+  <div class="main-container bg-reset" v-webp.bg="`url('main-bg.jpg')`">
     <div class="main-container__top">
       <div class="main-container__top__back" @click="back">
         <p class="main-container__top__back__icon icon-fanhui iconfont"></p>
@@ -9,7 +9,7 @@
         <p class="main-container__top__online__num">{{onlineAmount}}</p>
       </div>
       <div class="main-container__top__logo" @click="back">
-        <img src="../assets/images/logo.png" alt="millionaire">
+        <img v-webp="'logo.png'" alt="millionaire">
       </div>
       <lang class="main-container__top__lang"></lang>
       <div class="main-container__top__music" @click="isPlay">
@@ -158,8 +158,6 @@ export default {
   .main-container{
     width: 100%;
     height:100%;
-    background: url("../assets/images/main-bg.jpg") no-repeat top left;
-    background-size: cover;
     display: flex;
     flex-direction: column;
     position: relative;

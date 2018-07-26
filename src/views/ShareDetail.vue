@@ -1,5 +1,5 @@
 <template>
-  <div class="share-detail">
+  <div class="share-detail bg-reset" v-webp.bg="`url('set-question-bg.jpg')`">
     <div class="top">
       <p class="header" @click="goBack">
         <span class="iconfont icon-fanhui"></span>
@@ -106,8 +106,6 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: url("../assets/images/set-question-bg.jpg") no-repeat top;
-  background-size: cover;
   color: #241262;
   .top{
     display: flex;

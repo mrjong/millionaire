@@ -1,12 +1,12 @@
 <template>
-  <div class="set-question">
+  <div class="set-question bg-reset" v-webp.bg="`url('set-question-bg.jpg')`">
     <div class="set-question__wrap">
       <div class="back" @click='back'>
         <p class="back__icon icon-fanhui iconfont"></p>
       </div>
       <p class="set-question__wrap__title">{{$t('setQuestionResult.title')}}</p>
       <div class="result-box">
-        <img src="../assets/images/questions-res.png" alt="">
+        <img v-webp="'questions-res.png'" alt="">
         <p class="result-title">{{$t('setQuestionResult.text1')}}</p>
         <p class="result-content">{{$t('setQuestionResult.text2')}}</p>
       </div>
@@ -67,8 +67,6 @@ export default {
 .set-question{
   width: 100%;
   min-height: 100%;
-  background: url("../assets/images/set-question-bg.jpg") no-repeat top left;
-  background-size: cover;
   color: #fff;
   &__wrap{
     height: 100%;

@@ -2,7 +2,7 @@
   <div class="video" ref="videoContainer">
     <p class="video__back iconfont icon-fanhui" @click="goBack"></p>
     <div class="logo">
-      <img src="../assets/images/await-logo.png">
+      <img v-webp="'await-logo.png'">
     </div>
     <div class="title">
       <img src="../assets/images/video-title.png">
