@@ -13,6 +13,7 @@ import im from '../assets/js/im'
 import throttle from 'lodash.throttle'
 import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
 import i18n from '../i18n'
+import gameProcess from '../assets/js/game-process'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -230,7 +231,7 @@ export default new Vuex.Store({
      */
     [type._POLL_INIT] ({dispatch, getters}) {
       initTimer = setTimeout(() => {
-        if (getters.status === status._AWAIT && !question.isTaskStart) {
+        if (getters.status === status._AWAIT && !gameProcess.data.isTaskStart) {
           dispatch(type._INIT)
         }
       }, getters.syncIntervalTime)

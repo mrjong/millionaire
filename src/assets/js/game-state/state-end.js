@@ -7,7 +7,7 @@ import utils from '../utils.js'
 import im from '../im'
 import gameProcess from '../game-process/index.js'
 
-const awaitState = {
+const endState = {
   data: {},
   $store: null,
   /**
@@ -40,4 +40,4 @@ const awaitState = {
   }
 }
 
-export default awaitState
+export default endState
