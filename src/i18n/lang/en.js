@@ -491,7 +491,7 @@ const locale = {
     balanceShareModal: {
       title: 'Withdraw Cash Successfully',
       desc: 'You\'ll get cash after reviewed, invite friends to earn more money!',
-      btn: 'Invite & Earn Cash'
+      btn: 'Rate Us 5 Stars'
     }
   }
 }
