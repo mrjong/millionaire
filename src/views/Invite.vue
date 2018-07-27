@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="num-money">
-          <p class="text" v-for="i in 3" :key="i">+ {{userInfo.currencyType}} {{i === 3? 15 : 8 + 2*i}}</p>
+          <p class="text" v-for="i in 3" :key="i">+ {{userInfo.currencyType}} {{i === 3? 40 : 10*i}}</p>
         </div>
         <div class="step-text">
           <p class="text" v-for="(val, idx) in $t('invite.steps')" :key="idx">{{val}}</p>
@@ -37,7 +37,7 @@
           <span class="icon-youjiantou iconfont arrows1"></span>
           <span class="icon-youjiantou iconfont arrows2"></span>
           <div class="progress-ball" v-for="i in 3" :key="i">
-            <span class="total-money" :class=" `progress${i}`">{{myInviteNum && myInviteNum['a' + i] ? myInviteNum['a' + i] : 0}} x {{userInfo.currencyType}}{{i === 3? 15 : 8 + 2*i}}</span>
+            <span class="total-money" :class=" `progress${i}`">{{myInviteNum && myInviteNum['a' + i] ? myInviteNum['a' + i] : 0}} x {{userInfo.currencyType}}{{i === 3? 40 :10*i}}</span>
             <img v-webp="`progress${i}.png`">
           </div>
         </div>
@@ -87,7 +87,10 @@
                 <p class="date">{{$t('invite.invite_times', {'times': val.an ? val.an: 0})}}</p>
               </div>
               <div class="invite-data">
-                <p class="money">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
+                <p class="money gray" v-if="val.type === 4" :class="{'active': val.status === 1}">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
+                <p class="money" v-else>
+                  <span v-for="i in 3" :key="i" class="gray" :class="{'active':val[`type${i-1}`] === (i === 1 ? 0: (i === 2 ? 2 : 3)) && val[`status${i - 1}`] === 1}"> +{{userInfo.currencyType}}{{val[`amount${i-1}Fmt`]}}</span>
+                </p>
                 <p class="number invite-name" v-if="val.type === 4">{{val. pnick}}</p>
                 <p class="number" @click="copy" v-else>{{$t('invite.invite_copy')}}</p>
               </div>
@@ -168,7 +171,7 @@ export default {
   },
   mounted () {
     utils.statistic('invite_earn_page', 0)
-    this.getMyInviteData()
+    this.getMyInviteData('change')
     this.myInviteTask()
   },
   methods: {
@@ -210,8 +213,6 @@ export default {
       this.index = idx
       if (idx !== 0) {
         this.getData(idx)
-      } else {
-        this.getMyInviteData()
       }
     },
     getMyInviteData () {
@@ -706,8 +707,14 @@ export default {
                 height: 40px;
                 font: 24px 'Roboto', Arial, serif;
                 line-height: 20px;
-                color:#ffb03e;
                 text-align: right;
+                color:#ffb03e;
+                .gray {
+                  color:#d9d4cd;
+                }
+                .active{
+                  color:#ffb03e;
+                }
               }
             }
           }

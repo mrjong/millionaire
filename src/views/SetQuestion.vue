@@ -1,15 +1,15 @@
 <template>
   <div class="set-question bg-reset" ref="setQestion" v-webp.bg="`url('set-question-bg.jpg')`">
     <div class="set-question__wrap" v-if="isPop">
-      <div class="back"  @click="back">
+      <section class="back"  @click="back"  id="1">
         <p class="back__icon icon-fanhui iconfont"></p>
-      </div>
+      </section>
       <p class="set-question__wrap__title">{{$t('setQuestion.title')}}</p>
       <a class="set-question__wrap__join" @click="join" ref="toFbGroup" v-if="isSetQuestion">
         <span class="set-question__wrap__join__icon iconfont icon-facebook"></span>
         {{$t('setQuestion.share_btn')}}
       </a>
-      <div class="form">
+      <section class="form">
         <div class="frame">
           <input type="text" class="form__name base" maxlength="100" :placeholder="$t('setQuestion.name')" v-model="questionInfo.author">
           <check-str-length :originalLength=100 :currentLength=questionInfo.author.length class="check-str-length-name"></check-str-length>
@@ -52,10 +52,10 @@
           </div>
         </div>
         <div class="form__submit" @click="submit">{{$t('setQuestion.submit_btn')}}</div>
-        </div>
+        </section>
     </div>
     <div class="set-question__mark" v-else>
-      <div class="bomb bg-reset bg-x-center" v-webp.bg="`url('bomb-bg.jpg')`">
+      <div class="bomb bg-reset bg-x-center" v-webp.bg="`url('bomb-bg.jpg')`" id="2">
         <img v-webp="'logo.png'" class="bomb__logo">
         <div class="bomb__content">
         <p class="bomb__content__title1">{{$t('setQuestion.question_rule.title1')}}</p>
@@ -425,8 +425,7 @@ export default {
   &__mark{
     width: 100%;
     height: 100%;
-    background-color: #000;
-    opacity: 0.8;
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     position: absolute;

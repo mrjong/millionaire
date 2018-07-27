@@ -18,7 +18,7 @@
       </div>
     </div>
     <count-down v-if="status === 2"></count-down>
-    <winners-result v-if="status === 4 && isShowTaskEnd === 2"></winners-result>
+    <winners-result v-if="status === 4 && !isTaskRespondence"></winners-result>
     <keep-alive>
       <component v-bind:is="anwseredComponent" @fail-tip="failTip" @error="onError"></component>
     </keep-alive>
