@@ -385,11 +385,15 @@ export default {
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
-      if (this.isRemider) {
-        this.isChangeReminder = true
-        this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case1'), true, true)
+      if (utils.isSupportReminder) {
+        utils.setReminder()
       } else {
-        this.isReminderPop = true
+        if (this.isRemider) {
+          this.isChangeReminder = true
+          this.BobmParamesConfig('', this.$t('await.remider_pop.cancel_case1'), true, true)
+        } else {
+          this.isReminderPop = true
+        }
       }
     },
     // 关闭游戏定时提醒弹框
