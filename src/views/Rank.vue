@@ -64,9 +64,6 @@ export default {
   mounted () {
     utils.statistic('rank_page', 0)
   },
-  updated () {
-    this.$refs['rankItems'] && this.$refs['rankItems'].scrollTo(0, 0)
-  },
   components: {
     'rank-item': rankItem,
     loading
@@ -88,6 +85,9 @@ export default {
   },
   created () {
     this.getRank()
+  },
+  updated () {
+    this.$refs['rankItems'] && this.$refs['rankItems'].scrollTo(0, 0)
   },
   watch: {
     mode () {
