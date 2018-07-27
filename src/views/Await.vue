@@ -124,14 +124,7 @@
                   @okEvent='okEvent'
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
-    <div class="browser-tip bg-noRepeat bg-cover" v-webp.bg="`url('browser-tip-bg.png')`" v-if="isShowBrowserTip">
-      <span class="iconfont icon-cuowu close" @click="isShowBrowserTip = false"></span>
-      <img class="browser-tip__icon" v-webp="'browser-tip-icon.png'"/>
-      <div class="browser-tip__text">
-        <p>{{$t('tip.downBrowser.title')}} {{$t('tip.downBrowser.desc')}}</p>
-      </div>
-      <a class="browser-tip__button bg-noRepeat ellipsis-1" v-webp.bg="`url('browser-tip-button.png')`" href="javascript:;" @click="downBrowser">{{$t('tip.downBrowser.btn')}}</a>
-    </div>
+    <browser-download-tip></browser-download-tip>
   </div>
 </template>
 <script>
@@ -150,6 +143,7 @@ import lang from '../components/Language'
 import PolicyLink from '../components/PolicyLink'
 import NewbieTask from '../components/NewbieTask'
 import NewAnnouncement from '../components/NewAnnouncement'
+import BrowserDownloadTip from '../components/BrowserDownloadTip'
 // import VideoButton from '../components/VideoButton'
 export default {
   name: 'Await',
@@ -444,7 +438,8 @@ export default {
     lang,
     PolicyLink,
     NewbieTask,
-    NewAnnouncement
+    NewAnnouncement,
+    BrowserDownloadTip
   },
   watch: {
     status: function (status, oldStatus) {
@@ -835,50 +830,6 @@ export default {
       display: flex;
       justify-content: center;
       margin: 20px auto 0;
-    }
-
-    .browser-tip {
-      display: flex;
-      align-items: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 133px;
-      color: #fff;
-      padding-right: 10px;
-      z-index: 1;
-
-      .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        opacity: 0.5;
-      }
-      img {
-        width: 90px;
-        height: 83px;
-        margin: 0 10px;
-      }
-      &__text {
-        width: 64%;
-        line-height: 1.4;
-        font: 200 24px 'Roboto,Arial,serif'
-      }
-      &__button {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translate(0,-50%);
-        color: #fff;
-        width: 150px;
-        height: 58px;
-        text-align: center;
-        background-size: 100% 100%;
-        margin-top: 10px;
-        font: 24px 'Roboto,Arial,serif';
-        line-height: 58px;
-      }
     }
   }
   @media screen and (max-width: 321px) {
