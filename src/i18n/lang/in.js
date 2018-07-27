@@ -22,6 +22,7 @@ const locale = {
     play_card_step4: 'उत्तर दें, प्रश्नोत्तरी करें,  <span class="special"> ₹1,000,000 </span>तक जीतें!',
     ses_question_btn: 'प्रश्न सेट करें',
     teamBattle: 'टीम रण',
+    carnival_text: 'क्विज़ कार्निवल ',
     referral_code_pop: {
       title: 'लागू करें रेफरल कोड',
       description: 'अतिरिक्त जीवन पाने के लिए किसी मित्र का रेफ़रल कोड दर्ज करें।',
@@ -313,6 +314,21 @@ const locale = {
     text: 'मेरा रेफ़रल कोड:',
     share_btn: 'आमंत्रण'
   },
+  carnival: {
+    share_tip_title: 'मुबारक हो, जुलाई क्विज़ कार्निवल में!!!',
+    share_tip_hint: 'रविवार कार्निवल नाइट के लिए 500,000 रुपये',
+    date: 'अवधि : 25 जुलाई - 2 9 जुलाई',
+    btn: 'अभी आमंत्रित करें',
+    text: [
+      '<span class="circle"></span>रविवार कार्निवल नाइट के लिए <span class="light">500,000</span> रुपये(10pm)',
+      '<span class="circle"></span>एक नए उपयोगकर्ता को आमंत्रित करने के बाद <span class="light">रु 10</span> प्राप्त करें, 10 बजे खेलने के लिए !!!',
+      '<span class="circle"></span>नयें उपयोगकर्ता <span class="light">रु 10</span> कामा सक्ते हैं, पहले आपको गेम खेलना है रात को 10 बजे',
+      '<span class="circle"></span><span class="light">खजाना का डिब्बा </span>आपके लिए नकद पुरस्कार के साथ 12 वीं प्रश्न @ 10 बजे',
+      '<span class="circle"></span>नए लॉग इन उपयोगकर्ताओं के लिए एक <span class="light">अतिरिक्त जीवन</span>'
+    ],
+    share_title: 'Happy July Quiz Carnival in Go!Millionaire，Rs 500,000 is coming for this Sunday Carnival Night!',
+    share_desp: 'Dear, invite you to join Happy July Quiz Carnival in Go!Millionaire，win Rs 500,000 prize together!'
+  },
   receiveCard: {
     share_title: 'I\'m playing \'Go! Millionaire\', my referral code is {code}，join us and win up to Rs.1,000,000 at 10PM every day!',
     share_descripe: 'Download Go!Millonaire Browser and use my referral code {code}, let keep winning cash every day!',
@@ -347,7 +363,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: 'Hey, Happy July Quiz Carnival this week! All logined users can get Rs 10 after first playing 10PM Quiz. Come on!',
+  NewAnnouncement: 'Dear, invite you to join Happy July Quiz Carnival! Rs 500,000 is coming for this Sunday Night!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
@@ -473,7 +489,7 @@ const locale = {
     balanceShareModal: {
       title: 'सफलतापूर्वक नकद निकालना',
       desc: 'समीक्षा के बाद आपको नकद मिल जाएगी, दोस्तों को अधिक पैसा कमाने के लिए आमंत्रित करें!',
-      btn: 'नकद आमंत्रित करें और कमाएं'
+      btn: 'हमें रेट करें - 5 स्टार'
     }
   }
 }

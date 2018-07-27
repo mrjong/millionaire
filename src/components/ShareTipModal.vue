@@ -3,7 +3,7 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <div class="fail-tip-inner">
-        <section class="fail-tip bg-reset" v-webp.bg="`url('modal-bg.png')`">
+        <section class="fail-tip bg-reset" v-webp.bg="`url('share-modal-bg.png')`">
             <div class="fail-tip-text">
             <p class="fail-tip-title">{{$t('tip.balanceShareModal.title')}}</p>
             <p class="fail-tip-desc">{{$t('tip.balanceShareModal.desc')}}</p>
@@ -41,11 +41,19 @@ export default {
   },
   methods: {
     share () {
+      var link = window.location.protocol + ''
+      var referrerId = '334004'
+      var icode = ''
+      var iversion = ''
+      setTimeout(function () {
+        window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D' + referrerId + '%26icode%3D' + icode + '%26iversion%3D' + iversion
+      }, 500)
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(link)
       // utils.statistic('referral_code_invite', 1)
-      this.close()
-      this.$emit('share', {
-        isShare: true
-      })
+      // this.close()
+      // this.$emit('share', {
+      //   isShare: true
+      // })
     },
     close () {
       this.isClose = true
@@ -68,9 +76,6 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     padding: 67px 0 53px;
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
     width: 550px;
     height: 688px;
     color: #fff;

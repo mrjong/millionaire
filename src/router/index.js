@@ -20,6 +20,7 @@ const Blank = () => import('@/views/Blank.vue')
 // const Video = () => import('@/views/Video.vue')
 // const SamllAwait = () => import('@/views/SmallAwait.vue')
 const Invite = () => import('@/views/Invite.vue')
+const Carnival = () => import('@/views/Carnival')
 
 Vue.use(Router)
 
@@ -119,6 +120,11 @@ const router = new Router({
       path: '/doubleRewardCard',
       name: 'doubleRewardCard',
       component: DoubleRewardCard
+    },
+    {
+      path: '/carnival',
+      name: 'carnival',
+      component: Carnival
     }
   ],
   scrollBehavior () {

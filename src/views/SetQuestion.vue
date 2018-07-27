@@ -58,7 +58,7 @@
       <div class="bomb bg-reset bg-x-center" v-webp.bg="`url('bomb-bg.jpg')`" id="2">
         <img v-webp="'logo.png'" class="bomb__logo">
         <div class="bomb__content">
-        <p class="bomb__content__title1">{{$t('setQuestion.question_rule.title1')}}</p>
+          <p class="bomb__content__title1">{{$t('setQuestion.question_rule.title1')}}</p>
           <p class="bomb__content__title2">{{$t('setQuestion.question_rule.title2')}}</p>
           <p class="bomb__content__clause" v-for="(item, index) in instruction" :key="index">{{item}}</p>
           <p class="bomb__content__note">{{$t('setQuestion.question_rule.notice_title')}}</p>
