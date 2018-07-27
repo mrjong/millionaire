@@ -6,7 +6,7 @@
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text2')}}</p>
     <p class="guide__text"><span class="dot"></span>{{$t('reviveGuide.text3')}}</p>
     <div class="guide__img">
-      <img src="../assets/images/light.png" class="light">
+      <img v-webp="'light.png'" class="light">
       <img src="../assets/images/lives-icon.png" class="lives">
     </div>
     <div class="guide__btn" @click="toShareDetail">

@@ -40,7 +40,7 @@
       <!-- <div class="share-success" ref="shareSuccessCard" v-if="isSucceed">
         <p class="share-success__text">SUCCESS</p>
         <div class="share-success__base">
-          <img src="../assets/images/heart-light.png" class="heart">
+          <img v-webp="'heart-light.png'" class="heart">
         </div>
         <p class="share-success__num">+1</p>
       </div> -->

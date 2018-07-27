@@ -7,7 +7,7 @@
         <p class="bubble__text" v-html="$t('newbieTask.start_page.desp')"></p>
       </div>
       <div class="supa">
-        <img src="../assets/images/task-supa.png" class="spua__img">
+        <img v-webp="'task-supa.png'" class="spua__img">
       </div>
     </div>
     <div class="task__btn" @click="doTask">{{$t('newbieTask.start_page.btn')}}</div>

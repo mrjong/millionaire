@@ -53,7 +53,7 @@ export default new Vuex.Store({
       markType: 0,
       okBtnText: i18n.t('await.referral_code_pop.ok'),
       okEvent: null,
-      hintImg: './static/images/tip-fail.png',
+      hintImg: utils.getWebpImgUrl('tip-fail.png'),
       lastTime: 3000
     },
     lives: 0,
@@ -137,7 +137,7 @@ export default new Vuex.Store({
         shouldSub: false,
         markType: 0,
         okBtnText: i18n.t('await.referral_code_pop.ok'),
-        hintImg: './static/images/tip-fail.png',
+        hintImg: utils.getWebpImgUrl('tip-fail.png'),
         lastTime: 3000
       }
     },
@@ -264,7 +264,7 @@ export default new Vuex.Store({
      */
     [type._UPDATE_AMOUNT] ({commit}) {
       im.addListener(MESSAGE_AMOUNT, (message) => {
-        const count = (message.content && message.content.extra) || 0
+        const count = (message.content && message.content.count) || 0
         commit(type._UPDATE, {
           onlineAmount: count
         })

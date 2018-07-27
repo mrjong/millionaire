@@ -41,25 +41,25 @@ export default {
     return {
       ruleList: [
         {
-          img: `./static/images/rule1.png`
+          img: utils.getWebpImgUrl(`rule1.png`)
         },
         {
-          img: `./static/images/rule2.png`
+          img: utils.getWebpImgUrl(`rule2.png`)
         },
         {
-          img: `./static/images/rule3.png`
+          img: utils.getWebpImgUrl(`rule3.png`)
         },
         {
-          img: `./static/images/rule4.png`
+          img: utils.getWebpImgUrl(`rule4.png`)
         },
         {
-          img: `./static/images/rule5.png`
+          img: utils.getWebpImgUrl(`rule5.png`)
         },
         {
-          img: `./static/images/rule6.png`
+          img: utils.getWebpImgUrl(`rule6.png`)
         },
         {
-          img: `./static/images/rule7.png`
+          img: utils.getWebpImgUrl(`rule7.png`)
         }
       ]
     }

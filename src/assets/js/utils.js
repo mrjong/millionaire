@@ -5,11 +5,12 @@ import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import md5 from 'md5'
 import {makeShortUrl, api, logout, getPersonInfo, queryAgreePolicy, syncInfo, addExtraLife} from './api'
-import {host, env} from './http'
+import {host, env, imageHost} from './http'
 import {FACEBOOK, MESSAGER, WHATSAPP, TWITTER} from './package-name'
 import {vm} from '../../main'
 import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
+import { Timer } from './timers'
 const njordGame = window.top.njordGame
 const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
@@ -188,6 +189,34 @@ const utils = {
     const regx = new RegExp(`(^|&)${name}=(\\S+?)(&|$)`)
     const search = queryUrl.match(regx)
     return (search && decodeURIComponent(search[2])) || null
+  },
+  /**
+   * 解析URL中的参数为对象
+   * @param {*} url
+   * @returns
+   */
+  parseQuery (url) {
+    /* eslint-disable no-useless-escape */
+    const query = url.replace(/[^\?&]*/, '')
+    const reg = /([^=\?&\s]+)[=\s]*([^=\?&\s]*)/g
+    const obj = {}
+    while (reg.exec(query)) {
+      obj[RegExp.$1] = RegExp.$2
+    }
+    return obj
+  },
+  /**
+   * 将参数对象字符串化为query字符串
+   * @param {*} [params={}]
+   * @returns
+   */
+  stringifyToQuery (params = {}) {
+    const keys = Object.keys(params)
+    let query = ''
+    keys.forEach((key, index) => {
+      query += index === 0 ? `?${key}=${params[key]}` : `&${key}=${params[key]}`
+    })
+    return query
   },
   storage,
   app_id: clientParams ? clientParams.appId : '100110002',
@@ -549,6 +578,30 @@ const utils = {
     return str
   },
   /**
+   * 获取兼容Webp格式图片URL
+   */
+  getWebpImgUrl (url = '') {
+    url = `${imageHost}${url}`
+    const path = url.match(/[^\?&]*/)[0]
+    const query = utils.parseQuery(url)
+    const isSupportWebpFormat = !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0
+    // 如果支持webp 设置图片格式为webp
+    if (isSupportWebpFormat) {
+      query.format = 'webp'
+    }
+    const {w: width, h: height} = query
+    // 根据屏幕宽度对宽度做适配
+    const clientWidth = document.body.clientWidth
+    let scale = clientWidth / 720 > 1 ? 1 : clientWidth / 720
+    if (+width > 0) {
+      query.w = parseInt(width * scale)
+    }
+    if (+height > 0) {
+      query.h = parseInt(height * scale)
+    }
+    return `${path}${utils.stringifyToQuery(query)}`
+  },
+  /**
    * 清除分享参数
    */
   clearShareParams () {
@@ -565,107 +618,3 @@ const utils = {
 }
 
 export default utils
-
-/**
- * 计时器
- * @class Timer
- */
-class Timer {
-  /**
-   * 定时器
-   * @memberof Timer
-   */
-  timer = null
-  /**
-   * Creates an instance of Timer.
-   * @param {any} interval 间隔时间
-   * @param {any} offset 结束时间差
-   * @param {any} completeCallback 每次完成时的回调
-   * @param {any} endCallback 计时结束后的回调
-   * @memberof Timer
-   */
-  constructor (interval = 1000, offset = 0, completeCallback, endCallback) {
-    this.interval = interval
-    this.offset = offset
-    this.completeCallback = completeCallback
-    this.endCallback = endCallback
-  }
-
-  /**
-   * 开始
-   * @memberof Timer
-   */
-  start () {
-    const {interval} = this
-    // 如果剩余时间小于间隔
-    const offset = this.offset
-    if (offset < interval) {
-      setTimeout(() => {
-        this.endCallback && this.endCallback()
-      }, offset)
-      return
-    }
-    this.timer = setInterval(() => {
-      if (this.offset > 0) {
-        const {offset} = this
-        const date = new Date(offset)
-        this.completeCallback && this.completeCallback({
-          year: date.getUTCFullYear() - 1970,
-          month: date.getUTCMonth(),
-          date: date.getUTCDate() - 1,
-          hours: date.getUTCHours(),
-          minuates: date.getUTCMinutes(),
-          seconds: Math.round(offset / 1000) % 60,
-          offset
-        })
-        // 如果剩余时间小于间隔
-        if (offset <= interval) {
-          this.stop()
-          setTimeout(() => {
-            this.endCallback && this.endCallback()
-          }, offset)
-        } else {
-          this.offset -= interval
-        }
-      } else {
-        this.stop()
-        this.endCallback && this.endCallback()
-      }
-    }, interval)
-  }
-
-  /**
-   * 停止
-   * @memberof Timer
-   */
-  stop () {
-    clearInterval(this.timer)
-  }
-
-  /**
-   * 同步结束时间
-   * @param {any} endTime
-   * @memberof Timer
-   */
-  sync (endTime) {
-    this.endTime = Date.now() + endTime
-  }
-
-  /**
-   * 添加每次完成时的监听器
-   * @param {any} callback
-   * @memberof Timer
-   */
-  addCompleteListener (callback) {
-    this.completeCallback = callback
-  }
-
-  /**
-   * 添加计时结束后的监听器
-   * @param {any} callback
-   * @memberof Timer
-   */
-  addEndListener (callback) {
-    this.endCallback = callback
-  }
-}

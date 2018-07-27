@@ -3,12 +3,12 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <div class="fail-tip-inner">
-        <section class="fail-tip">
+        <section class="fail-tip bg-reset" v-webp.bg="`url('winner-share-bg.jpg')`">
             <div class="fail-tip-text">
             <p class="fail-tip-title">{{$t('tip.wonShareModal.title')}}</p>
             <p class="fail-tip-desc">{{$t('tip.wonShareModal.desc', {money: (userInfo.myselfBonusAmount)})}}</p>
             </div>
-            <button @click="share" class="btn-share">{{$t('tip.wonShareModal.btn')}}</button>
+            <button @click="share" class="btn-share bg-cover bg-noRepeat" v-webp.bg="`url('share-tip-btn.png')`">{{$t('tip.wonShareModal.btn')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -73,10 +73,6 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     padding: 67px 0 53px;
-    background-image: url("../assets/images/winner-share-bg.jpg");
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
     width: 550px;
     height: 688px;
     color: #fff;
@@ -101,10 +97,7 @@ export default {
       margin: 0 30px;
     }
     .btn-share {
-      background: none;
-      background-image: url("../assets/images/share-tip-btn.png");
-      background-repeat: no-repeat;
-      background-size: cover;
+      background-color: rgba(0, 0, 0, 0);
       outline: none;
       border: none;
       width: 480px;

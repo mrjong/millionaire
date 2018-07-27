@@ -165,3 +165,41 @@ html, body {
 .hide {
   visibility: hidden;
 }
+
+.bg-reset {
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: cover;
+}
+
+.bg-noRepeat {
+  background-repeat: no-repeat;
+}
+
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-contain {
+  background-size: contain;
+}
+
+.bg-center {
+  background-position: center center;
+}
+
+.bg-top {
+  background-position-y: top;
+}
+
+.bg-left {
+  background-position-x: left
+}
+
+.bg-x-center {
+  background-position-x: center;
+}
+
+.bg-y-center {
+  background-position-y: center;
+}

@@ -28,7 +28,7 @@
       </answer>
     </div>
     <div class="living" v-if="isLiving">
-      <div class="living-bg">
+      <div class="living-bg bg-reset" v-webp.bg="`url('light.png')`">
         <living class="living-animation"></living>
       </div>
       <p class="revive-title">{{$t('tip.reviveSuccess.title')}}</p>
@@ -40,7 +40,7 @@
     <!-- 使用复活卡提示 -->
     <modal v-model="extraLifeTip">
       <section class="tip-extra-life">
-        <img src="../assets/images/heart-light.png" alt="" class="heart-light">
+        <img v-webp="'heart-light.png'" alt="" class="heart-light">
         <p class="tip-text">{{$t('tip.userReviveCard.title')}}</p>
         <div class="useExtraLife" @click="useRecoveryCard">
           <section class="useExtraLife_wrapper" v-if="extraLifeTip"></section>
@@ -495,8 +495,6 @@ export default {
       .living-bg{
         width: 500px;
         height: 500px;
-        background: url("../assets/images/light.png") no-repeat top;
-        background-size: cover;
         align-self: center;
         display: flex;
         justify-content: center;
