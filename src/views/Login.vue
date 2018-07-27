@@ -44,7 +44,6 @@ import loading from '../components/Loading.vue'
 import CountryList from '../components/CountryList.vue'
 import PolicyLink from '../components/PolicyLink'
 import { register, signInByPhone } from '../assets/js/api'
-import awaitState from '../assets/js/game-state/state-end.js'
 let timer = null
 export default {
   name: 'Login',
@@ -70,9 +69,6 @@ export default {
   },
   methods: {
     back () {
-      if (this.isShowTaskEnd === 1) {
-        awaitState.run()
-      }
       this.$router.replace('/')
     },
     /**
