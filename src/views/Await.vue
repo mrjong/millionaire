@@ -51,8 +51,9 @@
         <p class="share-success__num">+1</p>
       </div>
     </div> -->
+     <!-- <br><em class="scale-text">{{$t('await.come_soon')}}</em> -->
     <div class="characters">
-      <div class="item"><img v-webp="'team-battle.png'"><span>{{$t('await.teamBattle')}} <br><em class="scale-text">{{$t('await.come_soon')}}</em></span></div>
+      <div class="item"><img v-webp="'carnival-card.png'" @click="carnival"><span>{{$t('await.carnival_text')}}</span></div>
       <div class="item" @click="getSetQuestion"><img v-webp="'set-question.png'"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
@@ -221,6 +222,10 @@ export default {
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
+    },
+    carnival () {
+      this.$router.push({path: '/carnival'})
+      utils.statistic('quiz_carnival_button', 1)
     },
     // 调起输入邀请码弹框
     inputInvitation () {

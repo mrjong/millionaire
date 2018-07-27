@@ -598,8 +598,6 @@ export default {
         padding-bottom: 20px;
         .my-info{
           width: 100%;
-          background: url('../assets/images/invite-user-bg.png') no-repeat center;
-          background-size: cover;
           padding-top:37px;
           .head{
             width: 150px;

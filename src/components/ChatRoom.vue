@@ -91,11 +91,14 @@ export default {
     },
     // 消息处理器
     messageHandler (message) {
+      const {content = {}} = message
+      const {user = {}, id = '', content: msgContent = ''} = content
+      const {avatar = '', name = ''} = user
       const obj = {
-        img: message.content.user.avatar,
-        nickname: message.content.user.name,
-        msg: message.content.content,
-        msgId: message.messageId
+        img: avatar,
+        nickname: name,
+        msg: unescape(msgContent),
+        msgId: id
       }
       let msgList = this.msgList || []
       msgList.push(obj)

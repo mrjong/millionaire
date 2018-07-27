@@ -3,12 +3,12 @@
   <section class="fail-tip-wrapper">
     <modal :value="!isClose">
       <div class="fail-tip-inner">
-        <section class="fail-tip bg-reset" v-webp.bg="'winner-share-bg.jpg'">
+        <section class="fail-tip bg-reset" v-webp.bg="`url('winner-share-bg.jpg')`">
             <div class="fail-tip-text">
             <p class="fail-tip-title">{{$t('tip.wonShareModal.title')}}</p>
             <p class="fail-tip-desc">{{$t('tip.wonShareModal.desc', {money: (userInfo.myselfBonusAmount)})}}</p>
             </div>
-            <button @click="share" class="btn-share bg-reset" v-webp.bg="`url('share-tip-btn.png')`">{{$t('tip.wonShareModal.btn')}}</button>
+            <button @click="share" class="btn-share bg-cover bg-noRepeat" v-webp.bg="`url('share-tip-btn.png')`">{{$t('tip.wonShareModal.btn')}}</button>
         </section>
         <section class="fail-close-btn" @click="close">
             <img src="../assets/images/icon-fail-tip-close.png">
@@ -97,7 +97,7 @@ export default {
       margin: 0 30px;
     }
     .btn-share {
-      background: none;
+      background-color: rgba(0, 0, 0, 0);
       outline: none;
       border: none;
       width: 480px;

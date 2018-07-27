@@ -1,10 +1,10 @@
 /**
  * 游戏结束状态
  */
-/* global RongIMClient */
 import { _UPDATE, _INIT } from '../../../store/type.js'
 import { _END } from '../status'
 import utils from '../utils.js'
+import im from '../im'
 import gameProcess from '../game-process/index.js'
 
 const awaitState = {
@@ -36,7 +36,7 @@ const awaitState = {
       status: _END
     })
     this.$store.dispatch(_INIT)
-    RongIMClient.getInstance().disconnect()
+    im.disconnect()
   }
 }
 
