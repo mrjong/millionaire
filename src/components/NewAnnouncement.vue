@@ -12,13 +12,16 @@ export default {
   name: 'NewAnnouncement',
   data () {
     return {
-      isShowAnnouncement: utils.getDialogTip('life-newAnnouncement', 3)
+      isShowAnnouncement: utils.getDialogTip('0727-newAnnouncement', 3)
     }
   },
   methods: {
     closeAnnouncement () {
       this.isShowAnnouncement = false
-      utils.setDialogTip('life-newAnnouncement')
+      utils.setDialogTip('0727-newAnnouncement')
+    },
+    toCarnival () {
+      this.$router.push({path: '/carnival'})
     }
   }
 }

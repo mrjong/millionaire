@@ -141,9 +141,9 @@ const locale = {
       '3. If your friends play our game for another 5 times, you\'ll earn Rs. 15.'
     ],
     steps: [
-      'Invite friends to play once',
-      'Invite friends to play for 3 times',
-      'Invite friends to play for 5 times'
+      'Invite friends to play for 1 time',
+      'Invite friends to play for 4 times',
+      'Invite friends to play for 9 times'
     ],
     rewards: [
       'Invite 100 friends',
@@ -365,7 +365,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, invite you to join Happy July Quiz Carnival! Rs 500,000 is coming for this Sunday Night!',
+  NewAnnouncement: 'Dear, Rs 500,000 is coming for Sunday Quiz Carnival! Invite friends to active more cash!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],

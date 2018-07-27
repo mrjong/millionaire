@@ -97,7 +97,7 @@ export default {
       margin: 0 30px;
     }
     .btn-share {
-      background: none;
+      background-color: transparent;
       outline: none;
       border: none;
       width: 480px;

@@ -149,6 +149,7 @@ export default {
   name: 'Await',
   data () {
     return {
+      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -205,6 +206,13 @@ export default {
     utils.statistic('wait_page', 0)
   },
   methods: {
+    downBrowser () {
+      utils.statistic('download_button', 1)
+      setTimeout(function () {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
+      }, 500)
+      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href)
+    },
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')

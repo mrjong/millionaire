@@ -412,7 +412,6 @@ export default {
       &__text {
         font: 24px "Roboto", Arial, serif;
         line-height: 93px;
-        max-width: 350px;
       }
       .mail {
         background: url("../assets/images/icon-small-gmail.png") no-repeat
