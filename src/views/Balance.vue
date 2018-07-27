@@ -89,7 +89,7 @@ export default {
     },
     invite () {
       // 去邀请
-      this.statistic('invite_go_buttion', 1)
+      utils.statistic('invite_go_buttion', 1)
       this.$router.push({path: '/invite'})
     }
   },
