@@ -1,6 +1,6 @@
 <template>
-    <div class="announcement  bg-reset bg-center"  v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isShowAnnouncement">
-      <span class="iconfont icon-cuowu close" @click="closeAnnouncement" ></span>
+    <div class="announcement  bg-reset bg-center"  v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isClose && newAnnouncement < 3">
+      <span class="iconfont icon-cuowu close" @click="close" ></span>
       <span class="iconfont icon-laba horn"></span>
       <div class="content">{{$t('NewAnnouncement')}} <span class="to-carnival" @click="toCarnival">More</span> >></div>
     </div>
@@ -12,13 +12,24 @@ export default {
   name: 'NewAnnouncement',
   data () {
     return {
-      isShowAnnouncement: utils.getDialogTip('life-newAnnouncement', 3)
+      isClose: true
+    }
+  },
+  computed: {
+    newAnnouncement: function () {
+      if (!utils.storage.get('millionaire-carnival-newAnnouncement')) {
+        utils.storage.set('millionaire-carnival-newAnnouncement', 0)
+      }
+      return utils.storage.get('millionaire-carnival-newAnnouncement')
     }
   },
   methods: {
-    closeAnnouncement () {
-      this.isShowAnnouncement = false
-      utils.setDialogTip('life-newAnnouncement')
+    close () {
+      this.isClose = false
+      utils.storage.set('millionaire-carnival-newAnnouncement', utils.storage.get('millionaire-carnival-newAnnouncement') + 1)
+    },
+    toCarnival () {
+      this.$router.push({path: '/carnival'})
     }
   }
 }
