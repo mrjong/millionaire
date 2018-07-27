@@ -87,7 +87,9 @@
                 <p class="date">{{$t('invite.invite_times', {'times': val.an ? val.an: 0})}}</p>
               </div>
               <div class="invite-data">
-                <p class="money gray" v-if="val.type === 4" :class="{'active': val.status === 1}">+{{userInfo.currencyType}}{{val.amountFmt}}</p>
+                <p class="money" v-if="val.type === 4">
+                  <span :class="{'gray': val.status === 0}">+{{userInfo.currencyType}}{{val.amountFmt}}</span>
+                </p>
                 <p class="money" v-else>
                   <span v-for="i in 3" :key="i" class="gray" :class="{'active':val[`type${i-1}`] === (i === 1 ? 0: (i === 2 ? 2 : 3)) && val[`status${i - 1}`] === 1}"> +{{userInfo.currencyType}}{{val[`amount${i-1}Fmt`]}}</span>
                 </p>
