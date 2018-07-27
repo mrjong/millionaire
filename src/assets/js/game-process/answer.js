@@ -55,7 +55,7 @@ const answerProcess = {
       options
     }
     const answer = {
-      a: correctAnswer || {}
+      a: correctAnswer || ''
     }
     let summary = answerSummary
     const optionsMd5Map = this.$store.getters.optionsMd5Map
@@ -131,7 +131,7 @@ const answerProcess = {
         // 监听新手任务结束
         awaitState.update()
         this.$store.commit(_UPDATE, {
-          isShowTaskEnd: 2
+          isShowTaskEnd: true
         })
       } else {
         resultMsgProcess.run({

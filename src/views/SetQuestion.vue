@@ -1,7 +1,7 @@
 <template>
   <div class="set-question bg-reset" ref="setQestion" v-webp.bg="`url('set-question-bg.jpg')`">
     <div class="set-question__wrap" v-if="isPop">
-      <section class="back"  @click="back"  id="1">
+      <section class="back"  @click="back">
         <p class="back__icon icon-fanhui iconfont"></p>
       </section>
       <p class="set-question__wrap__title">{{$t('setQuestion.title')}}</p>
@@ -55,7 +55,7 @@
         </section>
     </div>
     <div class="set-question__mark" v-else>
-      <div class="bomb bg-reset bg-x-center" v-webp.bg="`url('bomb-bg.jpg')`" id="2">
+      <div class="bomb bg-reset bg-x-center" v-webp.bg="`url('bomb-bg.jpg')`">
         <img v-webp="'logo.png'" class="bomb__logo">
         <div class="bomb__content">
           <p class="bomb__content__title1">{{$t('setQuestion.question_rule.title1')}}</p>

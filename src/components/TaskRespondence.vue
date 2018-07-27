@@ -193,7 +193,7 @@ export default {
             if (this.isTaskRespondence) {
               awaitState.update()
               this.$store.commit(type._UPDATE, {
-                isShowTaskEnd: 2
+                isShowTaskEnd: true
               })
             }
           }, 3000)

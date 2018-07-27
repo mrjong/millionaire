@@ -80,7 +80,6 @@ export default {
   },
   methods: {
     cashOut () {
-      console.log()
       if (+this.userInfo.balance < (+this.withdraw) * 100) {
         this.changeMarkInfo(true, false, 0, this.$t('balanceDetail.balance_pop.no_money', {currencyType: this.userInfo.currencyType, withdraw: this.withdraw}))
       } else {
