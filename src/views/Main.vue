@@ -11,7 +11,7 @@
       <div class="main-container__top__logo" @click="back">
         <img v-webp="'logo.png'" alt="millionaire">
       </div>
-      <lang class="main-container__top__lang"></lang>
+      <lang class="main-container__top__lang" v-if="!isTaskRespondence"></lang>
       <div class="main-container__top__music" @click="isPlay">
         <img src="../assets/images/music-icon.png" v-if="isPlayingMusic">
         <img src="../assets/images/music_close-icon.png" v-else>

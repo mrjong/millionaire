@@ -16,7 +16,7 @@ import {mapGetters} from 'vuex'
 import utils from '../assets/js/utils'
 import * as type from '../store/type'
 import * as api from '../assets/js/api'
-import awaitState from '../assets/js/game-state/state-end.js'
+import awaitState from '../assets/js/game-state/state-await.js'
 import gameProcess from '../assets/js/game-process'
 export default {
   name: 'TaskResult',
@@ -55,32 +55,41 @@ export default {
     getExtraLift () {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
-      gameProcess.update({
-        isTaskStart: false
-      })
       this.$store.commit(type._UPDATE, {
         isShowTaskEnd: false,
         isTaskRespondence: false
       })
-      if (utils.isOnline) {
-        this.reportLift('online')
-      } else {
-        utils.login(() => {
-          this.reportLift('offline')
-        })
-      }
+      this.$nextTick(() => {
+        if (utils.isOnline) {
+          this.reportLift('online')
+        } else {
+          utils.login(() => {
+            this.reportLift('offline')
+          })
+        }
+      })
+      awaitState.run()
     },
     reportLift (type) {
       // 上报得复活卡
       let state = type === 'online' ? 'wait_page' : 'sigh_up'
       this.isClose = true
+      awaitState.run()
       api.addExtraLife(1).then(({data}) => {
-        if (data.result === 1 && data.code === 0) {
+        if (data.result === 1 && data.code) {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
         } else {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '0'})
         }
+        gameProcess.update({
+          isTaskStart: false
+        })
         awaitState.run()
+      }, (err) => {
+        console.log(`新手任务获取复活卡失败:`, err)
+        gameProcess.update({
+          isTaskStart: false
+        })
       })
     }
   }

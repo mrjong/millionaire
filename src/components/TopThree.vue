@@ -88,7 +88,6 @@ export default {
       }
     }
     .nickname, .number {
-      margin-top: 10px;
       color: #201a98;
       min-height: 30px;
       font: 20px 'Roboto', Arial, serif;

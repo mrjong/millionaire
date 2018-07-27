@@ -1,5 +1,5 @@
 <template>
-  <section class="select-language" v-if="status === 1 || status === 2 || watchingMode">
+  <section class="select-language" v-if="(status === 1 || status === 2 || watchingMode) && !isTaskRespondence">
     <div class="icon-lang" @click="isShowDialog = true">{{$i18n.locale.toUpperCase()}}</div>
     <lang-pop :isShowLang= "isShowDialog" @changeLang= "changeLang"></lang-pop>
   </section>
@@ -17,7 +17,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['status', 'watchingMode'])
+    ...mapGetters(['status', 'watchingMode', 'isTaskRespondence'])
   },
   methods: {
     changeLang (lang) {

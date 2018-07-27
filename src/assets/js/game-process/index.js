@@ -12,7 +12,7 @@ import utils from '../utils'
  */
 const gameProcess = {
   data: {
-    id: '',
+    id: null,
     currentState: PROCESS_COUNT_DOWN, // 当前进度
     currentIndex: 1, // 当前题目序号
     beginHostMsgList: [], // 开场串词
@@ -38,7 +38,7 @@ const gameProcess = {
    */
   init (data = {}, $store, initialState = PROCESS_COUNT_DOWN) {
     const {ri: gameInfo = {}} = data
-    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 3000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 15000, tas: answerShowTime = 10000, isEQ: isTaskStart} = gameInfo
+    const {i: id, qs: questions = [], rs: beginHostMsgList = [], cs: resultHostMsgList = [], si: hostMsgInterval = 3000, tbf: firstQuestionInterval = 30000, tqs: questionShowTime = 15000, tas: answerShowTime = 10000} = gameInfo
     this.update({
       id,
       currentState: initialState,
@@ -52,8 +52,7 @@ const gameProcess = {
       hostMsgInterval: +hostMsgInterval > 0 ? +hostMsgInterval : 3000,
       firstQuestionInterval,
       questionShowTime: +questionShowTime > 0 ? +questionShowTime : 15000,
-      answerShowTime: +answerShowTime > 0 ? +answerShowTime : 10000,
-      isTaskStart
+      answerShowTime: +answerShowTime > 0 ? +answerShowTime : 10000
     })
     this.$store = $store
     // 从本地同步进度信息

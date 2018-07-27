@@ -3247,7 +3247,7 @@ ignore@^3.3.3, ignore@^3.3.5, ignore@^3.3.6:
   version "3.3.7"
   resolved "https://npm.apuscn.com/ignore/-/ignore-3.3.7.tgz#612289bfb3c220e186a58118618d5be8c1bab021"
 
-im@1.0.10:
+im@^1.0.10:
   version "1.0.10"
   resolved "https://npm.apuscn.com/im/-/im-1.0.10.tgz#ae005d429041e6d2087945fb198426859b0ff0a3"
 
