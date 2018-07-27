@@ -12,6 +12,7 @@ import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
 import { Timer } from './timers'
 const njordGame = window.top.njordGame
+const njordSetReminder = window.top.njordSetReminder
 const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -614,6 +615,44 @@ const utils = {
    */
   isInstall (packageName) {
     return njordGame && njordGame.isPackageInstalled && njordGame.isPackageInstalled(packageName)
+  },
+  /**
+   * 是否支持设置闹钟
+   * @returns
+   */
+  isSupportReminder () {
+    return njordSetReminder && njordSetReminder.setReminder
+  },
+  /**
+   * 设置闹钟
+   * @param {*} [args={}]
+   */
+  setReminder (args = {}) {
+    if (utils.isSupportReminder) {
+      const params =
+      {
+        title: 'Set reminder',
+        quizInfo: [
+          {
+            title: 'All Answer Quizzes',
+            subTitle: 'Suggested'
+          },
+          {
+            title: 'Win Bonus at 10PM',
+            subTitle: '₹100,000',
+            time: '22:00',
+            endDate: '20181231'
+          },
+          {
+            title: 'Win Bonus at 13:30PM',
+            subTitle: '₹10,000',
+            time: '13:30',
+            endDate: '20181231'
+          }
+        ]
+      }
+      njordSetReminder.setReminder(JSON.stringify(params))
+    }
   },
   /**
    * 获取弹窗显示状态
