@@ -385,7 +385,7 @@ export default {
     // 开启游戏定时提醒
     Reminder (val) {
       this.btnStatistic(val)
-      if (utils.isSupportReminder) {
+      if (utils.isSupportReminder()) {
         utils.setReminder()
       } else {
         if (this.isRemider) {
