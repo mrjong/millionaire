@@ -136,9 +136,11 @@ const locale = {
       '6. You can not get cash/live from the friend who already registered before.'
     ],
     task_rule: [
-      '1. You can earn ₹10 after inviting 1 new user to play in one game.',
-      '2. If your friends play our game for another 3 times, you\'ll earn ₹20.',
-      '3. If your friends play our game for another 5 times, you\'ll earn ₹40.'
+      '1. Invite friends by sharing your link, ask your friends to download and sign up.',
+      '2. You can earn ₹10 after inviting 1 new user first playing 10PM quiz.',
+      '3. If the friend you invited plays 10PM quiz 4 times in total, you\'ll earn ₹20.',
+      '4. If the friend you invited plays 10PM quiz 9 times in total, you\'ll earn ₹40.',
+      'Note: This rule will take into effect from July 27th, invite more and you can win more prize.'
     ],
     steps: [
       'Invite friends to play for 1 time',

@@ -190,7 +190,9 @@ export default {
       this.dialogInfo.htmlText = `
       <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[0]')}</p>
       <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[1]')}</p>
-      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[2]')}</p>`
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[2]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[3]')}</p>
+      <p style="text-align: left;line-height: 0.4rem;">${this.$t('invite.task_rule[4]')}</p>`
     },
     rule () {
       this.showDialog = true
