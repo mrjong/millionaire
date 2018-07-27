@@ -26,7 +26,7 @@
           <p class="text" v-for="i in 3" :key="i">+ {{userInfo.currencyType}} {{i === 3? 40 : 10*i}}</p>
         </div>
         <div class="step-text">
-          <p class="text" v-for="(val, idx) in $t('invite.steps')" :key="idx">{{val}}</p>
+          <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_times',{'times': i*i})}}</p>
         </div>
       </div>
     </div>

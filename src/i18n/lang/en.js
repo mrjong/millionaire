@@ -141,9 +141,9 @@ const locale = {
       '3. If your friends play our game for another 5 times, you\'ll earn Rs. 15.'
     ],
     steps: [
-      'Invite friends to play once',
-      'Invite friends to play for 3 times',
-      'Invite friends to play for 5 times'
+      'Invite friends to play for 1 time',
+      'Invite friends to play for 4 times',
+      'Invite friends to play for 9 times'
     ],
     rewards: [
       'Invite 100 friends',
