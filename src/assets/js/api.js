@@ -49,7 +49,8 @@ export const api = {
   getIMServerAddress: '/cmp/im_url/', // 获取IM服务器地址
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsId: '/cmp/gb', // 获得宝箱id
-  getBounsBox: '/cmp/ub/' // 获得宝箱
+  getBounsBox: '/cmp/ub/', // 获得宝箱
+  myInviteTask: '/cmp/sef/' // 我邀请好友答题任务
 }
 
 export const init = function (isRefreshToken) {
@@ -488,5 +489,16 @@ export const getBounsBox = function (id) {
     app_id: utils.app_id,
     client_id: utils.clientId,
     boxId: id
+  })
+}
+
+// 我邀请的好友答题
+
+export const myInviteTask = function () {
+  return axios.get(api.myInviteTask, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
   })
 }

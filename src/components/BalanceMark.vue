@@ -63,7 +63,7 @@ export default {
   }
 }
 </script>
-<style scoped lang="less" type="text/less">
+<style lang="less" type="text/less">
   .balance-mark {
     width: 100%;
     height: 100%;
@@ -134,12 +134,13 @@ export default {
         margin-top: 25px;
         span {
           display: inline-block;
-          max-width: 47%;
-          width: 240px;
+          max-width: 70%;
+          min-width: 240px;
+          padding: 0 20px;
           height: 100%;
           border-radius: 38px;
           color: #fff;
-          font: 300 24px 'Roboto', Arial, serif;
+          font: 300 28px 'Roboto', Arial, serif;
           text-align: center;
           line-height: 77px;
         }
@@ -151,5 +152,14 @@ export default {
         }
       }
     }
+  }
+  .copy{
+    padding:20px 40px;
+    border-radius: 26px;
+    background-color: #f8f8f8;
+    color:#fbb631;
+    text-align: left;
+    font: 400 32px 'Roboto', Arial, serif;
+    margin-top: 20px;
   }
 </style>

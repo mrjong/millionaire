@@ -46,7 +46,7 @@ export default {
       this.$store.commit(type._UPDATE, {
         isShowNewbieTask: false,
         isTaskRespondence: false,
-        isShowTaskEnd: false
+        isShowTaskEnd: 1
       })
     },
     doTask () {

@@ -113,32 +113,55 @@ const locale = {
   invite: { // 邀请助力
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
-    steps_title: 'How To Earn',
+    steps_title: '100 rupees can be activated once invited a new user',
+    invite_hint: 'You\'ll get Rs. 5 if your friends invited new user to play',
+    invite_friend: '{num} Friends',
+    invite_times: 'play {times} times',
+    invite_copy: 'Earn More ',
+    invite_anwser: 'Accumulated answer {times} time',
+    invite_task: 'My Invitation task',
     rank_text1: 'Invite {number} freshmen',
-    rank_text2: 'Earn',
+    rank_text2: 'Earn ',
     rank_text3: 'Get Reward',
     rank_text4: 'Not play yet',
     rank_text5: ' Played on {time}',
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [ // 规则说明
-      '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
+      '1. You can invite friends through Facebook, WhatsApp,twitter etc.;',
       '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
       '4. You have to submit your PAN ID when you withdraw;',
       '5. The cash will be transferred in 7 days;',
       '6. You can not get cash/live from the friend who already registered before.'
     ],
+    task_rule: [
+      '1. You can earn Rs. 10 after inviting 1 new user to play in one game.',
+      '2. If your friends play our game for another 3 times, you\'ll earn Rs. 12.',
+      '3. If your friends play our game for another 5 times, you\'ll earn Rs. 15.'
+    ],
     steps: [
-      'Invite your friends to play',
-      'Ask your friends to sign up and play 10PM Quiz',
-      'You can earn Rs.10, when your friends has played this game'
+      'Invite friends to play once',
+      'Invite friends to play for 3 times',
+      'Invite friends to play for 5 times'
+    ],
+    rewards: [
+      'Invite 100 friends',
+      'Invite 200 friends',
+      'Invite 500 friends'
     ],
     rank_text: [
-      'Weekly Rank', 'Total Rank', 'My Invite'
+      'My Invite', 'Weekly Rank', 'Total Rank'
     ],
+    copy_tip: {
+      hint: 'Ask friends to keep joining quiz, you can get more bonuses.Click to copy the following sentence and send it to your friends.',
+      content: 'Hi, I have already won {money} rupees in this quiz. Tonight at 10PM, don\'t forget to join together.',
+      btn: 'Click to Copy'
+    },
     no_list_title: 'No Friends invited',
-    no_list_text: '. Invite friends to earn cash right now!'
+    no_list_text: '. Invite friends to earn cash right now!',
+    copyright: 'GOM reserves all the rights of final interpretation',
+    get_more: 'Get More'
   },
   login: { // 登录页面
     title: 'Sign Up',

@@ -59,19 +59,18 @@ export default {
       username: '',
       phoneNumber: '',
       code: '',
-      isAgree: true,
-      isShowTaskEnd: 'isShowTaskEnd'
+      isAgree: true
     }
   },
   computed: {
-    ...mapGetters(['status', 'phoneNationCode', 'isInputting'])
+    ...mapGetters(['status', 'phoneNationCode', 'isInputting', 'isShowTaskEnd'])
   },
   mounted () {
     utils.statistic('login_page', 0)
   },
   methods: {
     back () {
-      if (!this.isShowTaskEnd) {
+      if (this.isShowTaskEnd === 1) {
         awaitState.run()
       }
       this.$router.replace('/')

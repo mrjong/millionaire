@@ -131,7 +131,7 @@ const answerProcess = {
         // 监听新手任务结束
         awaitState.update()
         this.$store.commit(_UPDATE, {
-          isShowTaskEnd: true
+          isShowTaskEnd: 2
         })
       } else {
         resultMsgProcess.run({

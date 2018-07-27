@@ -46,7 +46,7 @@ export default {
         isTaskStart: false
       })
       this.$store.commit(type._UPDATE, {
-        isShowTaskEnd: false,
+        isShowTaskEnd: 1,
         isTaskRespondence: false
       })
       awaitState.run()
@@ -59,7 +59,7 @@ export default {
         isTaskStart: false
       })
       this.$store.commit(type._UPDATE, {
-        isShowTaskEnd: false,
+        isShowTaskEnd: 1,
         isTaskRespondence: false
       })
       if (utils.isOnline) {
@@ -74,13 +74,13 @@ export default {
       // 上报得复活卡
       let state = type === 'online' ? 'wait_page' : 'sigh_up'
       this.isClose = true
+      awaitState.run()
       api.addExtraLife(1).then(({data}) => {
-        if (data.result === 1 && data.code === 0) {
+        if (data.result === 1 && data.code) {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '1'})
         } else {
           utils.statistic('get_more_extra', 1, {to_destination_s: state, result_code_s: '0'})
         }
-        awaitState.run()
       })
     }
   }
