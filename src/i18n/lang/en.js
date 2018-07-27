@@ -136,9 +136,9 @@ const locale = {
       '6. You can not get cash/live from the friend who already registered before.'
     ],
     task_rule: [
-      '1. You can earn Rs. 10 after inviting 1 new user to play in one game.',
-      '2. If your friends play our game for another 3 times, you\'ll earn Rs. 12.',
-      '3. If your friends play our game for another 5 times, you\'ll earn Rs. 15.'
+      '1. You can earn ₹10 after inviting 1 new user to play in one game.',
+      '2. If your friends play our game for another 3 times, you\'ll earn ₹20.',
+      '3. If your friends play our game for another 5 times, you\'ll earn ₹40.'
     ],
     steps: [
       'Invite friends to play for 1 time',
