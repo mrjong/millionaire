@@ -62,7 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['status', 'phoneNationCode', 'isInputting', 'isShowTaskEnd'])
+    ...mapGetters(['status', 'phoneNationCode', 'isInputting'])
   },
   mounted () {
     utils.statistic('login_page', 0)

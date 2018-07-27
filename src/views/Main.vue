@@ -26,7 +26,7 @@
     <!-- <task-respondence v-show="status === 3 && questionStatus !== 8 && isTaskRespondence"></task-respondence> -->
     <compere v-show="status === 3 && questionStatus === 8"></compere>
     <chat-room v-if="!isTaskRespondence"></chat-room>
-    <task-result v-if="status === 3 && isShowTaskEnd === 2"></task-result>
+    <task-result v-if="status === 3 && isShowTaskEnd"></task-result>
     <bouns-tip v-if="hasBounsBox && isOnline"></bouns-tip>
     <!-- <new-announcement v-if="status === 2"></new-announcement> -->
     <balance-mark style="text-align:center;" v-if="showDialog" :data-info="dialogInfo" @okEvent='sure'></balance-mark>

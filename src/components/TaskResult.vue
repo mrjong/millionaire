@@ -46,7 +46,7 @@ export default {
         isTaskStart: false
       })
       this.$store.commit(type._UPDATE, {
-        isShowTaskEnd: 1,
+        isShowTaskEnd: false,
         isTaskRespondence: false
       })
       awaitState.run()
@@ -56,7 +56,7 @@ export default {
       this.isClose = true
       utils.statistic('wait_page', 1, {to_destination_s: 'referral_code_guide'}, 'wait_page')
       this.$store.commit(type._UPDATE, {
-        isShowTaskEnd: 1,
+        isShowTaskEnd: false,
         isTaskRespondence: false
       })
       this.$nextTick(() => {

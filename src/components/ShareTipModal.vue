@@ -41,19 +41,10 @@ export default {
   },
   methods: {
     share () {
-      var link = window.location.protocol + ''
-      var referrerId = '334004'
-      var icode = ''
-      var iversion = ''
       setTimeout(function () {
-        window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D' + referrerId + '%26icode%3D' + icode + '%26iversion%3D' + iversion
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334004'
       }, 500)
-      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(link)
-      // utils.statistic('referral_code_invite', 1)
-      // this.close()
-      // this.$emit('share', {
-      //   isShare: true
-      // })
+      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D334004'
     },
     close () {
       this.isClose = true
@@ -101,7 +92,7 @@ export default {
       margin: 0 30px;
     }
     .btn-share {
-      background: none;
+      background-color: transparent;
       outline: none;
       border: none;
       width: 480px;
