@@ -113,32 +113,57 @@ const locale = {
   invite: { // 邀请助力
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
-    steps_title: 'How To Earn',
+    steps_title: '100 rupees can be activated once invited a new user',
+    invite_hint: 'You\'ll get ₹5 if your friends invited new user to play',
+    invite_friend: '{num} Friends',
+    invite_times: 'play {times} times',
+    invite_copy: 'Earn More ',
+    invite_anwser: 'Accumulated answer {times} time',
+    invite_task: 'My Invitation task',
     rank_text1: 'Invite {number} freshmen',
-    rank_text2: 'Earn',
+    rank_text2: 'Earn ',
     rank_text3: 'Get Reward',
     rank_text4: 'Not play yet',
     rank_text5: ' Played on {time}',
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
     rule: [ // 规则说明
-      '1. You can invite friends through Facebook, WhatsApp，twitter etc.;',
+      '1. You can invite friends through Facebook, WhatsApp,twitter etc.;',
       '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
       '3. You can do cashout with Paytm account when your balance reaches Rs. 150;',
       '4. You have to submit your PAN ID when you withdraw;',
       '5. The cash will be transferred in 7 days;',
       '6. You can not get cash/live from the friend who already registered before.'
     ],
+    task_rule: [
+      '1. Invite friends by sharing your link, ask your friends to download and sign up.',
+      '2. You can earn ₹10 after inviting 1 new user first playing 10PM quiz.',
+      '3. If the friend you invited plays 10PM quiz 4 times in total, you\'ll earn ₹20.',
+      '4. If the friend you invited plays 10PM quiz 9 times in total, you\'ll earn ₹40.',
+      'Note: This rule will take into effect from July 27th, invite more and you can win more prize.'
+    ],
     steps: [
-      'Invite your friends to play',
-      'Ask your friends to sign up and play 10PM Quiz',
-      'You can earn Rs.10, when your friends has played this game'
+      'Invite friends to play for 1 time',
+      'Invite friends to play for 4 times',
+      'Invite friends to play for 9 times'
+    ],
+    rewards: [
+      'Invite 100 friends',
+      'Invite 200 friends',
+      'Invite 500 friends'
     ],
     rank_text: [
-      'Weekly Rank', 'Total Rank', 'My Invite'
+      'My Invite', 'Weekly Rank', 'Total Rank'
     ],
+    copy_tip: {
+      hint: 'Ask friends to keep joining quiz, you can get more bonuses.Click to copy the following sentence and send it to your friends.',
+      content: 'Hi, I have already won {money} rupees in this quiz. Tonight at 10PM, don\'t forget to join together.',
+      btn: 'Click to Copy'
+    },
     no_list_title: 'No Friends invited',
-    no_list_text: '. Invite friends to earn cash right now!'
+    no_list_text: '. Invite friends to earn cash right now!',
+    copyright: 'GOM reserves all the rights of final interpretation',
+    get_more: 'Get More'
   },
   login: { // 登录页面
     title: 'Sign Up',
@@ -342,7 +367,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, invite you to join Happy July Quiz Carnival! Rs 500,000 is coming for this Sunday Night!',
+  NewAnnouncement: 'Dear, Rs 500,000 is coming for Sunday Quiz Carnival! Invite friends to active more cash!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -468,7 +493,7 @@ const locale = {
     balanceShareModal: {
       title: 'Withdraw Cash Successfully',
       desc: 'You\'ll get cash after reviewed, invite friends to earn more money!',
-      btn: 'Invite & Earn Cash'
+      btn: 'Rate Us 5 Stars'
     }
   }
 }

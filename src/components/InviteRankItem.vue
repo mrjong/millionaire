@@ -7,7 +7,7 @@
       </div>
       <p class="nickname">{{BoardData.nick}}</p>
       <div class="invite-data">
-        <p class="number">{{$t('invite.rank_text1', {number: BoardData.sc})}}</p>
+        <p class="number">{{$t('invite.rank_text1', {number: BoardData.pc})}}</p>
         <p class="money">{{$t('invite.rank_text2')}}{{userInfo.currencyType}}{{BoardData.amountFmt}}</p>
       </div>
     </div>
@@ -32,6 +32,7 @@ export default {
 
 <style scoped lang="less" type="text/less">
 .rank {
+  margin-top: 30px;
   padding:20px 20px 0;
   .rank-item {
     width: 100%;

@@ -12,6 +12,7 @@ import { _UPDATE, HOME_UPDATE } from '../../store/type'
 import currency from './currency'
 import { Timer } from './timers'
 const njordGame = window.top.njordGame
+const njordSetReminder = window.top.njordSetReminder
 const ma_js_i = window.top.ma_js_i
 const TercelAutoPlayJs = window.top.TercelAutoPlayJs
 
@@ -614,6 +615,72 @@ const utils = {
    */
   isInstall (packageName) {
     return njordGame && njordGame.isPackageInstalled && njordGame.isPackageInstalled(packageName)
+  },
+  /**
+   * 是否支持设置闹钟
+   * @returns
+   */
+  isSupportReminder () {
+    return njordSetReminder && njordSetReminder.setReminder
+  },
+  /**
+   * 设置闹钟
+   * @param {*} [args={}]
+   */
+  setReminder (args = {}) {
+    if (utils.isSupportReminder) {
+      const params =
+      {
+        title: 'Set reminder',
+        quizInfo: [
+          {
+            title: 'All Answer Quizzes',
+            subTitle: 'Suggested'
+          },
+          {
+            title: 'Win Bonus at 10PM',
+            subTitle: '₹100,000',
+            time: '22:00',
+            endDate: '20181231'
+          },
+          {
+            title: 'Win Bonus at 13:30PM',
+            subTitle: '₹10,000',
+            time: '13:30',
+            endDate: '20181231'
+          }
+        ]
+      }
+      njordSetReminder.setReminder(JSON.stringify(params))
+    }
+  },
+  /**
+   * 获取弹窗显示状态
+   * @param {*} key 弹窗提示key值
+   * @param {*} limit 显示上限次数
+   */
+  getDialogTip (key, limit = Infinity) {
+    const tip = utils.storage.get('millionaire-tip-show') || {}
+    const dialog = tip[key] || {}
+    if (window[`tip-${key}-is-view`]) {
+      return false
+    }
+    if (dialog.count >= limit) {
+      return false
+    }
+    return true
+  },
+  /**
+   * 设置弹窗显示状态为已显示
+   * @param {*} key 弹窗提示key值
+   */
+  setDialogTip (key) {
+    const tip = utils.storage.get('millionaire-tip-show') || {}
+    const dialog = tip[key] || {}
+    window[`tip-${key}-is-view`] = true
+    dialog.count = (+dialog.count || 0) + 1
+    tip[key] = dialog
+    utils.storage.set('millionaire-tip-show', tip)
   }
 }
 
