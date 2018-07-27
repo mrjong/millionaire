@@ -32,6 +32,7 @@ export default {
 
 <style scoped lang="less" type="text/less">
 .rank {
+  margin-top: 30px;
   padding:20px 20px 0;
   .rank-item {
     width: 100%;

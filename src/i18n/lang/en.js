@@ -114,7 +114,7 @@ const locale = {
     rule_bnt: 'Rules',
     invite_btn: 'Invite & Earn Cash',
     steps_title: '100 rupees can be activated once invited a new user',
-    invite_hint: 'You\'ll get Rs. 5 if your friends invited new user to play',
+    invite_hint: 'You\'ll get ₹5 if your friends invited new user to play',
     invite_friend: '{num} Friends',
     invite_times: 'play {times} times',
     invite_copy: 'Earn More ',

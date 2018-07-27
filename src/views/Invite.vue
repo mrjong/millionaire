@@ -29,6 +29,7 @@
           <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_times',{'times': i*i})}}</p>
         </div>
       </div>
+      <div class="invite__step__btn">{{$t('invite.invite_hint')}}</div>
     </div>
     <div class="invite__mytask">
       <p class="invite__mytask__title">{{$t('invite.invite_task')}}</p>
@@ -49,7 +50,6 @@
         </div>
       </div>
     </div>
-    <div class="invite__rewards__btn">{{$t('invite.invite_hint')}}</div>
     <!-- <div class="invite__rewards">
       <p class="invite__rewards__title">{{$t('invite.steps_title')}}</p>
       <div class="invite__rewards__content">
@@ -360,13 +360,14 @@ export default {
     &__rule {
       right: 0;
       width: 100px;
-      border-top-left-radius: 24px 24px;
-      border-bottom-left-radius: 24px 24px;
+      border-top-left-radius: 50px 50px;
+      border-bottom-left-radius: 50px 50px;
+      padding-left: 10px;
     }
     &__title {
       width: 620px;
-      margin: 0 auto 250px;
-      padding-top: 70px;
+      margin: 0 auto 220px;
+      padding-top: 50px;
       &__img {
         max-width: 100%;
         width: 620px;
@@ -405,9 +406,10 @@ export default {
       background-color: #fff;
       border-radius: 24px;
       margin: 25px auto;
-      padding: 30px;
+      padding: 30px 0;
       &__title{
-        margin-bottom: 30px;
+        width: 90%;
+        margin: 0 auto 30px;
         color: #201a98;
         font:600 32px 'Roboto', Arial, serif;
         text-align: center;
@@ -535,12 +537,12 @@ export default {
         }
       }
       &__btn {
-        width: 680px;
-        padding: 30px;
+        width: 600px;
+        padding: 24px;
         font: 400 24px "Roboto", Arial, serif;
         text-align: center;
         color: #fff;
-        border-radius:26px;
+        border-radius:12px;
         background:linear-gradient(left, #f6cd46 , #fc642b);
         background:-webkit-linear-gradient(left, #f6cd46 , #fc642b);
         margin: 45px auto 0;
@@ -646,7 +648,7 @@ export default {
             height: 120px;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(34,15,96,0.2);
+            border-bottom: 1px solid rgba(34,15,96,0.1);
             .index {
               align-self: center;
               color:#201a98;
