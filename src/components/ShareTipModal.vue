@@ -41,11 +41,10 @@ export default {
   },
   methods: {
     share () {
-      // utils.statistic('referral_code_invite', 1)
-      this.close()
-      this.$emit('share', {
-        isShare: true
-      })
+      setTimeout(function () {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334004'
+      }, 500)
+      window.location.href = 'market://details?id=com.millionaire.aries&referrer=id%3D334004'
     },
     close () {
       this.isClose = true
@@ -93,7 +92,7 @@ export default {
       margin: 0 30px;
     }
     .btn-share {
-      background: none;
+      background-color: transparent;
       outline: none;
       border: none;
       width: 480px;

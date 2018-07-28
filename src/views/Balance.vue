@@ -28,6 +28,10 @@
       <p class="balance-wrap__operate__btn" @click="cashOut">{{$t('balance.cash_out_btn')}}</p>
     </div>
     <policy-link></policy-link>
+    <div class="invite-activity-btn" @click="invite">
+      <img v-webp="'balance-invite-btn-hi.png'"  v-if="$i18n.locale === 'hi'">
+      <img v-webp="'balance-invite-btn.png'"  v-else>
+    </div>
     <login-tip v-if="showLogin" @loginTipClose="showLogin = false" desp="You can't cash out without logging in. If you don't login within 24 hours, your balance will be reset to zero after that."></login-tip>
     <loading v-if="showLoading"></loading>
   </div>
@@ -82,6 +86,11 @@ export default {
           this.$store.dispatch(type._INIT)
         })
       }
+    },
+    invite () {
+      // 去邀请
+      utils.statistic('invite_go_buttion', 1)
+      this.$router.push({path: '/invite'})
     }
   },
   components: {
@@ -133,8 +142,7 @@ export default {
   }
   &__contain {
     width: 100%;
-    height: 100%;
-    flex: 1;
+    height: 50%;
     min-height: 384px;
     .balance-hint{
       color: #fff;
@@ -216,7 +224,6 @@ export default {
   &__operate {
     width: 100%;
     display: block;
-    margin-bottom: 50px;
     &__tip {
       color: #fff;
       font: 300 24px/30px 'Roboto', Arial, serif;
@@ -231,6 +238,14 @@ export default {
       background: rgba(250,167,23, 0.95);
       text-align: center;
       font: 300 36px/94px 'Roboto', Arial, serif;
+    }
+  }
+  .invite-activity-btn{
+    width: 663px;
+    height: 174px;
+    img{
+      width: 100%;
+      height: 100%;
     }
   }
 }
