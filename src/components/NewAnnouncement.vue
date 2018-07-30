@@ -2,7 +2,7 @@
     <div class="announcement  bg-reset bg-center"  v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isShowAnnouncement">
       <span class="iconfont icon-cuowu close" @click="closeAnnouncement" ></span>
       <span class="iconfont icon-laba horn"></span>
-      <div class="content">{{$t('NewAnnouncement')}} <span class="highlight" @click="toInvite">Invite now >></span></div>
+      <div class="content">{{$t('NewAnnouncement')}}</div>
     </div>
 </template>
 
