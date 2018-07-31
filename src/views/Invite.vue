@@ -47,7 +47,7 @@
         </div>
         <div class="num-money">
           <p class="text friend" v-for="i in 3" :key="i">
-            <span class="friend-num">{{myInviteNum['a0'] === undefined || myInviteNum['a0'] === 0 ? 0 : (myInviteNum['a' + i] || 0) + '/' + (myInviteNum['a' + (i - 1)] || 0)}}</span>
+            <span class="friend-num">{{myInviteNum['a' + (i - 1)] === undefined || myInviteNum['a' + (i - 1)] === 0 ? 0 : (myInviteNum['a' + i] || 0) + '/' + (myInviteNum['a' + (i - 1)])}}</span>
             {{$t('invite.invite_friend')}}
           </p>
         </div>

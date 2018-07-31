@@ -317,7 +317,7 @@ const locale = {
   },
   shareDetail: { // 分享详情页
     title: 'Extra Lives',
-    describe1: 'You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game except the last question.',
+    describe1: 'You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game.',
     describe2: 'You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.',
     text: 'My Referral Code:',
     share_btn: 'Invite'
