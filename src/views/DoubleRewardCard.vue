@@ -3,9 +3,9 @@
     <BackArrow class="double-reward-card__back"></BackArrow>
     <div class="double-reward-rule bg-cover" v-webp.bg="`url('double-rule-bg.jpg')`">
       <h2>HOW TO USE</h2>
-      <p>1. Double Prize Cards are only available after you won more than once at 10PM before today.</p>
-      <p>2. With it, you prize will double after you win at the 10PM game in 3 days.</p>
-      <p>3. A 'Doube Prize Card' can only be used after login, and it will expire after 3 days.</p>
+      <p>1. Double Prize Cards are only available for people who joined 10PM quiz from July 27th to 30th.</p>
+      <p>2. With it, you prize will automatically double after you win the 10PM game during July 31th to August 2th.</p>
+      <p>3. A 'Doube Prize Card' can only double once after login, and it will expire after 3 days.</p>
     </div>
     <div class="double-reward-list">
         <div class="double-reward-list_item"
@@ -78,20 +78,20 @@ export default {
     width: 660px;
     height: 470px;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: auto;
     padding: 0 20px 20px;
     color: #fff;
 
     h2 {
       text-align: center;
       font-size: 32px;
-      margin: 34px 0 28px;
+      margin: 28px 0 20px;
       font-family: "Roboto", Arial, serif;
       font-weight: bold;
     }
 
     p {
-      font: normal 28px/1.8 "Roboto", Arial, serif;
+      font: normal 28px/1.5 "Roboto", Arial, serif;
     }
   }
   &-card {
