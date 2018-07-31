@@ -367,7 +367,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, share your link and invite friends to join 10PM Quiz, increase your balance quickly!',
+  NewAnnouncement: 'Dear, this Wednesday night prize will be ₹150,000. Cash is raining on the #MagicWednesday, join us to win more!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
