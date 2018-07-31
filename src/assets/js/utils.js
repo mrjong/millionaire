@@ -229,7 +229,7 @@ const utils = {
   raceId: '', // 本场比赛ID
   actUrl: 'http://bit.ly/VoteForYourCity', // 活动URL
   icode: shareParams ? shareParams.icode : null,
-
+  isOriginImgUrl: true, // 是否使用原始图片URL，不使用前端图片服务
   /**
    * 关闭客户端WebView
    */
@@ -582,6 +582,9 @@ const utils = {
    * 获取兼容Webp格式图片URL
    */
   getWebpImgUrl (url = '') {
+    if (utils.isOriginImgUrl) {
+      return `./static/images/${url}`
+    }
     url = `${imageHost}${url}`
     const path = url.match(/[^\?&]*/)[0]
     const query = utils.parseQuery(url)
