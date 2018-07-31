@@ -13,8 +13,28 @@
       </div>
     </div>
     <div class="invite__step">
-      <p class="invite__step__title">{{$t('invite.steps_title')}} <span class="icon-shuoming iconfont instruct" @click="instruct"></span></p>
+      <p class="invite__step__title">{{$t('invite.instrcution_title')}}</p>
       <div class="invite__step__content">
+        <div class="icon-img">
+          <span class="icon-youjiantou iconfont arrows1"></span>
+          <span class="icon-youjiantou iconfont arrows2"></span>
+          <div class="icon" v-for="i in 3" :key="i">
+            <img v-webp="`invite-icon${i}.png`">
+          </div>
+        </div>
+        <div class="num-img">
+          <div class="num" v-for="i in 3" :key="i">
+            <img v-webp="`invite-step${i}.png`">
+          </div>
+        </div>
+        <div class="step-text instrcution">
+          <p class="text" v-for="(val, idx) in $t('invite.instrcution')" :key="idx">{{val}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="invite__mytask">
+      <p class="invite__mytask__title">{{$t('invite.steps_title')}} <span class="icon-shuoming iconfont instruct" @click="instruct"></span></p>
+      <div class="invite__mytask__content">
         <div class="icon-img">
           <span class="icon-youjiantou iconfont arrows1"></span>
           <span class="icon-youjiantou iconfont arrows2"></span>
@@ -23,15 +43,21 @@
           </div>
         </div>
         <div class="num-money">
-          <p class="text" v-for="i in 3" :key="i">+ {{userInfo.currencyType}} {{i === 3? 40 : 10*i}}</p>
+          <p class="text" v-for="i in 3" :key="i">{{myInviteNum['a' + i] || 0}} x {{userInfo.currencyType}}{{i === 3? 40 :10*i}}</p>
         </div>
-        <div class="step-text">
+        <div class="num-money">
+          <p class="text friend" v-for="i in 3" :key="i">
+            <span class="friend-num">{{myInviteNum['a' + (i - 1)] === undefined || myInviteNum['a' + (i - 1)] === 0 ? 0 : (myInviteNum['a' + i] || 0) + '/' + (myInviteNum['a' + (i - 1)])}}</span>
+            {{$t('invite.invite_friend')}}
+          </p>
+        </div>
+        <div class="step-text invite-times">
           <p class="text" v-for="i in 3" :key="i">{{$t('invite.invite_times',{'times': i*i})}}</p>
         </div>
       </div>
       <div class="invite__step__btn">{{$t('invite.invite_hint')}}</div>
     </div>
-    <div class="invite__mytask">
+    <!-- <div class="invite__mytask">
       <p class="invite__mytask__title">{{$t('invite.invite_task')}}</p>
       <div class="invite__mytask__content">
         <div class="icon-img">
@@ -49,7 +75,7 @@
           <p class="text" v-for="(val, idx) in 3" :key="idx">{{$t('invite.invite_times', {'times': val*val})}}</p>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <div class="invite__rewards">
       <p class="invite__rewards__title">{{$t('invite.steps_title')}}</p>
       <div class="invite__rewards__content">
@@ -485,6 +511,24 @@ export default {
             }
           }
         }
+        .num-img {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          justify-content: center;
+          align-items: flex-start;
+          margin-bottom: 15px;
+          .num {
+            flex: 1;
+            align-self: center;
+            img {
+              width: 60px;
+              height: 60px;
+              margin: 0 auto;
+            }
+          }
+        }
         .reward-icon{
           .icon{
             display: flex;
@@ -521,6 +565,15 @@ export default {
               margin: 0 auto;
             }
           }
+          .friend{
+            color: #201a98;
+            margin-top: 10px;
+            font-weight: 400;
+            .friend-num {
+              color: #fa8d36;
+              font: 600 30px 'Roboto', Arial, serif;
+            }
+          }
         }
         .step-text ,.rewards-text{
           display: flex;
@@ -528,11 +581,21 @@ export default {
           justify-content: space-between;
           color: #201a98;
           font: 24px 'Roboto', Arial, serif;
+          padding: 0 20px;
           .text{
             line-height: 30px;
             width: 90%;
             text-align: center;
           }
+        }
+        .instrcution{
+          .text{
+            text-align: left;
+            padding-right: 8px;
+          }
+        }
+        .invite-times{
+          padding: 0;
         }
         .rewards-text{
           margin-top: 20px;
