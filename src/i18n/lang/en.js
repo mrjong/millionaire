@@ -115,7 +115,7 @@ const locale = {
     invite_btn: 'Invite & Earn Cash',
     steps_title: '70 rupees can be activated once invited a new user',
     invite_hint: 'You\'ll get ₹5 if your friends invited new user to play',
-    invite_friend: '{num} Friends',
+    invite_friend: 'Friends',
     invite_times: 'play {times} times',
     invite_copy: 'Earn More ',
     invite_anwser: 'Accumulated answer {times} time',
@@ -127,6 +127,12 @@ const locale = {
     rank_text5: ' Played on {time}',
     rank_text6: ' Invited on {time}',
     rank_hint: '- You will get cash after the friends invited first playing \'Go!Millionaire\'-',
+    instrcution_title: 'How To Invite',
+    instrcution: [
+      'Click invite button and share to invite your freinds',
+      'New users open your sharing link to download and sign up',
+      'Both of you get ₹10 after his first answering 10PM quiz'
+    ],
     rule: [ // 规则说明
       '1. You can invite friends through Facebook, WhatsApp,twitter etc.;',
       '2. The one you invite should play \'Go! Millionaire\', then only you can receive the rewards रु10',
@@ -311,7 +317,7 @@ const locale = {
   },
   shareDetail: { // 分享详情页
     title: 'Extra Lives',
-    describe1: 'You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game except the last question.',
+    describe1: 'You can use EXTRA LIVES when you answer incorrectly after logging in. It will be applied automatically. Two extra lives could be used per game.',
     describe2: 'You can get it through INVITING a new user. Every time he/she signs up with your Referral Code and play our game, both of you get one.',
     text: 'My Referral Code:',
     share_btn: 'Invite'
@@ -367,7 +373,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, this Wednesday night prize will be ₹150,000. Cash is raining on the #MagicWednesday, join us to win more!',
+  NewAnnouncement: 'Hey, Wednesday Prize at 10PM: Rs 150,000! Double cards is giving to people joined 10PM quiz from July 27th to 30th!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
