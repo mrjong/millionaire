@@ -10,8 +10,7 @@ import gameState from '../assets/js/game-state'
 import * as status from '../assets/js/status'
 import {init, syncTime} from '../assets/js/api'
 import im from '../assets/js/im'
-import throttle from 'lodash.throttle'
-import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, NETWORK_UNAVAILABLE, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
+import {MESSAGE_AMOUNT, MESSAGE_RESULT, MESSAGE_END, MESSAGE_HOST, MESSAGE_EXTRA_LIFE} from '../assets/js/listener-type'
 import i18n from '../i18n'
 import gameProcess from '../assets/js/game-process'
 Vue.use(Vuex)
@@ -183,17 +182,6 @@ export default new Vuex.Store({
      * @param {any} {dispatch}
      */
     [type._INIT_LISTENER] ({dispatch, commit, getters}) {
-      // 添加网络状况监听器
-      im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
-        !utils.disableNetworkTip && dispatch(type._OPEN_DIALOG, {
-          htmlTitle: i18n.t('tip.networkNotice.title'),
-          htmlText: i18n.t('tip.networkNotice.desp'),
-          shouldSub: false,
-          markType: 0,
-          okBtnText: i18n.t('tip.networkNotice.btn')
-        })
-        utils.statistic('NETWORK_UNAVAILABLE', 6)
-      }, 30000))
       // 添加复活卡消息监听器
       im.addListener(MESSAGE_EXTRA_LIFE, (message) => {
         console.log('复活卡消息', message)
