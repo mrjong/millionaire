@@ -371,7 +371,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: 'Dear, this Wednesday night prize will be ₹150,000. Cash is raining on the #MagicWednesday, join us to win more!',
+  NewAnnouncement: 'Hey, Wednesday Prize at 10PM: Rs 150,000! Double cards is giving to people joined 10PM quiz from July 27th to 30th!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
