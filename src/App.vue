@@ -9,6 +9,7 @@
     <loading v-if="loading"></loading>
     <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
     <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
+    <network-tip @close="isShowNetworkTip = false" v-model="isShowNetworkTip"></network-tip>
   </div>
 </template>
 
@@ -25,7 +26,9 @@ import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
 import WonTipModal from './components/WonTipModal'
 import ReviveCard from './components/ReviveCard'
-
+import NetworkTip from './components/NetworkTip'
+import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
+import throttle from 'lodash.throttle'
 export default {
   name: 'App',
   data () {
@@ -48,7 +51,8 @@ export default {
         markType: 0,
         okBtnText: ''
       },
-      isShowTipModal: false
+      isShowTipModal: false,
+      isShowNetworkTip: false
     }
   },
   computed: {
@@ -129,6 +133,17 @@ export default {
       this.windowInnerHeight = window.innerHeight
       this.timeOffset = Date.now()
     })
+
+    // 添加网络状况监听器
+    im.addListener(NETWORK_UNAVAILABLE, throttle(() => {
+      if (!utils.disableNetworkTip) {
+        this.isShowNetworkTip = true
+        setTimeout(() => {
+          this.isShowNetworkTip = false
+        }, 6000)
+      }
+      utils.statistic('NETWORK_UNAVAILABLE', 6)
+    }, 45000))
   },
   methods: {
     init () {
@@ -231,7 +246,8 @@ export default {
     BalanceMark,
     ReviveGuide,
     WonTipModal,
-    ReviveCard
+    ReviveCard,
+    NetworkTip
   },
   watch: {
     status: function (status, oldStatus) {
