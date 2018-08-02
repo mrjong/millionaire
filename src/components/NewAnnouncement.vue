@@ -2,7 +2,7 @@
     <div class="announcement  bg-reset bg-center"  v-webp.bg="`url('top-pop-bg.jpg')`" v-if="isShowAnnouncement">
       <span class="iconfont icon-cuowu close" @click="closeAnnouncement" ></span>
       <span class="iconfont icon-laba horn"></span>
-      <div class="content">{{$t('NewAnnouncement')}}  <span class="highlight" @click="toInvite">Check now >></span></div>
+      <div class="content">{{$t('NewAnnouncement')}}</div>
     </div>
 </template>
 
@@ -12,13 +12,13 @@ export default {
   name: 'NewAnnouncement',
   data () {
     return {
-      isShowAnnouncement: utils.getDialogTip('0731-newAnnouncement', 3)
+      isShowAnnouncement: utils.getDialogTip('0802-newAnnouncement', 3)
     }
   },
   methods: {
     closeAnnouncement () {
       this.isShowAnnouncement = false
-      utils.setDialogTip('0731-newAnnouncement')
+      utils.setDialogTip('0802-newAnnouncement')
     },
     toInvite () {
       this.$router.push({path: '/doubleRewardCard'})
