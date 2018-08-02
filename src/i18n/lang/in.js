@@ -371,7 +371,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: 'Hey, Wednesday Prize at 10PM: Rs 150,000! Double cards are giving to people joined 10PM quiz from July 27th to 30th!',
+  NewAnnouncement: 'Dear, Go Millionaire × Bollywood Movie Double Night is coming！Win Rs. 200,000 at Sunday 10PM!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
