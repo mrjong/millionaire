@@ -97,7 +97,7 @@ export default {
       const obj = {
         img: avatar,
         nickname: name,
-        msg: unescape(msgContent),
+        msg: msgContent,
         msgId: id
       }
       let msgList = this.msgList || []
