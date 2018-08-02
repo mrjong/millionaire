@@ -373,7 +373,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, Go Millionaire × Bollywood Movie Double Night is coming！Win Rs. 200,000 at Sunday 10PM!',
+  NewAnnouncement: 'Dear, \'Go Millionaire × Bollywood Movie\' with Double Prize Rs. 200,000 at Sunday 10PM! Just win it!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -385,7 +385,7 @@ const locale = {
     result_page: {
       title: 'Congrats!',
       text1: 'Your task done. Here\'s the EXTRA LIFE.',
-      btn: 'Get More EXTRA LIVES'
+      btn: 'Get Extra Life Now'
     },
     question: [
       {ji: '0', js: 1, jc: 'Diwali is known as "Festival of ____".', jo: ['Colors', 'Water', 'Lights'], ja: 'e1f238e1860b16d1139607d92f612098', jd: ['Diwali, or Dipawali, also known as the festival of lights, is India\'s biggest and most important celebration of the year.'], restTime: 10, si: 2500},
