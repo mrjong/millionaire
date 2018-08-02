@@ -361,7 +361,6 @@ const im = {
    * @param {any} name 用户名
    */
   sendMessage (content, avatar, name) {
-    content = escape(content)
     const msg = { content, user: {avatar, name} }
     IM.sendChatRoomMsg(msg)
   },
