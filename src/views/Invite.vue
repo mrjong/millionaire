@@ -388,6 +388,8 @@ export default {
     &__rule {
       right: 0;
       width: 100px;
+      background:linear-gradient(left, #66c8f5 , #6adbfc);
+      background:-webkit-linear-gradient(left, #66c8f5 , #6adbfc);
       border-top-left-radius: 50px 50px;
       border-bottom-left-radius: 50px 50px;
       padding-left: 10px;
