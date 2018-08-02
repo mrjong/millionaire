@@ -373,7 +373,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Hey, Wednesday Prize at 10PM: Rs 150,000! Double cards is giving to people joined 10PM quiz from July 27th to 30th!',
+  NewAnnouncement: 'Dear, Go Millionaire × Bollywood Movie Double Night is coming！Win Rs. 200,000 at Sunday 10PM!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
