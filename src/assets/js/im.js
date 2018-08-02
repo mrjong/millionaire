@@ -86,6 +86,10 @@ const im = {
     }, err => {
       console.log(`获取IM服务地址出错:`, err)
     })
+
+    window.addEventListener('offline', () => {
+      im.emitListener(type.NETWORK_UNAVAILABLE)
+    })
   },
 
   /**

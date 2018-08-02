@@ -37,7 +37,8 @@ export default {
       code: '',
       reviveObj: {
         code: '',
-        isShare: false
+        isShare: false,
+        type: 'invite'
       },
       dialogInfo: {
         htmlTitle: '',
