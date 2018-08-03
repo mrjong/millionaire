@@ -48,8 +48,7 @@ export default {
     background-size: cover;
     color: #fff;
     padding-right: 10px;
-    z-index: 1;
-
+    // z-index: 1;
     .close {
       position: absolute;
       top: 10px;

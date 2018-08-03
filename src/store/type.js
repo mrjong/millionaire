@@ -16,8 +16,10 @@ export const _END = '_END'
 export const _OPEN_DIALOG = '_OPEN_DIALOG'
 export const _CLOSE_DIALOG = '_CLOSE_DIALOG'
 export const _RESET_HOSTMSGLIST = '_RESET_HOSTMSGLIST'
-
 export const HOME_UPDATE = 'HOME_UPDATE'
+
+// 组团答题
+export const UPDATE_TEAM_INFO = 'UPDATE_TEAM_INFO'
 
 // 题目相关
 export const QUESTION_UPDATE = 'QUESTION_UPDATE'

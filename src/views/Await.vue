@@ -53,7 +53,7 @@
     </div> -->
      <!-- <br><em class="scale-text">{{$t('await.come_soon')}}</em> -->
     <div class="characters">
-      <div class="item"><img v-webp="'carnival-card.png'" @click="carnival"><span>{{$t('await.carnival_text')}}</span></div>
+      <div class="item" @click="openTeamModal"><img v-webp="'team-battle.png'"><span>{{$t('await.teamBattle')}}</span></div>
       <div class="item" @click="getSetQuestion"><img v-webp="'set-question.png'"><span>{{$t('await.ses_question_btn')}}</span></div>
     </div>
     <div class="invite" @click="toInvite">
@@ -125,6 +125,7 @@
                   @cancelEvent = 'cancelEvent'>
     </balance-mark>
     <browser-download-tip></browser-download-tip>
+    <!-- <revive-card :reviveObj="reviveObj" @shareClose="shareClose"></revive-card> -->
   </div>
 </template>
 <script>
@@ -149,7 +150,6 @@ export default {
   name: 'Await',
   data () {
     return {
-      isShowBrowserTip: !utils.isInstall('com.millionaire.aries'),
       isInvitation: false,
       isInputInvitation: false,
       isWeb: utils.pageType,
@@ -206,13 +206,6 @@ export default {
     utils.statistic('wait_page', 0)
   },
   methods: {
-    downBrowser () {
-      utils.statistic('download_button', 1)
-      setTimeout(function () {
-        window.location.href = 'https://play.google.com/store/apps/details?id=com.millionaire.aries&referrer=id%3D334005'
-      }, 500)
-      window.location.href = 'xapplink://com.millionaire.aries/millionaire?url=' + encodeURIComponent(window.location.href)
-    },
     // 按钮打点
     btnStatistic (destination) {
       utils.statistic('wait_page', 1, {to_destination_s: destination}, 'wait_page')
@@ -364,7 +357,6 @@ export default {
     },
     // 头像登录逻辑
     loginAvatar () {
-      console.log(utils.isOnline)
       if (!utils.isOnline) {
         if (utils.pageType === 'h5') {
           utils.statistic('wait_page', 1, {to_destination_s: 'sign_up'}, 'wait_page')
@@ -429,6 +421,11 @@ export default {
           }
         }).catch()
       }
+    },
+    openTeamModal () {
+      this.$store.commit(type.UPDATE_TEAM_INFO, {
+        isShowTeamModal: true
+      })
     }
   },
   components: {
@@ -453,11 +450,6 @@ export default {
         }
       } else {
         this.$router.replace({path: '/'})
-      }
-    },
-    isShowBrowserTip: function (val) {
-      if (val) {
-        utils.statistic('download_notice', 0)
       }
     }
   }
@@ -786,9 +778,11 @@ export default {
       z-index: 0;
     }
     .characters {
+      max-width: 93% !important;
+      width: 670px;
       display: flex;
       justify-content: space-between;
-      margin: 0 25px 25px;
+      margin: 0 auto 25px;
       .item {
         width: 48.3%;
         height: 160px;

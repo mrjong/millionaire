@@ -347,7 +347,15 @@ const locale = {
     invite_pop: {
       text1: 'नकदी कमाने के लिए दोस्तों को आमंत्रित करें',
       text2: 'प्रत्येक निमंत्रण ₹ 10000 तक कमा सकता है'
-    }
+    },
+    teamBattle: {
+      text1: 'मेरा टीम कोड: {code}',
+      text2: 'अपने दोस्तों के साथ टीम बनाओ और अधिक पुरस्कार जीतो!'
+    },
+    balance_share_title: 'I withdrew cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    team_battle_title: 'I have joined a quiz team in Go!Millionaire, my team code is {code}, come to join us and win up to Rs.1,000,000 every day!',
+    team_battle_share: 'Download Go!Millonaire APP and enter my team code {code}, let win more cash together every day!'
   },
   reviveGuide: {
     title: 'रेफरल कोड अब उपलब्ध है!',
@@ -361,6 +369,7 @@ const locale = {
     no_winner: 'कोई विजेता नहीं!',
     title1: 'विजेता!',
     title2: 'आप जीट गेए',
+    team_win_title: 'आपकी टीम जीत गई!',
     hint: 'बधाई! इस खेल में {winnerAmount} विजेता!'
   },
   policyBomb: {
@@ -371,7 +380,7 @@ const locale = {
     describe3: 'को ध्यान से पढ़ें!',
     symbol: 'और'
   },
-  NewAnnouncement: 'Dear, \'Go Millionaire × Bollywood Movie\' with Double Prize Rs. 200,000 at Sunday 10PM! Just win it!',
+  NewAnnouncement: 'Dear, Rs 200,000 this Sunday 10PM! Start your TEAM BATTLE, Team up with your friends and win more!',
   stringWords: [
     'गो मिलियनेयर\' गेम में आपका स्वागत है! सभी प्रश्नों का सही उत्तर दें और आप हर दिन  ₹ 1,000,000 तक जीत सकते हैं!',
     'आपको सही जवाब पर टैप करने की आवश्यकता है, अगर आप किसी भी गलत सवाल का जवाब देते हैं, तो आप अतिरिक्त जीवन का उपयोग कर सकते हैं। अब खेलने के लिए तैयार हो जाओ!'],
@@ -499,6 +508,46 @@ const locale = {
       desc: 'समीक्षा के बाद आपको नकद मिल जाएगी, दोस्तों को अधिक पैसा कमाने के लिए आमंत्रित करें!',
       btn: 'हमें रेट करें - 5 स्टार'
     }
+  },
+  // 组团双语文案
+  teamBattle: {
+    errInfo_1000: 'आपके पास पहले से ही एक टीम है!',
+    errInfo_1001: 'कृपया सही टीम कोड दर्ज करें!',
+    errInfo_1002: 'टीम के सदस्य पहले से ही 5 लोग हैं।!',
+    errInfo_1004: 'प्रश्नोत्तरी खेल अब सप्राण हो रहा है और अब आप टीम से बाहर नहीं निकल सकते हैं।!',
+    errInfo_1005: 'उपयोगकर्ता मौजूद नहीं है!',
+    errInfo_1006: 'टीम में शामिल होने में असफल रहा और कृपया पुनः प्रयास करें।!',
+    errInfo_1007: 'आप पहले से ही एक और टीम में शामिल हो गए हैं!',
+    errInfo_1008: 'क्विज शुरू हो चुका है, आप टीम नहीं बना सकते हैं!',
+    noinvite: 'क्विज शुरू हो चुका है, आप दोस्तों को आमंत्रित नहीं कर सकते हैं!',
+    copySuccess: 'सफलतापूर्वक कॉपी करें!',
+    createSuccess: 'सफलतापूर्वक टीम बनाएं!',
+    joinSuccess: 'सफलतापूर्वक टीम में शामिल हों!',
+    passwordError: 'आपका टीम कोड सही नहीं है!',
+    exitSuccess: 'टीम से बाहर निकलें सफलतापूर्वक!',
+    peopleError: 'आपका टीम सदस्य 3 लोगों तक नहीं पहुंचता है, टीम विफल हो गेई है!',
+    title: 'टीम लड़ाई',
+    desc: 'यदि आपकी टीम में कोई भी जीतता है, तो सभी नकद कमाएंगे!',
+    teamCode: 'टीम कोड',
+    btn: {
+      placeholder: 'अपना टीम कोड दर्ज करें',
+      create: 'अपनी टीम बनाएं',
+      invite: 'मित्रों को आमंत्रित करें',
+      exit: 'टीम से बाहर निकलें',
+      ok: 'OK',
+      copy: 'कॉपी करें'
+    },
+    note: [
+      'हर दिन 10 पीएम से पहले अपने 3-5 दोस्तों के साथ टीम बनाएं',
+      'अपनी टीम के साथ 10 पीएम पर क्विज़ गेम खेलें',
+      'टीम के किसी भी व्यक्ति को सभी प्रश्न सही मिलते हैं, सभी सदस्य नकद जीतते हैं',
+      'यदि वह जीतता है तो कप्तान पुरस्कार 1.3 गुना बढ़ जाएगा. जीतने के बाद, टीम सदस्यों का पुरस्कार 1.2 गुणा हो जाएगा. अगर कोई गलत जवाब देता हैं तो, इनाम का आधा जीतेंगे।.'
+    ],
+    rule: [
+      '1. मिनी क्विज़ गेम के बजाए, टीम बैटल मोड केवल 10 पीएम गेम पर काम करता 12 प्रश्नों के साथ.',
+      '2. टीम के सदस्यों को 3-5 के बीच होना चाहिए, आप 10 पीएम के बाद अपनी टीम नहीं बना सकते हैं।',
+      '3. आपको यह सुनिश्चित करना चाहिए कि टीम में हर कोई एक ही समय में प्रश्नोत्तरी खेल रहा है, अन्यथा पुरस्कार उपलब्ध नहीं है।'
+    ]
   }
 }
 export default locale

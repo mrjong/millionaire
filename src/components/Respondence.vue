@@ -1,5 +1,7 @@
 <template>
   <div class="respondence-container" ref="respondenceContainer">
+    <!-- 组团成员列表 -->
+    <team-member-list :member-list="teamList" v-if="teamIsValid"></team-member-list>
     <viewing class="respondence-container__viewing"  v-if="watchingMode"></viewing>
     <div class="respondence-container__countdown">
       <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
@@ -63,6 +65,7 @@ import Viewing from '../components/Viewing.vue'
 import * as type from '../store/type'
 import utils from '../assets/js/utils'
 import Living from '../components/Living'
+import TeamMemberList from '../components/TeamMemberList'
 export default {
   name: 'Respondence',
   data () {
@@ -80,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion']),
+    ...mapGetters(['question_status', 'watchingMode', 'contents', 'index', 'isAnswered', 'isCorrect', 'correctAnswer', 'userAnswer', 'time', 'restTime', 'options', 'question_result', 'id', 'maxRecoveryCount', 'isOnline', 'questionCount', 'lives', 'isCanRecoveryLastQuestion', 'teamId', 'teamIsValid', 'teamList']),
     totalResult: function () {
       let result = {}
       let totalNum = 0
@@ -414,6 +417,12 @@ export default {
           }, 1500)
         }
       }
+
+      // 每次展示题目，拉取一次成员列表的状态
+      if (this.teamIsValid && status === 5) {
+        console.log(`拉取第一道题信息-----status:${status}-----teamId:${this.teamId}-----teamIsValid:${this.teamIsValid}`)
+        this.$store.dispatch(type.UPDATE_TEAM_INFO)
+      }
     //  if (status === 7 && !this.watchingMode) {
     //    this.game_answer.resule_code_s = this.isClick ? (this.isCorrect ? 'right' : 'wrong') : 'none'
     //    utils.statistic('', 2, this.game_answer)
@@ -441,7 +450,8 @@ export default {
     Living,
     Modal,
     AnswerErrorTip,
-    WatchingModeTip
+    WatchingModeTip,
+    TeamMemberList
   }
 }
 </script>

@@ -71,9 +71,9 @@ export default {
     box-sizing: border-box;
 
     &-inner {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     &-title {

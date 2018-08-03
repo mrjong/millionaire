@@ -12,13 +12,13 @@ export default {
   name: 'NewAnnouncement',
   data () {
     return {
-      isShowAnnouncement: utils.getDialogTip('0802-newAnnouncement', 3)
+      isShowAnnouncement: utils.getDialogTip('0803-newAnnouncement', 3)
     }
   },
   methods: {
     closeAnnouncement () {
       this.isShowAnnouncement = false
-      utils.setDialogTip('0802-newAnnouncement')
+      utils.setDialogTip('0803-newAnnouncement')
     },
     toInvite () {
       this.$router.push({path: '/doubleRewardCard'})
@@ -43,7 +43,7 @@ export default {
     position: fixed;
     top:0;
     left: 0;
-    z-index: 1110;
+    // z-index: 1110;
     display: flex;
     align-items: center;
     animation: fadeIn 3s 1;

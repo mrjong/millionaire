@@ -9,6 +9,7 @@
     <loading v-if="loading"></loading>
     <WonTipModal v-model="isShowTipModal" @close="isShowTipModal = false" @share="share"></WonTipModal>
     <revive-card :reviveObj="reviveObj" @callbackFailed="callbackFailed" @shareClose="shareClose"></revive-card>
+    <team-battle-modal v-show="isShowTeamModal" @showReviveCard="showReviveCard"></team-battle-modal>
     <network-tip @close="isShowNetworkTip = false" v-model="isShowNetworkTip"></network-tip>
   </div>
 </template>
@@ -26,6 +27,8 @@ import BalanceMark from './components/BalanceMark'
 import ReviveGuide from './components/ReviveGuide.vue'
 import WonTipModal from './components/WonTipModal'
 import ReviveCard from './components/ReviveCard'
+import TeamBattleModal from './components/TeamBattle'
+
 import NetworkTip from './components/NetworkTip'
 import { NETWORK_UNAVAILABLE } from './assets/js/listener-type'
 import throttle from 'lodash.throttle'
@@ -39,8 +42,8 @@ export default {
       windowInnerHeight: 0,
       timeOffset: 0,
       reviveObj: {
-        title: this.$t('receiveCard.invite_pop.text1'),
-        hint: this.$t('receiveCard.invite_pop.text2'),
+        title: this.$t('receiveCard.teamBattle.text1'),
+        hint: this.$t('receiveCard.teamBattle.text2'),
         isShare: false,
         type: 'reward'
       },
@@ -64,7 +67,9 @@ export default {
       showDialog: 'showDialog',
       dialogInfo: 'dialogInfo',
       userInfo: 'userInfo',
-      initialState: 'initialState'
+      initialState: 'initialState',
+      teamId: 'teamId',
+      isShowTeamModal: 'isShowTeamModal'
     })
   },
   beforeCreate () {
@@ -238,6 +243,13 @@ export default {
       this.$router.push('/invite')
       // this.reviveObj.isShare = data.isShare
       // this.reviveObj.code = this.code
+    },
+    showReviveCard (teamId) {
+      this.reviveObj.isShare = true
+      this.reviveObj.title = this.$t('receiveCard.teamBattle.text1', {code: teamId})
+      this.reviveObj.teamId = teamId
+      this.reviveObj.type = 'teamBattle'
+      this.reviveObj.hint = this.$t('receiveCard.teamBattle.text2')
     }
   },
   components: {
@@ -247,6 +259,7 @@ export default {
     ReviveGuide,
     WonTipModal,
     ReviveCard,
+    TeamBattleModal,
     NetworkTip
   },
   watch: {
