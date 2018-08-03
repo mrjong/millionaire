@@ -594,16 +594,6 @@ const utils = {
     if (isSupportWebpFormat) {
       query.format = 'webp'
     }
-    const {w: width, h: height} = query
-    // 根据屏幕宽度对宽度做适配
-    const clientWidth = document.body.clientWidth
-    let scale = clientWidth / 720 > 1 ? 1 : clientWidth / 720
-    if (+width > 0) {
-      query.w = parseInt(width * scale)
-    }
-    if (+height > 0) {
-      query.h = parseInt(height * scale)
-    }
     return `${path}${utils.stringifyToQuery(query)}`
   },
   /**
