@@ -50,6 +50,11 @@ export const api = {
   doubelRewardList: '/cmp/gdb', // 获取双倍奖金
   getBounsId: '/cmp/gb', // 获得宝箱id
   getBounsBox: '/cmp/ub/', // 获得宝箱
+  createTeam: '/team/ct/', // 创建团队
+  joinTeam: '/team/jt/', // 加入团队
+  exitTeam: '/team/ot/', // 退出团队
+  queryTeamStatus: '/team/qt/', // 查询团队状态
+  queryTeamReward: '/team/qw/', // 查询团队奖励
   myInviteTask: '/cmp/sef/' // 我邀请好友答题任务
 }
 
@@ -492,8 +497,60 @@ export const getBounsBox = function (id) {
   })
 }
 
-// 我邀请的好友答题
+// 创建团队
+export const createTeam = function () {
+  return axios.get(api.createTeam, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
 
+// 加入团队
+export const joinTeam = function (id) {
+  return axios.get(api.joinTeam, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      teamId: id
+    }
+  })
+}
+
+// 退出团队
+export const exitTeam = function (id) {
+  return axios.get(api.exitTeam, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      teamId: id
+    }
+  })
+}
+
+// 查询团队奖励
+export const queryTeamReward = function (id) {
+  return axios.get(api.queryTeamReward, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId,
+      teamId: id
+    }
+  })
+}
+
+// 查询团队状态
+export const queryTeamStatus = function () {
+  return axios.get(api.queryTeamStatus, {
+    params: {
+      app_id: utils.app_id,
+      client_id: utils.clientId
+    }
+  })
+}
+
+// 我邀请的好友答题
 export const myInviteTask = function () {
   return axios.get(api.myInviteTask, {
     params: {

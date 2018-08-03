@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container bg-reset" v-webp.bg="`url('await-bg.jpg')`" @click="showCountryList = false">
+  <div class="login-container bg-reset" v-webp.bg="`url('login-bg.png')`" @click="showCountryList = false">
     <header>
       <p class="title">{{$t('login.title')}}</p>
       <p class="back iconfont icon-fanhui" @click="back"> </p>

@@ -88,6 +88,13 @@ export default {
         let title = this.$t('receiveCard.reward_share_title', {code: this.code})
         let desp = this.$t('receiveCard.share_descripe', {code: this.code})
         utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/20180716183804524ef09d7b.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.code}&money=${this.userInfo.myselfBonusAmount}`), this.code, title, desp)
+      } else if (this.reviveObj.type === 'teamBattle') {
+        // 组团答题成功分享
+        utils.statistic('team_battle', 3, {to_destination_s: val}, 'teamBattle_page')
+        // 需加入组团分享落地页标题
+        let title = this.$t('receiveCard.team_battle_title', {code: this.reviveObj.teamId})
+        let desp = this.$t('receiveCard.team_battle_share', {code: this.reviveObj.teamId})
+        utils.share(this.callbackFn, val, '', encodeURIComponent(`http://static.subcdn.com/201808031404024c97e1b4f4.html?pic=${this.userInfo.avatar}&name=${this.userInfo.userName}&code=${this.reviveObj.teamId}`), this.reviveObj.teamId, title, desp)
       } else if (this.reviveObj.type === 'carnival') {
         if (this.shareConent) {
           utils.statistic('invite_now_button', 3, {to_destination_s: val}, 'reward_share_page')

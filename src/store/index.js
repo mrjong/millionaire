@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import question from './modules/question'
+import teamBattle from './modules/teamBattle'
 import rank from './modules/rank'
 import home from './modules/home'
 import * as type from './type'
@@ -359,7 +360,8 @@ export default new Vuex.Store({
   modules: {
     question,
     rank,
-    home
+    home,
+    teamBattle
   },
   strict: debug // 开启严格模式，在mutations外修改state的数据会报错
 })

@@ -348,8 +348,14 @@ const locale = {
       text1: 'Invite  friends to earn cash quickly',
       text2: 'Each invitation can earn up to ₹10000'
     },
+    teamBattle: {
+      text1: 'My Team Code: {code}',
+      text2: 'Team up with friends and win more prizes!'
+    },
     balance_share_title: 'I withdrew cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
-    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!'
+    reward_share_title: 'I won cash RS 150.89 in Go!Millionaire now, my referral code is {code}, join us and win up to Rs.1,000,000 at 10PM every day!',
+    team_battle_title: 'I have joined a quiz team in Go!Millionaire, my team code is {code}, come to join us and win up to Rs.1,000,000 every day!',
+    team_battle_share: 'Download Go!Millonaire APP and enter my team code {code}, let win more cash together every day!'
   },
   reviveGuide: { // 复活卡说明页
     title: 'Referral Code Available Now!',
@@ -363,6 +369,7 @@ const locale = {
     no_winner: 'No winners!',
     title1: 'Winners!',
     title2: 'You Won!',
+    team_win_title: 'Your team won!',
     hint: 'Congrats! {winnerAmount} winners in this game!'
   },
   policyBomb: { // 隐私协议弹框
@@ -373,7 +380,7 @@ const locale = {
     describe3: 'carefully before you start game!',
     symbol: '&'
   },
-  NewAnnouncement: 'Dear, \'Go Millionaire × Bollywood Movie\' with Double Prize Rs. 200,000 at Sunday 10PM! Just win it!',
+  NewAnnouncement: 'Dear, Rs 200,000 this Sunday 10PM! Start your TEAM BATTLE, Team up with your friends and win more!',
   stringWords: [ // 默认串词
     'Welcome to \'Go Millionaire\' game! Answer all question right and you can win upto ₹1,000,000 every day!',
     'You just need to tap on the right answer , If you answer any  wrong question, you can use extra life. Now get ready to play!'],
@@ -501,6 +508,46 @@ const locale = {
       desc: 'You\'ll get cash after reviewed, invite friends to earn more money!',
       btn: 'Rate Us 5 Stars'
     }
+  },
+  // 组团双语文案
+  teamBattle: {
+    errInfo_1000: 'You already have a team now.',
+    errInfo_1001: 'Please enter the correct team code.',
+    errInfo_1002: 'The Team members are already 5 people.',
+    errInfo_1004: 'The quiz is living, you can not exit team now.',
+    errInfo_1005: 'The User does not exist.',
+    errInfo_1006: 'The quiz is living, join team failed.',
+    errInfo_1007: 'You already joined other team.',
+    errInfo_1008: 'The quiz is living, you can not create a team.',
+    noinvite: 'The quiz is living, you can not invite friends.',
+    copySuccess: 'Copy successfully!',
+    createSuccess: 'Create team successfully!',
+    joinSuccess: 'Join team successfully!',
+    passwordError: 'Your team code is not right!',
+    exitSuccess: 'Exit team successfully!',
+    peopleError: 'Your Team member does not reach 3 people, creat team failed!',
+    title: 'TEAM BATTLE',
+    desc: 'Anyone in your team wins, all will win!',
+    teamCode: 'Team Code',
+    btn: {
+      placeholder: 'Enter Team Code',
+      create: 'Create Your Team',
+      invite: 'Invite friends',
+      exit: 'Exit the team',
+      ok: 'OK',
+      copy: 'Copy'
+    },
+    note: [
+      'Team up with your 3-5 friends before 10PM every day',
+      'Play quiz at 10PM with your team together',
+      'Anyone of the team gets all questions right, all members win cash',
+      'The captain prize will multiby 1.3 if he/she wins; Team member prize will multiby 1.2 after winning; Others answer incorrectly will win half of the prize'
+    ],
+    rule: [
+      '1. Team Battle mode only works for the game at 10PM with 12 questions instead of the Mini Quiz game.',
+      '2. Team members should be between 3-5, You can not build your team after 10PM.',
+      '3. You should make sure everyone in the team playing the quiz at the same time, otherwise prize is not available.'
+    ]
   }
 }
 export default locale

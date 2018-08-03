@@ -96,6 +96,7 @@ export default {
         font: 300 28px 'Roboto', Arial, serif;
         &__day{
           color: #ffb227;
+          font-weight: 700;
         }
       }
       &__hour,&__number{
@@ -111,6 +112,7 @@ export default {
           top: -3px;
           font-size: 40px;
           margin-left: 10px;
+          font-weight: 200;
         }
       }
       .game-living{

@@ -58,7 +58,7 @@ export default {
     top:0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1110;
+    // z-index: 1110;
     display: flex;
     align-items: center;
     .close{

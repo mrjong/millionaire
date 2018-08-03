@@ -1,5 +1,5 @@
 <template>
-  <div class="user bg-reset" v-webp.bg="`url('await-bg.jpg')`">
+  <div class="user bg-reset" v-webp.bg="`url('login-bg.png')`">
     <loading v-if="loading"></loading>
     <div class="header">
       <p class="title">{{$t('userCenter.title')}}</p>
