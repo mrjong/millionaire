@@ -582,8 +582,7 @@ const utils = {
    * 获取兼容Webp格式图片URL
    */
   getWebpImgUrl (url = '') {
-    const isOriginImgUrl = Math.random() > 0.1
-    if (isOriginImgUrl) {
+    if (utils.isOriginImgUrl) {
       return `./static/images/${url}`
     }
     url = `${imageHost}${url}`
